@@ -26,18 +26,18 @@ describe("Task Initialization Tests", function() {
 	it("Expect 'type' to be simple by default", function() {
 
 		var task = Task.extend({});
-		console.log("task = ");
-		console.log(task);
 		expect(task.type).toEqual("simple");
 
 	});
 
 	it("Expect 'type' to be simple when sub tasks is empty", function() {
 
+		/*
 		var task = Task.extend({
 			type:"parallel",
 			tasks:[]
 		});
+*/
 
 		//expect(task.type).toEqual("simple");
 
@@ -45,9 +45,11 @@ describe("Task Initialization Tests", function() {
 
 	it("Expect 'type' to be sequence when sub tasks are listed", function() {
 
+/*
 		var task = Task.extend({
 			tasks:[{}]
 		});
+*/
 
 		//expect(task.type).toEqual("sequence");
 
@@ -55,11 +57,12 @@ describe("Task Initialization Tests", function() {
 
 	it("Expect 'type' to be parallel when sub tasks are listed and type is set", function() {
 
+/*
 		var task = Task.extend({
 			type:"parallel",
 			tasks:[{}]
 		});
-
+*/
 		//expect(task.type).toEqual("parallel");
 
 	});
@@ -116,7 +119,7 @@ describe("Task Operation Tests", function() {
 	afterEach(function() {});
 
 	it("Running operate should just set the product", function() {
-		task = Task.extend({
+		var task = Task.extend({
 			name:"OperatorTestTask",
 			perform:function(){
 				this.operate("b");
@@ -125,6 +128,47 @@ describe("Task Operation Tests", function() {
 		});
 		task.start();
 		expect(task.product).toEqual("b");
+	});
+
+});
+
+describe("Sequence Task Tests", function() {
+
+	beforeEach(function() {});
+	afterEach(function() {});
+
+	it("Sequence task should complete", function() {
+		var task = Task.extend({
+			name:"SequenceTaskTests",
+			tasks:[
+			{
+				name:"SubTaskSimple",
+				perform:function(){
+					this.complete();
+				}
+			},
+			{
+				name:"SubTaskSequence",
+				tasks:[{
+					name:"SubTaskSimple",
+					perform:function(){
+						this.complete();
+					}
+				}]
+			}
+			],
+			change:function(state,error) {
+				if(state == 4) {
+					console.log("complete");
+				}
+			}
+		});
+
+		console.log(task);
+
+		task.start();
+		//expect(task.product).toEqual("b");
+		
 	});
 
 });

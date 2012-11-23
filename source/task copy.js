@@ -49,7 +49,7 @@
 					start:function(){
 						if(this.state >= TaskLibrary.TaskStates.TaskStateStarted) return;
 						this.state = TaskLibrary.TaskStates.TaskStateStarted;
-						console.log("Started:" + this.name);
+						//console.log("Started:" + this.name);
 						if(this.block) this.block(this,this.state,null);
 						this.performTask();
 					},
@@ -67,7 +67,7 @@
 					cancel:function(){
 						if(this.state > TaskLibrary.TaskStates.TaskStateStarted) return;
 						this.state = TaskLibrary.TaskStates.TaskStateCanceled;
-						console.log("Canceled:" + this.name);
+						//console.log("Canceled:" + this.name);
 						if(this.block) this.block(this,this.state,null);
 					},
 
@@ -77,7 +77,7 @@
 					complete:function(){
 						if(this.state > TaskLibrary.TaskStates.TaskStateStarted) return;
 						this.state = TaskLibrary.TaskStates.TaskStateCompleted;
-						console.log("Completed:" + this.name);
+						//console.log("Completed:" + this.name);
 						if(this.block) this.block(this,this.state,null);
 						// this is where ill need to have some events fired off
 					},
@@ -88,7 +88,7 @@
 					fault:function(error){
 						if(this.state >= TaskLibrary.TaskStates.TaskStateCanceled) return;
 						this.state = TaskLibrary.TaskStates.TaskStateFaulted;
-						console.log("Faulted:" + this.name);
+						//console.log("Faulted:" + this.name);
 						if(this.block) this.block(this,this.state,error);
 					}
 
