@@ -140,23 +140,12 @@ describe("Sequence Task Tests", function() {
 	it("Sequence task should complete", function() {
 		var task = Task.extend({
 			name:"SequenceTaskTests",
-			tasks:[
-			{
+			tasks:[{
 				name:"SubTaskSimple",
 				perform:function(){
 					this.complete();
 				}
-			},
-			{
-				name:"SubTaskSequence",
-				tasks:[{
-					name:"SubTaskSimple",
-					perform:function(){
-						this.complete();
-					}
-				}]
-			}
-			],
+			}],
 			change:function(state,error) {
 				if(state == 4) {
 					console.log("complete");
@@ -168,7 +157,7 @@ describe("Sequence Task Tests", function() {
 
 		task.start();
 		//expect(task.product).toEqual("b");
-		
+
 	});
 
 });

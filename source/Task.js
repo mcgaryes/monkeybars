@@ -122,28 +122,28 @@
 			var tasks = [];
 			var methods = {
 				addSubTask:function(task){
-					throw "TaskGroup Method 'addSubTask' is not yet implemented";
+					throw "task group method 'addSubTask' is not yet implemented";
 				},
 				addSubTaskAfterTask:function(beforeTask,afterTask){
-					throw "TaskGroup Method 'addSubTaskAfterTask' is not yet implemented";
+					throw "task group method 'addSubTaskAfterTask' is not yet implemented";
 				},
 				removeSubTask:function(task){
-					throw "TaskGroup Method 'removeSubTask' is not yet implemented";
+					throw "task group method 'removeSubTask' is not yet implemented";
 				},
 				processSubTask:function(task){
-					throw "TaskGroup Method 'processSubTask' is not yet implemented";
+					throw "task group method 'processSubTask' is not yet implemented";
 				},
 				onSubTaskComplete:function(){
-					throw "TaskGroup Method 'onSubTaskComplete' is not yet implemented";
+					throw "task group method 'onSubTaskComplete' is not yet implemented";
 				},
 				onSubTaskFault:function(error){
-					throw "TaskGroup Method 'onSubTaskFault' is not yet implemented";
+					throw "task group method 'onSubTaskFault' is not yet implemented";
 				},
 				onSubTaskCancel:function(task){
-					throw "TaskGroup Method 'onSubTaskCancel' is not yet implemented";
+					throw "task group method 'onSubTaskCancel' is not yet implemented";
 				},
 				perform:function(){						 
-					throw "TaskGroup Method 'perform' is not yet implemented";
+					throw "task group method 'perform' is not yet implemented";
 				}
 				 
 			};
