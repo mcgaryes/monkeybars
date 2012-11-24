@@ -1,0 +1,57 @@
+<html>
+<head>
+	<title>Parallel Task Example</title>
+	<script src="../../source/Task.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+
+		function handleOnLoad(e) { 
+		
+			var task = new TaskLibrary.ParallelTask({
+				name:"ParallelTask",
+				logging:true,
+				tasks:[{
+					name:"SubTask1",
+					perform:function(){
+						var task = this;
+						var timeout = setTimeout(function(){
+							task.complete();
+						},Math.round(Math.random()*3000));
+					}
+				},
+				{
+					name:"SubTask2",
+					perform:function(){
+						var task = this;
+						var timeout = setTimeout(function(){
+							task.complete();
+						},Math.round(Math.random()*3000));
+					}
+				},
+				{
+					name:"SubTask3",
+					perform:function(){
+						var task = this;
+						var timeout = setTimeout(function(){
+							task.complete();
+						},Math.round(Math.random()*3000));
+					}
+				}],
+				change:function(state,error){
+					if(state == TaskLibrary.TaskStates.Completed) {
+						alert("The 'ParallelTask' is complete");
+					}
+				}
+			});
+
+			task.start(); 
+
+		}
+
+		
+
+	</script>
+</head>
+<body onload="handleOnLoad();">
+</body>
+</html>

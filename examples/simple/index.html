@@ -7,14 +7,14 @@
 
 		function handleOnLoad(e) { 
 		
-			var task = Task.extend({
+			var task = TaskLibrary.create({
 				name:"SimpleTask",
 				perform:function(){
 					console.log("Perform SimpleTask");
 					this.complete();
 				},
 				change:function(state,error){
-					if(state == Task.States.Completed || state == 4) {
+					if(state == TaskLibrary.States.Completed || state == 4) {
 						alert("The 'SimpleTask' is complete");
 					}
 				}
