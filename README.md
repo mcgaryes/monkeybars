@@ -1,4 +1,4 @@
-# Task Library
+# JavaScript Task
 
 This library provides a simple interface for handling singular, sequential and parallel units of code. The overall architecture is based off of the [compisite pattern](http://en.m.wikipedia.org/wiki/Composite%20pattern).
 
