@@ -1,16 +1,16 @@
 var TaskLibrary = (function() {
 
 	// state constants
-	var STATE_INITIALIZED 	= 	0;
-	var STATE_STARTED 		= 	1;
-	var STATE_CANCELED 		= 	2;
-	var STATE_FAULTED 		= 	3;
-	var STATE_COMPLETED 	= 	4;
+	var STATE_INITIALIZED	=	0;
+	var STATE_STARTED		=	1;
+	var STATE_CANCELED		=	2;
+	var STATE_FAULTED		=	3;
+	var STATE_COMPLETED		=	4;
 
 	// type constants
-	var TYPE_PARALLEL 		= 	"parallel";
-	var TYPE_SEQUENCE 		= 	"sequence";
-	var TYPE_SIMPLE 		= 	"simple";
+	var TYPE_PARALLEL		=	"parallel";
+	var TYPE_SEQUENCE		=	"sequence";
+	var TYPE_SIMPLE			=	"simple";
 
 	// creates task based on the options passed
 	var createTaskWithOptions = function(options){
