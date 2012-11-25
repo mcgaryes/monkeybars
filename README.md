@@ -34,3 +34,7 @@ All tasks have the ability to have sub tasks nested within them, turning them in
 Sequential tasks run sub tasks one after another until all sub tasks complete. When all nested sub tasks are complete the `complete` state is passed to the task groups `change` method for handling.
 
 Parallel tasks are task groups who's nested subtasks are executed side by side, executing whenever they can. Just like the sequential task group, when all sub tasks have completed the groups `change` method will be notified.
+
+### Examples
+
+There are number examples to illustrate usage. Be sure to open the console as there is some logging happening.
