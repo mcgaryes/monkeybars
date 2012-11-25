@@ -8,38 +8,30 @@
 
 		function handleOnLoad(e) { 
 		
-			var task = new TaskLibrary.SequenceTask({
+
+			var performTaskFunx = function(){
+				var task = this;
+				var timeout = setTimeout(function(){
+					task.complete();
+				},Math.round(Math.random()*3000));
+			}
+
+			var task = TaskLibrary.SequenceTask.extend({
 				name:"SequenceTask",
-				logging:true,
+				loggingEnabled:true,
 				tasks:[{
 					name:"SubTask1",
-					perform:function(){
-						var task = this;
-						var timeout = setTimeout(function(){
-							task.complete();
-						},Math.round(Math.random()*3000));
-
-					}
+					performTask:performTaskFunx
 				},
 				{
 					name:"SubTask2",
-					perform:function(){
-						var task = this;
-						var timeout = setTimeout(function(){
-							task.complete();
-						},Math.round(Math.random()*3000));
-					}
+					performTask:performTaskFunx
 				},
 				{
 					name:"SubTask3",
-					perform:function(){
-						var task = this;
-						var timeout = setTimeout(function(){
-							task.complete();
-						},Math.round(Math.random()*3000));
-					}
+					performTask:performTaskFunx
 				}],
-				change:function(state,error){
+				onChange:function(state,error){
 					if(state == TaskLibrary.TaskStates.Completed) {
 						alert("complete");
 					}

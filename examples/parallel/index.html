@@ -1,45 +1,38 @@
 <html>
 <head>
-	<title>Parallel Task Example</title>
-	<script src="../../source/Task.js" type="text/javascript"></script>
 
+	<title>Parallel Task Example</title>
+
+	<script src="../../source/Task.js" type="text/javascript"></script>
 	<script type="text/javascript">
 
 		function handleOnLoad(e) { 
 		
-			var task = new TaskLibrary.ParallelTask({
+			var performTaskFunx = function(){
+				var task = this;
+				var timeout = setTimeout(function(){
+					task.complete();
+				},Math.round(Math.random()*3000));
+			}
+
+			var task = TaskLibrary.ParallelTask.extend({
 				name:"ParallelTask",
-				logging:true,
+				loggingEnabled:true,
 				tasks:[{
 					name:"SubTask1",
-					perform:function(){
-						var task = this;
-						var timeout = setTimeout(function(){
-							task.complete();
-						},Math.round(Math.random()*3000));
-					}
+					performTask:performTaskFunx
 				},
 				{
 					name:"SubTask2",
-					perform:function(){
-						var task = this;
-						var timeout = setTimeout(function(){
-							task.complete();
-						},Math.round(Math.random()*3000));
-					}
+					performTask:performTaskFunx
 				},
 				{
 					name:"SubTask3",
-					perform:function(){
-						var task = this;
-						var timeout = setTimeout(function(){
-							task.complete();
-						},Math.round(Math.random()*3000));
-					}
+					performTask:performTaskFunx
 				}],
-				change:function(state,error){
+				onChange:function(state,error){
 					if(state == TaskLibrary.TaskStates.Completed) {
-						alert("The 'ParallelTask' is complete");
+						alert("complete");
 					}
 				}
 			});
@@ -48,9 +41,8 @@
 
 		}
 
-		
-
 	</script>
+
 </head>
 <body onload="handleOnLoad();">
 </body>

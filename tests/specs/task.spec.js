@@ -3,50 +3,10 @@ describe("Task Initialization Tests", function() {
 	beforeEach(function() {});
 	afterEach(function() {});
 
-	it("Default properties should be set", function() {
-
-		var task = TaskLibrary.create({
-			name:"InitializationTestTask",
-			perform:function(){
-				return "perform";
-			},
-			change:function(state,error){
-				return 'change';
-			}
-		});
-
-		expect(task.name).toEqual("InitializationTestTask");
-		expect(task.tasks).not.toBeDefined();
-		expect(task.state).toEqual(0);
-		expect(task.perform()).toEqual("perform");
-		expect(task.change()).toEqual("change");
-
-	});
-
-	it("Expect 'type' to be simple by default", function() {
-		var task = TaskLibrary.create({});
-		expect(task.type).toEqual("simple");
-	});
-
-	it("Expect 'type' to be sequence by default when sub tasks are listed", function() {
-		var task = TaskLibrary.create({
-			tasks:[{}]
-		});
-		expect(task.type).toEqual("sequence");
-	});
-
-	it("Expect 'type' to be parallel when sub tasks are listed and type is set", function() {
-		var task = TaskLibrary.create({
-			type:"parallel",
-			tasks:[{}]
-		});
-		expect(task.type).toEqual("parallel");
-	});
-
-	it("Initializing with ./new syntax creates a simple task that executes",function(){
-		var task = new TaskLibrary.Task({
+	it("Initializing simple task",function(){
+		var task = TaskLibrary.Task.extend({
 			name:"name",
-			perform:function(){
+			performTask:function(){
 				this.complete();
 			}
 		});
@@ -57,8 +17,8 @@ describe("Task Initialization Tests", function() {
 		expect(task.state).toEqual(4);
 	});
 
-	it("Initializing sequence with ./new syntax creates a simple task that executes",function(){
-		var task = new TaskLibrary.SequenceTask({
+	it("Initializing sequence task",function(){
+		var task = TaskLibrary.SequenceTask.extend({
 			name:"name",
 			tasks:[{
 				name:"subtask",
@@ -66,7 +26,7 @@ describe("Task Initialization Tests", function() {
 					this.complete();
 				}
 			}],
-			perform:function(){
+			performTask:function(){
 				this.complete();
 			}
 		});
@@ -78,8 +38,8 @@ describe("Task Initialization Tests", function() {
 		expect(task.state).toEqual(4);
 	});
 
-	it("Initializing parallel with ./new syntax creates a simple task that executes",function(){
-		var task = new TaskLibrary.ParallelTask({
+	it("Initializing parallel task",function(){
+		var task = TaskLibrary.ParallelTask.extend({
 			name:"name",
 			tasks:[{
 				name:"subtask",
@@ -87,7 +47,7 @@ describe("Task Initialization Tests", function() {
 					this.complete();
 				}
 			}],
-			perform:function(){
+			performTask:function(){
 				this.complete();
 			}
 		});
@@ -101,9 +61,9 @@ describe("Task Initialization Tests", function() {
 
 	it("Setting simple task properties with . syntax after creation get applied",function(){
 		
-		var task = new TaskLibrary.Task();
+		var task = TaskLibrary.Task.extend();
 		task.name = "name";
-		task.perform = function(){
+		task.performTask = function(){
 			this.complete();
 		}
 
@@ -116,18 +76,18 @@ describe("Task Initialization Tests", function() {
 
 	it("Setting sequence task properties with . syntax after creation get applied",function(){
 		
-		var sequenceTask = new TaskLibrary.SequenceTask();
+		var sequenceTask = TaskLibrary.SequenceTask.extend();
 		sequenceTask.name = "name";
 		
-		var subtask1 = new TaskLibrary.Task();
+		var subtask1 = TaskLibrary.Task.extend();
 		subtask1.name = "subtask1";
-		subtask1.perform = function(){
+		subtask1.performTask = function(){
 			this.complete();
 		}
 
-		var subtask2 = new TaskLibrary.Task();
+		var subtask2 = TaskLibrary.Task.extend();
 		subtask2.name = "subtask2";
-		subtask2.perform = function(){
+		subtask2.performTask = function(){
 			this.complete();
 		}
 
@@ -142,10 +102,10 @@ describe("Task Initialization Tests", function() {
 
 	it("Mixing syntaxes still results in acceptable simple task",function(){
 		
-		var task = new TaskLibrary.Task({
+		var task = TaskLibrary.Task.extend({
 			name:"name"
 		});
-		task.perform = function(){
+		task.performTask = function(){
 			this.complete();
 		}
 		task.start();
@@ -157,23 +117,25 @@ describe("Task Initialization Tests", function() {
 
 	it("Mixing syntaxes still results in acceptable group task",function(){
 		
-		var sequenceTask = new TaskLibrary.SequenceTask({
+		var sequenceTask = TaskLibrary.SequenceTask.extend({
 			name:"name",
 			tasks:[{
 				name:"subtask1",
-				perform:function(){
+				performTask:function(){
 					this.complete();
 				}
 			}]
 		});
-		
-		var subtask2 = new TaskLibrary.Task();
+
+		var subtask2 = TaskLibrary.Task.extend();
 		subtask2.name = "subtask2";
-		subtask2.perform = function(){
+		subtask2.performTask = function(){
 			this.complete();
 		}
 
 		sequenceTask.addSubTask(subtask2);
+
+		console.log(sequenceTask);
 
 		sequenceTask.start();
 		expect(sequenceTask.tasks.length).toEqual(2);
@@ -184,12 +146,13 @@ describe("Task Initialization Tests", function() {
 
 });
 
+/*
 describe("Task Execution Cycle Tests", function() {
 
 	var task;
 
 	beforeEach(function() {
-		task = TaskLibrary.create({
+		task = TaskLibrary.Task.extend({
 			name:"ExecutionTestTask",
 			perform:function(){}
 		});
@@ -280,3 +243,4 @@ describe("Sequence Task Tests", function() {
 	});
 
 });
+*/
