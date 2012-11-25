@@ -1,14 +1,13 @@
 <html>
 <head>
 
-	<title>Sequence Task Example</title>
-	
-	<script src="../../source/task.js" type="text/javascript"></script>
+	<title>Parallel Task Example</title>
+
+	<script src="../source/task.js" type="text/javascript"></script>
 	<script type="text/javascript">
 
 		function handleOnLoad(e) { 
 		
-
 			var performTaskFunx = function(){
 				var task = this;
 				var timeout = setTimeout(function(){
@@ -16,8 +15,8 @@
 				},Math.round(Math.random()*3000));
 			}
 
-			var task = TaskLibrary.SequenceTask.extend({
-				name:"SequenceTask",
+			var task = TaskLibrary.ParallelTask.extend({
+				name:"ParallelTask",
 				loggingEnabled:true,
 				tasks:[{
 					name:"SubTask1",
@@ -42,9 +41,8 @@
 
 		}
 
-		
-
 	</script>
+
 </head>
 <body onload="handleOnLoad();">
 </body>
