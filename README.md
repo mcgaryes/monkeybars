@@ -1,6 +1,6 @@
 # JavaScript Task
 
-This library provides a simple interface for handling singular, sequential and parallel units of code. The overall architecture is based off of the [compisite pattern](http://en.m.wikipedia.org/wiki/Composite%20pattern).
+This library provides a simple interface for handling singular, sequential and parallel units of code. The overall architecture is based off of the [composite pattern](http://en.m.wikipedia.org/wiki/Composite%20pattern).
 
 >*In software engineering, the composite pattern is a partitioning design pattern. The composite pattern describes that a group of objects are to be treated in the same way as a single instance of an object. The intent of a composite is to "compose" objects into tree structures to represent part-whole hierarchies. Implementing the composite pattern lets clients treat individual objects and compositions uniformly.*
 
