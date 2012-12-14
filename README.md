@@ -39,7 +39,7 @@ Parallel tasks are task groups who's nested subtasks are executed side by side, 
 
 There are number examples to illustrate usage. Be sure to open the console as there is some logging happening.
 
-* [Simple](/simple.html)
-* [Parallel](/parallel.html)
-* [Sequence](/sequence.html)
-* [Complex](/complex.html)
+* [Simple](http://sandbox.ericmcgary.com/monkeybars/simple.html)
+* [Parallel](http://sandbox.ericmcgary.com/monkeybars/parallel.html)
+* [Sequence](http://sandbox.ericmcgary.com/monkeybars/sequence.html)
+* [Complex](http://sandbox.ericmcgary.com/monkeybars/complex.html)
