@@ -42,4 +42,4 @@ There are number examples to illustrate usage. Be sure to open the console as th
 * [Simple](http://sandbox.ericmcgary.com/monkeybars/simple.html)
 * [Parallel](http://sandbox.ericmcgary.com/monkeybars/parallel.html)
 * [Sequence](http://sandbox.ericmcgary.com/monkeybars/sequence.html)
-* [Complex](http://sandbox.ericmcgary.com/monkeybars/complex.html)
+* [Complex](http://sandbox.ericmcgary.com/monkeybars/complex.html) 
