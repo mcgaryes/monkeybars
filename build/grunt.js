@@ -1,5 +1,15 @@
 module.exports = function(grunt) {
+    
+	// config
     grunt.initConfig({
+
+    	jasmine: {
+            all: {
+                src: ['../tests/index.html'],
+                errorReporting: true
+            }
+        },
+
         min: {
             dist: {
                 src: ['../source/task.js'],
@@ -7,5 +17,11 @@ module.exports = function(grunt) {
             }
         }
     });
-    grunt.registerTask('default', 'min');
+
+    // load npm tasks
+    grunt.loadNpmTasks('grunt-jasmine-task');
+
+    // tasks
+    grunt.registerTask('default', 'jasmine min');
+    
 };

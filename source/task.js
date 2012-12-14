@@ -1,4 +1,5 @@
-var TaskLibrary = (function() {
+
+(function() {
 
 	// state constants
 	var STATE_INITIALIZED	=	0;
@@ -66,20 +67,32 @@ var TaskLibrary = (function() {
 				this.state = STATE_CANCELED;
 				if(this.loggingEnabled) console.log("Canceled:" + this.name);
 				this.onChange(this.state);
+				this.onCancel();
 			},
 			complete:function(){
 				if(this.state > STATE_STARTED) return;
 				this.state = STATE_COMPLETED;
 				if(this.loggingEnabled) console.log("Completed:" + this.name);
 				this.onChange(this.state);
+				this.onComplete();
 			},
 			fault:function(error){
 				if(this.state >= STATE_CANCELED) return;
 				this.state = STATE_FAULTED;
 				if(this.loggingEnabled) console.log("Faulted:" + this.name);
 				this.onChange(this.state,error);
+				this.onFault(error);
 			},
 			onChange:function(state,error){
+				// empty by default
+			},
+			onFault:function(error) {
+				// empty by default
+			},
+			onComplete:function() {
+				// empty by default
+			},
+			onCancel:function() {
 				// empty by default
 			},
 			performTask:function(){
@@ -254,7 +267,7 @@ var TaskLibrary = (function() {
 		}
 	};
 
-	return {
+	this.TaskLibrary = {
 		TaskStates:{
 			Initialized:STATE_INITIALIZED,
 			Started:STATE_STARTED,
@@ -272,4 +285,4 @@ var TaskLibrary = (function() {
 		SequenceTask:SequenceTask
 	};
 
-}());
+}(this));

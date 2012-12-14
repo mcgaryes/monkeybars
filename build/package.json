@@ -1,0 +1,17 @@
+{
+  "name": "javascript-task-build-tool",
+  "version": "0.0.1",
+  "author": "Eric McGary <mcgaryes@gmail.com>",
+  "description": "A simple build script for the javascript-task github project.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcgaryes/javascript-task"
+  },
+  "contributors": [{
+    "name": "Eric McGary",
+    "email": "mcgaryes@gmail.com"
+  }],
+  "dependencies": {
+    "grunt-jasmine-task": "0.2.3"
+  }
+}
