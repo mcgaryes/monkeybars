@@ -12,8 +12,8 @@ module.exports = function(grunt) {
 
         min: {
             dist: {
-                src: ['../source/task.js'],
-                dest: '../source/task.min.js'
+                src: ['../source/monkeybars.js'],
+                dest: '../source/monkeybars.min.js'
             }
         }
     });
