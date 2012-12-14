@@ -12,6 +12,7 @@
     "email": "mcgaryes@gmail.com"
   }],
   "dependencies": {
-    "grunt-jasmine-task": "0.2.3"
+    "grunt-jasmine-task": "0.2.3",
+    "grunt-contrib-copy": "0.3.2"
   }
 }
