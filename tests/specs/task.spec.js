@@ -4,7 +4,7 @@ describe("Task Initialization Tests", function() {
 	afterEach(function() {});
 
 	it("Initializing simple task",function(){
-		var task = TaskLibrary.Task.extend({
+		var task = MonkeyBars.Task.extend({
 			name:"name",
 			performTask:function(){
 				this.complete();
@@ -18,7 +18,7 @@ describe("Task Initialization Tests", function() {
 	});
 
 	it("Initializing sequence task",function(){
-		var task = TaskLibrary.SequenceTask.extend({
+		var task = MonkeyBars.SequenceTask.extend({
 			name:"name",
 			tasks:[{
 				name:"subtask",
@@ -39,7 +39,7 @@ describe("Task Initialization Tests", function() {
 	});
 
 	it("Initializing parallel task",function(){
-		var task = TaskLibrary.ParallelTask.extend({
+		var task = MonkeyBars.ParallelTask.extend({
 			name:"name",
 			tasks:[{
 				name:"subtask",
@@ -61,7 +61,7 @@ describe("Task Initialization Tests", function() {
 
 	it("Setting simple task properties with . syntax after creation get applied",function(){
 		
-		var task = TaskLibrary.Task.extend();
+		var task = MonkeyBars.Task.extend();
 		task.name = "name";
 		task.performTask = function(){
 			this.complete();
@@ -76,16 +76,16 @@ describe("Task Initialization Tests", function() {
 
 	it("Setting sequence task properties with . syntax after creation get applied",function(){
 		
-		var sequenceTask = TaskLibrary.SequenceTask.extend();
+		var sequenceTask = MonkeyBars.SequenceTask.extend();
 		sequenceTask.name = "name";
 		
-		var subtask1 = TaskLibrary.Task.extend();
+		var subtask1 = MonkeyBars.Task.extend();
 		subtask1.name = "subtask1";
 		subtask1.performTask = function(){
 			this.complete();
 		}
 
-		var subtask2 = TaskLibrary.Task.extend();
+		var subtask2 = MonkeyBars.Task.extend();
 		subtask2.name = "subtask2";
 		subtask2.performTask = function(){
 			this.complete();
@@ -102,7 +102,7 @@ describe("Task Initialization Tests", function() {
 
 	it("Mixing syntaxes still results in acceptable simple task",function(){
 		
-		var task = TaskLibrary.Task.extend({
+		var task = MonkeyBars.Task.extend({
 			name:"name"
 		});
 		task.performTask = function(){
@@ -117,7 +117,7 @@ describe("Task Initialization Tests", function() {
 
 	it("Mixing syntaxes still results in acceptable group task",function(){
 		
-		var sequenceTask = TaskLibrary.SequenceTask.extend({
+		var sequenceTask = MonkeyBars.SequenceTask.extend({
 			name:"name",
 			tasks:[{
 				name:"subtask1",
@@ -127,7 +127,7 @@ describe("Task Initialization Tests", function() {
 			}]
 		});
 
-		var subtask2 = TaskLibrary.Task.extend();
+		var subtask2 = MonkeyBars.Task.extend();
 		subtask2.name = "subtask2";
 		subtask2.performTask = function(){
 			this.complete();
@@ -152,7 +152,7 @@ describe("Task Execution Cycle Tests", function() {
 	var task;
 
 	beforeEach(function() {
-		task = TaskLibrary.Task.extend({
+		task = MonkeyBars.Task.extend({
 			name:"ExecutionTestTask",
 			perform:function(){}
 		});
@@ -197,7 +197,7 @@ describe("Sequence Task Tests", function() {
 	afterEach(function() {});
 
 	it("Sequence task should complete", function() {
-		var task = TaskLibrary.create({
+		var task = MonkeyBars.create({
 			name:"SequenceTaskTests",
 			tasks:[{
 				name:"SubTaskSimple",
@@ -214,7 +214,7 @@ describe("Sequence Task Tests", function() {
 
 	it("Product should be operated on", function() {
 
-		var task = TaskLibrary.create({
+		var task = MonkeyBars.create({
 			name:"SequenceTaskTests",
 			product:1,
 			tasks:[{

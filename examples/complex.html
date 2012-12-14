@@ -3,7 +3,7 @@
 
 	<title>Complex Task Example</title>
 	
-	<script src="../source/task.js" type="text/javascript"></script>
+	<script src="../source/monkeybars.js" type="text/javascript"></script>
 	<script type="text/javascript">
 
 		function handleOnLoad(e) { 
@@ -15,12 +15,12 @@
 				},Math.round(Math.random()*3000));
 			}
 
-			var simple = TaskLibrary.Task.extend({
+			var simple = MonkeyBars.Task.extend({
 				name:"simple",
 				performTask:performTaskFunx
 			});
 
-			var sequence = TaskLibrary.SequenceTask.extend({
+			var sequence = MonkeyBars.SequenceTask.extend({
 				name:"sequence",
 				tasks:[{
 					name:"squence subtask 1",
@@ -36,7 +36,7 @@
 				}]
 			});
 
-			var parallel = TaskLibrary.ParallelTask.extend({
+			var parallel = MonkeyBars.ParallelTask.extend({
 				name:"parallel",
 				tasks:[{
 					name:"parallel subtask 1",
@@ -52,12 +52,12 @@
 				}]
 			});
 
-			var complex = TaskLibrary.SequenceTask.extend({
+			var complex = MonkeyBars.SequenceTask.extend({
 				name:"complex",
 				loggingEnabled:true,
 				tasks:[sequence,simple,parallel],
 				onChange:function(state,error){
-					if(state == TaskLibrary.TaskStates.Completed){
+					if(state == MonkeyBars.TaskStates.Completed){
 						alert("complete");
 					}
 				}

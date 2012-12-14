@@ -4,16 +4,16 @@
 
 		<title>Simple Task Example</title>
 
-		<script src="../source/task.js" type="text/javascript"></script>
+		<script src="../source/monkeybars.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			
 			function onload(e) { 
 				
-				var task = TaskLibrary.Task.extend({
+				var task = MonkeyBars.Task.extend({
 					name:"SimpleTask",
 					loggingEnabled:true,
 					onChange:function(state,error){
-						if(state == TaskLibrary.TaskStates.Completed) {
+						if(state == MonkeyBars.TaskStates.Completed) {
 							alert("The 'SimpleTask' is complete");
 						}
 					},

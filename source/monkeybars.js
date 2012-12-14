@@ -267,7 +267,7 @@
 		}
 	};
 
-	this.TaskLibrary = {
+	this.MonkeyBars = {
 		TaskStates:{
 			Initialized:STATE_INITIALIZED,
 			Started:STATE_STARTED,

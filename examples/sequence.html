@@ -3,7 +3,7 @@
 
 	<title>Sequence Task Example</title>
 	
-	<script src="../source/task.js" type="text/javascript"></script>
+	<script src="../source/monkeybars.js" type="text/javascript"></script>
 	<script type="text/javascript">
 
 		function handleOnLoad(e) { 
@@ -16,7 +16,7 @@
 				},Math.round(Math.random()*3000));
 			}
 
-			var task = TaskLibrary.SequenceTask.extend({
+			var task = MonkeyBars.SequenceTask.extend({
 				name:"SequenceTask",
 				loggingEnabled:true,
 				tasks:[{
@@ -32,7 +32,7 @@
 					performTask:performTaskFunx
 				}],
 				onChange:function(state,error){
-					if(state == TaskLibrary.TaskStates.Completed) {
+					if(state == MonkeyBars.TaskStates.Completed) {
 						alert("complete");
 					}
 				}
