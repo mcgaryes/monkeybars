@@ -37,7 +37,7 @@
 					performTask:performTaskFunx
 				}],
 				performTask:function(){
-					append("start",this.name);
+					append("Started",this.name);
 					MonkeyBars.SequenceTask.prototype.performTask.call(this,task);
 				}
 			});
@@ -53,7 +53,7 @@
 					performTask:performTaskFunx
 				}],
 				performTask:function(){
-					append("start",this.name);
+					append("Started",this.name);
 					MonkeyBars.ParallelTask.prototype.performTask.call(this,task);
 				}
 			});
@@ -64,7 +64,7 @@
 				tasks:[sequence,forTask,simple,parallel],
 				onChange:function(state,error){
 					if(state == MonkeyBars.TaskStates.Completed) {
-						alert("complete");
+						append("Completed",this.name,this.executionTime);
 					}
 				}
 			});

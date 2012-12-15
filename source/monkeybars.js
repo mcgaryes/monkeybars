@@ -84,8 +84,9 @@
 				if(this.state > STATE_STARTED) return;
 				this.state = STATE_COMPLETED;
 				if(this.loggingEnabled) console.log("Completed:" + this.name);
-				this.onChange(this.state);
+				this.executionTime = ( new Date().getTime() )-this.startTime;
 				this.onComplete();
+				this.onChange(this.state);
 			},
 			fault:function(error){
 				if(this.state >= STATE_CANCELED) return;
@@ -114,6 +115,7 @@
 			},
 			start:function(){
 				if(this.state >= STATE_STARTED) return;
+				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
 				if(this.loggingEnabled) console.log("Started:" + this.name);
 				this.onChange(this.state);
