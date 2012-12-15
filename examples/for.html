@@ -14,12 +14,13 @@
 			
 			function execute(e) { 
 				
-				task = MonkeyBars.Task.extend({
-					name:"SimpleTask",
+				task = MonkeyBars.ForTask.extend({
+					name:"ForTask",
 					loggingEnabled:true,
+					count:5,
 					onChange:function(state,error){
 						if(state == MonkeyBars.TaskStates.Completed) {
-							alert("The 'Task' is complete");
+							alert("The 'ForTask' is complete");
 						}
 					},
 					performTask:performTaskFunx

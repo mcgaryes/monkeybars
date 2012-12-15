@@ -4,19 +4,15 @@
 	<title>Sequence Task Example</title>
 	
 	<script src="monkeybars.min.js" type="text/javascript"></script>
+		<script src="../source/monkeybars.js" type="text/javascript"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="index.js"></script>
+		<link rel="stylesheet" href="index.css">
 	<script type="text/javascript">
 
-		function handleOnLoad(e) { 
+		function execute(e) { 
 		
-
-			var performTaskFunx = function(){
-				var task = this;
-				var timeout = setTimeout(function(){
-					task.complete();
-				},Math.round(Math.random()*3000));
-			}
-
-			var task = MonkeyBars.SequenceTask.extend({
+			task = MonkeyBars.SequenceTask.extend({
 				name:"SequenceTask",
 				loggingEnabled:true,
 				tasks:[{
@@ -46,6 +42,9 @@
 
 	</script>
 </head>
-<body onload="handleOnLoad();">
+<body >
+	<button id="start" onclick="start();">start</button>
+	<button id="stop" onclick="stop();">cancel</button>
+	<div id="log"></div>
 </body>
 </html>

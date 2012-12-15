@@ -11,7 +11,13 @@
 		<script type="text/javascript" src="../source/monkeybars.js"></script>
 
 		<!-- Specs -->
-		<script type="text/javascript" src="specs/monkeybars.spec.js"></script>
+		<script type="text/javascript" src="specs/simple.spec.js"></script>
+		<script type="text/javascript" src="specs/group.spec.js"></script>
+		<script type="text/javascript" src="specs/parallel.spec.js"></script>
+		<script type="text/javascript" src="specs/sequence.spec.js"></script>
+		<script type="text/javascript" src="specs/for.spec.js"></script>
+		<script type="text/javascript" src="specs/while.spec.js"></script>
+		<script type="text/javascript" src="specs/when.spec.js"></script>
 
 		<!-- Jasmine Startup -->
 		<script type="text/javascript">
@@ -29,14 +35,8 @@
 			var currentWindowOnload = window.onload;
 			
 			window.onload = function() {
-				
-				if (currentWindowOnload) {
-					currentWindowOnload();
-				}
-
-				//document.querySelector('.version').innerHTML = jasmineEnv.versionString();
+				if (currentWindowOnload) currentWindowOnload();
 				execJasmine();
-
 			};
 
 			function execJasmine() {

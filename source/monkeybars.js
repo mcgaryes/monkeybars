@@ -1,6 +1,9 @@
 
 (function() {
 
+
+	var root = this;
+
 	// state constants
 	var STATE_INITIALIZED	=	0;
 	var STATE_STARTED		=	1;
@@ -9,6 +12,7 @@
 	var STATE_COMPLETED		=	4;
 
 	// type constants
+	var TYPE_FOR			=	"for";
 	var TYPE_PARALLEL		=	"parallel";
 	var TYPE_SEQUENCE		=	"sequence";
 	var TYPE_SIMPLE			=	"simple";
@@ -33,10 +37,17 @@
 				return SequenceTask.extend(options);
 			} else if(type == TYPE_PARALLEL){
 				return ParallelTask.extend(options);
+			} else if( type == TYPE_FOR) {
+				console.log("for type");
+				return ForTask.extend(options);
 			}
 		} else {
 			if (!tasks) {
-				return Task.extend(options);
+				if(!options.count){
+					return Task.extend(options);
+				}else{
+					return ForTask.extend(options);
+				}
 			} else {
 				return SequenceTask.extend(options);
 			}
@@ -86,6 +97,9 @@
 			onChange:function(state,error){
 				// empty by default
 			},
+			onStart:function() {
+				// empty by default
+			},
 			onFault:function(error) {
 				// empty by default
 			},
@@ -104,6 +118,7 @@
 				if(this.loggingEnabled) console.log("Started:" + this.name);
 				this.onChange(this.state);
 				this.performTask();
+				this.onStart();
 			}
 		},
 		extend:function(options){
@@ -267,7 +282,36 @@
 		}
 	};
 
-	this.MonkeyBars = {
+	var ForTask = {
+		prototype:{
+			count:1,
+			currentIndex:0,
+			complete:function(){
+				if(this.currentIndex != this.count - 1) {
+					this.state = STATE_INITIALIZED;
+					this.currentIndex++;
+					if(this.loggingEnabled) 
+						console.log("Completed:" + this.name + " " + this.currentIndex + " out of " + this.count + " times");
+					this.performTask();
+				} else {
+					Task.prototype.complete.call(this);
+				}
+			}
+		},
+		extend:function(options){
+			var parent = Task.extend(ForTask.prototype);
+			var child = {};
+			for (var prop in parent) child[prop] = parent[prop];
+			for (var prop in options) child[prop] = options[prop];
+		    return child;
+		}
+	}
+
+	root.MonkeyBars = {
+		ForTask:ForTask,
+		ParallelTask:ParallelTask,
+		SequenceTask:SequenceTask,
+		Task:Task,
 		TaskStates:{
 			Initialized:STATE_INITIALIZED,
 			Started:STATE_STARTED,
@@ -278,11 +322,9 @@
 		TaskTypes:{
 			Parallel:TYPE_PARALLEL,
 			Sequence:TYPE_SEQUENCE,
-			Simple:TYPE_SIMPLE
-		},
-		Task:Task,
-		ParallelTask:ParallelTask,
-		SequenceTask:SequenceTask
+			Simple:TYPE_SIMPLE,
+			For:TYPE_FOR
+		}
 	};
 
 }(this));

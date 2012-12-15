@@ -1,0 +1,25 @@
+button {
+			height: 50px;
+			width: 100px;
+			background-color: #DDD;
+			border: none;
+			margin-right: 10px;
+			margin-bottom: 20px;
+			padding: 0;
+			color: #333;
+			font-size: 20px;
+		}
+
+		p {
+			margin: 0;
+			padding: 0;
+			font-size: 24px;
+			font-family: Arial;
+			font-weight: bold;
+			color: #999;
+
+		}
+
+		.label {
+			color: #333;
+		}
