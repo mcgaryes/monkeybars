@@ -9,6 +9,7 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script src="index.js"></script>
 		<link rel="stylesheet" href="index.css">
+		<link rel="stylesheet" href="examples.css">
 
 		<script type="text/javascript">
 			
@@ -18,11 +19,6 @@
 					name:"ForTask",
 					loggingEnabled:true,
 					count:5,
-					onChange:function(state,error){
-						if(state == MonkeyBars.TaskStates.Completed) {
-							alert("The 'ForTask' is complete");
-						}
-					},
 					performTask:performTaskFunx
 				});
 

@@ -1,7 +1,7 @@
 
 (function() {
 
-
+	// reference to window
 	var root = this;
 
 	// state constants
@@ -38,7 +38,6 @@
 			} else if(type == TYPE_PARALLEL){
 				return ParallelTask.extend(options);
 			} else if( type == TYPE_FOR) {
-				console.log("for type");
 				return ForTask.extend(options);
 			}
 		} else {

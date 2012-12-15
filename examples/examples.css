@@ -1,0 +1,48 @@
+body {
+  background-color: #f8f8f8 !important;
+  color: #333;
+  font-smooth: always;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+  width: 100%; 
+padding:50px;}
+
+button {
+			height: 50px;
+			width: 100px;
+			background-color: #DDD;
+			border: none;
+			margin-right: 10px;
+			margin-bottom: 20px;
+			padding: 0;
+			color: #333;
+			font-size: 20px;
+		}
+
+		p {
+			margin: 0;
+			padding: 0;
+			font-size: 24px;
+			font-family: Arial;
+			font-weight: bold;
+			color: #333;
+
+		}
+
+		.Started {
+			color: #4183C4;
+		}
+
+		.Completed {
+			color: #439B38;
+		}
+
+		#stop {
+			background-color: #ff0000;
+			color:#fff;
+		}
+
+		#start {
+			background-color: #439B38;
+			color:#fff;
+		}
