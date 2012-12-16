@@ -1,49 +1,79 @@
-describe("Parallel Tests", function() {
+describe("Parallel Task Tests", function() {
 
-	beforeEach(function() {});
-	afterEach(function() {});
+	// ===================================================================
+	// === Initialization Tests ==========================================
+	// ===================================================================
 
-	/*
-	it("Initializing parallel task",function(){
-		var task = MonkeyBars.ParallelTask.extend({
-			name:"name",
-			tasks:[{
-				name:"subtask",
-				perform:function(){
+	describe("Initialization Tests", function() {
+
+		it("Initialization as expected",function(){
+			var task = new MonkeyBars.ParallelTask({
+				name:"name",
+				tasks:[{
+					name:"subtask",
+					perform:function(){
+						this.complete();
+					}
+				}],
+				performTask:function(){
 					this.complete();
 				}
-			}],
-			performTask:function(){
-				this.complete();
-			}
+			});
+
+			expect(task.type).toEqual("parallel");
+			expect(task.name).toEqual("name");
+			expect(task.state).toEqual(0);
+			task.start();
+			expect(task.state).toEqual(4);
 		});
 
-		expect(task.type).toEqual("parallel");
-		expect(task.name).toEqual("name");
-		expect(task.state).toEqual(0);
-		task.start();
-		expect(task.state).toEqual(4);
 	});
-	*/
-	it("FOR decorator performs as expected",function(){
-		var index = 0;
-		var task = new MonkeyBars.ParallelTask.extend({
-			count:3,
-			tasks:[{
-				performTask:function(){
-					index++;
-					this.complete();
-				}
-			},
-			{
-				performTask:function(){
-					index++;
-					this.complete();
-				}
-			}]
+
+	// ===================================================================
+	// === Decorator Tests ===============================================
+	// ===================================================================
+
+	describe("Decorator Tests", function() {
+
+		it("FOR decorator performs as expected",function(){
+			var index = 0;
+			var task = new MonkeyBars.ParallelTask({
+				count:3,
+				loggingEnabled:false,
+				tasks:[{
+					name:"subtask1",
+					performTask:function(){
+						index++;
+						this.complete();
+					}
+				},
+				{
+					name:"subtask2",
+					performTask:function(){
+						index++;
+						this.complete();
+					}
+				},
+				{
+					name:"subtask2",
+					performTask:function(){
+						index++;
+						this.complete();
+					}
+				}]
+			});
+			task.start();
+			expect(index).toEqual(9);
 		});
-		task.start();
-		expect(index).toEqual(6);
+
+	});
+
+	// ===================================================================
+	// === Structural Tests ==============================================
+	// ===================================================================
+
+	describe("Structural Tests", function() {
+
 	});
 
 });

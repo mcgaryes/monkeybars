@@ -1,46 +1,37 @@
 /*! monkeybars v0.0.1 */
 (function() {
 
-	// reference to window
-	var root = this;
-
 	// ===================================================================
 	// === Constants =====================================================
 	// ===================================================================
 
-	// state constants
 	var STATE_INITIALIZED	=	0;
 	var STATE_STARTED		=	1;
 	var STATE_CANCELED		=	2;
 	var STATE_FAULTED		=	3;
 	var STATE_COMPLETED		=	4;
 
-	// type constants
 	var TYPE_PARALLEL		=	"parallel";
 	var TYPE_SEQUENCE		=	"sequence";
 	var TYPE_SIMPLE			=	"simple";
 
-	// decorators
 	var DECORATOR_FOR		=	"for";
 	var DECORATOR_WHEN		=	"when";
 	var DECORATOR_WHILE		=	"while";
 
+	var TID_PREFIX			=	"tid";
+
+	// ===================================================================
+	// === Private Variables =============================================
+	// ===================================================================
+
+	var root = this;
+	var taskIdCounter = 0;
+	var MonkeyBars = {};
+
 	// ===================================================================
 	// === Helper Functions ==============================================
 	// ===================================================================
-
-	/**
-	 * Adds any decorations based on child properties
-	 *
-	 * @method decorateChildTask
-	 * @param {Object} child
-	 */
-	var decorateChildTask = function(child) {
-		console.log("count = " + child.count);
-		if(child.count) ForTaskDecorator.decorate(child);
-		if(child.when) WhenTaskDecorator.decorate(child);
-		if(child.while) WhileTaskDecorator.decorate(child);
-	}
 
 	/**
 	 * Creates task based on the options passed
@@ -95,8 +86,25 @@
 		return tempTasks;
 	}
 
+	/** 
+	 * Resets the task to its original non executed state
+	 *
+	 * @method resetTask
+	 * @param {Object} task
+	 */
+	var resetTask = function(task){
+		task.state = STATE_INITIALIZED;
+		if(task.type != TYPE_SIMPLE && task.tasks){
+			//if(task.type == TYPE_PARALLEL) task.currentIndex = task.tasks.length;
+			task.currentIndex = 0;
+			for (var i = 0; i < task.tasks.length; i++) {
+				resetTask(task.tasks[i]);
+			};
+		}
+	}
+
 	/**
-	 * Extends one object from another
+	 * Extends a task with a set of attributes
 	 *
 	 * @method extend
 	 * @param {Object} protoProps
@@ -105,11 +113,17 @@
 	var extend = function(attributes) {
 		var parent = this.prototype;
     	var child = {};
-
 		for (var prop in parent) child[prop] = parent[prop];
 		for (var prop in attributes) child[prop] = attributes[prop];
-
 		return child;
+	}
+
+	/**
+	 * Generates a unique id for each task
+	 */
+	var generateUniqueId = function(prefix){
+  		var id = '' + taskIdCounter++;
+    	return prefix ? prefix + id : TID_PREFIX + id;
 	}
 
 	// ===================================================================
@@ -123,8 +137,18 @@
 	 * @param {Object} attributes
 	 * @param {Object} options
 	 */
-	var Task = function(attributes,options) {
-		return Task.extend(attributes);
+	var Task = MonkeyBars.Task = function(attributes,options) {
+
+		var task = Task.extend(attributes);
+		task.tid = generateUniqueId();
+		task.decorators = [];
+
+		// decorate our task
+		if(task.count) ForTaskDecorator(task);
+		if(task.when) WhenTaskDecorator(task);
+		if(task.while) WhileTaskDecorator(task);
+
+		return task;
 	}
 
 	/**
@@ -137,7 +161,6 @@
 		type:TYPE_SIMPLE,
 		name:TYPE_SIMPLE,
 		state:STATE_INITIALIZED,
-		decorators:[],
 		cancel:function(){
 			if(this.state > STATE_STARTED) return;
 			this.state = STATE_CANCELED;
@@ -196,7 +219,7 @@
 	 * @param {Object} attributes
 	 * @param {Object} options
 	 */
-	var TaskGroup = function(attributes,options){
+	var TaskGroup = MonkeyBars.TaskGroup = function(attributes,options){
 		attributes = TaskGroup.extend(attributes);
 		attributes.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
 		return new Task(attributes,options);
@@ -209,6 +232,7 @@
 	 * @type Object
 	 */
 	TaskGroup.prototype = {
+		currentIndex:0,
 		addSubTask:function(task){
 			if(!task.id) task = createTaskWithOptions(task);
 			this.tasks.push(task);
@@ -249,7 +273,7 @@
 				else if(state == STATE_FAULTED) this.group.onSubTaskFault(error);
 				else if(state == STATE_CANCELED) this.group.onSubTaskCancel(task);
 			}
-			
+
 			task.start();
 			
 			return false;
@@ -268,7 +292,7 @@
 	 * @param {Object} attributes
 	 * @param {Object} options
 	 */
-	var ParallelTask = function(attributes,options) { 
+	var ParallelTask = MonkeyBars.ParallelTask = function(attributes,options) { 
 		attributes = ParallelTask.extend(attributes);
 		return new TaskGroup(attributes,options);
 	}
@@ -282,7 +306,6 @@
 	ParallelTask.prototype = {
 		type:TYPE_PARALLEL,
 		name:TYPE_PARALLEL,
-		currentIndex:0,
 		hasNoEnabledSubTasks:function(){
 			for (var i = 0; i < this.tasks.length; i++) {
 				var task = this.tasks[i];
@@ -305,7 +328,8 @@
 			this.processSubTask(task);
 		},
 		onSubTaskComplete:function(){
-			if(this.currentIndex-- <= 1) {
+			this.currentIndex = this.currentIndex++;
+			if(this.currentIndex == this.tasks.length) {
 				this.complete();
 			}
 		},
@@ -325,7 +349,7 @@
 	 * @param {Object} attributes
 	 * @param {Object} options
 	 */
-	var SequenceTask = function(attributes,options) {
+	var SequenceTask = MonkeyBars.SequenceTask = function(attributes,options) {
 		attributes = SequenceTask.extend(attributes);
 		return new TaskGroup(attributes,options);
 	}
@@ -339,7 +363,6 @@
 	SequenceTask.prototype = {
 		type:TYPE_SEQUENCE,
 		name:TYPE_SEQUENCE,
-		currentIndex:0,
 		startNextSubTask:function(){
 			if(this.state >= STATE_CANCELED) return;
 			if (this.tasks && this.currentIndex < this.tasks.length){
@@ -370,88 +393,103 @@
 	// ===================================================================
 
 	/**
-	 * ForTaskDecorator description.
+	 * description.
 	 *
-	 * @property ForTaskDecorator
-	 * @type Object
+	 * @method ForTaskDecorator
+	 * @param {Object} task
+	 * @return Object decorated task
 	 */
-	var ForTaskDecorator = {
-		prototype:{
-			itterationIndex:0,
-			complete:function() {
-				var count = this.count ? this.count : 1;
-				if(this.itterationIndex != count - 1) {
-					this.state = STATE_INITIALIZED;
-					this.itterationIndex++;
-					if(this.loggingEnabled) console.log("Completed:" + this.name + " " + this.itterationIndex + " out of " + count + " times");
-					this.performTask();
-				} else {
-					Task.prototype.complete.call(this);
-				}
-			}
-		},
-		decorate:function(child){
-			console.log("FOR");
-			child.decorators.push(DECORATOR_FOR);
-			for (var prop in ForTaskDecorator.prototype) {
-				child[prop] = ForTaskDecorator.prototype[prop];
-			}
-		}
+	var ForTaskDecorator = function(task) {
+	 	task.count = task.count ? task.count : 1;
+		task.itterationIndex = ForTaskDecorator.prototype.itterationIndex;
+		task.complete = ForTaskDecorator.prototype.complete;
+		task.decorators.push(DECORATOR_FOR);
+		return task;
 	};
 
 	/**
-	 * WhileTaskDecorator description.
+	 * prototype description.
 	 *
-	 * @property WhileTaskDecorator
+	 * @property ForTaskDecorator prototype
 	 * @type Object
 	 */
-	var WhileTaskDecorator = {
-		prototype:{
-			complete:function(){
-				var interval = this.interval ? this.interval : 100;
-				if(this.while()) {
-					this.state = STATE_INITIALIZED;
-					var delegate = this;
-					if(interval != 0){
-						setTimeout(function(){ delegate.start(); },interval);
-					}else{
-						delegate.start();
-					}
-				} else {
-					Task.prototype.complete.call(this);
-				}
-			}
-		},
-		decorate:function(child){
-			child.decorators.push(DECORATOR_WHILE);
-			for (var prop in WhileTaskDecorator.prototype) {
-				child[prop] = WhileTaskDecorator.prototype[prop];
+	ForTaskDecorator.prototype = {
+		itterationIndex:0,
+		complete:function() {
+			if(this.itterationIndex != this.count - 1) {
+				resetTask(this);
+				this.itterationIndex++;
+				if(this.loggingEnabled) console.log("Completed:" + this.name + " " + this.itterationIndex + " out of " + this.count + " times");
+				this.performTask();
+			} else {
+				Task.prototype.complete.call(this);
 			}
 		}
-	};
+	}
 
 	/**
-	 * WhenTaskDecorator description.
+	 * description.
 	 *
-	 * @property WhenTaskDecorator
+	 * @method WhileTaskDecorator
+	 * @param {Object} task
+	 * @return Object decorated task
+	 */
+	 var WhileTaskDecorator = function(task) {
+	 	task.interval = task.interval ? task.interval : 100;
+	 	task.complete = WhileTaskDecorator.prototype.complete;
+	 	task.decorators.push(DECORATOR_WHILE);
+		return task;
+	 };
+
+	/**
+	 * prototype description.
+	 *
+	 * @property WhileTaskDecorator prototype
 	 * @type Object
 	 */
-	var WhenTaskDecorator = {
-		prototype:{
-			start:function(){
-				var interval = this.interval ? this.interval : 10;
-				if(this.when()){
-					Task.prototype.start.call(this);
+	WhileTaskDecorator.prototype = {
+		complete:function(){
+			if(this.while()) {
+				this.state = STATE_INITIALIZED;
+				var delegate = this;
+				if(this.interval != 0){
+					setTimeout(function(){ delegate.start(); },this.interval);
 				}else{
-					var delegate = this;
-					setTimeout(function(){ delegate.start(); },interval);
+					delegate.start();
 				}
+			} else {
+				Task.prototype.complete.call(this);
 			}
-		},
-		decorate:function(child){
-			child.decorators.push(DECORATOR_WHEN);
-			for (var prop in WhenTaskDecorator.prototype) {
-				child[prop] = WhenTaskDecorator.prototype[prop];
+		}
+	};
+
+	/**
+	 * description.
+	 *
+	 * @method WhenTaskDecorator
+	 * @param {Object} task
+	 * @return Object decorated task
+	 */
+	var WhenTaskDecorator = function(task) {
+		task.start = WhenTaskDecorator.prototype.start;
+		task.decorators.push(DECORATOR_WHEN);
+		return task;
+	};
+
+	/**
+	 * prototype description.
+	 *
+	 * @property WhenTaskDecorator prototype
+	 * @type Object
+	 */
+	WhenTaskDecorator.prototype = {
+		start:function(){
+			var interval = this.interval ? this.interval : 10;
+			if(this.when()){
+				Task.prototype.start.call(this);
+			}else{
+				var delegate = this;
+				setTimeout(function(){ delegate.start(); },interval);
 			}
 		}
 	};
@@ -460,27 +498,30 @@
 	// === Public Interface ==============================================
 	// ===================================================================
 
-	root.MonkeyBars = {
-		ParallelTask:ParallelTask,
-		SequenceTask:SequenceTask,
-		Task:Task,
-		TaskStates:{
-			Initialized:STATE_INITIALIZED,
-			Started:STATE_STARTED,
-			Canceled:STATE_CANCELED,
-			Faulted:STATE_FAULTED,
-			Completed:STATE_COMPLETED
-		},
-		TaskTypes:{
-			Parallel:TYPE_PARALLEL,
-			Sequence:TYPE_SEQUENCE,
-			Simple:TYPE_SIMPLE
-		},
-		TaskDecorators:{
-			For:DECORATOR_FOR,
-			When:DECORATOR_WHEN,
-			While:DECORATOR_WHILE
-		}
+	// set publicly available states
+	MonkeyBars.TaskStates = {
+		Initialized:STATE_INITIALIZED,
+		Started:STATE_STARTED,
+		Canceled:STATE_CANCELED,
+		Faulted:STATE_FAULTED,
+		Completed:STATE_COMPLETED
 	};
+
+	// set publicly available types
+	MonkeyBars.TaskTypes = {
+		Parallel:TYPE_PARALLEL,
+		Sequence:TYPE_SEQUENCE,
+		Simple:TYPE_SIMPLE
+	};
+
+	// set publicly available decorators
+	MonkeyBars.TaskDecorators = {
+		For:DECORATOR_FOR,
+		When:DECORATOR_WHEN,
+		While:DECORATOR_WHILE
+	};
+
+	// set MonkeyBars to our root object
+	root.MonkeyBars = MonkeyBars;
 
 }(this));

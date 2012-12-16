@@ -17,18 +17,12 @@
 
 		function execute(e) { 
 		
-			var simple = MonkeyBars.Task.extend({
+			var simple = new MonkeyBars.Task({
 				name:"simple",
 				performTask:performTaskFunx
 			});
 
-			var forTask = MonkeyBars.ForTask.extend({
-				name:"for",
-				count:2,
-				performTask:performTaskFunx
-			});
-
-			var sequence = MonkeyBars.SequenceTask.extend({
+			var sequence = new MonkeyBars.SequenceTask({
 				name:"sequence",
 				tasks:[{
 					name:"sequence subtask one",
@@ -44,7 +38,7 @@
 				}
 			});
 
-			var parallel = MonkeyBars.ParallelTask.extend({
+			var parallel = new MonkeyBars.ParallelTask({
 				name:"parallel",
 				tasks:[{
 					name:"parallel subtask one",
@@ -60,10 +54,10 @@
 				}
 			});
 
-			task = MonkeyBars.SequenceTask.extend({
+			task = new MonkeyBars.SequenceTask({
 				name:"complex",
 				loggingEnabled:true,
-				tasks:[sequence,forTask,simple,parallel],
+				tasks:[sequence,simple,parallel],
 				onChange:function(state,error){
 					if(state == MonkeyBars.TaskStates.Completed) {
 						append("Completed",this.name,this.executionTime);

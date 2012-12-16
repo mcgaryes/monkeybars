@@ -2,7 +2,7 @@
 
 	<head>
 
-		<title>For Task Example</title>
+		<title>Simple Task Example</title>
 
 		<script src="monkeybars.min.js" type="text/javascript"></script>
 		<script src="../source/monkeybars.js" type="text/javascript"></script>
@@ -15,7 +15,7 @@
 			
 			function execute(e) { 
 				
-				task = MonkeyBars.Task.extend({
+				task = new MonkeyBars.Task({
 					name:"SimpleTask",
 					loggingEnabled:true,
 					onChange:function(state,error){

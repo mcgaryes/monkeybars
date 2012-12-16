@@ -1,4 +1,4 @@
-describe("Group Tests", function() {
+describe("Task Group Tests", function() {
 
 	beforeEach(function() {});
 	afterEach(function() {});
