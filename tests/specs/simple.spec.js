@@ -23,6 +23,16 @@ describe("Simple Task Tests", function() {
 			expect(task.state).toEqual(4);
 		});
 
+		it("Extention is possible",function(){
+			
+			var CustomSimple = MonkeyBars.Task.extend({
+				name:"CustomSimple"
+			});
+
+			console.log(CustomSimple);
+
+		});
+
 	});
 
 	// ===================================================================

@@ -39,31 +39,33 @@
 	 * @method createTaskWithOptions
 	 * @param {Object} options
 	 */
-	var createTaskWithOptions = function(options){
-		
-		var task;
+	var createTaskWithOptions = function(attributes){
 
-		if(!options) {
-			throw "No options passed";
+		// check for attributes
+		if(!attributes) {
+			throw "No attributes passed";
 			return;
 		}
 
-		var type = options.type;
-		var tasks = options.tasks;
+		if(attributes.tid) return attributes;
+
+		var task;
+		var type = attributes.type;
+		var tasks = attributes.tasks;
 
 		if(type) {
 			if(type == TYPE_SIMPLE) {
-				return Task.extend(options);
+				return new Task(attributes);
 			} else if(type == TYPE_SEQUENCE) {
-				return SequenceTask.extend(options);
+				return new SequenceTask(attributes);
 			} else if(type == TYPE_PARALLEL){
-				return ParallelTask.extend(options);
+				return new ParallelTask(attributes);
 			}
 		} else {
 			if (!tasks) {
-				return Task.extend(options);
+				return new Task(attributes);
 			} else {
-				return SequenceTask.extend(options);
+				return new SequenceTask(attributes);
 			}
 		}
 
@@ -257,13 +259,10 @@
 			if (!task) throw "You cannot process a task with a nil value.";
 			
 			if(task.state == STATE_CANCELED) {
-				console.log("task is canceled");
 				this.onSubTaskCancel(task);
 				return true;
 			}
 			
-			// set concurrency for the sub tasks
-			//task.concurrent = self.concurrent;
 			task.group = this;
 			task.loggingEnabled = this.loggingEnabled;
 			
@@ -282,6 +281,12 @@
 			if (!task) return;
 			var index = this.tasks.indexOf(task);
 			this.tasks.splice(index,1);
+		},
+		getTaskById:function(tid){
+			for (var i = 0; i < this.tasks.length; i++) {
+				var task = this.tasks[i];
+				if(task.tid == tid) return task;
+			};
 		}
 	};
 
