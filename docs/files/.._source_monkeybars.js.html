@@ -41,6 +41,8 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="..&#x2F;classes/MonkeyBars.html">MonkeyBars</a></li>
+            
                 <li><a href="..&#x2F;classes/ParallelTask.html">ParallelTask</a></li>
             
                 <li><a href="..&#x2F;classes/SequenceTask.html">SequenceTask</a></li>
@@ -93,9 +95,12 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 &#x2F;*!
+ *
  * MonkeyBars 
+ * 
  * Simple library that provides a simple structure for handling singular, sequential 
  * and parallel units of code. 
+ *
  * https:&#x2F;&#x2F;github.com&#x2F;mcgaryes&#x2F;monkeybars
  * 
  * @version 0.0.1 
@@ -126,6 +131,7 @@
 	var TID_PREFIX			=	&quot;tid&quot;;
 	var TIMEOUT_INTERVAL	=	100;
 	var OVERRIDE_NEEDED		=	&quot;This method must be overridden.&quot;;
+	var UNDEFINED_TASK		=	&quot;Task is undefined.&quot;;
 
 	&#x2F;&#x2F; ===================================================================
 	&#x2F;&#x2F; === Private Variables =============================================
@@ -133,7 +139,7 @@
 
 	var root = this;
 	var taskIdCounter = 0;
-	var MonkeyBars = {};
+	var MonkeyBars = root.MonkeyBars = {};
 
 	&#x2F;&#x2F; ===================================================================
 	&#x2F;&#x2F; === NodeJS Conditional ============================================
@@ -263,6 +269,7 @@
 	&#x2F;**
 	 * Extention functionality for various task types.
 	 * @method extend
+	 * @for MonkeyBars
 	 * @param {Object} protoProps
 	 * @return {Function} child Constructor function for extended task type
 	 * @example
@@ -289,10 +296,6 @@
 	&#x2F;&#x2F; === Tasks Objects =================================================
 	&#x2F;&#x2F; ===================================================================
 
-	&#x2F;&#x2F; @TODO: Figure out what properties should be &#x27;writable&#x27;... I am
-	&#x2F;&#x2F; thinking all of them should to allow future extention by the end
-	&#x2F;&#x2F; developer, but investigate.
-
 	&#x2F;**
 	 * The simplest form of a __MonkeyBars__ task. Once started the task executes all 
 	 * functionality located within the &#x60;performTask&#x60; function block. Set &#x60;loggingEnabled&#x60;
@@ -317,7 +320,7 @@
     		task.start();
 
 	 *&#x2F;
-	 var Task = MonkeyBars.Task = function(attributes) {
+	var Task = MonkeyBars.Task = function(attributes) {
 	 
 	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
@@ -335,10 +338,10 @@
 		if(task.count) ForTaskDecorator(task);
 		if(task.when) WhenTaskDecorator(task);
 		if(task.while) WhileTaskDecorator(task);
-
-	 }
+	}
 
 	Task.prototype = Object.create({}, {
+		
 		&#x2F;**
 		 * The kind of task 
 		 * 
@@ -351,14 +354,53 @@
 			value: TYPE_SIMPLE,
 			writable: true
 		},
+
+		&#x2F;**
+		 * The name of the task if not specified by the instance.
+		 * 
+		 * @for Task
+		 * @property name
+		 * @type String
+		 * @default task
+		 *&#x2F;
 		name: {
 			value: TYPE_SIMPLE,
 			writable: true
 		},
+
+		&#x2F;**
+		 * The current state of the task
+		 * 
+		 * @for Task
+		 * @property name
+		 * @type Integer
+		 * @readonly
+		 * @default 0
+		 *&#x2F;
 		state: {
 			value: STATE_INITIALIZED,
 			writable: true
 		},
+
+		&#x2F;**
+		 * Calling this method cancels the task. However it is up to the instance to handle 
+		 * the canceled state.
+		 * 
+		 * @for Task
+		 * @method cancel
+		 * @example
+
+			var task = new MonkeyBars.Task({
+				performTask:function(){
+					if(true){
+						this.cancel();
+					}
+				}
+			});
+
+			task.start();
+
+		 *&#x2F;
 		cancel: {
 			value: function() {
 				if(this.state &gt; STATE_STARTED) return;
@@ -369,6 +411,23 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Calling this method says that the tasks execution is now complete.
+		 * 
+		 * @for Task
+		 * @method complete
+		 * @example
+
+			var task = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete();
+				}
+			});
+
+			task.start();
+
+		 *&#x2F;
 		complete: {
 			value: function() {
 				if(this.state &gt; STATE_STARTED) return;
@@ -380,6 +439,28 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Calling this method to fault a task. If it is part of a group task this will 
+		 * also call the groups fault method passing the error up to the group.
+		 * 
+		 * @for Task
+		 * @method fault
+		 * @param {String} error Message associated with the cause of the fault.
+		 * @example
+
+			var task = new MonkeyBars.Task({
+				performTask:function(){
+					var a = &quot;a&quot;;
+					if(a != &quot;b&quot;) {
+						this.fault(&quot;a != b&quot;);
+					}
+				}
+			});
+
+			task.start();
+
+		 *&#x2F;
 		fault: {
 			value: function(error) {
 				if(this.state &gt;= STATE_CANCELED) return;
@@ -390,30 +471,114 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * This method is called during the execution lifecycle of the task. It is intentionally
+		 * left blank and is up to the instance to describe it functionality.
+		 * 
+		 * @for Task
+		 * @method onChange
+		 * @param {Integer} state The current state of the task
+		 * @param {String} error Message describing error
+		 * @example
+
+			var task = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete();
+				},
+				onChange:function(state,error){
+					if(state == MonkeyBars.TaskStates.Completed){
+						alert(&quot;complete&quot;);
+					}
+				}
+			});
+
+			task.start();
+
+		 *&#x2F;
 		onChange: {
 			value: function(state, error) {},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Convenience method called when the task starts.
+		 * 
+		 * @for Task
+		 * @method onStart
+		 *&#x2F;
 		onStart: {
 			value: function() {},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Convenience method called when the task faults.
+		 * 
+		 * @for Task
+		 * @method onFault
+		 * @param {String} error Message describing error
+		 *&#x2F;
 		onFault: {
 			value: function(error) {},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Convenience method called when the task completes.
+		 * 
+		 * @for Task
+		 * @method onComplete
+		 *&#x2F;
 		onComplete: {
 			value: function() {},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Convenience method called when the task is canceled.
+		 * 
+		 * @for Task
+		 * @method onCancel
+		 *&#x2F;
 		onCancel: {
 			value: function() {},
 			writable: true
 		},
+
+		&#x2F;**
+		 * This method is required for **simple** tasks and will throw an exception if it 
+		 * is called and not overridden. If you overwrite this method on a task group
+		 * then you need to make sure that you call the extended&#x2F;implemented classes
+		 * original prototype method (see the example below).
+		 * 
+		 * @for Task
+		 * @method performTask
+		 * @required
+		 * @example
+
+			var parallel = new MonkeyBars.ParallelTask({
+				...
+				performTask:function(){
+					&#x2F;&#x2F; custom functionality
+					MonkeyBars.ParallelTask.prototype.performTask.call(this);
+				}
+				...
+			})
+
+		 *&#x2F;
 		performTask: {
 			value: function() { throw OVERRIDE_NEEDED; },
 			writable: true
 		},
+
+		&#x2F;**
+		 * Kicks off the execution of the task by calling the tasks &#x60;performTask&#x60; method. 
+		 * This method can only be run once on a task.
+		 * 
+		 * @for Task
+		 * @method start
+		 *&#x2F;
 		start: {
 			value:function() {
 				if(this.state &gt;= STATE_STARTED) return;
@@ -449,48 +614,135 @@
 	 }
 
 	TaskGroup.prototype = Object.create(Task.prototype, {
+		
+		&#x2F;**
+		 * The index of the subtasks that have completed execution.
+		 * 
+		 * @for Task
+		 * @property currentIndex
+		 * @type String
+		 * @readonly
+		 *&#x2F;
 		currentIndex: {
 			value: 0,
 			writable: true
 		},
+
+		&#x2F;**
+		 * Adds a subtask to the groups queue. This is helpful when you want to add
+		 * a sub task after instantiation.
+		 * 
+		 * @for TaskGroup
+		 * @method addSubTask
+		 * @param {Object} task Either an object containing attributes of a task or
+		 * an already instantiated task
+		 * @example
+
+			var parallel = new MonkeyBars.ParallelTask();
+			
+			parallel.addSubTask({
+				name:&quot;subtask&quot;,
+				performTask:function(){
+					this.complete();
+				}
+			});
+
+			var simple = new MonkeyBars.simple({
+				name:&quot;subtask&quot;,
+				performTask:function(){
+					this.complete();
+				}
+			});
+			parallel.addSubTask(simple);
+
+
+		 *&#x2F;
 		addSubTask: {
 			value: function(task) {
-				if(!task.id) task = createTaskWithOptions(task);
+				if(!task.tid) task = createTaskWithOptions(task);
 				this.tasks.push(task);
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * description
+		 * 
+		 * @for TaskGroup
+		 * @method addSubTaskAfterTask
+		 * @param {Object} task Either an object containing attributes of a task or
+		 * @param {Object} afterTask Reference to an already added task
+		 * @example
+
+			var parallel = new MonkeyBars.ParallelTask({
+				tasks:[task1,task3]
+			});
+
+			var task2 = new MonkeyBars.Task();
+			parallel.addTaskAfterTask(task2,task1);
+
+		 *&#x2F;
 		addSubTaskAfterTask: {
 			value: function(task, afterTask) {
 				if(!task || this.state == STATE_CANCELED) return;
-				if(!task.id) task = createTaskWithOptions(task);
+				if(!task.tid) task = createTaskWithOptions(task);
 				var index = this.tasks.indexOf(afterTask);
 				this.tasks.splice(index, 0, task);
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Called when a sub task completes. Must be overridden with functionality 
+		 * provided by the extending class.
+		 * 
+		 * @for TaskGroup
+		 * @method onSubTaskComplete
+		 *&#x2F;
 		onSubTaskComplete: {
-			value: function() {
-				throw &quot;This is an abstract method and must be implemented in a subclass.&quot;;
-			},
+			value: function() { throw OVERRIDE_NEEDED; },
 			writable: true
 		},
+
+		&#x2F;**
+		 * Called when a subtask calls its fault method.
+		 * 
+		 * @for TaskGroup
+		 * @method onSubTaskFault
+		 * @param {String} error Error message.
+		 *&#x2F;
 		onSubTaskFault: {
-			value: function(error) {
-				this.fault(error);
-			},
+			value: function(error) { this.fault(error); },
 			writable: true
 		},
+
+		&#x2F;**
+		 * Called when a subtask calls its fault method.
+		 * 
+		 * @for TaskGroup
+		 * @method onSubTaskCancel
+		 *&#x2F;
 		onSubTaskCancel: {
 			value: function(task) {
 				this.cancel();
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Processes a sub task and prepares it for execution. This method overwrites the
+		 * tasks on change functionality. If you wish to have a sub task that handles 
+		 * its own change functionality then you will need to implement the partner 
+		 * convenience methods.
+		 * 
+		 * @for TaskGroup
+		 * @method processSubTask
+		 * @param {Task} task Subtask to process
+		 *&#x2F;
 		processSubTask: {
 			value: function(task) {
 
-				if(!task) throw &quot;You cannot process a task with a nil value.&quot;;
+				if(!task) throw UNDEFINED_TASK;
 
 				if(task.state == STATE_CANCELED) {
 					this.onSubTaskCancel(task);
@@ -513,6 +765,15 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Removes a task from its group. Removing the task after it has executed will
+		 * have no apparent affect as it has already ran.
+		 * 
+		 * @for TaskGroup
+		 * @method removeSubTask
+		 * @param {Task} task The task you wish to remove from the group.
+		 *&#x2F;
 		removeSubTask: {
 			value: function(task) {
 				if(!task) return;
@@ -521,6 +782,22 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Return a Task object, if it exists, based on the &#x60;tid&#x60; passed.
+		 * 
+		 * @for TaskGroup
+		 * @method getTaskById
+		 * @param {String} tid The id of the task you want
+		 * @example
+
+			var parallel = new MonkeyBars.ParallelTask({
+				tasks:[task1,task3]
+			});
+
+			parallel.getTaskById(task1.tid);
+
+		 *&#x2F;
 		getTaskById: {
 			value: function(tid) {
 				for(var i = 0; i &lt; this.tasks.length; i++) {
@@ -557,7 +834,7 @@
 			parallel.start();
 
 	 *&#x2F;
-	 var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
+	var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
 	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
 
@@ -566,14 +843,40 @@
 	 }
 
 	ParallelTask.prototype = Object.create(TaskGroup.prototype, {
+
+		&#x2F;**
+		 * The kind of task 
+		 * 
+		 * @for ParallelTask
+		 * @property type
+		 * @type String
+		 * @readonly
+		 *&#x2F;
 		type: {
 			value: TYPE_PARALLEL,
 			writable: true
 		},
+
+		&#x2F;**
+		 * Name of the task
+		 * 
+		 * @for ParallelTask
+		 * @property name
+		 * @type String
+		 * @default parallel
+		 *&#x2F;
 		name: {
 			value: TYPE_PARALLEL,
 			writable: true
 		},
+
+		&#x2F;**
+		 * Checks whether or not the group has any enabled sub tasks.
+		 * 
+		 * @for ParallelTask
+		 * @method hasNoEnabledSubTasks
+		 * @return {Boolean} Has sub tasks or not
+		 *&#x2F;
 		hasNoEnabledSubTasks: {
 			value: function() {
 				if(!this.tasks) return true;
@@ -585,6 +888,13 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Processes all of the sub tasks available for the group
+		 * 
+		 * @for ParallelTask
+		 * @method processSubTasks
+		 *&#x2F;
 		processSubTasks: {
 			value: function() {
 				for(var i = 0; i &lt; this.tasks.length; i++) {
@@ -595,16 +905,35 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * This method is overridden from &#x60;TaskGroups&#x60; implementation because of the 
+		 * nature of a parallel task. When a task is added it should be immediately
+		 * processed and started.
+		 * 
+		 * @for ParallelTask
+		 * @method addSubTask
+		 * @param {Object} task Either an object containing attributes of a task or
+		 *&#x2F;
 		addSubTask: {
 			value: function(task) {
 				if(!task || task.state == STATE_CANCELED) return;
 				this.currentIndex++;
-				if(!task.id) task = new Task(task);
+				if(!task.tid) task = createTaskWithOptions(task);
 				this.tasks.push(task);
 				this.processSubTask(task);
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Overridden from TaskGroup. This method is run everytime a sub task
+		 * completes. When all subtasks are complete the groups complete method
+		 * is called.
+		 * 
+		 * @for ParallelTask
+		 * @method onSubTaskComplete
+		 *&#x2F;
 		onSubTaskComplete: {
 			value: function() {
 				this.currentIndex = this.currentIndex++;
@@ -614,6 +943,15 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Overridden from Task. First checks to see if there are any enabled
+		 * subtasks to process. If there arent the groups complete method is called.
+		 * If there are then the group processes all of the sub tasks it has.
+		 * 
+		 * @for ParallelTask
+		 * @method performTask
+		 *&#x2F;
 		performTask: {
 			value: function() {
 				if(this.hasNoEnabledSubTasks()) {
@@ -651,7 +989,7 @@
 			sequence.start();
 
 	 *&#x2F;
-	 var SequenceTask = MonkeyBars.SequenceTask = function(attributes){
+	var SequenceTask = MonkeyBars.SequenceTask = function(attributes){
 	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
 
@@ -660,14 +998,39 @@
 	 }
 
 	SequenceTask.prototype = Object.create(TaskGroup.prototype, {
+		
+		&#x2F;**
+		 * The kind of task 
+		 * 
+		 * @for SequenceTask
+		 * @property type
+		 * @type String
+		 * @readonly
+		 *&#x2F;
 		type: {
 			value: TYPE_SEQUENCE,
 			writable: true
 		},
+
+		&#x2F;**
+		 * The name of task 
+		 * 
+		 * @for SequenceTask
+		 * @property name
+		 * @type String
+		 * @default sequence
+		 *&#x2F;
 		name: {
 			value: TYPE_SEQUENCE,
 			writable: true
 		},
+
+		&#x2F;**
+		 * Starts the next task in the queue after its previous sibling has completed.
+		 * 
+		 * @for SequenceTask
+		 * @method startNextSubTask
+		 *&#x2F;
 		startNextSubTask: {
 			value: function() {
 				if(this.state &gt;= STATE_CANCELED) return;
@@ -680,6 +1043,14 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Overridden from TaskGroup. As long as the group has not been canceled,
+		 * when a sub task completes it starts the next sibling in the queue.
+		 * 
+		 * @for SequenceTask
+		 * @method onSubTaskComplete
+		 *&#x2F;
 		onSubTaskComplete: {
 			value: function() {
 				if(this.state == STATE_CANCELED) return;
@@ -687,6 +1058,15 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Overriden from TaskGroup. As long as the group has not been canceled,
+		 * when a sub task is canceled it simply moves on to the next task in the queue.
+		 * 
+		 * @for SequenceTask
+		 * @method onSubTaskCancel
+		 * @param {Task} task 
+		 *&#x2F;
 		onSubTaskCancel: {
 			value: function(task) {
 				&#x2F;&#x2F;[super onSubTaskCancel:task];
@@ -694,6 +1074,15 @@
 			},
 			writable: true
 		},
+
+		&#x2F;**
+		 * Starts the next sub task in the sequence. If overriden you need to call the 
+		 * SequenceTask&#x27;s prototype &#x60;performTask&#x60; method.
+		 * 
+		 * @for SequenceTask
+		 * @method performTask
+		 * @param {Task} task 
+		 *&#x2F;
 		performTask: {
 			value: function() {
 				this.startNextSubTask();
@@ -710,10 +1099,13 @@
 	&#x2F;&#x2F; ===================================================================
 
 	&#x2F;**
-	 * ForTaskDecorator description
-	 *
+	 * Decorator to provide for loop functionality for the task. The task executes
+	 * as many times as referenced by the count attribute provided by the instance.
+	 * 
+	 * @for MonkeyBars
 	 * @method ForTaskDecorator
 	 * @param {Object} task
+	 * @private
 	 *&#x2F;
 	var ForTaskDecorator = function(task) {
 	 	task.itterationIndex = 0;
@@ -730,12 +1122,15 @@
 	}
 
 	&#x2F;**
-	 * WhileTaskDecorator description
-	 *
+	 * Decorator to provide while loop functionaliy. The task executed until the &#x60;while&#x60;
+	 * method returns false.
+	 * 
+	 * @for MonkeyBars
 	 * @method WhileTaskDecorator
 	 * @param {Object} task
+	 * @private
 	 *&#x2F;
-	 var WhileTaskDecorator = function(task) {
+	var WhileTaskDecorator = function(task) {
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.complete = function() {
 			if(this.while()) {
@@ -754,10 +1149,12 @@
 	}
 
 	&#x2F;**
-	 * WhenTaskDecorator description
+	 * The task doesnt execute until the when method provided returns true.
 	 *
+	 * @for MonkeyBars
 	 * @method WhenTaskDecorator
 	 * @param {Object} task
+	 * @private
 	 *&#x2F;
 	var WhenTaskDecorator = function(task) {
 		task.decorators.push(DECORATOR_WHEN);
@@ -776,7 +1173,14 @@
 	&#x2F;&#x2F; === Public Interface ==============================================
 	&#x2F;&#x2F; ===================================================================
 
-	&#x2F;&#x2F; set publicly available states
+	&#x2F;**
+	 * description needed
+	 *
+	 * @property TaskStates
+	 * @for MonkeyBars
+	 * @type Object
+	 * @static
+	 *&#x2F;
 	MonkeyBars.TaskStates = {
 		Initialized:STATE_INITIALIZED,
 		Started:STATE_STARTED,
@@ -785,22 +1189,33 @@
 		Completed:STATE_COMPLETED
 	};
 
-	&#x2F;&#x2F; set publicly available types
+	&#x2F;**
+	 * description needed
+	 *
+	 * @property TaskTypes
+	 * @for MonkeyBars
+	 * @type Object
+	 * @static
+	 *&#x2F;
 	MonkeyBars.TaskTypes = {
 		Parallel:TYPE_PARALLEL,
 		Sequence:TYPE_SEQUENCE,
 		Simple:TYPE_SIMPLE
 	};
 
-	&#x2F;&#x2F; set publicly available decorators
+	&#x2F;**
+	 * description needed
+	 *
+	 * @property TaskDecorators
+	 * @for MonkeyBars
+	 * @type Object
+	 * @static
+	 *&#x2F;
 	MonkeyBars.TaskDecorators = {
 		For:DECORATOR_FOR,
 		When:DECORATOR_WHEN,
 		While:DECORATOR_WHILE
 	};
-
-	&#x2F;&#x2F; set MonkeyBars to our root object
-	root.MonkeyBars = MonkeyBars;
 
 }(this));
     </pre>

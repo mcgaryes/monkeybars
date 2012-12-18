@@ -41,6 +41,8 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="..&#x2F;classes/MonkeyBars.html">MonkeyBars</a></li>
+            
                 <li><a href="..&#x2F;classes/ParallelTask.html">ParallelTask</a></li>
             
                 <li><a href="..&#x2F;classes/SequenceTask.html">SequenceTask</a></li>
@@ -100,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l337"><code>..&#x2F;source&#x2F;monkeybars.js:337</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l500"><code>..&#x2F;source&#x2F;monkeybars.js:500</code></a>
         </div>
     
 
@@ -161,7 +163,7 @@ a group of tasks that is inherently a task itself.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l337"><code>..&#x2F;source&#x2F;monkeybars.js:337</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l500"><code>..&#x2F;source&#x2F;monkeybars.js:500</code></a>
         
         </p>
 
@@ -232,43 +234,127 @@ a group of tasks that is inherently a task itself.</p>
 
                     <ul class="index-list methods extends">
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method_createPropertyDescriptorsWithAttributes">createPropertyDescriptorsWithAttributes</a>
+                            <li class="index-item method">
+                                <a href="#method_addSubTask">addSubTask</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method_createSubTasksFromTaskOptionsArray">createSubTasksFromTaskOptionsArray</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private inherited">
-                                <a href="#method_createTaskWithOptions">createTaskWithOptions</a>
+                            <li class="index-item method">
+                                <a href="#method_addSubTaskAfterTask">addSubTaskAfterTask</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method inherited">
-                                <a href="#method_extend">extend</a>
+                                <a href="#method_cancel">cancel</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method_generateUniqueId">generateUniqueId</a>
+                            <li class="index-item method inherited">
+                                <a href="#method_complete">complete</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method_resetTask">resetTask</a>
+                            <li class="index-item method inherited">
+                                <a href="#method_fault">fault</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getTaskById">getTaskById</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_onCancel">onCancel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_onChange">onChange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_onComplete">onComplete</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_onFault">onFault</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_onStart">onStart</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_onSubTaskCancel">onSubTaskCancel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_onSubTaskComplete">onSubTaskComplete</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_onSubTaskFault">onSubTaskFault</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_performTask">performTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_processSubTask">processSubTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeSubTask">removeSubTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_start">start</a>
 
                                 
                                 
@@ -283,6 +369,20 @@ a group of tasks that is inherently a task itself.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                        
+                            <li class="index-item property inherited">
+                                <a href="#property_currentIndex">currentIndex</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property inherited inherited">
+                                <a href="#property_name">name</a>
+
+                                
+                                
+                            </li>
                         
                             <li class="index-item property inherited">
                                 <a href="#property_type">type</a>
@@ -305,486 +405,8 @@ a group of tasks that is inherently a task itself.</p>
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_createPropertyDescriptorsWithAttributes" class="method item private inherited">
-    <h3 class="name"><code>createPropertyDescriptorsWithAttributes</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>attributes</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_createPropertyDescriptorsWithAttributes">Task</a>:
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l118"><code>..&#x2F;source&#x2F;monkeybars.js:118</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Creates property descriptors from the passes attributes</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">attributes</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_createSubTasksFromTaskOptionsArray" class="method item private inherited">
-    <h3 class="name"><code>createSubTasksFromTaskOptionsArray</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>tasks</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_createSubTasksFromTaskOptionsArray">Task</a>:
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l101"><code>..&#x2F;source&#x2F;monkeybars.js:101</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Creates an array of tasks based on the options array passed</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">tasks</code>
-                        <span class="type">Array</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_createTaskWithOptions" class="method item private inherited">
-    <h3 class="name"><code>createTaskWithOptions</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_createTaskWithOptions">Task</a>:
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l58"><code>..&#x2F;source&#x2F;monkeybars.js:58</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Creates task based on the options passed</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_extend" class="method item inherited">
-    <h3 class="name"><code>extend</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>protoProps</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Function</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_extend">Task</a>:
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l169"><code>..&#x2F;source&#x2F;monkeybars.js:169</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Extention functionality for various task types.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">protoProps</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Function</span>:
-                    
-                    child Constructor function for extended task type
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>        var CustomTask = MonkeyBars.Task.extend({
-            name:"CustomTask",
-            newMethod:function(){
-                console.log("Executing newMethod");
-            }
-        });
-
-        var instance = new CustomTask();
-</code></pre>
-            </div>
-        </div>
-    
-</div>
-
-                
-                    <div id="method_generateUniqueId" class="method item private inherited">
-    <h3 class="name"><code>generateUniqueId</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>prefix</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_generateUniqueId">Task</a>:
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l156"><code>..&#x2F;source&#x2F;monkeybars.js:156</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generates a unique id for each task</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">prefix</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    tid
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_resetTask" class="method item private inherited">
-    <h3 class="name"><code>resetTask</code></h3>
+                    <div id="method_addSubTask" class="method item">
+    <h3 class="name"><code>addSubTask</code></h3>
 
     
         <div class="args">
@@ -805,8 +427,6 @@ a group of tasks that is inherently a task itself.</p>
     
 
     
-        <span class="flag private">private</span>
-    
 
     
 
@@ -819,12 +439,15 @@ a group of tasks that is inherently a task itself.</p>
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_resetTask">Task</a>:
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l139"><code>..&#x2F;source&#x2F;monkeybars.js:139</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l535"><code>..&#x2F;source&#x2F;monkeybars.js:535</code></a>
         
         </p>
 
@@ -835,7 +458,8 @@ a group of tasks that is inherently a task itself.</p>
     </div>
 
     <div class="description">
-        <p>Resets the task to its original non executed state</p>
+        <p>Adds a subtask to the groups queue. This is helpful when you want to add
+a sub task after instantiation.</p>
     </div>
 
     
@@ -853,7 +477,804 @@ a group of tasks that is inherently a task itself.</p>
                     
 
                     <div class="param-description">
-                        
+                        <p>Either an object containing attributes of a task or
+an already instantiated task</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var parallel = new MonkeyBars.ParallelTask();
+
+        parallel.addSubTask({
+            name:"subtask",
+            performTask:function(){
+                this.complete();
+            }
+        });
+
+        var simple = new MonkeyBars.simple({
+            name:"subtask",
+            performTask:function(){
+                this.complete();
+            }
+        });
+        parallel.addSubTask(simple);
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_addSubTaskAfterTask" class="method item">
+    <h3 class="name"><code>addSubTaskAfterTask</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>afterTask</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l572"><code>..&#x2F;source&#x2F;monkeybars.js:572</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>description</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Either an object containing attributes of a task or</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">afterTask</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Reference to an already added task</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var parallel = new MonkeyBars.ParallelTask({
+            tasks:[task1,task3]
+        });
+
+        var task2 = new MonkeyBars.Task();
+        parallel.addTaskAfterTask(task2,task1);
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_cancel" class="method item inherited">
+    <h3 class="name"><code>cancel</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_cancel">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l289"><code>..&#x2F;source&#x2F;monkeybars.js:289</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calling this method cancels the task. However it is up to the instance to handle 
+the canceled state.</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
+            performTask:function(){
+                if(true){
+                    this.cancel();
+                }
+            }
+        });
+
+        task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_complete" class="method item inherited">
+    <h3 class="name"><code>complete</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_complete">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l319"><code>..&#x2F;source&#x2F;monkeybars.js:319</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calling this method says that the tasks execution is now complete.</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
+            performTask:function(){
+                this.complete();
+            }
+        });
+
+        task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_fault" class="method item inherited">
+    <h3 class="name"><code>fault</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_fault">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l347"><code>..&#x2F;source&#x2F;monkeybars.js:347</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calling this method to fault a task. If it is part of a group task this will 
+also call the groups fault method passing the error up to the group.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message associated with the cause of the fault.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
+            performTask:function(){
+                var a = "a";
+                if(a != "b") {
+                    this.fault("a != b");
+                }
+            }
+        });
+
+        task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_getTaskById" class="method item">
+    <h3 class="name"><code>getTaskById</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>tid</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l690"><code>..&#x2F;source&#x2F;monkeybars.js:690</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return a Task object, if it exists, based on the <code>tid</code> passed.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">tid</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The id of the task you want</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var parallel = new MonkeyBars.ParallelTask({
+            tasks:[task1,task3]
+        });
+
+        parallel.getTaskById(task1.tid);
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_onCancel" class="method item inherited">
+    <h3 class="name"><code>onCancel</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_onCancel">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l442"><code>..&#x2F;source&#x2F;monkeybars.js:442</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task is canceled.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onChange" class="method item inherited">
+    <h3 class="name"><code>onChange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>state</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_onChange">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l379"><code>..&#x2F;source&#x2F;monkeybars.js:379</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method is called during the execution lifecycle of the task. It is intentionally
+left blank and is up to the instance to describe it functionality.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">state</code>
+                        <span class="type">Integer</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The current state of the task</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message describing error</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
+            performTask:function(){
+                this.complete();
+            },
+            onChange:function(state,error){
+                if(state == MonkeyBars.TaskStates.Completed){
+                    alert("complete");
+                }
+            }
+        });
+
+        task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_onComplete" class="method item inherited">
+    <h3 class="name"><code>onComplete</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_onComplete">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l431"><code>..&#x2F;source&#x2F;monkeybars.js:431</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task completes.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onFault" class="method item inherited">
+    <h3 class="name"><code>onFault</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_onFault">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l419"><code>..&#x2F;source&#x2F;monkeybars.js:419</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task faults.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message describing error</p>
                     </div>
 
                     
@@ -869,12 +1290,646 @@ a group of tasks that is inherently a task itself.</p>
 </div>
 
                 
+                    <div id="method_onStart" class="method item inherited">
+    <h3 class="name"><code>onStart</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_onStart">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l408"><code>..&#x2F;source&#x2F;monkeybars.js:408</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task starts.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onSubTaskCancel" class="method item">
+    <h3 class="name"><code>onSubTaskCancel</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l623"><code>..&#x2F;source&#x2F;monkeybars.js:623</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Called when a subtask calls its fault method.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onSubTaskComplete" class="method item">
+    <h3 class="name"><code>onSubTaskComplete</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l599"><code>..&#x2F;source&#x2F;monkeybars.js:599</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Called when a sub task completes. Must be overridden with functionality 
+provided by the extending class.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onSubTaskFault" class="method item">
+    <h3 class="name"><code>onSubTaskFault</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l611"><code>..&#x2F;source&#x2F;monkeybars.js:611</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Called when a subtask calls its fault method.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Error message.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_performTask" class="method item inherited">
+    <h3 class="name"><code>performTask</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_performTask">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l453"><code>..&#x2F;source&#x2F;monkeybars.js:453</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method is required for <strong>simple</strong> tasks and will throw an exception if it 
+is called and not overridden. If you overwrite this method on a task group
+then you need to make sure that you call the extended/implemented classes
+original prototype method (see the example below).</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>        var parallel = new MonkeyBars.ParallelTask({
+            ...
+            performTask:function(){
+                // custom functionality
+                MonkeyBars.ParallelTask.prototype.performTask.call(this);
+            }
+            ...
+        })
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_processSubTask" class="method item">
+    <h3 class="name"><code>processSubTask</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l636"><code>..&#x2F;source&#x2F;monkeybars.js:636</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Processes a sub task and prepares it for execution. This method overwrites the
+tasks on change functionality. If you wish to have a sub task that handles 
+its own change functionality then you will need to implement the partner 
+convenience methods.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Subtask to process</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeSubTask" class="method item">
+    <h3 class="name"><code>removeSubTask</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l673"><code>..&#x2F;source&#x2F;monkeybars.js:673</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Removes a task from its group. Removing the task after it has executed will
+have no apparent affect as it has already ran.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The task you wish to remove from the group.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_start" class="method item inherited">
+    <h3 class="name"><code>start</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#method_start">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l479"><code>..&#x2F;source&#x2F;monkeybars.js:479</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Kicks off the execution of the task by calling the tasks <code>performTask</code> method. 
+This method can only be run once on a task.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
             </div>
         
 
         
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_currentIndex" class="property item inherited">
+    <h3 class="name"><code>currentIndex</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#property_currentIndex">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l522"><code>..&#x2F;source&#x2F;monkeybars.js:522</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The index of the subtasks that have completed execution.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_name" class="property item inherited">
+    <h3 class="name"><code>name</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            <p>Inherited from
+            <a href="..&#x2F;classes&#x2F;Task.html#property_name">
+                Task
+            </a>
+            
+            but overwritten in
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l262"><code>..&#x2F;source&#x2F;monkeybars.js:262</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The name of the task if not specified by the instance.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> task</p>
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="property_type" class="property item inherited">
@@ -897,7 +1952,7 @@ a group of tasks that is inherently a task itself.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l248"><code>..&#x2F;source&#x2F;monkeybars.js:248</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l249"><code>..&#x2F;source&#x2F;monkeybars.js:249</code></a>
         
         </p>
 
