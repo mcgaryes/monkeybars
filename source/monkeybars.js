@@ -2,7 +2,7 @@
  *
  * MonkeyBars 
  * 
- * Simple library that provides a simple structure for handling singular, sequential 
+ * Task library that provides a simple structure for handling singular, sequential 
  * and parallel units of code. 
  *
  * https://github.com/mcgaryes/monkeybars

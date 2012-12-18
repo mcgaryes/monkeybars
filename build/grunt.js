@@ -2,21 +2,31 @@ module.exports = function(grunt) {
     
 	// config
     grunt.initConfig({
-
+        version: '0.0.1',
+        meta: {
+            banner: "/*!\n" + 
+                    "*\n" + 
+                    "* MonkeyBars v<%= version %>\n" + 
+                    "* \n" + 
+                    "* Task library that provides a simple structure for handling singular, sequential \n" +
+                    "* and parallel units of code. \n" + 
+                    "*\n" + 
+                    "* https://github.com/mcgaryes/monkeybars\n" + 
+                    "*\n" + 
+                    "*/"
+        },
     	jasmine: {
             all: {
                 src: ['../tests/index.html'],
                 errorReporting: true
             }
         },
-
         min: {
             dist: {
-                src: ['../source/monkeybars.js'],
+                src: ['<banner>','../source/monkeybars.js'],
                 dest: '../source/monkeybars.min.js'
             }
         },
-
         copy: {
             default:{
                 files: {
@@ -27,7 +37,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-
         yuidoc: {
             compile: {
                 "name": "MonkeyBars",
@@ -39,8 +48,7 @@ module.exports = function(grunt) {
                     outdir: "../docs/"
                 }
             }
-        },
-
+        }
     });
 
     // load npm tasks
