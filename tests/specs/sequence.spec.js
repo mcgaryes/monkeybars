@@ -6,6 +6,38 @@ describe("Sequence Task Tests", function() {
 
 	describe("Initialization Tests", function() {
 
+		it("Initialization With Type",function(){
+			var task = MonkeyBars.create({
+				name:"name",
+				type:"sequence",
+				tasks:[{
+					name:"subtask",
+					performTask:function(){
+						this.complete();
+					}
+				}]
+			});
+			expect(task.type).toEqual("sequence");
+			expect(task.name).toEqual("name");
+			expect(task.state).toEqual(0);
+		});
+
+		it("Initialization Without Type",function(){
+			var task = MonkeyBars.create({
+				name:"name",
+				tasks:[{
+					name:"subtask",
+					performTask:function(){
+						this.complete();
+					}
+				}]
+			});
+			expect(task.type).toEqual("sequence");
+			expect(task.name).toEqual("name");
+			expect(task.state).toEqual(0);
+		});
+
+		/*
 		it("Initializing sequence task",function(){
 			var task = new MonkeyBars.SequenceTask({
 				name:"name",
@@ -27,8 +59,9 @@ describe("Sequence Task Tests", function() {
 			expect(task.state).toEqual(4);
 		});
 
+	*/
 	});
-
+/*
 	// ===================================================================
 	// === Decorator Tests ===============================================
 	// ===================================================================
@@ -61,5 +94,5 @@ describe("Sequence Task Tests", function() {
 	describe("Structural Tests", function() {
 
 	});
-
+*/
 });

@@ -9,6 +9,37 @@ describe("Simple Task Tests", function() {
 
 	describe("Initialization Tests", function() {
 
+		it("Initializing With Type",function(){
+			var task = MonkeyBars.create({
+				name:"task",
+				type:"simple",
+				loggingEnabled:false,
+				performTask:function(){
+					this.complete();
+				}
+			});
+			expect(task.type).toEqual("simple");
+			expect(task.name).toEqual("task");
+			expect(task.state).toEqual(0);
+		});
+
+		it("Initializing Without Type",function(){
+			var task = MonkeyBars.create({
+				name:"task",
+				loggingEnabled:false,
+				performTask:function(){
+					this.complete();
+				}
+			});
+			expect(task.type).toEqual("simple");
+			expect(task.name).toEqual("task");
+			expect(task.state).toEqual(0);
+		});
+
+
+
+		/*
+
 		it("Initializing simple task",function(){
 			var task = new MonkeyBars.Task({
 				name:"custom",
@@ -33,7 +64,11 @@ describe("Simple Task Tests", function() {
 
 		});
 
+		*/
+
 	});
+
+	
 
 	// ===================================================================
 	// === Decorator Tests ===============================================
@@ -41,9 +76,9 @@ describe("Simple Task Tests", function() {
 
 	describe("Decorator Tests", function() {
 
-		it("FOR decorator performs as expected",function(){
+		it("FOR",function(){
 			var index = 0;
-			var task = new MonkeyBars.Task({
+			var task = MonkeyBars.create({
 				count:3,
 				performTask:function(){
 					index++;
@@ -53,7 +88,7 @@ describe("Simple Task Tests", function() {
 			task.start();
 			expect(index).toEqual(3);
 		});
-
+/*
 		it("FOR & WHEN decorators perform as expected",function(){
 			var flag = false;
 			var index = 0;
@@ -110,8 +145,9 @@ describe("Simple Task Tests", function() {
 			runs(function() { expect(index).toEqual(2); });
 		});
 
+	*/
 	});
-
+/*
 	// ===================================================================
 	// === Structural Tests ==============================================
 	// ===================================================================
@@ -144,5 +180,7 @@ describe("Simple Task Tests", function() {
 		});
 
 	});
+
+	*/
 
 });

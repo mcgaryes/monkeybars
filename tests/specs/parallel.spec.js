@@ -6,6 +6,40 @@ describe("Parallel Task Tests", function() {
 
 	describe("Initialization Tests", function() {
 
+		it("Initialization With Type",function(){
+			var task = MonkeyBars.create({
+				name:"name",
+				type:"parallel",
+				tasks:[{
+					name:"subtask",
+					performTask:function(){
+						this.complete();
+					}
+				}]
+			});
+			expect(task.type).toEqual("parallel");
+			expect(task.name).toEqual("name");
+			expect(task.state).toEqual(0);
+		});
+
+		it("Initialization Without Type",function(){
+			var task = MonkeyBars.create({
+				name:"name",
+				type:"parallel",
+				tasks:[{
+					name:"subtask",
+					performTask:function(){
+						this.complete();
+					}
+				}]
+			});
+			expect(task.type).toEqual("parallel");
+			expect(task.name).toEqual("name");
+			expect(task.state).toEqual(0);
+		});
+
+/*
+
 		it("Initialization as expected",function(){
 			var task = new MonkeyBars.ParallelTask({
 				name:"name",
@@ -52,8 +86,10 @@ describe("Parallel Task Tests", function() {
 			expect(task.state).toEqual(4);
 		});
 
-	});
+*/
 
+	});
+/*
 	// ===================================================================
 	// === Decorator Tests ===============================================
 	// ===================================================================
@@ -118,5 +154,5 @@ describe("Parallel Task Tests", function() {
 		});
 
 	});
-
+*/
 });

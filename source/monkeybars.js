@@ -53,23 +53,54 @@
 		var type = attributes.type;
 		var tasks = attributes.tasks;
 
+		// create any subtasks
+		if (tasks) attributes.tasks = createSubTasksFromTaskOptionsArray(tasks);
+
+		// create the property descriptors that we'll apply to the object
+		var properties = createPropertyDescriptorsWithAttributes(attributes);
+
 		if(type) {
 			if(type == TYPE_SIMPLE) {
-				return new Task(attributes);
+				task = Object.create(Task,properties);
 			} else if(type == TYPE_SEQUENCE) {
-				return new SequenceTask(attributes);
+				task = Object.create(SequenceTask,properties);
 			} else if(type == TYPE_PARALLEL){
-				return new ParallelTask(attributes);
+				task = Object.create(ParallelTask,properties);
 			}
 		} else {
 			if (!tasks) {
-				return new Task(attributes);
+				task = Object.create(Task,properties);
 			} else {
-				return new SequenceTask(attributes);
+				task = Object.create(SequenceTask,properties);
 			}
 		}
 
+		// decorate out task
+		if(task.count) ForTaskDecorator(task);
+		if(task.when) WhenTaskDecorator(task);
+		if(task.while) WhileTaskDecorator(task);
+		
 		return task;
+	}
+
+	/**
+	 * Creates property descriptors from the passes attributes
+	 *
+	 * @method createPropertyDescriptorsWithAttributes
+	 * @param {Object} attributes
+	 */
+	var createPropertyDescriptorsWithAttributes = function(attributes){
+		var descriptors = {};
+		for (var attribute in attributes) {
+			// @TODO: If the attribute in question already has property descriptors then carry those over
+			descriptors[attribute] = { 
+				value: attributes[attribute],
+				writable:true,
+				configurable:true,
+				enumerable:true
+			};
+		}
+		return descriptors;
 	}
 
 	/**
@@ -106,22 +137,11 @@
 	}
 
 	/**
-	 * Extends a task with a set of attributes
-	 *
-	 * @method extend
-	 * @param {Object} protoProps
-	 * @param {Object} staticProps
-	 */
-	var extend = function(attributes) {
-		var parent = this.prototype;
-    	var child = {};
-		for (var prop in parent) child[prop] = parent[prop];
-		for (var prop in attributes) child[prop] = attributes[prop];
-		return child;
-	}
-
-	/**
 	 * Generates a unique id for each task
+	 *
+	 * @method generateUniqueId
+	 * @param {String} prefix
+	 * @return {String} tid
 	 */
 	var generateUniqueId = function(prefix){
   		var id = '' + taskIdCounter++;
@@ -129,178 +149,213 @@
 	}
 
 	// ===================================================================
-	// === Task Types ====================================================
+	// === Task Constructor ==============================================
 	// ===================================================================
 
 	/**
-	 * Creates a copy of the task prototype and returns the result
+	 * Generates a task object based on the attributes passed
 	 *
-	 * @method Task
+	 * @method create
 	 * @param {Object} attributes
-	 * @param {Object} options
+	 * @return {Object} task object
 	 */
-	var Task = MonkeyBars.Task = function(attributes,options) {
-
-		var task = Task.extend(attributes);
-		task.tid = generateUniqueId();
-		task.decorators = [];
-
-		// decorate our task
-		if(task.count) ForTaskDecorator(task);
-		if(task.when) WhenTaskDecorator(task);
-		if(task.while) WhileTaskDecorator(task);
-
-		return task;
+	var create = MonkeyBars.create = function(attributes){
+		return createTaskWithOptions(attributes);
 	}
 
+	// ===================================================================
+	// === Tasks Objects =================================================
+	// ===================================================================
+
 	/**
-	 * Task prototype description.
+	 * Task description.
 	 *
-	 * @property Task prototype
+	 * @property Task
 	 * @type Object
 	 */
-	Task.prototype = {
-		type:TYPE_SIMPLE,
-		name:TYPE_SIMPLE,
-		state:STATE_INITIALIZED,
-		cancel:function(){
-			if(this.state > STATE_STARTED) return;
-			this.state = STATE_CANCELED;
-			if(this.loggingEnabled) console.log("Canceled:" + this.name);
-			this.onChange(this.state);
-			this.onCancel();
+	var Task = MonkeyBars.Task = Object.create({}, {
+		type: {
+			value: TYPE_SIMPLE,
+			writable: true
 		},
-		complete:function(){
-			if(this.state > STATE_STARTED) return;
-			this.state = STATE_COMPLETED;
-			if(this.loggingEnabled) console.log("Completed:" + this.name);
-			this.executionTime = ( new Date().getTime() )-this.startTime;
-			this.onComplete();
-			this.onChange(this.state);
+		name: {
+			value: TYPE_SIMPLE,
+			writable: true
 		},
-		fault:function(error){
-			if(this.state >= STATE_CANCELED) return;
-			this.state = STATE_FAULTED;
-			if(this.loggingEnabled) console.log("Faulted:" + this.name);
-			this.onChange(this.state,error);
-			this.onFault(error);
+		state: {
+			value: STATE_INITIALIZED,
+			writable: true
 		},
-		onChange:function(state,error){
-			// empty by default
+		cancel: {
+			value: function() {
+				if(this.state > STATE_STARTED) return;
+				this.state = STATE_CANCELED;
+				if(this.loggingEnabled) console.log("Canceled:" + this.name);
+				this.onChange(this.state);
+				this.onCancel();
+			},
+			writable: true
 		},
-		onStart:function() {
-			// empty by default
+		complete: {
+			value: function() {
+				if(this.state > STATE_STARTED) return;
+				this.state = STATE_COMPLETED;
+				if(this.loggingEnabled) console.log("Completed:" + this.name);
+				this.executionTime = (new Date().getTime()) - this.startTime;
+				this.onComplete();
+				this.onChange(this.state);
+			},
+			writable: true
 		},
-		onFault:function(error) {
-			// empty by default
+		fault: {
+			value: function(error) {
+				if(this.state >= STATE_CANCELED) return;
+				this.state = STATE_FAULTED;
+				if(this.loggingEnabled) console.log("Faulted:" + this.name);
+				this.onChange(this.state, error);
+				this.onFault(error);
+			},
+			writable: true
 		},
-		onComplete:function() {
-			// empty by default
+		onChange: {
+			value: function(state, error) {
+				// empty by default
+			},
+			writable: true
 		},
-		onCancel:function() {
-			// empty by default
+		onStart: {
+			value: function() {
+				// empty by default
+			},
+			writable: true
 		},
-		performTask:function(){
-			throw "'performTask' method should be overridden";
+		onFault: {
+			value: function(error) {
+				// empty by default
+			},
+			writable: true
 		},
-		start:function(){
-			if(this.state >= STATE_STARTED) return;
-			this.startTime = new Date().getTime();
-			this.state = STATE_STARTED;
-			if(this.loggingEnabled) console.log("Started:" + this.name);
-			this.onChange(this.state);
-			this.performTask();
-			this.onStart();
+		onComplete: {
+			value: function() {
+				// empty by default
+			},
+			writable: true
+		},
+		onCancel: {
+			value: function() {
+				// empty by default
+			},
+			writable: true
+		},
+		performTask: {
+			value: function() {
+				throw "'performTask' method should be overridden";
+			},
+			writable: true
+		},
+		start: {
+			value:function() {
+				if(this.state >= STATE_STARTED) return;
+				this.startTime = new Date().getTime();
+				this.state = STATE_STARTED;
+				if(this.loggingEnabled) console.log("Started:" + this.name);
+				this.onChange(this.state);
+				this.performTask();
+				this.onStart();
+			},
+			writable: true
 		}
-	};
-
+	});
+	
 	/**
 	 * TaskGroup description.
 	 *
-	 * @method TaskGroup
-	 * @param {Object} attributes
-	 * @param {Object} options
-	 */
-	var TaskGroup = MonkeyBars.TaskGroup = function(attributes,options){
-		attributes = TaskGroup.extend(attributes);
-		attributes.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
-		return new Task(attributes,options);
-	}
-
-	/**
-	 * TaskGroup prototype description.
-	 *
-	 * @property TaskGroup prototype
+	 * @property Task
 	 * @type Object
 	 */
-	TaskGroup.prototype = {
-		currentIndex:0,
-		addSubTask:function(task){
-			if(!task.id) task = createTaskWithOptions(task);
-			this.tasks.push(task);
+	var TaskGroup = MonkeyBars.TaskGroup = Object.create(Task, {
+		currentIndex: {
+			value: 0,
+			writable: true
 		},
-		addSubTaskAfterTask:function(task,afterTask){
-			if (!task || this.state == STATE_CANCELED) return;
-			if(!task.id) task = createTaskWithOptions(task);
-			var index = this.tasks.indexOf(afterTask);
-			this.tasks.splice(index,0,task);
+		addSubTask: {
+			value: function(task) {
+				if(!task.id) task = createTaskWithOptions(task);
+				this.tasks.push(task);
+			},
+			writable: true
 		},
-		onSubTaskComplete:function(){
-			throw "This is an abstract method and must be implemented in a subclass.";
+		addSubTaskAfterTask: {
+			value: function(task, afterTask) {
+				if(!task || this.state == STATE_CANCELED) return;
+				if(!task.id) task = createTaskWithOptions(task);
+				var index = this.tasks.indexOf(afterTask);
+				this.tasks.splice(index, 0, task);
+			},
+			writable: true
 		},
-		onSubTaskFault:function(error){
-			this.fault(error);
+		onSubTaskComplete: {
+			value: function() {
+				throw "This is an abstract method and must be implemented in a subclass.";
+			},
+			writable: true
 		},
-		onSubTaskCancel:function(task){
-			this.cancel();
+		onSubTaskFault: {
+			value: function(error) {
+				this.fault(error);
+			},
+			writable: true
 		},
-		processSubTask:function(task){
-			
-			if (!task) throw "You cannot process a task with a nil value.";
-			
-			if(task.state == STATE_CANCELED) {
-				this.onSubTaskCancel(task);
-				return true;
-			}
-			
-			task.group = this;
-			task.loggingEnabled = this.loggingEnabled;
-			
-			// set execution block
-			task.onChange = function(state,error){
-				if(state == STATE_COMPLETED) this.group.onSubTaskComplete();
-				else if(state == STATE_FAULTED) this.group.onSubTaskFault(error);
-				else if(state == STATE_CANCELED) this.group.onSubTaskCancel(task);
-			}
+		onSubTaskCancel: {
+			value: function(task) {
+				this.cancel();
+			},
+			writable: true
+		},
+		processSubTask: {
+			value: function(task) {
 
-			task.start();
-			
-			return false;
+				if(!task) throw "You cannot process a task with a nil value.";
+
+				if(task.state == STATE_CANCELED) {
+					this.onSubTaskCancel(task);
+					return true;
+				}
+
+				task.group = this;
+				task.loggingEnabled = this.loggingEnabled;
+
+				// set execution block
+				task.onChange = function(state, error) {
+					if(state == STATE_COMPLETED) this.group.onSubTaskComplete();
+					else if(state == STATE_FAULTED) this.group.onSubTaskFault(error);
+					else if(state == STATE_CANCELED) this.group.onSubTaskCancel(task);
+				}
+
+				task.start();
+
+				return false;
+			},
+			writable: true
 		},
-		removeSubTask:function(task){
-			if (!task) return;
-			var index = this.tasks.indexOf(task);
-			this.tasks.splice(index,1);
+		removeSubTask: {
+			value: function(task) {
+				if(!task) return;
+				var index = this.tasks.indexOf(task);
+				this.tasks.splice(index, 1);
+			},
+			writable: true
 		},
-		getTaskById:function(tid){
-			for (var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
-				if(task.tid == tid) return task;
-			};
+		getTaskById: {
+			value: function(tid) {
+				for(var i = 0; i < this.tasks.length; i++) {
+					var task = this.tasks[i];
+					if(task.tid == tid) return task;
+				};
+			},
+			writable: true
 		}
-	};
-
-	/**
-	 * ParallelTask description.
-	 *
-	 * @method ParallelTask
-	 * @param {Object} attributes
-	 * @param {Object} options
-	 */
-	var ParallelTask = MonkeyBars.ParallelTask = function(attributes,options) { 
-		attributes = ParallelTask.extend(attributes);
-		return new TaskGroup(attributes,options);
-	}
+	});
 
 	/**
 	 * ParallelTask description.
@@ -308,152 +363,147 @@
 	 * @property ParallelTask
 	 * @type Object
 	 */
-	ParallelTask.prototype = {
-		type:TYPE_PARALLEL,
-		name:TYPE_PARALLEL,
-		hasNoEnabledSubTasks:function(){
-			for (var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
-				if(task.state != STATE_CANCELED) return false;
-			}
-			return true;
+	var ParallelTask = MonkeyBars.ParallelTask = Object.create(TaskGroup, {
+		type: {
+			value: TYPE_PARALLEL,
+			writable: true
 		},
-		processSubTasks:function(){
-			for (var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
+		name: {
+			value: TYPE_PARALLEL,
+			writable: true
+		},
+		hasNoEnabledSubTasks: {
+			value: function() {
+				for(var i = 0; i < this.tasks.length; i++) {
+					var task = this.tasks[i];
+					if(task.state != STATE_CANCELED) return false;
+				}
+				return true;
+			},
+			writable: true
+		},
+		processSubTasks: {
+			value: function() {
+				for(var i = 0; i < this.tasks.length; i++) {
+					var task = this.tasks[i];
+					this.currentIndex++;
+					this.processSubTask(task);
+				}
+			},
+			writable: true
+		},
+		addSubTask: {
+			value: function(task) {
+				if(!task || task.state == STATE_CANCELED) return;
 				this.currentIndex++;
+				if(!task.id) task = new Task(task);
+				this.tasks.push(task);
 				this.processSubTask(task);
-			}
+			},
+			writable: true
 		},
-		addSubTask:function(task) {
-			if (!task || task.state == STATE_CANCELED) return;
-			this.currentIndex++;
-			if(!task.id) task = new Task(task);
-			this.tasks.push(task);
-			this.processSubTask(task);
+		onSubTaskComplete: {
+			value: function() {
+				this.currentIndex = this.currentIndex++;
+				if(this.currentIndex == this.tasks.length) {
+					this.complete();
+				}
+			},
+			writable: true
 		},
-		onSubTaskComplete:function(){
-			this.currentIndex = this.currentIndex++;
-			if(this.currentIndex == this.tasks.length) {
-				this.complete();
-			}
-		},
-		performTask:function(){
-			if (this.hasNoEnabledSubTasks()){
-				this.complete();
-			}else{
-				this.processSubTasks();
-			}
+		performTask: {
+			value: function() {
+				if(this.hasNoEnabledSubTasks()) {
+					this.complete();
+				} else {
+					this.processSubTasks();
+				}
+			},
+			writable: true
 		}
-	};
+	});
 
 	/**
 	 * SequenceTask description.
 	 *
-	 * @method SequenceTask
-	 * @param {Object} attributes
-	 * @param {Object} options
-	 */
-	var SequenceTask = MonkeyBars.SequenceTask = function(attributes,options) {
-		attributes = SequenceTask.extend(attributes);
-		return new TaskGroup(attributes,options);
-	}
-
-	/**
-	 * SequenceTask prototype description.
-	 *
-	 * @property SequenceTask prototype
+	 * @property SequenceTask
 	 * @type Object
 	 */
-	SequenceTask.prototype = {
-		type:TYPE_SEQUENCE,
-		name:TYPE_SEQUENCE,
-		startNextSubTask:function(){
-			if(this.state >= STATE_CANCELED) return;
-			if (this.tasks && this.currentIndex < this.tasks.length){
-				var skipped = this.processSubTask(this.tasks[this.currentIndex++]);
-				if (skipped) this.startNextSubTask();
-			}else{
-				this.complete();
-			}
+	var SequenceTask = MonkeyBars.SequenceTask = Object.create(TaskGroup, {
+		type: {
+			value: TYPE_SEQUENCE,
+			writable: true
 		},
-		onSubTaskComplete:function(){
-			if(this.state == STATE_CANCELED) return;
-			this.startNextSubTask();
+		name: {
+			value: TYPE_SEQUENCE,
+			writable: true
 		},
-		onSubTaskCancel:function(task){
-			//[super onSubTaskCancel:task];
-			if(this.state != STATE_CANCELED) this.startNextSubTask();
+		startNextSubTask: {
+			value: function() {
+				if(this.state >= STATE_CANCELED) return;
+				if(this.tasks && this.currentIndex < this.tasks.length) {
+					var skipped = this.processSubTask(this.tasks[this.currentIndex++]);
+					if(skipped) this.startNextSubTask();
+				} else {
+					this.complete();
+				}
+			},
+			writable: true
 		},
-		performTask:function(){
-			this.startNextSubTask();
+		onSubTaskComplete: {
+			value: function() {
+				if(this.state == STATE_CANCELED) return;
+				this.startNextSubTask();
+			},
+			writable: true
+		},
+		onSubTaskCancel: {
+			value: function(task) {
+				//[super onSubTaskCancel:task];
+				if(this.state != STATE_CANCELED) this.startNextSubTask();
+			},
+			writable: true
+		},
+		performTask: {
+			value: function() {
+				this.startNextSubTask();
+			},
+			writable: true
 		}
-	};
-
-	// set the extend method on all task types
-	Task.extend = TaskGroup.extend = ParallelTask.extend = SequenceTask.extend = extend;
+	});
 
 	// ===================================================================
 	// === Task Decorators ===============================================
 	// ===================================================================
 
 	/**
-	 * description.
+	 * ForTaskDecorator description
 	 *
 	 * @method ForTaskDecorator
 	 * @param {Object} task
-	 * @return Object decorated task
 	 */
 	var ForTaskDecorator = function(task) {
-	 	task.count = task.count ? task.count : 1;
-		task.itterationIndex = ForTaskDecorator.prototype.itterationIndex;
-		task.complete = ForTaskDecorator.prototype.complete;
-		task.decorators.push(DECORATOR_FOR);
-		return task;
-	};
-
-	/**
-	 * prototype description.
-	 *
-	 * @property ForTaskDecorator prototype
-	 * @type Object
-	 */
-	ForTaskDecorator.prototype = {
-		itterationIndex:0,
-		complete:function() {
+	 	task.itterationIndex = 0;
+	 	task.complete = function() {
 			if(this.itterationIndex != this.count - 1) {
 				resetTask(this);
 				this.itterationIndex++;
 				if(this.loggingEnabled) console.log("Completed:" + this.name + " " + this.itterationIndex + " out of " + this.count + " times");
 				this.performTask();
 			} else {
-				Task.prototype.complete.call(this);
+				Task.complete.call(this);
 			}
 		}
 	}
 
 	/**
-	 * description.
+	 * WhileTaskDecorator description
 	 *
 	 * @method WhileTaskDecorator
 	 * @param {Object} task
-	 * @return Object decorated task
 	 */
 	 var WhileTaskDecorator = function(task) {
-	 	task.interval = task.interval ? task.interval : 100;
-	 	task.complete = WhileTaskDecorator.prototype.complete;
-	 	task.decorators.push(DECORATOR_WHILE);
-		return task;
-	 };
-
-	/**
-	 * prototype description.
-	 *
-	 * @property WhileTaskDecorator prototype
-	 * @type Object
-	 */
-	WhileTaskDecorator.prototype = {
-		complete:function(){
+	 	task.complete = function(){
 			if(this.while()) {
 				this.state = STATE_INITIALIZED;
 				var delegate = this;
@@ -466,38 +516,25 @@
 				Task.prototype.complete.call(this);
 			}
 		}
-	};
+	 }
 
 	/**
-	 * description.
+	 * WhenTaskDecorator description
 	 *
 	 * @method WhenTaskDecorator
 	 * @param {Object} task
-	 * @return Object decorated task
 	 */
 	var WhenTaskDecorator = function(task) {
-		task.start = WhenTaskDecorator.prototype.start;
-		task.decorators.push(DECORATOR_WHEN);
-		return task;
-	};
-
-	/**
-	 * prototype description.
-	 *
-	 * @property WhenTaskDecorator prototype
-	 * @type Object
-	 */
-	WhenTaskDecorator.prototype = {
-		start:function(){
+		task.start = function(){
 			var interval = this.interval ? this.interval : 10;
 			if(this.when()){
 				Task.prototype.start.call(this);
 			}else{
-				var delegate = this;
+				
 				setTimeout(function(){ delegate.start(); },interval);
 			}
 		}
-	};
+	}
 
 	// ===================================================================
 	// === Public Interface ==============================================
