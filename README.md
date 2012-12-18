@@ -25,7 +25,7 @@ task.start();
 
 ### Documentation
 
-Full documentation can be seen from within the __docs__ directory of this project.
+Full documentation can be seen from within the [docs](https://github.com/mcgaryes/monkeybars/tree/master/docs) directory of this project.
 
 ### Nesting
 
@@ -37,4 +37,4 @@ Parallel tasks are task groups who's nested subtasks are executed side by side, 
 
 ### Examples
 
-Examples for the library can be found in the __examples__ directory of this project.
+Examples for the library can be found in the [examples](https://github.com/mcgaryes/monkeybars/tree/master/examples) directory of this project.
