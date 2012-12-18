@@ -1,6 +1,15 @@
 /*! monkeybars v0.0.1 */
 (function() {
 
+
+
+	// ===================================================================
+	// === Object Create Polyfil =========================================
+	// ===================================================================
+
+	// @TODO: check to see if Object.create exsists... if it does not
+	// then decribe a polyfil here that will act in a similar manner
+
 	// ===================================================================
 	// === Constants =====================================================
 	// ===================================================================
@@ -166,6 +175,10 @@
 	// ===================================================================
 	// === Tasks Objects =================================================
 	// ===================================================================
+
+	// @TODO: Figure out what properties should be 'writable'... I am
+	// thinking all of them should to allow future extention by the end
+	// developer, but investigate.
 
 	/**
 	 * Task description.
