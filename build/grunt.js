@@ -28,13 +28,27 @@ module.exports = function(grunt) {
             }
         },
 
+        yuidoc: {
+            compile: {
+                "name": "MonkeyBars",
+                "description": "Simple structure for handling singular, sequential and parallel units of code.",
+                "version": "0.0.1",
+                "url": "https://github.com/mcgaryes/monkeybars",
+                options: {
+                    paths: "../source/",
+                    outdir: "../docs/"
+                }
+            }
+        },
+
     });
 
     // load npm tasks
     grunt.loadNpmTasks('grunt-jasmine-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
     // tasks
-    grunt.registerTask('default', 'jasmine min copy');
+    grunt.registerTask('default', 'jasmine min copy yuidoc');
     
 };

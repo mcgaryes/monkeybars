@@ -1,8 +1,5 @@
 describe("Simple Task Tests", function() {
 
-	beforeEach(function() {});
-	afterEach(function() {});
-
 	// ===================================================================
 	// === Initialization Tests ==========================================
 	// ===================================================================
@@ -10,65 +7,52 @@ describe("Simple Task Tests", function() {
 	describe("Initialization Tests", function() {
 
 		it("Initializing With Type",function(){
-			var task = MonkeyBars.create({
-				name:"task",
-				type:"simple",
-				loggingEnabled:false,
-				performTask:function(){
-					this.complete();
-				}
-			});
+			var task = new MonkeyBars.Task({ name:"task" });
 			expect(task.type).toEqual("simple");
 			expect(task.name).toEqual("task");
 			expect(task.state).toEqual(0);
 		});
 
-		it("Initializing Without Type",function(){
-			var task = MonkeyBars.create({
-				name:"task",
-				loggingEnabled:false,
-				performTask:function(){
-					this.complete();
-				}
-			});
-			expect(task.type).toEqual("simple");
-			expect(task.name).toEqual("task");
-			expect(task.state).toEqual(0);
-		});
-
-
-
-		/*
-
-		it("Initializing simple task",function(){
-			var task = new MonkeyBars.Task({
-				name:"custom",
-				performTask:function(){
-					this.complete();
-				}
-			});
-			expect(task.type).toEqual("simple");
-			expect(task.name).toEqual("custom");
-			expect(task.state).toEqual(0);
+		it("Initializing With Dot Notation",function(){
+			var task = new MonkeyBars.Task();
+			task.performTask = function() {};
 			task.start();
-			expect(task.state).toEqual(4);
+			expect(task.state).toEqual(1);
 		});
 
-		it("Extention is possible",function(){
+		it("Initializing After Traditional Extention",function(){
 			
-			var CustomSimple = MonkeyBars.Task.extend({
-				name:"CustomSimple"
+			var CustomTask = function(attributes){
+				MonkeyBars.Task(this);
+			};
+
+			CustomTask.prototype = Object.create(MonkeyBars.Task.prototype,{
+				method:{
+					value:function(){
+						return 24;
+					}
+				}
 			});
 
-			console.log(CustomSimple);
-
+			var task = new CustomTask();
+			expect(task.method()).toEqual(24);
+			expect(task.performTask).toBeDefined();
 		});
 
-		*/
+		it("Initializing After MonkeyBars Extention Method",function(){
+			var CustomTask = MonkeyBars.Task.extend({
+				method:function(){ 
+					return 24; 
+				}
+			});
+			var task = new CustomTask({ name:"task" });
+			expect(task.type).toEqual("simple");
+			expect(task.name).toEqual("task");
+			expect(task.method()).toEqual(24);
+			expect(task.performTask).toBeDefined();
+		});
 
 	});
-
-	
 
 	// ===================================================================
 	// === Decorator Tests ===============================================
@@ -76,9 +60,18 @@ describe("Simple Task Tests", function() {
 
 	describe("Decorator Tests", function() {
 
+		var value, flag;
+
+		beforeEach(function() {});
+
+		afterEach(function() {
+			value = undefined;
+			flag = undefined;
+		});
+
 		it("FOR",function(){
 			var index = 0;
-			var task = MonkeyBars.create({
+			var task = new MonkeyBars.Task({
 				count:3,
 				performTask:function(){
 					index++;
@@ -88,99 +81,110 @@ describe("Simple Task Tests", function() {
 			task.start();
 			expect(index).toEqual(3);
 		});
-/*
-		it("FOR & WHEN decorators perform as expected",function(){
-			var flag = false;
+
+		it("FOR & WHEN",function(){
+
+			runs(function() {
+				flag = false;
+				value = 0;
+				setTimeout(function() {
+					flag = true;
+				}, 200);
+			});
+
 			var index = 0;
 			var task = new MonkeyBars.Task({
-				count:2,
+				count:1,
 				performTask:function(){
 					index++;
 					this.complete();
 				},
 				when:function(){
-					return flag;
+					return value > 0;
 				}
 			});
+
 			task.start();
-			runs(function() { setTimeout(function() { flag = true; }, 50); });
-			waitsFor(function() { return flag; }, "The task should be completed now", 100);
-			runs(function() { expect(index).toEqual(2); });
+
+			waitsFor(function() {
+		      value++;
+		      return flag;
+		    }, "task to complete", 1000);
+
+			runs(function() {
+      			expect(task.state).toEqual(4);
+      			expect(index).toEqual(1);
+    		});
 		});
 
-		it("WHEN decorator performs as expected",function(){
-			var flag = false;
-			var index = 0;
+		it("WHEN",function(){
+
+			runs(function() {
+				flag = false;
+				value = 0;
+				setTimeout(function() {
+					flag = true;
+				}, 500);
+			});
+
 			var task = new MonkeyBars.Task({
+				name:"*** SIMPLE_WHEN ***",
 				performTask:function(){
-					index++;
 					this.complete();
 				},
 				when:function(){
-					return flag;
+					return value > 0;
 				}
 			});
+
 			task.start();
-			runs(function() { setTimeout(function() { flag = true; }, 50); });
-			waitsFor(function() { return flag; }, "The task should be completed now", 100);
-			runs(function() { expect(index).toEqual(1); });
+
+			waitsFor(function() {
+		      value++;
+		      return flag;
+		    }, "task to complete", 1000);
+
+			runs(function() {
+      			expect(task.state).toEqual(4);
+    		});
 		});
 
-		it("WHILE decorator performs as expected",function(){
-			var flag = true;
+		it("WHILE",function(){
+			
+			runs(function() {
+				flag = false;
+				value = 0;
+				setTimeout(function() { 
+					flag = true; 
+				}, 310);
+			});
+
 			var index = 0;
 			var task = new MonkeyBars.Task({
-				interval:100,
+				name:"*** SIMPLE_WHEN ***",
 				performTask:function(){
 					index++;
 					this.complete();
 				},
 				while:function(){
-					return flag;
+					return index < 10;
 				}
 			});
+
 			task.start();
-			runs(function() { setTimeout(function() { flag = false; }, 150); });
-			waitsFor(function() { return !flag; }, "The task should be completed now", 160);
-			runs(function() { expect(index).toEqual(2); });
-		});
 
-	*/
-	});
-/*
-	// ===================================================================
-	// === Structural Tests ==============================================
-	// ===================================================================
+			waitsFor(function() { 
+				return flag; 
+			}, "task to complete", 1000);
 
-	describe("Structural Tests", function() {
-
-		it("Setting simple task properties with . syntax after creation get applied",function(){
-			var task = new MonkeyBars.Task();
-			task.name = "name";
-			task.performTask = function(){
-				this.complete();
-			}
-			task.start();
-			expect(task.type).toEqual("simple");
-			expect(task.name).toEqual("name");
-			expect(task.state).toEqual(4);
-		});
-
-		it("Mixing syntaxes still results in acceptable simple task",function(){
-			var task = new MonkeyBars.Task({
-				name:"name"
-			});
-			task.performTask = function(){
-				this.complete();
-			}
-			task.start();
-			expect(task.type).toEqual("simple");
-			expect(task.name).toEqual("name");
-			expect(task.state).toEqual(4);
+			runs(function() {
+				setTimeout(function() { 
+					expect(task.state).toEqual(4);
+      				expect(index).toEqual(4);
+				}, 100);
+    		});
 		});
 
 	});
-
-	*/
 
 });

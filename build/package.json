@@ -13,6 +13,7 @@
   }],
   "dependencies": {
     "grunt-jasmine-task": "0.2.3",
-    "grunt-contrib-copy": "0.3.2"
+    "grunt-contrib-copy": "0.3.2",
+    "grunt-contrib-yuidoc": "0.3.2"
   }
 }

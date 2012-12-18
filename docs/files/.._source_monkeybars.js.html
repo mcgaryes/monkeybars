@@ -1,19 +1,113 @@
-/*!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>..&#x2F;source&#x2F;monkeybars.js - MonkeyBars</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.8.0pr2&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.8.0pr2&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/ParallelTask.html">ParallelTask</a></li>
+            
+                <li><a href="..&#x2F;classes/SequenceTask.html">SequenceTask</a></li>
+            
+                <li><a href="..&#x2F;classes/Task.html">Task</a></li>
+            
+                <li><a href="..&#x2F;classes/TaskGroup.html">TaskGroup</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: ..&#x2F;source&#x2F;monkeybars.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;*!
  * MonkeyBars 
  * Simple library that provides a simple structure for handling singular, sequential 
  * and parallel units of code. 
- * https://github.com/mcgaryes/monkeybars
+ * https:&#x2F;&#x2F;github.com&#x2F;mcgaryes&#x2F;monkeybars
  * 
  * @version 0.0.1 
  * @author Eric McGary
  * @module MonkeyBars
  * @main MonkeyBars
- */
+ *&#x2F;
 (function() {
 
-	// ===================================================================
-	// === Constants =====================================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Constants =====================================================
+	&#x2F;&#x2F; ===================================================================
 
 	var STATE_INITIALIZED	=	0;
 	var STATE_STARTED		=	1;
@@ -21,52 +115,52 @@
 	var STATE_FAULTED		=	3;
 	var STATE_COMPLETED		=	4;
 
-	var TYPE_PARALLEL		=	"parallel";
-	var TYPE_SEQUENCE		=	"sequence";
-	var TYPE_SIMPLE			=	"simple";
+	var TYPE_PARALLEL		=	&quot;parallel&quot;;
+	var TYPE_SEQUENCE		=	&quot;sequence&quot;;
+	var TYPE_SIMPLE			=	&quot;simple&quot;;
 
-	var DECORATOR_FOR		=	"for";
-	var DECORATOR_WHEN		=	"when";
-	var DECORATOR_WHILE		=	"while";
+	var DECORATOR_FOR		=	&quot;for&quot;;
+	var DECORATOR_WHEN		=	&quot;when&quot;;
+	var DECORATOR_WHILE		=	&quot;while&quot;;
 
-	var TID_PREFIX			=	"tid";
+	var TID_PREFIX			=	&quot;tid&quot;;
 	var TIMEOUT_INTERVAL	=	100;
-	var OVERRIDE_NEEDED		=	"This method must be overridden.";
+	var OVERRIDE_NEEDED		=	&quot;This method must be overridden.&quot;;
 
-	// ===================================================================
-	// === Private Variables =============================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Private Variables =============================================
+	&#x2F;&#x2F; ===================================================================
 
 	var root = this;
 	var taskIdCounter = 0;
 	var MonkeyBars = {};
 
-	// ===================================================================
-	// === NodeJS Conditional ============================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === NodeJS Conditional ============================================
+	&#x2F;&#x2F; ===================================================================
 
-	if(typeof exports !== 'undefined') {
-		if(typeof module !== 'undefined' && module.exports) {
+	if(typeof exports !== &#x27;undefined&#x27;) {
+		if(typeof module !== &#x27;undefined&#x27; &amp;&amp; module.exports) {
 			exports = module.exports = MonkeyBars;
 		}
 	}
 
-	// ===================================================================
-	// === Helper Functions ==============================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Helper Functions ==============================================
+	&#x2F;&#x2F; ===================================================================
 
-	/**
+	&#x2F;**
 	 * Creates task based on the options passed
 	 *
 	 * @method createTaskWithOptions
 	 * @param {Object} options
 	 * @private
-	 */
+	 *&#x2F;
 	var createTaskWithOptions = function(attributes){
 
-		// check for attributes
+		&#x2F;&#x2F; check for attributes
 		if(!attributes) {
-			throw "No attributes passed";
+			throw &quot;No attributes passed&quot;;
 			return;
 		}
 
@@ -76,7 +170,7 @@
 		var type = attributes.type;
 		var tasks = attributes.tasks;
 
-		// create any subtasks
+		&#x2F;&#x2F; create any subtasks
 		if (tasks) attributes.tasks = createSubTasksFromTaskOptionsArray(tasks);
 
 		if(type) {
@@ -98,34 +192,34 @@
 		return task;
 	}
 
-	/**
+	&#x2F;**
 	 * Creates an array of tasks based on the options array passed
 	 *
 	 * @method createSubTasksFromTaskOptionsArray
 	 * @param {Array} tasks
 	 * @private
-	 */
+	 *&#x2F;
 	var createSubTasksFromTaskOptionsArray = function(tasks){
 		var tempTasks = [];
 		if(tasks) {
-			for(var i=0;i<tasks.length;i++){
+			for(var i=0;i&lt;tasks.length;i++){
 				tempTasks.push(createTaskWithOptions(tasks[i]));
 			}
 		}
 		return tempTasks;
 	}
 
-	/**
+	&#x2F;**
 	 * Creates property descriptors from the passes attributes
 	 *
 	 * @method createPropertyDescriptorsWithAttributes
 	 * @param {Object} attributes
 	 * @private
-	 */
+	 *&#x2F;
 	var createPropertyDescriptorsWithAttributes = function(attributes){
 		var descriptors = {};
 		for (var attribute in attributes) {
-			// @TODO: If the attribute in question already has property descriptors then carry those over
+			&#x2F;&#x2F; @TODO: If the attribute in question already has property descriptors then carry those over
 			descriptors[attribute] = { 
 				value: attributes[attribute],
 				writable:true,
@@ -136,37 +230,37 @@
 		return descriptors;
 	}
 
-	/** 
+	&#x2F;** 
 	 * Resets the task to its original non executed state
 	 *
 	 * @method resetTask
 	 * @param {Object} task
 	 * @private
-	 */
+	 *&#x2F;
 	var resetTask = function(task){
 		task.state = STATE_INITIALIZED;
-		if(task.type != TYPE_SIMPLE && task.tasks){
+		if(task.type != TYPE_SIMPLE &amp;&amp; task.tasks){
 			task.currentIndex = 0;
-			for (var i = 0; i < task.tasks.length; i++) {
+			for (var i = 0; i &lt; task.tasks.length; i++) {
 				resetTask(task.tasks[i]);
 			};
 		}
 	}
 
-	/**
+	&#x2F;**
 	 * Generates a unique id for each task
 	 *
 	 * @method generateUniqueId
 	 * @param {String} prefix
 	 * @return {String} tid
 	 * @private
-	 */
+	 *&#x2F;
 	var generateUniqueId = function(prefix){
-  		var id = '' + taskIdCounter++;
+  		var id = &#x27;&#x27; + taskIdCounter++;
     	return prefix ? prefix + id : TID_PREFIX + id;
 	}
 
-	/**
+	&#x2F;**
 	 * Extention functionality for various task types.
 	 * @method extend
 	 * @param {Object} protoProps
@@ -174,15 +268,15 @@
 	 * @example
 			
 			var CustomTask = MonkeyBars.Task.extend({
-				name:"CustomTask",
+				name:&quot;CustomTask&quot;,
 				newMethod:function(){
-					console.log("Executing newMethod");
+					console.log(&quot;Executing newMethod&quot;);
 				}
 			});
 
 			var instance = new CustomTask();
 
-	 */
+	 *&#x2F;
 	var extend = function(protoProps) {
 		var parent = this;
 		var child = function(){ parent.apply(this, arguments); };
@@ -191,17 +285,17 @@
 		return child;
 	}
 
-	// ===================================================================
-	// === Tasks Objects =================================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Tasks Objects =================================================
+	&#x2F;&#x2F; ===================================================================
 
-	// @TODO: Figure out what properties should be 'writable'... I am
-	// thinking all of them should to allow future extention by the end
-	// developer, but investigate.
+	&#x2F;&#x2F; @TODO: Figure out what properties should be &#x27;writable&#x27;... I am
+	&#x2F;&#x2F; thinking all of them should to allow future extention by the end
+	&#x2F;&#x2F; developer, but investigate.
 
-	/**
+	&#x2F;**
 	 * The simplest form of a __MonkeyBars__ task. Once started the task executes all 
-	 * functionality located within the `performTask` function block. Set `loggingEnabled`
+	 * functionality located within the &#x60;performTask&#x60; function block. Set &#x60;loggingEnabled&#x60;
 	 * to see console logs during task execution.
 	 * 
 	 * @extends Object
@@ -211,32 +305,32 @@
 	 * @example
 			
 			var task = new MonkeyBars.Task({
-				name:"ExampleTask",
+				name:&quot;ExampleTask&quot;,
 				performTask:function(){
 					this.complete();
 				},
 				onComplete:function(){
-					alert(this.name + " is complete!");
+					alert(this.name + &quot; is complete!&quot;);
 				}
     		});
 
     		task.start();
 
-	 */
+	 *&#x2F;
 	 var Task = MonkeyBars.Task = function(attributes) {
 	 
-	 	// refernce for readability
+	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
 	 	task.tid = generateUniqueId();
 
-	 	// add our attributes
+	 	&#x2F;&#x2F; add our attributes
 	 	for (var prop in attributes) {
 			if (!task.hasOwnProperty(prop)) {
 				task[prop] = attributes[prop];
 			}
 		}
 
-	 	// decorate out task
+	 	&#x2F;&#x2F; decorate out task
 	 	task.decorators = [];
 		if(task.count) ForTaskDecorator(task);
 		if(task.when) WhenTaskDecorator(task);
@@ -245,14 +339,14 @@
 	 }
 
 	Task.prototype = Object.create({}, {
-		/**
+		&#x2F;**
 		 * The kind of task 
 		 * 
 		 * @for Task
 		 * @property type
 		 * @type String
 		 * @readonly
-		 */
+		 *&#x2F;
 		type: {
 			value: TYPE_SIMPLE,
 			writable: true
@@ -267,9 +361,9 @@
 		},
 		cancel: {
 			value: function() {
-				if(this.state > STATE_STARTED) return;
+				if(this.state &gt; STATE_STARTED) return;
 				this.state = STATE_CANCELED;
-				if(this.loggingEnabled) console.log("Canceled:" + this.name);
+				if(this.loggingEnabled) console.log(&quot;Canceled:&quot; + this.name);
 				this.onChange(this.state);
 				this.onCancel();
 			},
@@ -277,9 +371,9 @@
 		},
 		complete: {
 			value: function() {
-				if(this.state > STATE_STARTED) return;
+				if(this.state &gt; STATE_STARTED) return;
 				this.state = STATE_COMPLETED;
-				if(this.loggingEnabled) console.log("Completed:" + this.name);
+				if(this.loggingEnabled) console.log(&quot;Completed:&quot; + this.name);
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.onComplete();
 				this.onChange(this.state);
@@ -288,9 +382,9 @@
 		},
 		fault: {
 			value: function(error) {
-				if(this.state >= STATE_CANCELED) return;
+				if(this.state &gt;= STATE_CANCELED) return;
 				this.state = STATE_FAULTED;
-				if(this.loggingEnabled) console.log("Faulted:" + this.name);
+				if(this.loggingEnabled) console.log(&quot;Faulted:&quot; + this.name);
 				this.onChange(this.state, error);
 				this.onFault(error);
 			},
@@ -322,10 +416,10 @@
 		},
 		start: {
 			value:function() {
-				if(this.state >= STATE_STARTED) return;
+				if(this.state &gt;= STATE_STARTED) return;
 				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
-				if(this.loggingEnabled) console.log("Started:" + this.name);
+				if(this.loggingEnabled) console.log(&quot;Started:&quot; + this.name);
 				this.onChange(this.state);
 				this.performTask();
 				this.onStart();
@@ -334,7 +428,7 @@
 		}
 	});
 	
-	/**
+	&#x2F;**
 	 * A task group, and extention of task, provides the building blocks for creating
 	 * a group of tasks that is inherently a task itself. 
 	 * 
@@ -342,15 +436,15 @@
 	 * @constructor
 	 * @class TaskGroup
 	 * @param {Object} attributes List of attributes to apply to the task group
-	 */
+	 *&#x2F;
 	var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
-	 	// refernce for readability
+	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
 
-	 	// custom functionality
+	 	&#x2F;&#x2F; custom functionality
 	 	if(attributes) task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
 
-	 	// super
+	 	&#x2F;&#x2F; super
 	 	Task.call(task,attributes);
 	 }
 
@@ -377,7 +471,7 @@
 		},
 		onSubTaskComplete: {
 			value: function() {
-				throw "This is an abstract method and must be implemented in a subclass.";
+				throw &quot;This is an abstract method and must be implemented in a subclass.&quot;;
 			},
 			writable: true
 		},
@@ -396,7 +490,7 @@
 		processSubTask: {
 			value: function(task) {
 
-				if(!task) throw "You cannot process a task with a nil value.";
+				if(!task) throw &quot;You cannot process a task with a nil value.&quot;;
 
 				if(task.state == STATE_CANCELED) {
 					this.onSubTaskCancel(task);
@@ -406,7 +500,7 @@
 				task.group = this;
 				task.loggingEnabled = this.loggingEnabled;
 
-				// set execution block
+				&#x2F;&#x2F; set execution block
 				task.onChange = function(state, error) {
 					if(state == STATE_COMPLETED) this.group.onSubTaskComplete();
 					else if(state == STATE_FAULTED) this.group.onSubTaskFault(error);
@@ -429,7 +523,7 @@
 		},
 		getTaskById: {
 			value: function(tid) {
-				for(var i = 0; i < this.tasks.length; i++) {
+				for(var i = 0; i &lt; this.tasks.length; i++) {
 					var task = this.tasks[i];
 					if(task.tid == tid) return task;
 				};
@@ -438,7 +532,7 @@
 		}
 	});
 
-	/**
+	&#x2F;**
 	 * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
 	 * complete functionality is run when all of its sub tasks are complete.
 	 * 
@@ -449,25 +543,25 @@
 	 * @example
 
 			var parallel = new MonkeyBars.ParallelTask({
-				name:"ParallelTask",
+				name:&quot;ParallelTask&quot;,
 				tasks:[new MonkeyBars.Task({
 					performTask:function(){
 						this.complete();
 					}
 				})],
 				onComplete:function(){
-					alert(this.name + " is complete!");
+					alert(this.name + &quot; is complete!&quot;);
 				}
 			});
 
 			parallel.start();
 
-	 */
+	 *&#x2F;
 	 var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
-	 	// refernce for readability
+	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
 
-	 	// super
+	 	&#x2F;&#x2F; super
 	 	TaskGroup.call(task,attributes);
 	 }
 
@@ -483,7 +577,7 @@
 		hasNoEnabledSubTasks: {
 			value: function() {
 				if(!this.tasks) return true;
-				for(var i = 0; i < this.tasks.length; i++) {
+				for(var i = 0; i &lt; this.tasks.length; i++) {
 					var task = this.tasks[i];
 					if(task.state != STATE_CANCELED) return false;
 				}
@@ -493,7 +587,7 @@
 		},
 		processSubTasks: {
 			value: function() {
-				for(var i = 0; i < this.tasks.length; i++) {
+				for(var i = 0; i &lt; this.tasks.length; i++) {
 					var task = this.tasks[i];
 					this.currentIndex++;
 					this.processSubTask(task);
@@ -532,7 +626,7 @@
 		}
 	});
 
-	/**
+	&#x2F;**
 	 * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
 	 * complete functionality is run when all of its sub tasks are complete.
 	 * 
@@ -543,25 +637,25 @@
 	 * @example
 
 			var sequence = new MonkeyBars.SequenceTask({
-				name:"ParallelTask",
+				name:&quot;ParallelTask&quot;,
 				tasks:[new MonkeyBars.Task({
 					performTask:function(){
 						this.complete();
 					}
 				})],
 				onComplete:function(){
-					alert(this.name + " is complete!");
+					alert(this.name + &quot; is complete!&quot;);
 				}
 			});
 
 			sequence.start();
 
-	 */
+	 *&#x2F;
 	 var SequenceTask = MonkeyBars.SequenceTask = function(attributes){
-	 	// refernce for readability
+	 	&#x2F;&#x2F; refernce for readability
 	 	var task = this;
 
-	 	// super
+	 	&#x2F;&#x2F; super
 	 	TaskGroup.call(task,attributes);
 	 }
 
@@ -576,8 +670,8 @@
 		},
 		startNextSubTask: {
 			value: function() {
-				if(this.state >= STATE_CANCELED) return;
-				if(this.tasks && this.currentIndex < this.tasks.length) {
+				if(this.state &gt;= STATE_CANCELED) return;
+				if(this.tasks &amp;&amp; this.currentIndex &lt; this.tasks.length) {
 					var skipped = this.processSubTask(this.tasks[this.currentIndex++]);
 					if(skipped) this.startNextSubTask();
 				} else {
@@ -595,7 +689,7 @@
 		},
 		onSubTaskCancel: {
 			value: function(task) {
-				//[super onSubTaskCancel:task];
+				&#x2F;&#x2F;[super onSubTaskCancel:task];
 				if(this.state != STATE_CANCELED) this.startNextSubTask();
 			},
 			writable: true
@@ -608,26 +702,26 @@
 		}
 	});
 
-	// add the extend functionality to all of the task constructor functions
+	&#x2F;&#x2F; add the extend functionality to all of the task constructor functions
 	Task.extend = TaskGroup.extend = ParallelTask.extend = SequenceTask.extend = extend;
 
-	// ===================================================================
-	// === Task Decorators ===============================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Task Decorators ===============================================
+	&#x2F;&#x2F; ===================================================================
 
-	/**
+	&#x2F;**
 	 * ForTaskDecorator description
 	 *
 	 * @method ForTaskDecorator
 	 * @param {Object} task
-	 */
+	 *&#x2F;
 	var ForTaskDecorator = function(task) {
 	 	task.itterationIndex = 0;
 	 	task.complete = function() {
 			if(this.itterationIndex != this.count - 1) {
 				resetTask(this);
 				this.itterationIndex++;
-				if(this.loggingEnabled) console.log("Completed:" + this.name + " " + this.itterationIndex + " out of " + this.count + " times");
+				if(this.loggingEnabled) console.log(&quot;Completed:&quot; + this.name + &quot; &quot; + this.itterationIndex + &quot; out of &quot; + this.count + &quot; times&quot;);
 				this.performTask();
 			} else {
 				Task.prototype.complete.call(this);
@@ -635,12 +729,12 @@
 		}
 	}
 
-	/**
+	&#x2F;**
 	 * WhileTaskDecorator description
 	 *
 	 * @method WhileTaskDecorator
 	 * @param {Object} task
-	 */
+	 *&#x2F;
 	 var WhileTaskDecorator = function(task) {
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.complete = function() {
@@ -659,12 +753,12 @@
 		}
 	}
 
-	/**
+	&#x2F;**
 	 * WhenTaskDecorator description
 	 *
 	 * @method WhenTaskDecorator
 	 * @param {Object} task
-	 */
+	 *&#x2F;
 	var WhenTaskDecorator = function(task) {
 		task.decorators.push(DECORATOR_WHEN);
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
@@ -678,11 +772,11 @@
 		}
 	}
 
-	// ===================================================================
-	// === Public Interface ==============================================
-	// ===================================================================
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Public Interface ==============================================
+	&#x2F;&#x2F; ===================================================================
 
-	// set publicly available states
+	&#x2F;&#x2F; set publicly available states
 	MonkeyBars.TaskStates = {
 		Initialized:STATE_INITIALIZED,
 		Started:STATE_STARTED,
@@ -691,21 +785,40 @@
 		Completed:STATE_COMPLETED
 	};
 
-	// set publicly available types
+	&#x2F;&#x2F; set publicly available types
 	MonkeyBars.TaskTypes = {
 		Parallel:TYPE_PARALLEL,
 		Sequence:TYPE_SEQUENCE,
 		Simple:TYPE_SIMPLE
 	};
 
-	// set publicly available decorators
+	&#x2F;&#x2F; set publicly available decorators
 	MonkeyBars.TaskDecorators = {
 		For:DECORATOR_FOR,
 		When:DECORATOR_WHEN,
 		While:DECORATOR_WHILE
 	};
 
-	// set MonkeyBars to our root object
+	&#x2F;&#x2F; set MonkeyBars to our root object
 	root.MonkeyBars = MonkeyBars;
 
 }(this));
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
