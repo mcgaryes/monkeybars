@@ -1,10 +1,8 @@
-![MonkeyBars](http://sandbox.ericmcgary.com/images/github_logo_h.png)
+# MonkeyBars
 
 A task based library that provides a simple structure for handling singular, sequential and parallel units of code. 
 
 The overall architecture is based off of the [composite](http://en.m.wikipedia.org/wiki/Composite%20pattern) and [decorator](http://en.wikipedia.org/wiki/Decorator_pattern) patterns. These patterns lend themselves very well to a task based library, where tasks can contain other tasks all contributing to the overall flow of an operation.
-
-----------------------------------------
 
 ### Implementation
 
