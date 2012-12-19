@@ -1,4 +1,4 @@
-![MonkeyBars](./artwork/github_banner.png)
+![MonkeyBars](http://sandbox.ericmcgary.com/images/github_logo.png)
 
 A task based library that provides a simple structure for handling singular, sequential and parallel units of code. 
 
