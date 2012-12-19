@@ -4,6 +4,8 @@ A task based library that provides a simple structure for handling singular, seq
 
 The overall architecture is based off of the [composite](http://en.m.wikipedia.org/wiki/Composite%20pattern) and [decorator](http://en.wikipedia.org/wiki/Decorator_pattern) patterns. These patterns lend themselves very well to a task based library, where tasks can contain other tasks all contributing to the overall flow of an operation.
 
+----------------------------------------
+
 ### Implementation
 
 <pre>
