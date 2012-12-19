@@ -633,8 +633,8 @@
 					this.complete();
 				}
 			});
-			parallel.addSubTask(simple);
 
+			parallel.addSubTask(simple);
 
 		 */
 		addSubTask: {
@@ -669,6 +669,26 @@
 				if(!task.tid) task = createTaskWithOptions(task);
 				this.setDependeciesForTask(task);
 				var index = this.tasks.indexOf(afterTask);
+				this.tasks.splice(index+1, 0, task);
+			},
+			writable: true
+		},
+
+		/**
+		 * Very similar to `addSubTaskAfterTask` except the inject task appears
+		 * before the second arguments position.
+		 * 
+		 * @for TaskGroup
+		 * @method addSubTaskBeforeTask
+		 * @param {Object} task Either an object containing attributes of a task or
+		 * @param {Object} beforeTask Reference to an already added task
+		 */
+		addSubTaskBeforeTask: {
+			value: function(task, beforeTask) {
+				if(!task || this.state == STATE_CANCELED) return;
+				if(!task.tid) task = createTaskWithOptions(task);
+				this.setDependeciesForTask(task);
+				var index = this.tasks.indexOf(beforeTask);
 				this.tasks.splice(index, 0, task);
 			},
 			writable: true

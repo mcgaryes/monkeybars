@@ -16,6 +16,62 @@ describe("Sequence Task Tests", function() {
 	});
 
 	// ===================================================================
+	// === Task Injection Tests ==========================================
+	// ===================================================================
+
+	describe("Task Injection Tests", function() {
+
+		it("Add SubTask",function(){
+			
+			var s = new MonkeyBars.SequenceTask({
+				tasks:[
+					{name:"one"},
+					{name:"two"},
+					{name:"three"}
+				]
+			});
+
+			s.addSubTask({name:"four"});
+
+			expect(s.tasks.length).toEqual(4);
+			expect(s.tasks[3].name).toEqual("four");
+		});
+
+		it("Add SubTask After SubTask",function(){
+			var s = new MonkeyBars.SequenceTask({
+				tasks:[
+					{name:"one"},
+					{name:"two"},
+					{name:"three"}
+				]
+			});
+
+			s.addSubTaskAfterTask({name:"four"},s.getTaskByName("two"));
+
+			expect(s.tasks.length).toEqual(4);
+			expect(s.tasks[2].name).toEqual("four");
+
+		});
+
+		it("Add SubTask Before SubTask",function(){
+			var s = new MonkeyBars.SequenceTask({
+				tasks:[
+					{name:"one"},
+					{name:"two"},
+					{name:"three"}
+				]
+			});
+
+			s.addSubTaskBeforeTask({name:"four"},s.getTaskByName("two"));
+
+			expect(s.tasks.length).toEqual(4);
+			expect(s.tasks[1].name).toEqual("four");
+
+		});
+
+	});
+
+	// ===================================================================
 	// === Task Dependency Tests =========================================
 	// ===================================================================
 

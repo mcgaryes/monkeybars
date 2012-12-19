@@ -102,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1030"><code>..&#x2F;source&#x2F;monkeybars.js:1030</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1050"><code>..&#x2F;source&#x2F;monkeybars.js:1050</code></a>
         </div>
     
 
@@ -163,7 +163,7 @@ complete functionality is run when all of its sub tasks are complete.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1030"><code>..&#x2F;source&#x2F;monkeybars.js:1030</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1050"><code>..&#x2F;source&#x2F;monkeybars.js:1050</code></a>
         
         </p>
 
@@ -264,6 +264,13 @@ complete functionality is run when all of its sub tasks are complete.</p>
                         
                             <li class="index-item method inherited">
                                 <a href="#method_addSubTaskAfterTask">addSubTaskAfterTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_addSubTaskBeforeTask">addSubTaskBeforeTask</a>
 
                                 
                                 
@@ -556,6 +563,7 @@ an already instantiated task</p>
                 this.complete();
             }
         });
+
         parallel.addSubTask(simple);
 </code></pre>
             </div>
@@ -683,6 +691,112 @@ an already instantiated task</p>
 </div>
 
                 
+                    <div id="method_addSubTaskBeforeTask" class="method item inherited">
+    <h3 class="name"><code>addSubTaskBeforeTask</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>beforeTask</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskGroup.html#method_addSubTaskBeforeTask">TaskGroup</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l677"><code>..&#x2F;source&#x2F;monkeybars.js:677</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Very similar to <code>addSubTaskAfterTask</code> except the inject task appears
+before the second arguments position.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Either an object containing attributes of a task or</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">beforeTask</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Reference to an already added task</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_cancel" class="method item inherited">
     <h3 class="name"><code>cancel</code></h3>
 
@@ -715,7 +829,7 @@ an already instantiated task</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l833"><code>..&#x2F;source&#x2F;monkeybars.js:833</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l853"><code>..&#x2F;source&#x2F;monkeybars.js:853</code></a>
         
         </p>
 
@@ -945,7 +1059,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l799"><code>..&#x2F;source&#x2F;monkeybars.js:799</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l819"><code>..&#x2F;source&#x2F;monkeybars.js:819</code></a>
         
         </p>
 
@@ -1029,7 +1143,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l816"><code>..&#x2F;source&#x2F;monkeybars.js:816</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l836"><code>..&#x2F;source&#x2F;monkeybars.js:836</code></a>
         
         </p>
 
@@ -1113,7 +1227,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l774"><code>..&#x2F;source&#x2F;monkeybars.js:774</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l794"><code>..&#x2F;source&#x2F;monkeybars.js:794</code></a>
         
         </p>
 
@@ -1576,7 +1690,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1113"><code>..&#x2F;source&#x2F;monkeybars.js:1113</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1133"><code>..&#x2F;source&#x2F;monkeybars.js:1133</code></a>
         
         </p>
 
@@ -1654,7 +1768,7 @@ when a sub task is canceled it simply moves on to the next task in the queue.</p
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1098"><code>..&#x2F;source&#x2F;monkeybars.js:1098</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1118"><code>..&#x2F;source&#x2F;monkeybars.js:1118</code></a>
         
         </p>
 
@@ -1716,7 +1830,7 @@ when a sub task completes it starts the next sibling in the queue.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l689"><code>..&#x2F;source&#x2F;monkeybars.js:689</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l709"><code>..&#x2F;source&#x2F;monkeybars.js:709</code></a>
         
         </p>
 
@@ -1803,7 +1917,7 @@ when a sub task completes it starts the next sibling in the queue.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1129"><code>..&#x2F;source&#x2F;monkeybars.js:1129</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1149"><code>..&#x2F;source&#x2F;monkeybars.js:1149</code></a>
         
         </p>
 
@@ -1888,7 +2002,7 @@ SequenceTask's prototype <code>performTask</code> method.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l720"><code>..&#x2F;source&#x2F;monkeybars.js:720</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l740"><code>..&#x2F;source&#x2F;monkeybars.js:740</code></a>
         
         </p>
 
@@ -1975,7 +2089,7 @@ convenience methods.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l757"><code>..&#x2F;source&#x2F;monkeybars.js:757</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l777"><code>..&#x2F;source&#x2F;monkeybars.js:777</code></a>
         
         </p>
 
@@ -2105,7 +2219,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1079"><code>..&#x2F;source&#x2F;monkeybars.js:1079</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1099"><code>..&#x2F;source&#x2F;monkeybars.js:1099</code></a>
         
         </p>
 
@@ -2285,7 +2399,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1065"><code>..&#x2F;source&#x2F;monkeybars.js:1065</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1085"><code>..&#x2F;source&#x2F;monkeybars.js:1085</code></a>
         
         </p>
 
