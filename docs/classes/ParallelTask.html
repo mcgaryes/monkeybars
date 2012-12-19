@@ -102,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l716"><code>..&#x2F;source&#x2F;monkeybars.js:716</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l887"><code>..&#x2F;source&#x2F;monkeybars.js:887</code></a>
         </div>
     
 
@@ -163,7 +163,7 @@ complete functionality is run when all of its sub tasks are complete.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l716"><code>..&#x2F;source&#x2F;monkeybars.js:716</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l887"><code>..&#x2F;source&#x2F;monkeybars.js:887</code></a>
         
         </p>
 
@@ -269,7 +269,7 @@ complete functionality is run when all of its sub tasks are complete.</p>
                                 
                             </li>
                         
-                            <li class="index-item method inherited">
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_cancel">cancel</a>
 
                                 
@@ -292,6 +292,20 @@ complete functionality is run when all of its sub tasks are complete.</p>
                         
                             <li class="index-item method inherited">
                                 <a href="#method_getTaskById">getTaskById</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_getTaskByName">getTaskByName</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_getTaskByTid">getTaskByTid</a>
 
                                 
                                 
@@ -413,7 +427,14 @@ complete functionality is run when all of its sub tasks are complete.</p>
                             </li>
                         
                             <li class="index-item property inherited">
-                                <a href="#property_name">name</a>
+                                <a href="#property_displayName">displayName</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property inherited">
+                                <a href="#property_state">state</a>
 
                                 
                                 
@@ -482,7 +503,7 @@ complete functionality is run when all of its sub tasks are complete.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l813"><code>..&#x2F;source&#x2F;monkeybars.js:813</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l972"><code>..&#x2F;source&#x2F;monkeybars.js:972</code></a>
         
         </p>
 
@@ -574,7 +595,7 @@ processed and started.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l572"><code>..&#x2F;source&#x2F;monkeybars.js:572</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l649"><code>..&#x2F;source&#x2F;monkeybars.js:649</code></a>
         
         </p>
 
@@ -671,13 +692,16 @@ processed and started.</p>
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="..&#x2F;classes&#x2F;Task.html#method_cancel">
+                Task
+            </a>
             
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#method_cancel">Task</a>:
+            but overwritten in
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l289"><code>..&#x2F;source&#x2F;monkeybars.js:289</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l833"><code>..&#x2F;source&#x2F;monkeybars.js:833</code></a>
         
         </p>
 
@@ -688,31 +712,13 @@ processed and started.</p>
     </div>
 
     <div class="description">
-        <p>Calling this method cancels the task. However it is up to the instance to handle 
-the canceled state.</p>
+        <p>Cancel the group and cancel all of its subtasks</p>
     </div>
 
     
 
     
 
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            performTask:function(){
-                if(true){
-                    this.cancel();
-                }
-            }
-        });
-
-        task.start();
-</code></pre>
-            </div>
-        </div>
     
 </div>
 
@@ -746,7 +752,7 @@ the canceled state.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l319"><code>..&#x2F;source&#x2F;monkeybars.js:319</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l384"><code>..&#x2F;source&#x2F;monkeybars.js:384</code></a>
         
         </p>
 
@@ -822,7 +828,7 @@ the canceled state.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l347"><code>..&#x2F;source&#x2F;monkeybars.js:347</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l412"><code>..&#x2F;source&#x2F;monkeybars.js:412</code></a>
         
         </p>
 
@@ -895,7 +901,7 @@ also call the groups fault method passing the error up to the group.</p>
             
                 <li class="arg">
                     
-                        <code>tid</code>
+                        <code>id</code>
                     
                 </li>
             
@@ -925,7 +931,175 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l690"><code>..&#x2F;source&#x2F;monkeybars.js:690</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l799"><code>..&#x2F;source&#x2F;monkeybars.js:799</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return a Task object, if it exists, based on the <code>id</code> passed.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">id</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The user defined id</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTaskByName" class="method item inherited">
+    <h3 class="name"><code>getTaskByName</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskGroup.html#method_getTaskByName">TaskGroup</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l816"><code>..&#x2F;source&#x2F;monkeybars.js:816</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return a Task object, if it exists, based on the <code>name</code> passed.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The user defined name</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTaskByTid" class="method item inherited">
+    <h3 class="name"><code>getTaskByTid</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>tid</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskGroup.html#method_getTaskByTid">TaskGroup</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l774"><code>..&#x2F;source&#x2F;monkeybars.js:774</code></a>
         
         </p>
 
@@ -975,7 +1149,7 @@ also call the groups fault method passing the error up to the group.</p>
             tasks:[task1,task3]
         });
 
-        parallel.getTaskById(task1.tid);
+        parallel.getTaskByTid(task1.tid);
 </code></pre>
             </div>
         </div>
@@ -1019,7 +1193,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l777"><code>..&#x2F;source&#x2F;monkeybars.js:777</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l936"><code>..&#x2F;source&#x2F;monkeybars.js:936</code></a>
         
         </p>
 
@@ -1083,7 +1257,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l442"><code>..&#x2F;source&#x2F;monkeybars.js:442</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l507"><code>..&#x2F;source&#x2F;monkeybars.js:507</code></a>
         
         </p>
 
@@ -1150,7 +1324,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l379"><code>..&#x2F;source&#x2F;monkeybars.js:379</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l444"><code>..&#x2F;source&#x2F;monkeybars.js:444</code></a>
         
         </p>
 
@@ -1260,7 +1434,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l431"><code>..&#x2F;source&#x2F;monkeybars.js:431</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l496"><code>..&#x2F;source&#x2F;monkeybars.js:496</code></a>
         
         </p>
 
@@ -1321,7 +1495,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l419"><code>..&#x2F;source&#x2F;monkeybars.js:419</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l484"><code>..&#x2F;source&#x2F;monkeybars.js:484</code></a>
         
         </p>
 
@@ -1395,7 +1569,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l408"><code>..&#x2F;source&#x2F;monkeybars.js:408</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l473"><code>..&#x2F;source&#x2F;monkeybars.js:473</code></a>
         
         </p>
 
@@ -1421,7 +1595,17 @@ left blank and is up to the instance to describe it functionality.</p>
     <h3 class="name"><code>onSubTaskCancel</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -1446,7 +1630,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l623"><code>..&#x2F;source&#x2F;monkeybars.js:623</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l701"><code>..&#x2F;source&#x2F;monkeybars.js:701</code></a>
         
         </p>
 
@@ -1457,9 +1641,33 @@ left blank and is up to the instance to describe it functionality.</p>
     </div>
 
     <div class="description">
-        <p>Called when a subtask calls its fault method.</p>
+        <p>Called when a subtask calls its cancel method. When a subtask is canceled
+any other subtasks that are dependent on the canceled task are cancled.</p>
     </div>
 
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The task that was just cancled</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -1500,7 +1708,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l833"><code>..&#x2F;source&#x2F;monkeybars.js:833</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l992"><code>..&#x2F;source&#x2F;monkeybars.js:992</code></a>
         
         </p>
 
@@ -1563,7 +1771,7 @@ is called.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l611"><code>..&#x2F;source&#x2F;monkeybars.js:611</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l689"><code>..&#x2F;source&#x2F;monkeybars.js:689</code></a>
         
         </p>
 
@@ -1640,7 +1848,7 @@ is called.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l851"><code>..&#x2F;source&#x2F;monkeybars.js:851</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l1010"><code>..&#x2F;source&#x2F;monkeybars.js:1010</code></a>
         
         </p>
 
@@ -1703,7 +1911,7 @@ If there are then the group processes all of the sub tasks it has.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l636"><code>..&#x2F;source&#x2F;monkeybars.js:636</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l720"><code>..&#x2F;source&#x2F;monkeybars.js:720</code></a>
         
         </p>
 
@@ -1783,7 +1991,7 @@ convenience methods.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l796"><code>..&#x2F;source&#x2F;monkeybars.js:796</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l955"><code>..&#x2F;source&#x2F;monkeybars.js:955</code></a>
         
         </p>
 
@@ -1844,7 +2052,7 @@ convenience methods.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l673"><code>..&#x2F;source&#x2F;monkeybars.js:673</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l757"><code>..&#x2F;source&#x2F;monkeybars.js:757</code></a>
         
         </p>
 
@@ -1919,7 +2127,7 @@ have no apparent affect as it has already ran.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l479"><code>..&#x2F;source&#x2F;monkeybars.js:479</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l544"><code>..&#x2F;source&#x2F;monkeybars.js:544</code></a>
         
         </p>
 
@@ -1952,7 +2160,7 @@ This method can only be run once on a task.</p>
                 
                     <div id="property_currentIndex" class="property item inherited">
     <h3 class="name"><code>currentIndex</code></h3>
-    <span class="type">String</span>
+    <span class="type">Integer</span>
 
     
 
@@ -1970,7 +2178,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l522"><code>..&#x2F;source&#x2F;monkeybars.js:522</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l597"><code>..&#x2F;source&#x2F;monkeybars.js:597</code></a>
         
         </p>
 
@@ -1984,6 +2192,8 @@ This method can only be run once on a task.</p>
     </div>
 
     
+        <p><strong>Default:</strong> 0</p>
+    
 
     
 
@@ -1991,8 +2201,8 @@ This method can only be run once on a task.</p>
 </div>
 
                 
-                    <div id="property_name" class="property item">
-    <h3 class="name"><code>name</code></h3>
+                    <div id="property_displayName" class="property item inherited">
+    <h3 class="name"><code>displayName</code></h3>
     <span class="type">String</span>
 
     
@@ -2005,16 +2215,13 @@ This method can only be run once on a task.</p>
 
     <div class="meta">
         
-            <p>Inherited from
-            <a href="..&#x2F;classes&#x2F;Task.html#property_name">
-                Task
-            </a>
             
-            but overwritten in
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#property_displayName">Task</a>:
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l764"><code>..&#x2F;source&#x2F;monkeybars.js:764</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l324"><code>..&#x2F;source&#x2F;monkeybars.js:324</code></a>
         
         </p>
 
@@ -2024,11 +2231,52 @@ This method can only be run once on a task.</p>
     </div>
 
     <div class="description">
-        <p>Name of the task</p>
+        <p>Display name for task. Used in logging output.</p>
     </div>
 
     
-        <p><strong>Default:</strong> parallel</p>
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_state" class="property item inherited">
+    <h3 class="name"><code>state</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#property_state">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l340"><code>..&#x2F;source&#x2F;monkeybars.js:340</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The current state of the task</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
     
 
     
@@ -2060,7 +2308,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l751"><code>..&#x2F;source&#x2F;monkeybars.js:751</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_monkeybars.js.html#l922"><code>..&#x2F;source&#x2F;monkeybars.js:922</code></a>
         
         </p>
 

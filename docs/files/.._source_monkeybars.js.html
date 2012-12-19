@@ -132,13 +132,36 @@
 	var TIMEOUT_INTERVAL	=	100;
 	var OVERRIDE_NEEDED		=	&quot;This method must be overridden.&quot;;
 	var UNDEFINED_TASK		=	&quot;Task is undefined.&quot;;
+	var MISSING_ATTRIBUTES	=	&quot;You must pass some attributes in order to create a task.&quot;;
 
 	&#x2F;&#x2F; ===================================================================
 	&#x2F;&#x2F; === Private Variables =============================================
 	&#x2F;&#x2F; ===================================================================
 
+	&#x2F;**
+     * A dictionary of dependencies for sub tasks
+     *
+     * @property root
+     * @type Object
+     * @private
+     *&#x2F;
 	var root = this;
+
+	&#x2F;**
+     * Counter used to create unique task ids
+     *
+     * @property taskIdCounter
+     * @type Integer
+     * @private
+     *&#x2F;
 	var taskIdCounter = 0;
+
+	&#x2F;**
+     * Object returned by module. Works as namespace for the task library.
+     *
+     * @property MonkeyBars
+     * @type Object
+     *&#x2F;
 	var MonkeyBars = root.MonkeyBars = {};
 
 	&#x2F;&#x2F; ===================================================================
@@ -152,11 +175,11 @@
 	}
 
 	&#x2F;&#x2F; ===================================================================
-	&#x2F;&#x2F; === Helper Functions ==============================================
+	&#x2F;&#x2F; === Helper Methods ================================================
 	&#x2F;&#x2F; ===================================================================
 
 	&#x2F;**
-	 * Creates task based on the options passed
+	 * Creates task based on the options passed.
 	 *
 	 * @method createTaskWithOptions
 	 * @param {Object} options
@@ -166,40 +189,50 @@
 
 		&#x2F;&#x2F; check for attributes
 		if(!attributes) {
-			throw &quot;No attributes passed&quot;;
+			throw MISSING_ATTRIBUTES;
 			return;
 		}
 
-		if(attributes.tid) return attributes;
-
 		var task;
-		var type = attributes.type;
-		var tasks = attributes.tasks;
-
-		&#x2F;&#x2F; create any subtasks
-		if (tasks) attributes.tasks = createSubTasksFromTaskOptionsArray(tasks);
-
-		if(type) {
-			if(type == TYPE_SIMPLE) {
-				task = new Task(attributes);
-			} else if(type == TYPE_SEQUENCE) {
-				task = new SequenceTask(attributes);
-			} else if(type == TYPE_PARALLEL){
-				task = new ParallelTask(attributes);
-			}
-		} else {
-			if (!tasks) {
-				task = new Task(attributes);
-			} else {
-				task = new SequenceTask(attributes);
-			}
-		}
 		
+		&#x2F;&#x2F; if the attributes passes already has a tid then we know that
+		&#x2F;&#x2F; its an already initialized Task object... else we need to create
+		&#x2F;&#x2F; a task from the attributes passed
+		if(attributes.tid) {
+
+			task = attributes;
+
+		} else {
+
+			var type = attributes.type;
+			var tasks = attributes.tasks;
+
+			&#x2F;&#x2F; create any subtasks
+			if (tasks) attributes.tasks = createSubTasksFromTaskOptionsArray(tasks);
+
+			if(type) {
+				if(type == TYPE_SIMPLE) {
+					task = new Task(attributes);
+				} else if(type == TYPE_SEQUENCE) {
+					task = new SequenceTask(attributes);
+				} else if(type == TYPE_PARALLEL){
+					task = new ParallelTask(attributes);
+				}
+			} else {
+				if (!tasks) {
+					task = new Task(attributes);
+				} else {
+					task = new SequenceTask(attributes);
+				}
+			}
+
+		}
+
 		return task;
 	}
 
 	&#x2F;**
-	 * Creates an array of tasks based on the options array passed
+	 * Creates an array of tasks based on the options array passed.
 	 *
 	 * @method createSubTasksFromTaskOptionsArray
 	 * @param {Array} tasks
@@ -216,7 +249,7 @@
 	}
 
 	&#x2F;**
-	 * Creates property descriptors from the passes attributes
+	 * Creates property descriptors from the passes attributes.
 	 *
 	 * @method createPropertyDescriptorsWithAttributes
 	 * @param {Object} attributes
@@ -237,7 +270,7 @@
 	}
 
 	&#x2F;** 
-	 * Resets the task to its original non executed state
+	 * Resets the task to its original non executed state.
 	 *
 	 * @method resetTask
 	 * @param {Object} task
@@ -254,7 +287,7 @@
 	}
 
 	&#x2F;**
-	 * Generates a unique id for each task
+	 * Generates a unique id for each task.
 	 *
 	 * @method generateUniqueId
 	 * @param {String} prefix
@@ -262,12 +295,40 @@
 	 * @private
 	 *&#x2F;
 	var generateUniqueId = function(prefix){
-  		var id = &#x27;&#x27; + taskIdCounter++;
-    	return prefix ? prefix + id : TID_PREFIX + id;
+  		var id = taskIdCounter++;
+  		var tid = prefix ? prefix + id : TID_PREFIX + id;
+  		return tid;
+	}
+
+	&#x2F;**
+	 * Determains whether the first task is dependent on the second.
+	 *
+	 * @method isTaskDependentOnTask
+	 * @param {Task} task1
+	 * @param {Task} task2
+	 * @private
+	 *&#x2F;
+	var isTaskDependentOnTask = function(task1,task2) {
+		var dependencies = task1.dependencies;
+		if(dependencies) {
+			var totalDependencies = dependencies.length;
+			for (var i = 0; i &lt;totalDependencies; i++) {
+				var dependency = dependencies[i];
+				if (dependency == task2.tid) {
+					return true;
+				} else if (dependency == task2.id) {
+					return true;
+				} else if (dependency == task2.name &amp;&amp; task2.name !== &quot;undefined&quot;) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	&#x2F;**
 	 * Extention functionality for various task types.
+	 *
 	 * @method extend
 	 * @for MonkeyBars
 	 * @param {Object} protoProps
@@ -351,28 +412,32 @@
 		 * @readonly
 		 *&#x2F;
 		type: {
-			value: TYPE_SIMPLE,
-			writable: true
+			get: function() {
+				return TYPE_SIMPLE;
+			}
 		},
 
 		&#x2F;**
-		 * The name of the task if not specified by the instance.
+		 * Display name for task. Used in logging output.
 		 * 
 		 * @for Task
-		 * @property name
+		 * @property displayName
 		 * @type String
-		 * @default task
+		 * @readonly
 		 *&#x2F;
-		name: {
-			value: TYPE_SIMPLE,
-			writable: true
+		displayName: {
+			get: function() {
+				if(this.id) return this.id;
+				if(this.name) return this.name;
+				return this.type;
+			}
 		},
 
 		&#x2F;**
 		 * The current state of the task
 		 * 
 		 * @for Task
-		 * @property name
+		 * @property state
 		 * @type Integer
 		 * @readonly
 		 * @default 0
@@ -405,7 +470,7 @@
 			value: function() {
 				if(this.state &gt; STATE_STARTED) return;
 				this.state = STATE_CANCELED;
-				if(this.loggingEnabled) console.log(&quot;Canceled:&quot; + this.name);
+				if(this.loggingEnabled) console.log(&quot;Canceled:&quot; + this.displayName);
 				this.onChange(this.state);
 				this.onCancel();
 			},
@@ -432,7 +497,7 @@
 			value: function() {
 				if(this.state &gt; STATE_STARTED) return;
 				this.state = STATE_COMPLETED;
-				if(this.loggingEnabled) console.log(&quot;Completed:&quot; + this.name);
+				if(this.loggingEnabled) console.log(&quot;Completed:&quot; + this.displayName);
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.onComplete();
 				this.onChange(this.state);
@@ -465,7 +530,7 @@
 			value: function(error) {
 				if(this.state &gt;= STATE_CANCELED) return;
 				this.state = STATE_FAULTED;
-				if(this.loggingEnabled) console.log(&quot;Faulted:&quot; + this.name);
+				if(this.loggingEnabled) console.log(&quot;Faulted:&quot; + this.displayName);
 				this.onChange(this.state, error);
 				this.onFault(error);
 			},
@@ -584,7 +649,7 @@
 				if(this.state &gt;= STATE_STARTED) return;
 				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
-				if(this.loggingEnabled) console.log(&quot;Started:&quot; + this.name);
+				if(this.loggingEnabled) console.log(&quot;Started:&quot; + this.displayName);
 				this.onChange(this.state);
 				this.performTask();
 				this.onStart();
@@ -609,6 +674,16 @@
 	 	&#x2F;&#x2F; custom functionality
 	 	if(attributes) task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
 
+	 	&#x2F;&#x2F; create dependency map and populate it with subtask tids
+	 	task.dependencyMap = {};
+	 	if(task.tasks){
+		 	for (var i = 0; i &lt; task.tasks.length; i++) {
+		 		var subtask = task.tasks[i];
+		 		this.dependencyMap[subtask.tid] = [];
+				task.setDependeciesForTask(subtask);
+		 	};
+	 	}
+
 	 	&#x2F;&#x2F; super
 	 	Task.call(task,attributes);
 	 }
@@ -620,8 +695,9 @@
 		 * 
 		 * @for Task
 		 * @property currentIndex
-		 * @type String
+		 * @type Integer
 		 * @readonly
+		 * @default 0
 		 *&#x2F;
 		currentIndex: {
 			value: 0,
@@ -660,6 +736,7 @@
 		addSubTask: {
 			value: function(task) {
 				if(!task.tid) task = createTaskWithOptions(task);
+				this.setDependeciesForTask(task);
 				this.tasks.push(task);
 			},
 			writable: true
@@ -686,6 +763,7 @@
 			value: function(task, afterTask) {
 				if(!task || this.state == STATE_CANCELED) return;
 				if(!task.tid) task = createTaskWithOptions(task);
+				this.setDependeciesForTask(task);
 				var index = this.tasks.indexOf(afterTask);
 				this.tasks.splice(index, 0, task);
 			},
@@ -717,14 +795,20 @@
 		},
 
 		&#x2F;**
-		 * Called when a subtask calls its fault method.
+		 * Called when a subtask calls its cancel method. When a subtask is canceled
+		 * any other subtasks that are dependent on the canceled task are cancled.
 		 * 
 		 * @for TaskGroup
 		 * @method onSubTaskCancel
+		 * @param {Task} task The task that was just cancled
 		 *&#x2F;
 		onSubTaskCancel: {
 			value: function(task) {
-				this.cancel();
+				for (var i = 0; i &lt; this.tasks.length; i++) {
+					if(isTaskDependentOnTask(this.tasks[i],task)){
+						this.tasks[i].state = STATE_CANCELED;
+					}
+				}
 			},
 			writable: true
 		},
@@ -787,7 +871,7 @@
 		 * Return a Task object, if it exists, based on the &#x60;tid&#x60; passed.
 		 * 
 		 * @for TaskGroup
-		 * @method getTaskById
+		 * @method getTaskByTid
 		 * @param {String} tid The id of the task you want
 		 * @example
 
@@ -795,10 +879,10 @@
 				tasks:[task1,task3]
 			});
 
-			parallel.getTaskById(task1.tid);
+			parallel.getTaskByTid(task1.tid);
 
 		 *&#x2F;
-		getTaskById: {
+		getTaskByTid: {
 			value: function(tid) {
 				for(var i = 0; i &lt; this.tasks.length; i++) {
 					var task = this.tasks[i];
@@ -806,6 +890,93 @@
 				};
 			},
 			writable: true
+		},
+
+		&#x2F;**
+		 * Return a Task object, if it exists, based on the &#x60;id&#x60; passed.
+		 * 
+		 * @for TaskGroup
+		 * @method getTaskById
+		 * @param {String} id The user defined id
+		 *&#x2F;
+		getTaskById: {
+			value: function(id) {
+				for(var i = 0; i &lt; this.tasks.length; i++) {
+					var task = this.tasks[i];
+					if(task.id == id) return task;
+				};
+			},
+			writable: true
+		},
+
+		&#x2F;**
+		 * Return a Task object, if it exists, based on the &#x60;name&#x60; passed.
+		 * 
+		 * @for TaskGroup
+		 * @method getTaskByName
+		 * @param {String} name The user defined name
+		 *&#x2F;
+		getTaskByName: {
+			value: function(name) {
+				for(var i = 0; i &lt; this.tasks.length; i++) {
+					var task = this.tasks[i];
+					if(task.name == name) return task;
+				};
+			},
+			writable: true
+		},
+
+		&#x2F;**
+		 * Cancel the group and cancel all of its subtasks
+		 * 
+		 * @for TaskGroup
+		 * @method cancel
+		 *&#x2F;
+		cancel:{
+		 	value:function(){
+
+		 		&#x2F;&#x2F; call cancel on this task
+		 		Task.prototype.call(this);
+		 		
+		 		&#x2F;&#x2F; cancel all of this tasks subtasks
+		 		for (var i = 0; i &lt; this.tasks.length; i++) {
+		 			&#x2F;&#x2F; we only want to cancel those tasks that are currently running
+					&#x2F;&#x2F; otherwise we want to set the canceled flag
+		 			var task = this.tasks[i];
+		 			if (task.state&gt;STATE_INITIALIZED){
+		 				task.cancel();
+		 			} else {
+		 				task.state = STATE_CANCELED;
+		 			}
+		 		};
+
+			},
+			writable: true
+		},
+
+		&#x2F;**
+		 * Sets dependencies for the passed task.
+		 *
+		 * @method setDependeciesForTask
+		 * @param {Task} task
+		 * @static
+		 *&#x2F;
+		setDependeciesForTask: {
+		 	value:function(task){
+				if(task.dependencies){
+					var totalDependencies = task.dependencies.length;
+					for (var i = 0; i &lt; totalDependencies; i++) {
+						var dependency = task.dependencies[i];
+						if(dependency.tid) {
+							this.dependencyMap[task.tid].push(dependency.tid);
+						} else {
+							this.dependencyMap[task.tid].push(dependency);
+						}
+					};
+
+				}
+			},
+			writable: false
 		}
 	});
 
@@ -853,21 +1024,9 @@
 		 * @readonly
 		 *&#x2F;
 		type: {
-			value: TYPE_PARALLEL,
-			writable: true
-		},
-
-		&#x2F;**
-		 * Name of the task
-		 * 
-		 * @for ParallelTask
-		 * @property name
-		 * @type String
-		 * @default parallel
-		 *&#x2F;
-		name: {
-			value: TYPE_PARALLEL,
-			writable: true
+			get: function() {
+				return TYPE_PARALLEL;
+			}
 		},
 
 		&#x2F;**
@@ -1008,21 +1167,9 @@
 		 * @readonly
 		 *&#x2F;
 		type: {
-			value: TYPE_SEQUENCE,
-			writable: true
-		},
-
-		&#x2F;**
-		 * The name of task 
-		 * 
-		 * @for SequenceTask
-		 * @property name
-		 * @type String
-		 * @default sequence
-		 *&#x2F;
-		name: {
-			value: TYPE_SEQUENCE,
-			writable: true
+			get: function() {
+				return TYPE_SEQUENCE;
+			}
 		},
 
 		&#x2F;**
@@ -1069,7 +1216,7 @@
 		 *&#x2F;
 		onSubTaskCancel: {
 			value: function(task) {
-				&#x2F;&#x2F;[super onSubTaskCancel:task];
+				TaskGroup.prototype.onSubTaskCancel.call(this,task);
 				if(this.state != STATE_CANCELED) this.startNextSubTask();
 			},
 			writable: true
@@ -1108,12 +1255,13 @@
 	 * @private
 	 *&#x2F;
 	var ForTaskDecorator = function(task) {
+		task.decorators.push(DECORATOR_FOR);
 	 	task.itterationIndex = 0;
 	 	task.complete = function() {
 			if(this.itterationIndex != this.count - 1) {
 				resetTask(this);
 				this.itterationIndex++;
-				if(this.loggingEnabled) console.log(&quot;Completed:&quot; + this.name + &quot; &quot; + this.itterationIndex + &quot; out of &quot; + this.count + &quot; times&quot;);
+				if(this.loggingEnabled) console.log(&quot;Completed:&quot; + this.displayName + &quot; &quot; + this.itterationIndex + &quot; out of &quot; + this.count + &quot; times&quot;);
 				this.performTask();
 			} else {
 				Task.prototype.complete.call(this);
@@ -1131,6 +1279,7 @@
 	 * @private
 	 *&#x2F;
 	var WhileTaskDecorator = function(task) {
+		task.decorators.push(DECORATOR_WHILE);
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.complete = function() {
 			if(this.while()) {

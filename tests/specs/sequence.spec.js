@@ -21,8 +21,11 @@ describe("Sequence Task Tests", function() {
 
 	describe("Dependency Tests", function() {
 
+
 		it("Canceling SubTask Cancels Its Dependencies",function(){
 			
+			return;
+
 			var index = 0;
 
 			var Custom = MonkeyBars.Task.extend({
@@ -42,7 +45,7 @@ describe("Sequence Task Tests", function() {
 			});
 			var t2 = new Custom({ name:"two" });
 			var t3 = new Custom({ name:"three", dependencies:[t1] });
-			var t4 = new Custom({name:"four"});
+			var t4 = new Custom({ name:"four"});
 			var t5 = new Custom({ name:"five", dependencies:[t3] });
 
 			var sequence = new MonkeyBars.SequenceTask({
@@ -55,10 +58,7 @@ describe("Sequence Task Tests", function() {
 
 		});
 
-
-		it("Canceling SubTask Cancels Its Dependencies With Mixed Syntax",function(){
-
-			return;
+		it("Canceling SubTask Cancels Its Dependencies With JSON Syntax",function(){
 			
 			var index = 0;
 
@@ -71,27 +71,54 @@ describe("Sequence Task Tests", function() {
 				}
 			});
 
-			var t1 = new Custom({ 
-				name:"one",
+			var sequence = new MonkeyBars.SequenceTask({
+				tasks:[
+					new Custom({ id:"one", name:"one", performTask:function(){ this.cancel(); } }),
+					new Custom({ id:"two", name:"two" }),
+					new Custom({ id:"three", name:"three", dependencies:["one"] }),
+					new Custom({ id:"four", name:"four" }),
+					new Custom({ id:"five", name:"five", dependencies:["one"] })
+				]
+			});
+
+			sequence.start();
+			expect(index).toEqual(2);
+
+		});
+
+		it("Canceling SubTask Cancels Its Dependencies With MIXED Syntax",function(){
+			
+			var index = 0;
+
+			var Custom = MonkeyBars.Task.extend({
 				performTask:function(){
-					this.cancel();
+					if(this.state == MonkeyBars.TaskStates.Canceled) return;
+					index++;
+					this.complete();
 				}
 			});
 
-			// thoughts... if i give the user the ability to provide there own ids for tasks
-			// then i could still have the ability to set dependencies even with the JSON
-			// syntax... I am thinking that it shouldn't be called tid at that point... i think
-			// that i should also look for a property of id and use that when doing the lookup
-			// as well. if the user defined id is present than I should look at this as well 
-			// when deciding whether or not to cancel the task
-
-			var t2 = new Custom({ name:"two" });
-			var t4 = new Custom({name:"four"});
-			var t5 = new Custom({ name:"five", dependencies:[t3] });
+			var t1 = new Custom({ 
+				name:"one", 
+				performTask:function(){ 
+					this.cancel(); 
+				} 
+			});
 
 			var sequence = new MonkeyBars.SequenceTask({
 				loggingEnabled:false,
-				tasks:[t1,t2,new Custom({ name:"three", dependencies:[t1] }),t4,t5]
+				tasks:[
+					t1,
+					new Custom({ name:"two_name"}),
+					new Custom({ id:"three", name:"three", dependencies:["one"] }),
+					new Custom({ id:"four_id", name:"four" }),
+					{ 
+						id:"five", 
+						name:"five", 
+						dependencies:["three"] 
+					},
+					new Custom({ id:"six", name:"six", dependencies:["five"] })
+				]
 			});
 
 			sequence.start();

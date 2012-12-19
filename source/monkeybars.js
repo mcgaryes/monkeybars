@@ -79,7 +79,7 @@
 	}
 
 	// ===================================================================
-	// === Helper Functions ==============================================
+	// === Helper Methods ================================================
 	// ===================================================================
 
 	/**
@@ -205,6 +205,32 @@
 	}
 
 	/**
+	 * Determains whether the first task is dependent on the second.
+	 *
+	 * @method isTaskDependentOnTask
+	 * @param {Task} task1
+	 * @param {Task} task2
+	 * @private
+	 */
+	var isTaskDependentOnTask = function(task1,task2) {
+		var dependencies = task1.dependencies;
+		if(dependencies) {
+			var totalDependencies = dependencies.length;
+			for (var i = 0; i <totalDependencies; i++) {
+				var dependency = dependencies[i];
+				if (dependency == task2.tid) {
+					return true;
+				} else if (dependency == task2.id) {
+					return true;
+				} else if (dependency == task2.name && task2.name !== "undefined") {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Extention functionality for various task types.
 	 *
 	 * @method extend
@@ -296,23 +322,26 @@
 		},
 
 		/**
-		 * The name of the task if not specified by the instance.
+		 * Display name for task. Used in logging output.
 		 * 
 		 * @for Task
-		 * @property name
+		 * @property displayName
 		 * @type String
-		 * @default task
+		 * @readonly
 		 */
-		name: {
-			value: TYPE_SIMPLE,
-			writable: true
+		displayName: {
+			get: function() {
+				if(this.id) return this.id;
+				if(this.name) return this.name;
+				return this.type;
+			}
 		},
 
 		/**
 		 * The current state of the task
 		 * 
 		 * @for Task
-		 * @property name
+		 * @property state
 		 * @type Integer
 		 * @readonly
 		 * @default 0
@@ -345,7 +374,7 @@
 			value: function() {
 				if(this.state > STATE_STARTED) return;
 				this.state = STATE_CANCELED;
-				if(this.loggingEnabled) console.log("Canceled:" + this.name);
+				if(this.loggingEnabled) console.log("Canceled:" + this.displayName);
 				this.onChange(this.state);
 				this.onCancel();
 			},
@@ -372,7 +401,7 @@
 			value: function() {
 				if(this.state > STATE_STARTED) return;
 				this.state = STATE_COMPLETED;
-				if(this.loggingEnabled) console.log("Completed:" + this.name);
+				if(this.loggingEnabled) console.log("Completed:" + this.displayName);
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.onComplete();
 				this.onChange(this.state);
@@ -405,7 +434,7 @@
 			value: function(error) {
 				if(this.state >= STATE_CANCELED) return;
 				this.state = STATE_FAULTED;
-				if(this.loggingEnabled) console.log("Faulted:" + this.name);
+				if(this.loggingEnabled) console.log("Faulted:" + this.displayName);
 				this.onChange(this.state, error);
 				this.onFault(error);
 			},
@@ -524,7 +553,7 @@
 				if(this.state >= STATE_STARTED) return;
 				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
-				if(this.loggingEnabled) console.log("Started:" + this.name);
+				if(this.loggingEnabled) console.log("Started:" + this.displayName);
 				this.onChange(this.state);
 				this.performTask();
 				this.onStart();
@@ -670,23 +699,18 @@
 		},
 
 		/**
-		 * Called when a subtask calls its cancel method.
+		 * Called when a subtask calls its cancel method. When a subtask is canceled
+		 * any other subtasks that are dependent on the canceled task are cancled.
 		 * 
 		 * @for TaskGroup
 		 * @method onSubTaskCancel
+		 * @param {Task} task The task that was just cancled
 		 */
 		onSubTaskCancel: {
 			value: function(task) {
-				var canceldTID = task.tid;
 				for (var i = 0; i < this.tasks.length; i++) {
-					var task = this.tasks[i];
-					if(task.dependencies) {
-						for (var j = 0; j <task.dependencies.length; j++) {
-							if(task.dependencies[j].tid == canceldTID){
-								task.state = STATE_CANCELED;
-								break;
-							}
-						}
+					if(isTaskDependentOnTask(this.tasks[i],task)){
+						this.tasks[i].state = STATE_CANCELED;
 					}
 				}
 			},
@@ -751,7 +775,7 @@
 		 * Return a Task object, if it exists, based on the `tid` passed.
 		 * 
 		 * @for TaskGroup
-		 * @method getTaskById
+		 * @method getTaskByTid
 		 * @param {String} tid The id of the task you want
 		 * @example
 
@@ -759,14 +783,48 @@
 				tasks:[task1,task3]
 			});
 
-			parallel.getTaskById(task1.tid);
+			parallel.getTaskByTid(task1.tid);
 
 		 */
-		getTaskById: {
+		getTaskByTid: {
 			value: function(tid) {
 				for(var i = 0; i < this.tasks.length; i++) {
 					var task = this.tasks[i];
 					if(task.tid == tid) return task;
+				};
+			},
+			writable: true
+		},
+
+		/**
+		 * Return a Task object, if it exists, based on the `id` passed.
+		 * 
+		 * @for TaskGroup
+		 * @method getTaskById
+		 * @param {String} id The user defined id
+		 */
+		getTaskById: {
+			value: function(id) {
+				for(var i = 0; i < this.tasks.length; i++) {
+					var task = this.tasks[i];
+					if(task.id == id) return task;
+				};
+			},
+			writable: true
+		},
+
+		/**
+		 * Return a Task object, if it exists, based on the `name` passed.
+		 * 
+		 * @for TaskGroup
+		 * @method getTaskByName
+		 * @param {String} name The user defined name
+		 */
+		getTaskByName: {
+			value: function(name) {
+				for(var i = 0; i < this.tasks.length; i++) {
+					var task = this.tasks[i];
+					if(task.name == name) return task;
 				};
 			},
 			writable: true
@@ -809,18 +867,17 @@
 		 */
 		setDependeciesForTask: {
 		 	value:function(task){
-				
 				if(task.dependencies){
 					var totalDependencies = task.dependencies.length;
 					for (var i = 0; i < totalDependencies; i++) {
 						var dependency = task.dependencies[i];
-						this.dependencyMap[task.tid].push(dependency.tid);
+						if(dependency.tid) {
+							this.dependencyMap[task.tid].push(dependency.tid);
+						} else {
+							this.dependencyMap[task.tid].push(dependency);
+						}
 					};
-					/*
-					for (var i = 0; i < task.dependencies.length; i++) {
-						.push(task.tid);
-					};
-					*/
+
 				}
 			},
 			writable: false
@@ -874,19 +931,6 @@
 			get: function() {
 				return TYPE_PARALLEL;
 			}
-		},
-
-		/**
-		 * Name of the task
-		 * 
-		 * @for ParallelTask
-		 * @property name
-		 * @type String
-		 * @default parallel
-		 */
-		name: {
-			value: TYPE_PARALLEL,
-			writable: true
 		},
 
 		/**
@@ -1033,19 +1077,6 @@
 		},
 
 		/**
-		 * The name of task 
-		 * 
-		 * @for SequenceTask
-		 * @property name
-		 * @type String
-		 * @default sequence
-		 */
-		name: {
-			value: TYPE_SEQUENCE,
-			writable: true
-		},
-
-		/**
 		 * Starts the next task in the queue after its previous sibling has completed.
 		 * 
 		 * @for SequenceTask
@@ -1128,12 +1159,13 @@
 	 * @private
 	 */
 	var ForTaskDecorator = function(task) {
+		task.decorators.push(DECORATOR_FOR);
 	 	task.itterationIndex = 0;
 	 	task.complete = function() {
 			if(this.itterationIndex != this.count - 1) {
 				resetTask(this);
 				this.itterationIndex++;
-				if(this.loggingEnabled) console.log("Completed:" + this.name + " " + this.itterationIndex + " out of " + this.count + " times");
+				if(this.loggingEnabled) console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
 				this.performTask();
 			} else {
 				Task.prototype.complete.call(this);
@@ -1151,6 +1183,7 @@
 	 * @private
 	 */
 	var WhileTaskDecorator = function(task) {
+		task.decorators.push(DECORATOR_WHILE);
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.complete = function() {
 			if(this.while()) {
