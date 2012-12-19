@@ -1,9 +1,3 @@
-<br />
-
-![MonkeyBars](http://sandbox.ericmcgary.com/images/github_logo_h.png)
-
-<br />
-
 # MonkeyBars
 
 A task based library that provides a simple structure for handling singular, sequential and parallel units of code. 
