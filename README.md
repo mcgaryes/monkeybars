@@ -92,6 +92,61 @@ In some cases you may have a need for more specific functionality then what is p
 
 </pre>
 
+##### Decorators
+
+There are three decorators (for, when and where) available for all three types of tasks(simple, parallel, and sequence). If you set a `count` on a task it will itterate for that count total. If you have a `when` method as a task attribute the task will only run when that method returns `true`. And if you have a `while` method the task will continuously run until that method returns `false`.
+
+For Decorator
+
+<pre>
+
+    var task = new MonkeyBars.Task({
+        ...
+        count:3,
+        performTask:function(){
+            ...
+        }
+        ...
+    });
+
+</pre>
+
+When Decorator
+
+<pre>
+
+    var task = new MonkeyBars.Task({
+        ...
+        when:function(){
+            return something == true;
+        },
+        performTask:function(){
+            ...
+        }
+        ...
+    });
+    
+</pre>
+
+When Decorator
+
+<pre>
+
+    var task = new MonkeyBars.Task({
+        ...
+        while:function(){
+            return something == false;
+        },
+        performTask:function(){
+            ...
+        }
+        ...
+    });
+    
+</pre>
+
+
+
 ### Documentation
 
 Full documentation can be seen from within the [docs](https://github.com/mcgaryes/monkeybars/tree/master/docs) directory of this project.
