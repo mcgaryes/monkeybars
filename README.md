@@ -98,11 +98,13 @@ Full documentation can be seen from within the [docs](https://github.com/mcgarye
 
 ### Nesting
 
-All tasks have the ability to have sub tasks nested within them, turning them into task groups. By default nested tasks run sequentially, unless otherwise specified. Currently the two types of task groups available are `sequence` and `parallel`. 
+As stated above the tasks within the library implement the composite design pattern, this simply means that all groups of tasks are themselves tasks. Tasks have the ability to have sub tasks nested within them, turning them into task groups. By default nested tasks run sequentially, unless otherwise specified. Currently the two types of task groups available are `sequence` and `parallel` (implementation examples above). 
 
 Sequential tasks run sub tasks one after another until all sub tasks complete. When all nested sub tasks are complete the `complete` state is passed to the task groups `change` method for handling.
 
 Parallel tasks are task groups who's nested subtasks are executed side by side, executing whenever they can. Just like the sequential task group, when all sub tasks have completed the groups `change` method will be notified.
+
+There is **no** limit to the depth of which you nest tasks, which is where the power of the library starts to become apparent. You can view a more complex example of this in the [complex](https://github.com/mcgaryes/monkeybars/blob/master/examples/complex.html) example within the examples directory.
 
 ### Examples
 
