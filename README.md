@@ -38,7 +38,3 @@ Parallel tasks are task groups who's nested subtasks are executed side by side, 
 ### Examples
 
 Examples for the library can be found in the [examples](https://github.com/mcgaryes/monkeybars/tree/master/examples) directory of this project.
-
-### Artwork
-
-[Monkey](http://thenounproject.com/noun/monkey/#icon-No2369) designed by [Simon Child](http://thenounproject.com/Simon%20Child/#) from [The Noun Project](http://thenounproject.com/)
