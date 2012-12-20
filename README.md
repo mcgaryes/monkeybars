@@ -6,21 +6,82 @@ The overall architecture is based off of the [composite](http://en.m.wikipedia.o
 
 ### Implementation
 
-<pre>
-var task = new MonkeyBars.Task({
-    name:"SimpleTask",
-    loggingEnabled:true,
-    onChange:function(state,error){
-        if(state == MonkeyBars.TaskStates.Completed) {
-            alert("The 'SimpleTask' is complete");
-        }
-    },
-    performTask:function(){
-        this.complete();
-    }
-});
+##### Simple Task
 
-task.start();
+`Monkeybars.Task` is the simplest form of a task possible. You can override any of the methods provided (granted you must then call the prototype version of the method), but in its simplest form a task only requires the `performTask` method to be present. For a list of all possible methods and properties available have a look at the [documentation](https://github.com/mcgaryes/monkeybars/tree/master/docs).
+
+<pre>
+
+    var task = new MonkeyBars.Task({
+        name:"SimpleTask",
+        loggingEnabled:true,
+        onChange:function(state,error){
+            if(state == MonkeyBars.TaskStates.Completed) {
+                alert("The 'SimpleTask' is complete");
+            }
+        },
+        performTask:function(){
+            this.complete();
+        }
+    });
+
+    task.start();
+
+</pre>
+
+##### Task Groups
+
+Task groups are a great way to contain and structure both serial and async units of code. There are numerous syntax variations that you can use in order to create and add subtasks to a task group. Have a look at the group, parallel and sequence specs within the [tests](https://github.com/mcgaryes/monkeybars/tree/master/tests/specs) directory for all of the possible variations.
+
+<pre>
+
+    var group = new MonkeyBars.SequenceTask({
+        name:"SimpleTask",
+        loggingEnabled:true,
+        tasks:[{
+            name:"subtask1",
+            performTask:function(){
+                // run task functionality
+                this.complete();
+            }
+        },
+        {
+            name:"subtask2",
+            performTask:function(){
+                // run task functionality
+                this.complete();
+            }
+        }]
+    });
+
+    group.start();
+
+</pre>
+
+##### Extending
+
+In some cases you may have a need for more specific functionality then what is provided with the simple, parallel and sequence task types. It is very simple to extend the base functionality of a specific task type to bake your own.
+
+<pre>
+
+    var MyCustomGroupTask = MonkeyBars.TaskGroup.extend({
+        type:"MyCustomGroupTask",
+        start:function(){
+            this.customFunction();
+            MonkeyBars.TaskGroup.prototype.start.call(this);
+        },
+        customFunction:function(){
+            // custom logic
+        }
+    });
+
+    var group = new MyCustomTaskGroup({
+        name:"group",
+        tasks:[...]
+    });
+
+    group.start(); 
+
 </pre>
 
 ### Documentation
