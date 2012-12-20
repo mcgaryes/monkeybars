@@ -181,8 +181,79 @@ describe("Sequence Task Tests", function() {
 			expect(index).toEqual(2);
 
 		});
+	});
 
+	// ===================================================================
+	// === Excecution Tests ==============================================
+	// ===================================================================
 
+	describe("Excecution Tests", function() {
+
+		var task, t1, t2, t3;
+
+		beforeEach(function() {
+			
+			t1 = new MonkeyBars.Task({ performTask:function(){} });
+			t2 = new MonkeyBars.Task({ performTask:function(){} });
+			t3 = new MonkeyBars.Task({ performTask:function(){} });
+
+			task = new MonkeyBars.SequenceTask({
+				tasks:[t1,t2,t3]
+			});
+
+		});
+
+		afterEach(function() {
+			task = t1 = t2 = t3 = undefined;
+		});
+
+		
+		it("Task Does Not Start Next Task After Canceled",function(){
+			task.start();
+			task.cancel();
+			task.startNextSubTask();
+			expect(task.currentIndex).toEqual(1);
+		});
+
+		it("Task Does Not Start Next Task After Complete",function(){
+			task.complete();
+			task.startNextSubTask();
+			expect(task.currentIndex).toEqual(0);
+		});
+
+		it("Task Does Not Start Next Task After Faulted",function(){
+			task.fault(null);
+			task.startNextSubTask();
+			expect(task.currentIndex).toEqual(0);
+		});
+
+		it("Task Starts Next Sub Task After Sub Task Canceled",function(){
+			task.start();
+			var subtask = task.getTaskByTid(t1.tid);
+			subtask.cancel();
+			expect(task.currentIndex).toEqual(2);
+		});
+
+		it("Task Starts Next Sub Task After Sub Task Completes",function(){
+			task.start();
+			var subtask = task.getTaskByTid(t1.tid);
+			subtask.complete();
+			expect(task.currentIndex).toEqual(2);
+		});
+
+		it("Task Faults After Sub Task Faults",function(){
+			task.start();
+			var subtask = task.getTaskByTid(t1.tid);
+			subtask.fault();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+		});
+
+		it("Task Does Increment Current Index",function(){
+			task.start();
+			var subtask = task.getTaskByTid(t1.tid);
+			subtask.complete();
+			expect(task.currentIndex).toEqual(2);
+		});
 	});
 
 });

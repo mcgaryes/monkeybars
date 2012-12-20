@@ -103,7 +103,7 @@
  *
  * https:&#x2F;&#x2F;github.com&#x2F;mcgaryes&#x2F;monkeybars
  * 
- * @version 0.0.1 
+ * @version 0.9.1 
  * @author Eric McGary
  * @module MonkeyBars
  * @main MonkeyBars
@@ -956,7 +956,7 @@
 		 	value:function(){
 
 		 		&#x2F;&#x2F; call cancel on this task
-		 		Task.prototype.call(this);
+		 		Task.prototype.cancel.call(this);
 		 		
 		 		&#x2F;&#x2F; cancel all of this tasks subtasks
 		 		for (var i = 0; i &lt; this.tasks.length; i++) {

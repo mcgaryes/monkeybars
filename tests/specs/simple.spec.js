@@ -187,4 +187,100 @@ describe("Simple Task Tests", function() {
 
 	});
 
+	// ===================================================================
+	// === Excecution Tests ==============================================
+	// ===================================================================
+
+	describe("Excecution Tests", function() {
+
+		var task;
+
+		beforeEach(function() {
+			task = new MonkeyBars.Task({
+				performTask:function(){
+					/* ... */
+				}
+			});
+		});
+
+		afterEach(function() {
+			task = undefined;
+		});
+
+		it("Task Did Cancel",function(){
+			task.cancel();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled)
+		});
+
+		it("Task Did Start",function(){
+			task.start();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Started)
+		});
+
+		it("Task Did Complete",function(){
+			task.complete();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+		});
+
+		it("Task Did Fault",function(){
+			task.fault(null);
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+		});
+
+		it("Task Should Not Start After Completed",function(){
+			task.complete();
+			task.start();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+		});
+
+		it("Task Should Not Start After Faulted",function(){
+			task.fault(null);
+			task.start();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+		});
+
+		it("Task Should Not Start After Canceled",function(){
+			task.cancel();
+			task.start();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
+		});
+
+		it("Task Should Not Fault After Canceled",function(){
+			task.cancel();
+			task.fault(null);
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
+		});
+
+		it("Task Should Not Fault After Compelte",function(){
+			task.complete();
+			task.fault(null);
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+		});
+
+		it("Task Should Not Complete After Fault",function(){
+			task.fault(null);
+			task.complete();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+		});
+
+		it("Task Should Not Complete After Cancel",function(){
+			task.cancel();
+			task.complete();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
+		});
+
+		it("Task Should Not Cancel After Fault",function(){
+			task.fault(null);
+			task.cancel();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+		});
+
+		it("Task Should Not Cancel After Complete",function(){
+			task.complete();
+			task.cancel();
+			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+		});
+
+	});
+
 });
