@@ -1,3 +1,5 @@
 build/*
+build/package.json
 tests/*
 www/*
+artwork/*
