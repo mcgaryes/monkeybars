@@ -23,15 +23,15 @@ module.exports = function(grunt) {
         },
         min: {
             dist: {
-                src: ['<banner>','../source/monkeybars.js'],
-                dest: '../source/monkeybars.min.js'
+                src: ['<banner>','../monkeybars.js'],
+                dest: '../monkeybars.min.js'
             }
         },
         copy: {
             default:{
                 files: {
                     // individual
-                    "../www/monkeybars.min.js": "../source/monkeybars.min.js",
+                    "../www/monkeybars.min.js": "../monkeybars.min.js",
                     // directory
                     "../www/": "../examples/**"
                 }
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
                 "version": "0.0.1",
                 "url": "https://github.com/mcgaryes/monkeybars",
                 options: {
-                    paths: "../source/",
+                    paths: "../",
                     outdir: "../docs/"
                 }
             }

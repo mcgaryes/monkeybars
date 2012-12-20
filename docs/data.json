@@ -6,8 +6,15 @@
         "url": "https://github.com/mcgaryes/monkeybars"
     },
     "files": {
-        "../source/monkeybars.js": {
-            "name": "../source/monkeybars.js",
+        "../tests/lib/jasmine/jasmine.js": {
+            "name": "../tests/lib/jasmine/jasmine.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "../monkeybars.js": {
+            "name": "../monkeybars.js",
             "modules": {},
             "classes": {
                 "Task": 1,
@@ -34,7 +41,8 @@
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
-            "extension_for": []
+            "extension_for": [],
+            "namespace": ""
         },
         "Task": {
             "name": "Task",
@@ -44,7 +52,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../source/monkeybars.js",
+            "namespace": "",
+            "file": "../monkeybars.js",
             "line": 264,
             "description": "The simplest form of a __MonkeyBars__ task. Once started the task executes all \nfunctionality located within the `performTask` function block. Set `loggingEnabled`\nto see console logs during task execution.",
             "extends": "Object",
@@ -68,7 +77,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../source/monkeybars.js",
+            "namespace": "",
+            "file": "../monkeybars.js",
             "line": 565,
             "description": "A task group, and extention of task, provides the building blocks for creating\na group of tasks that is inherently a task itself.",
             "extends": "Task",
@@ -89,7 +99,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../source/monkeybars.js",
+            "namespace": "",
+            "file": "../monkeybars.js",
             "line": 907,
             "description": "A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
@@ -113,7 +124,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../source/monkeybars.js",
+            "namespace": "",
+            "file": "../monkeybars.js",
             "line": 1050,
             "description": "A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
@@ -132,7 +144,1215 @@
     },
     "classitems": [
         {
-            "file": "../source/monkeybars.js",
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 3,
+            "description": "Top level namespace for Jasmine, a lightweight JavaScript BDD/spec/testing framework.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 10,
+            "access": "private",
+            "tagname": "",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 17,
+            "description": "Use <code>jasmine.undefined</code> instead of <code>undefined</code>, since <code>undefined</code> is just\na plain old variable and may be redefined by somebody else.",
+            "access": "private",
+            "tagname": "",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 25,
+            "description": "Show diagnostic messages in the console if set to true",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 31,
+            "description": "Default interval in milliseconds for event loop yields (e.g. to allow network activity or to refresh the screen with the HTML-based runner). Small values here may result in slow test running. Zero means no updates until all tests have completed.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 37,
+            "description": "Default timeout interval in milliseconds for waitsFor() blocks.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 42,
+            "description": "By default exceptions thrown in the context of a test are caught by jasmine so that it can run the remaining tests in the suite.\nSet to false to let the exception bubble up in the browser.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 57,
+            "description": "Allows for bound functions to be compared.  Internal use only.",
+            "ignore": "",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "base",
+                    "description": "bound 'this' for the function",
+                    "type": "Object"
+                },
+                {
+                    "name": "name",
+                    "description": "function to find",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 121,
+            "description": "Getter for the Jasmine environment. Ensures one gets created",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 129,
+            "ignore": "",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "value",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 139,
+            "ignore": "",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "value",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 149,
+            "ignore": "",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "value",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 159,
+            "ignore": "",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "typeName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 170,
+            "description": "Pretty printer for expecations.  Takes any object and turns it into a human-readable string.",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "an object to be outputted",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 182,
+            "description": "Returns true if the object is a DOM Node.",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "object to check",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 192,
+            "description": "Returns a matchable 'generic' object of the class type.  For use in expecations of type when values don't matter.",
+            "example": [
+                "\n// don't care about which function is passed in, as long as it's a function\nexpect(mySpy).toHaveBeenCalledWith(jasmine.any(Function));"
+            ],
+            "params": [
+                {
+                    "name": "clazz",
+                    "description": "",
+                    "type": "Class"
+                }
+            ],
+            "return": {
+                "description": "matchable object of the type clazz"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 206,
+            "description": "Returns a matchable subset of a JSON object. For use in expectations when you don't care about all of the\nattributes on the object.",
+            "example": [
+                "\n// don't care about any other attributes than foo.\nexpect(mySpy).toHaveBeenCalledWith(jasmine.objectContaining({foo: \"bar\"});"
+            ],
+            "params": [
+                {
+                    "name": "sample",
+                    "description": "sample",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "matchable object for the sample"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 221,
+            "description": "Jasmine Spies are test doubles that can act as stubs, spies, fakes or when used in an expecation, mocks.\n\nSpies should be created in test setup, before expectations.  They can then be checked, using the standard Jasmine\nexpectation syntax. Spies can be checked if they were called or not and what the calling params were.\n\nA Spy has the following fields: wasCalled, callCount, mostRecentCall, and argsForCall (see docs).\n\nSpies are torn down at the end of every spec.\n\nNote: Do <b>not</b> call new jasmine.Spy() directly - a spy must be created using spyOn, jasmine.createSpy or jasmine.createSpyObj.",
+            "example": [
+                "\n// a stub\nvar myStub = jasmine.createSpy('myStub');  // can be used anywhere\n\n// spy example\nvar foo = {\n  not: function(bool) { return !bool; }\n}\n\n// actual foo.not will not be called, execution stops\nspyOn(foo, 'not');\n\n// foo.not spied upon, execution will continue to implementation\nspyOn(foo, 'not').andCallThrough();\n\n// fake example\nvar foo = {\n  not: function(bool) { return !bool; }\n}\n\n// foo.not(val) will return val\nspyOn(foo, 'not').andCallFake(function(value) {return value;});\n\n// mock example\nfoo.not(7 == 7);\nexpect(foo.not).toHaveBeenCalled();\nexpect(foo.not).toHaveBeenCalledWith(true);"
+            ],
+            "is_constructor": 1,
+            "see": [
+                "spyOn",
+                "jasmine.createSpy",
+                "jasmine.createSpyObj"
+            ],
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 266,
+            "description": "The name of the spy, if provided.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 270,
+            "description": "Is this Object a spy?",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 274,
+            "description": "The actual function this spy stubs.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 279,
+            "description": "Tracking of the most recent call to the spy.",
+            "example": [
+                "\nvar mySpy = jasmine.createSpy('foo');\nmySpy(1, 2);\nmySpy.mostRecentCall.args = [1, 2];"
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 288,
+            "description": "Holds arguments for each call to the spy, indexed by call count",
+            "example": [
+                "\nvar mySpy = jasmine.createSpy('foo');\nmySpy(1, 2);\nmySpy(7, 8);\nmySpy.mostRecentCall.args = [7, 8];\nmySpy.argsForCall[0] = [1, 2];\nmySpy.argsForCall[1] = [7, 8];"
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 302,
+            "description": "Tells a spy to call through to the actual implemenatation.",
+            "example": [
+                "\nvar foo = {\n  bar: function() { // do some stuff }\n}\n\n// defining a spy on an existing property: foo.bar\nspyOn(foo, 'bar').andCallThrough();"
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 318,
+            "description": "For setting the return value of a spy.",
+            "example": [
+                "\n// defining a spy from scratch: foo() returns 'baz'\nvar foo = jasmine.createSpy('spy on foo').andReturn('baz');\n\n// defining a spy on an existing property: foo.bar() returns 'baz'\nspyOn(foo, 'bar').andReturn('baz');"
+            ],
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 337,
+            "description": "For throwing an exception when a spy is called.",
+            "example": [
+                "\n// defining a spy from scratch: foo() throws an exception w/ message 'ouch'\nvar foo = jasmine.createSpy('spy on foo').andThrow('baz');\n\n// defining a spy on an existing property: foo.bar() throws an exception w/ message 'ouch'\nspyOn(foo, 'bar').andThrow('baz');"
+            ],
+            "params": [
+                {
+                    "name": "exceptionMsg",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 356,
+            "description": "Calls an alternate implementation when a spy is called.",
+            "example": [
+                "\nvar baz = function() {\n  // do some stuff, return something\n}\n// defining a spy from scratch: foo() calls the function baz\nvar foo = jasmine.createSpy('spy on foo').andCall(baz);\n\n// defining a spy on an existing property: foo.bar() calls an anonymnous function\nspyOn(foo, 'bar').andCall(function() { return 'baz';} );"
+            ],
+            "params": [
+                {
+                    "name": "fakeFunc",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 376,
+            "description": "Resets all of a spy's the tracking variables so that it can be used again.",
+            "example": [
+                "\nspyOn(foo, 'bar');\n\nfoo.bar();\n\nexpect(foo.bar.callCount).toEqual(1);\n\nfoo.bar.reset();\n\nexpect(foo.bar.callCount).toEqual(0);"
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 422,
+            "description": "Determines whether an object is a spy.",
+            "params": [
+                {
+                    "name": "putativeSpy",
+                    "description": "",
+                    "type": "jasmine.Spy|Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 432,
+            "description": "Creates a more complicated spy: an Object that has every property a function that is a spy.  Used for stubbing something\nlarge in one call.",
+            "params": [
+                {
+                    "name": "baseName",
+                    "description": "name of spy class",
+                    "type": "String"
+                },
+                {
+                    "name": "methodNames",
+                    "description": "array of names of methods to make spies",
+                    "type": "Array"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 450,
+            "description": "All parameters are pretty-printed and concatenated together, then written to the current spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 460,
+            "description": "Function that installs a spy on an existing object's method name.  Used within a Spec to create a spy.",
+            "example": [
+                "\n// spy example\nvar foo = {\n  not: function(bool) { return !bool; }\n}\nspyOn(foo, 'not'); // actual foo.not will not be called, execution stops"
+            ],
+            "see": [
+                "jasmine.createSpy"
+            ],
+            "params": [
+                {
+                    "name": "obj",
+                    "description": ""
+                },
+                {
+                    "name": "methodName",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "a Jasmine spy that can be chained with all spy methods"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 480,
+            "description": "Creates a Jasmine spec that will be added to the current suite.\n\n// TODO: pending tests",
+            "example": [
+                "\nit('should be true', function() {\n  expect(true).toEqual(true);\n});"
+            ],
+            "params": [
+                {
+                    "name": "desc",
+                    "description": "description of this specification",
+                    "type": "String"
+                },
+                {
+                    "name": "func",
+                    "description": "defines the preconditions and expectations of the spec",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 498,
+            "description": "Creates a <em>disabled</em> Jasmine spec.\n\nA convenience method that allows existing specs to be disabled temporarily during development.",
+            "params": [
+                {
+                    "name": "desc",
+                    "description": "description of this specification",
+                    "type": "String"
+                },
+                {
+                    "name": "func",
+                    "description": "defines the preconditions and expectations of the spec",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 511,
+            "description": "Starts a chain for a Jasmine expectation.\n\nIt is passed an Object that is the actual value and should chain to one of the many\njasmine.Matchers functions.",
+            "params": [
+                {
+                    "name": "actual",
+                    "description": "Actual value to test against and expected value",
+                    "type": "Object"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 524,
+            "description": "Defines part of a jasmine spec.  Used in cominbination with waits or waitsFor in asynchrnous specs.",
+            "params": [
+                {
+                    "name": "func",
+                    "description": "Function that defines part of a jasmine spec.",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 534,
+            "description": "Waits a fixed time period before moving to the next block.",
+            "deprecated": true,
+            "deprecationMessage": "Use waitsFor() instead",
+            "params": [
+                {
+                    "name": "timeout",
+                    "description": "milliseconds to wait",
+                    "type": "Number"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 545,
+            "description": "Waits for the latchFunction to return true before proceeding to the next block.",
+            "params": [
+                {
+                    "name": "latchFunction",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "optional_timeoutMessage",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "optional_timeout",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 557,
+            "description": "A function that is called before each spec in a suite.\n\nUsed for spec setup, including validating assumptions.",
+            "params": [
+                {
+                    "name": "beforeEachFunction",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 569,
+            "description": "A function that is called after each spec in a suite.\n\nUsed for restoring any state that is hijacked during spec execution.",
+            "params": [
+                {
+                    "name": "afterEachFunction",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 581,
+            "description": "Defines a suite of specifications.\n\nStores the description and all defined specs in the Jasmine environment as one suite of specs. Variables declared\nare accessible by calls to beforeEach, it, and afterEach. Describe blocks can be nested, allowing for specialization\nof setup in some tests.",
+            "example": [
+                "\n// TODO: a simple suite\n\n// TODO: a simple suite with a nested describe block"
+            ],
+            "params": [
+                {
+                    "name": "description",
+                    "description": "A string, usually the class under test.",
+                    "type": "String"
+                },
+                {
+                    "name": "specDefinitions",
+                    "description": "function that defines several specs.",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 601,
+            "description": "Disables a suite of specifications.  Used to disable some suites in a file, or files, temporarily during development.",
+            "params": [
+                {
+                    "name": "description",
+                    "description": "A string, usually the class under test.",
+                    "type": "String"
+                },
+                {
+                    "name": "specDefinitions",
+                    "description": "function that defines several specs.",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 640,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 645,
+            "description": "Declare that a child class inherit it's prototype from the parent class.",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "childClass",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "parentClass",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 653,
+            "access": "private",
+            "tagname": "",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 707,
+            "description": "Environment for Jasmine",
+            "is_constructor": 1,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 745,
+            "return": {
+                "description": "an object containing jasmine version build info, if set."
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 756,
+            "return": {
+                "description": "string containing jasmine version build info, if set."
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 773,
+            "return": {
+                "description": "a sequential integer starting at 0"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 780,
+            "return": {
+                "description": "a sequential integer starting at 0"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 787,
+            "description": "Register a reporter to receive status updates from Jasmine.",
+            "params": [
+                {
+                    "name": "reporter",
+                    "description": "An object which will receive status updates.",
+                    "type": "jasmine.Reporter"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 984,
+            "is_constructor": 1,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1015,
+            "description": "Blocks are functions with executable code that make up a spec.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "env",
+                    "description": "",
+                    "type": "jasmine.Env"
+                },
+                {
+                    "name": "func",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "spec",
+                    "description": "",
+                    "type": "jasmine.Spec"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1042,
+            "is_constructor": 1,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1144,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "env",
+                    "description": "",
+                    "type": "jasmine.Env"
+                },
+                {
+                    "name": "actual",
+                    "description": ""
+                },
+                {
+                    "name": "spec",
+                    "description": "",
+                    "type": "jasmine.Spec"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1221,
+            "description": "toBe: compares the actual to the expected using ===",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": ""
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1229,
+            "description": "toNotBe: compares the actual to the expected using !==",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": ""
+                }
+            ],
+            "deprecated": true,
+            "deprecationMessage": "as of 1.0. Use not.toBe() instead.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1238,
+            "description": "toEqual: compares the actual to the expected using common sense equality. Handles Objects, Arrays, etc.",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": ""
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1247,
+            "description": "toNotEqual: compares the actual to the expected using the ! of jasmine.Matchers.toEqual",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": ""
+                }
+            ],
+            "deprecated": true,
+            "deprecationMessage": "as of 1.0. Use not.toEqual() instead.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1256,
+            "description": "Matcher that compares the actual to the expected using a regular expression.  Constructs a RegExp, so takes\na pattern or a String.",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": ""
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1266,
+            "description": "Matcher that compares the actual to the expected using the boolean inverse of jasmine.Matchers.toMatch",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": ""
+                }
+            ],
+            "deprecated": true,
+            "deprecationMessage": "as of 1.0. Use not.toMatch() instead.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1275,
+            "description": "Matcher that compares the actual to jasmine.undefined.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1282,
+            "description": "Matcher that compares the actual to jasmine.undefined.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1289,
+            "description": "Matcher that compares the actual to null.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1296,
+            "description": "Matcher that compares the actual to NaN.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1307,
+            "description": "Matcher that boolean not-nots the actual.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1315,
+            "description": "Matcher that boolean nots the actual.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1323,
+            "description": "Matcher that checks to see if the actual, a Jasmine spy, was called.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1345,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1348,
+            "description": "Matcher that checks to see if the actual, a Jasmine spy, was not called.",
+            "deprecated": true,
+            "deprecationMessage": "Use expect(xxx).not.toHaveBeenCalled() instead",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1372,
+            "description": "Matcher that checks to see if the actual, a Jasmine spy, was called with a set of parameters.",
+            "example": [
+                "\n"
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1401,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1404,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1421,
+            "description": "Matcher that checks that the expected item is an element in the actual Array.",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1430,
+            "description": "Matcher that checks that the expected item is NOT an element in the actual Array.",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "deprecated": true,
+            "deprecationMessage": "as of 1.0. Use not.toContain() instead.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1448,
+            "description": "Matcher that checks that the expected item is equal to the actual item\nup to a given level of decimal precision (default 2).",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "precision",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1462,
+            "description": "Matcher that checks that the expected exception was thrown by the actual.",
+            "params": [
+                {
+                    "name": "expected",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1639,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1735,
+            "is_constructor": 1,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1770,
+            "description": "Holds results for a set of Jasmine spec. Allows for the results array to hold another jasmine.NestedResults",
+            "is_constructor": 1,
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1776,
+            "description": "The total count of results",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1780,
+            "description": "Number of passed results",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1784,
+            "description": "Number of failed results",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1788,
+            "description": "Was this suite/spec skipped?",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1792,
+            "ignore": "",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1798,
+            "description": "Roll up the result counts.",
+            "params": [
+                {
+                    "name": "result",
+                    "description": ""
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1809,
+            "description": "Adds a log message.",
+            "params": [
+                {
+                    "name": "values",
+                    "description": "Array of message parts which will be concatenated later."
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1817,
+            "description": "Getter for the results: message & results.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1824,
+            "description": "Adds a result, tracking counts (total, passed, & failed)",
+            "params": [
+                {
+                    "name": "result",
+                    "description": "",
+                    "type": "jasmine.ExpectationResult|jasmine.NestedResults"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1844,
+            "return": {
+                "description": "True if <b>everything</b> below passed",
+                "type": "Boolean"
+            },
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1850,
+            "description": "Base class for pretty printing for expectation results.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 1857,
+            "description": "Formats a value in a nice, human-readable string.",
+            "params": [
+                {
+                    "name": "value",
+                    "description": ""
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2091,
+            "description": "Runner",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "env",
+                    "description": "",
+                    "type": "jasmine.Env"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2168,
+            "description": "Internal representation of a Jasmine specification, or test.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "env",
+                    "description": "",
+                    "type": "jasmine.Env"
+                },
+                {
+                    "name": "suite",
+                    "description": "",
+                    "type": "jasmine.Suite"
+                },
+                {
+                    "name": "description",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2207,
+            "description": "All parameters are pretty-printed and concatenated together, then written to the spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2230,
+            "params": [
+                {
+                    "name": "result",
+                    "description": "",
+                    "type": "jasmine.ExpectationResult"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2243,
+            "description": "Waits a fixed time period before moving to the next block.",
+            "deprecated": true,
+            "deprecationMessage": "Use waitsFor() instead",
+            "params": [
+                {
+                    "name": "timeout",
+                    "description": "milliseconds to wait",
+                    "type": "Number"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2255,
+            "description": "Waits for the latchFunction to return true before proceeding to the next block.",
+            "params": [
+                {
+                    "name": "latchFunction",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "optional_timeoutMessage",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "optional_timeout",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2411,
+            "description": "Internal representation of a Jasmine suite.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "env",
+                    "description": "",
+                    "type": "jasmine.Env"
+                },
+                {
+                    "name": "description",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "specDefinitions",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "parentSuite",
+                    "description": "",
+                    "type": "jasmine.Suite"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../tests/lib/jasmine/jasmine.js",
+            "line": 2508,
+            "description": "A block which waits for some condition to become true, with timeout.",
+            "is_constructor": 1,
+            "extends": "jasmine.Block",
+            "params": [
+                {
+                    "name": "env",
+                    "description": "The Jasmine environment.",
+                    "type": "jasmine.Env"
+                },
+                {
+                    "name": "timeout",
+                    "description": "The maximum time in milliseconds to wait for the condition to become true.",
+                    "type": "Number"
+                },
+                {
+                    "name": "latchFunction",
+                    "description": "A function which returns true when the desired condition has been met.",
+                    "type": "Function"
+                },
+                {
+                    "name": "message",
+                    "description": "The message to display if the desired condition hasn't been met within the given time period.",
+                    "type": "String"
+                },
+                {
+                    "name": "spec",
+                    "description": "The Jasmine spec.",
+                    "type": "jasmine.Spec"
+                }
+            ],
+            "class": "MonkeyBars"
+        },
+        {
+            "file": "../monkeybars.js",
             "line": 45,
             "description": "A dictionary of dependencies for sub tasks",
             "itemtype": "property",
@@ -143,7 +1363,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 54,
             "description": "Counter used to create unique task ids",
             "itemtype": "property",
@@ -154,7 +1374,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 63,
             "description": "Object returned by module. Works as namespace for the task library.",
             "itemtype": "property",
@@ -163,7 +1383,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 85,
             "description": "Creates task based on the options passed.",
             "itemtype": "method",
@@ -180,7 +1400,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 138,
             "description": "Creates an array of tasks based on the options array passed.",
             "itemtype": "method",
@@ -197,7 +1417,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 155,
             "description": "Creates property descriptors from the passes attributes.",
             "itemtype": "method",
@@ -214,7 +1434,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 176,
             "description": "Resets the task to its original non executed state.",
             "itemtype": "method",
@@ -231,7 +1451,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 193,
             "description": "Generates a unique id for each task.",
             "itemtype": "method",
@@ -252,7 +1472,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 207,
             "description": "Determains whether the first task is dependent on the second.",
             "itemtype": "method",
@@ -274,7 +1494,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 233,
             "description": "Extention functionality for various task types.",
             "itemtype": "method",
@@ -296,7 +1516,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 310,
             "description": "The kind of task",
             "itemtype": "property",
@@ -306,7 +1526,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 324,
             "description": "Display name for task. Used in logging output.",
             "itemtype": "property",
@@ -316,7 +1536,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 340,
             "description": "The current state of the task",
             "itemtype": "property",
@@ -327,7 +1547,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 354,
             "description": "Calling this method cancels the task. However it is up to the instance to handle \nthe canceled state.",
             "itemtype": "method",
@@ -338,7 +1558,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 384,
             "description": "Calling this method says that the tasks execution is now complete.",
             "itemtype": "method",
@@ -349,7 +1569,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 412,
             "description": "Calling this method to fault a task. If it is part of a group task this will \nalso call the groups fault method passing the error up to the group.",
             "itemtype": "method",
@@ -367,7 +1587,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 444,
             "description": "This method is called during the execution lifecycle of the task. It is intentionally\nleft blank and is up to the instance to describe it functionality.",
             "itemtype": "method",
@@ -390,7 +1610,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 473,
             "description": "Convenience method called when the task starts.",
             "itemtype": "method",
@@ -398,7 +1618,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 484,
             "description": "Convenience method called when the task faults.",
             "itemtype": "method",
@@ -413,7 +1633,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 496,
             "description": "Convenience method called when the task completes.",
             "itemtype": "method",
@@ -421,7 +1641,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 507,
             "description": "Convenience method called when the task is canceled.",
             "itemtype": "method",
@@ -429,7 +1649,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 518,
             "description": "This method is required for **simple** tasks and will throw an exception if it \nis called and not overridden. If you overwrite this method on a task group\nthen you need to make sure that you call the extended/implemented classes\noriginal prototype method (see the example below).",
             "itemtype": "method",
@@ -441,7 +1661,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 544,
             "description": "Kicks off the execution of the task by calling the tasks `performTask` method. \nThis method can only be run once on a task.",
             "itemtype": "method",
@@ -449,7 +1669,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 597,
             "description": "The index of the subtasks that have completed execution.",
             "itemtype": "property",
@@ -460,7 +1680,7 @@
             "class": "Task"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 611,
             "description": "Adds a subtask to the groups queue. This is helpful when you want to add\na sub task after instantiation.",
             "itemtype": "method",
@@ -478,7 +1698,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 649,
             "description": "description",
             "itemtype": "method",
@@ -501,7 +1721,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 677,
             "description": "Very similar to `addSubTaskAfterTask` except the inject task appears\nbefore the second arguments position.",
             "itemtype": "method",
@@ -521,7 +1741,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 697,
             "description": "Called when a sub task completes. Must be overridden with functionality \nprovided by the extending class.",
             "itemtype": "method",
@@ -529,7 +1749,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 709,
             "description": "Called when a subtask calls its fault method.",
             "itemtype": "method",
@@ -544,7 +1764,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 721,
             "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
             "itemtype": "method",
@@ -559,7 +1779,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 740,
             "description": "Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles \nits own change functionality then you will need to implement the partner \nconvenience methods.",
             "itemtype": "method",
@@ -574,7 +1794,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 777,
             "description": "Removes a task from its group. Removing the task after it has executed will\nhave no apparent affect as it has already ran.",
             "itemtype": "method",
@@ -589,7 +1809,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 794,
             "description": "Return a Task object, if it exists, based on the `tid` passed.",
             "itemtype": "method",
@@ -607,7 +1827,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 819,
             "description": "Return a Task object, if it exists, based on the `id` passed.",
             "itemtype": "method",
@@ -622,7 +1842,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 836,
             "description": "Return a Task object, if it exists, based on the `name` passed.",
             "itemtype": "method",
@@ -637,7 +1857,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 853,
             "description": "Cancel the group and cancel all of its subtasks",
             "itemtype": "method",
@@ -645,7 +1865,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 881,
             "description": "Sets dependencies for the passed task.",
             "itemtype": "method",
@@ -661,7 +1881,7 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 942,
             "description": "The kind of task",
             "itemtype": "property",
@@ -671,7 +1891,7 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 956,
             "description": "Checks whether or not the group has any enabled sub tasks.",
             "itemtype": "method",
@@ -683,7 +1903,7 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 975,
             "description": "Processes all of the sub tasks available for the group",
             "itemtype": "method",
@@ -691,7 +1911,7 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 992,
             "description": "This method is overridden from `TaskGroups` implementation because of the \nnature of a parallel task. When a task is added it should be immediately\nprocessed and started.",
             "itemtype": "method",
@@ -706,7 +1926,7 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1012,
             "description": "Overridden from TaskGroup. This method is run everytime a sub task\ncompletes. When all subtasks are complete the groups complete method\nis called.",
             "itemtype": "method",
@@ -714,7 +1934,7 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1030,
             "description": "Overridden from Task. First checks to see if there are any enabled\nsubtasks to process. If there arent the groups complete method is called.\nIf there are then the group processes all of the sub tasks it has.",
             "itemtype": "method",
@@ -722,7 +1942,7 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1085,
             "description": "The kind of task",
             "itemtype": "property",
@@ -732,7 +1952,7 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1099,
             "description": "Starts the next task in the queue after its previous sibling has completed.",
             "itemtype": "method",
@@ -740,7 +1960,7 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1118,
             "description": "Overridden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task completes it starts the next sibling in the queue.",
             "itemtype": "method",
@@ -748,7 +1968,7 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1133,
             "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
             "itemtype": "method",
@@ -763,7 +1983,7 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1149,
             "description": "Starts the next sub task in the sequence. If overriden you need to call the \nSequenceTask's prototype `performTask` method.",
             "itemtype": "method",
@@ -778,7 +1998,7 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1172,
             "description": "Decorator to provide for loop functionality for the task. The task executes\nas many times as referenced by the count attribute provided by the instance.",
             "itemtype": "method",
@@ -795,7 +2015,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1196,
             "description": "Decorator to provide while loop functionaliy. The task executed until the `while`\nmethod returns false.",
             "itemtype": "method",
@@ -812,7 +2032,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1224,
             "description": "The task doesnt execute until the when method provided returns true.",
             "itemtype": "method",
@@ -829,7 +2049,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1249,
             "description": "description needed",
             "itemtype": "property",
@@ -839,7 +2059,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1265,
             "description": "description needed",
             "itemtype": "property",
@@ -849,7 +2069,7 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../source/monkeybars.js",
+            "file": "../monkeybars.js",
             "line": 1279,
             "description": "description needed",
             "itemtype": "property",
@@ -859,5 +2079,490 @@
             "class": "MonkeyBars"
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "unknown tag: ignore",
+            "line": " ../tests/lib/jasmine/jasmine.js:57"
+        },
+        {
+            "message": "unknown tag: ignore",
+            "line": " ../tests/lib/jasmine/jasmine.js:129"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:129"
+        },
+        {
+            "message": "unknown tag: ignore",
+            "line": " ../tests/lib/jasmine/jasmine.js:139"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:139"
+        },
+        {
+            "message": "unknown tag: ignore",
+            "line": " ../tests/lib/jasmine/jasmine.js:149"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:149"
+        },
+        {
+            "message": "unknown tag: ignore",
+            "line": " ../tests/lib/jasmine/jasmine.js:159"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:159"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:170"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:182"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:192"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:206"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:422"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:460"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:745"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:756"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:773"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:780"
+        },
+        {
+            "message": "unknown tag: ignore",
+            "line": " ../tests/lib/jasmine/jasmine.js:1792"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " ../tests/lib/jasmine/jasmine.js:1844"
+        },
+        {
+            "message": "Missing item type\nTop level namespace for Jasmine, a lightweight JavaScript BDD/spec/testing framework.",
+            "line": " ../tests/lib/jasmine/jasmine.js:3"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:10"
+        },
+        {
+            "message": "Missing item type\nUse <code>jasmine.undefined</code> instead of <code>undefined</code>, since <code>undefined</code> is just\na plain old variable and may be redefined by somebody else.",
+            "line": " ../tests/lib/jasmine/jasmine.js:17"
+        },
+        {
+            "message": "Missing item type\nShow diagnostic messages in the console if set to true",
+            "line": " ../tests/lib/jasmine/jasmine.js:25"
+        },
+        {
+            "message": "Missing item type\nDefault interval in milliseconds for event loop yields (e.g. to allow network activity or to refresh the screen with the HTML-based runner). Small values here may result in slow test running. Zero means no updates until all tests have completed.",
+            "line": " ../tests/lib/jasmine/jasmine.js:31"
+        },
+        {
+            "message": "Missing item type\nDefault timeout interval in milliseconds for waitsFor() blocks.",
+            "line": " ../tests/lib/jasmine/jasmine.js:37"
+        },
+        {
+            "message": "Missing item type\nBy default exceptions thrown in the context of a test are caught by jasmine so that it can run the remaining tests in the suite.\nSet to false to let the exception bubble up in the browser.",
+            "line": " ../tests/lib/jasmine/jasmine.js:42"
+        },
+        {
+            "message": "Missing item type\nAllows for bound functions to be compared.  Internal use only.",
+            "line": " ../tests/lib/jasmine/jasmine.js:57"
+        },
+        {
+            "message": "Missing item type\nGetter for the Jasmine environment. Ensures one gets created",
+            "line": " ../tests/lib/jasmine/jasmine.js:121"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:129"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:139"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:149"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:159"
+        },
+        {
+            "message": "Missing item type\nPretty printer for expecations.  Takes any object and turns it into a human-readable string.",
+            "line": " ../tests/lib/jasmine/jasmine.js:170"
+        },
+        {
+            "message": "Missing item type\nReturns true if the object is a DOM Node.",
+            "line": " ../tests/lib/jasmine/jasmine.js:182"
+        },
+        {
+            "message": "Missing item type\nReturns a matchable 'generic' object of the class type.  For use in expecations of type when values don't matter.",
+            "line": " ../tests/lib/jasmine/jasmine.js:192"
+        },
+        {
+            "message": "Missing item type\nReturns a matchable subset of a JSON object. For use in expectations when you don't care about all of the\nattributes on the object.",
+            "line": " ../tests/lib/jasmine/jasmine.js:206"
+        },
+        {
+            "message": "Missing item type\nJasmine Spies are test doubles that can act as stubs, spies, fakes or when used in an expecation, mocks.\n\nSpies should be created in test setup, before expectations.  They can then be checked, using the standard Jasmine\nexpectation syntax. Spies can be checked if they were called or not and what the calling params were.\n\nA Spy has the following fields: wasCalled, callCount, mostRecentCall, and argsForCall (see docs).\n\nSpies are torn down at the end of every spec.\n\nNote: Do <b>not</b> call new jasmine.Spy() directly - a spy must be created using spyOn, jasmine.createSpy or jasmine.createSpyObj.",
+            "line": " ../tests/lib/jasmine/jasmine.js:221"
+        },
+        {
+            "message": "Missing item type\nThe name of the spy, if provided.",
+            "line": " ../tests/lib/jasmine/jasmine.js:266"
+        },
+        {
+            "message": "Missing item type\nIs this Object a spy?",
+            "line": " ../tests/lib/jasmine/jasmine.js:270"
+        },
+        {
+            "message": "Missing item type\nThe actual function this spy stubs.",
+            "line": " ../tests/lib/jasmine/jasmine.js:274"
+        },
+        {
+            "message": "Missing item type\nTracking of the most recent call to the spy.",
+            "line": " ../tests/lib/jasmine/jasmine.js:279"
+        },
+        {
+            "message": "Missing item type\nHolds arguments for each call to the spy, indexed by call count",
+            "line": " ../tests/lib/jasmine/jasmine.js:288"
+        },
+        {
+            "message": "Missing item type\nTells a spy to call through to the actual implemenatation.",
+            "line": " ../tests/lib/jasmine/jasmine.js:302"
+        },
+        {
+            "message": "Missing item type\nFor setting the return value of a spy.",
+            "line": " ../tests/lib/jasmine/jasmine.js:318"
+        },
+        {
+            "message": "Missing item type\nFor throwing an exception when a spy is called.",
+            "line": " ../tests/lib/jasmine/jasmine.js:337"
+        },
+        {
+            "message": "Missing item type\nCalls an alternate implementation when a spy is called.",
+            "line": " ../tests/lib/jasmine/jasmine.js:356"
+        },
+        {
+            "message": "Missing item type\nResets all of a spy's the tracking variables so that it can be used again.",
+            "line": " ../tests/lib/jasmine/jasmine.js:376"
+        },
+        {
+            "message": "Missing item type\nDetermines whether an object is a spy.",
+            "line": " ../tests/lib/jasmine/jasmine.js:422"
+        },
+        {
+            "message": "Missing item type\nCreates a more complicated spy: an Object that has every property a function that is a spy.  Used for stubbing something\nlarge in one call.",
+            "line": " ../tests/lib/jasmine/jasmine.js:432"
+        },
+        {
+            "message": "Missing item type\nAll parameters are pretty-printed and concatenated together, then written to the current spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
+            "line": " ../tests/lib/jasmine/jasmine.js:450"
+        },
+        {
+            "message": "Missing item type\nFunction that installs a spy on an existing object's method name.  Used within a Spec to create a spy.",
+            "line": " ../tests/lib/jasmine/jasmine.js:460"
+        },
+        {
+            "message": "Missing item type\nCreates a Jasmine spec that will be added to the current suite.\n\n// TODO: pending tests",
+            "line": " ../tests/lib/jasmine/jasmine.js:480"
+        },
+        {
+            "message": "Missing item type\nCreates a <em>disabled</em> Jasmine spec.\n\nA convenience method that allows existing specs to be disabled temporarily during development.",
+            "line": " ../tests/lib/jasmine/jasmine.js:498"
+        },
+        {
+            "message": "Missing item type\nStarts a chain for a Jasmine expectation.\n\nIt is passed an Object that is the actual value and should chain to one of the many\njasmine.Matchers functions.",
+            "line": " ../tests/lib/jasmine/jasmine.js:511"
+        },
+        {
+            "message": "Missing item type\nDefines part of a jasmine spec.  Used in cominbination with waits or waitsFor in asynchrnous specs.",
+            "line": " ../tests/lib/jasmine/jasmine.js:524"
+        },
+        {
+            "message": "Missing item type\nWaits a fixed time period before moving to the next block.",
+            "line": " ../tests/lib/jasmine/jasmine.js:534"
+        },
+        {
+            "message": "Missing item type\nWaits for the latchFunction to return true before proceeding to the next block.",
+            "line": " ../tests/lib/jasmine/jasmine.js:545"
+        },
+        {
+            "message": "Missing item type\nA function that is called before each spec in a suite.\n\nUsed for spec setup, including validating assumptions.",
+            "line": " ../tests/lib/jasmine/jasmine.js:557"
+        },
+        {
+            "message": "Missing item type\nA function that is called after each spec in a suite.\n\nUsed for restoring any state that is hijacked during spec execution.",
+            "line": " ../tests/lib/jasmine/jasmine.js:569"
+        },
+        {
+            "message": "Missing item type\nDefines a suite of specifications.\n\nStores the description and all defined specs in the Jasmine environment as one suite of specs. Variables declared\nare accessible by calls to beforeEach, it, and afterEach. Describe blocks can be nested, allowing for specialization\nof setup in some tests.",
+            "line": " ../tests/lib/jasmine/jasmine.js:581"
+        },
+        {
+            "message": "Missing item type\nDisables a suite of specifications.  Used to disable some suites in a file, or files, temporarily during development.",
+            "line": " ../tests/lib/jasmine/jasmine.js:601"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:640"
+        },
+        {
+            "message": "Missing item type\nDeclare that a child class inherit it's prototype from the parent class.",
+            "line": " ../tests/lib/jasmine/jasmine.js:645"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:653"
+        },
+        {
+            "message": "Missing item type\nEnvironment for Jasmine",
+            "line": " ../tests/lib/jasmine/jasmine.js:707"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:745"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:756"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:773"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:780"
+        },
+        {
+            "message": "Missing item type\nRegister a reporter to receive status updates from Jasmine.",
+            "line": " ../tests/lib/jasmine/jasmine.js:787"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:984"
+        },
+        {
+            "message": "Missing item type\nBlocks are functions with executable code that make up a spec.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1015"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1042"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1144"
+        },
+        {
+            "message": "Missing item type\ntoBe: compares the actual to the expected using ===",
+            "line": " ../tests/lib/jasmine/jasmine.js:1221"
+        },
+        {
+            "message": "Missing item type\ntoNotBe: compares the actual to the expected using !==",
+            "line": " ../tests/lib/jasmine/jasmine.js:1229"
+        },
+        {
+            "message": "Missing item type\ntoEqual: compares the actual to the expected using common sense equality. Handles Objects, Arrays, etc.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1238"
+        },
+        {
+            "message": "Missing item type\ntoNotEqual: compares the actual to the expected using the ! of jasmine.Matchers.toEqual",
+            "line": " ../tests/lib/jasmine/jasmine.js:1247"
+        },
+        {
+            "message": "Missing item type\nMatcher that compares the actual to the expected using a regular expression.  Constructs a RegExp, so takes\na pattern or a String.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1256"
+        },
+        {
+            "message": "Missing item type\nMatcher that compares the actual to the expected using the boolean inverse of jasmine.Matchers.toMatch",
+            "line": " ../tests/lib/jasmine/jasmine.js:1266"
+        },
+        {
+            "message": "Missing item type\nMatcher that compares the actual to jasmine.undefined.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1275"
+        },
+        {
+            "message": "Missing item type\nMatcher that compares the actual to jasmine.undefined.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1282"
+        },
+        {
+            "message": "Missing item type\nMatcher that compares the actual to null.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1289"
+        },
+        {
+            "message": "Missing item type\nMatcher that compares the actual to NaN.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1296"
+        },
+        {
+            "message": "Missing item type\nMatcher that boolean not-nots the actual.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1307"
+        },
+        {
+            "message": "Missing item type\nMatcher that boolean nots the actual.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1315"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks to see if the actual, a Jasmine spy, was called.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1323"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1345"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks to see if the actual, a Jasmine spy, was not called.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1348"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks to see if the actual, a Jasmine spy, was called with a set of parameters.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1372"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1401"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1404"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks that the expected item is an element in the actual Array.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1421"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks that the expected item is NOT an element in the actual Array.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1430"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks that the expected item is equal to the actual item\nup to a given level of decimal precision (default 2).",
+            "line": " ../tests/lib/jasmine/jasmine.js:1448"
+        },
+        {
+            "message": "Missing item type\nMatcher that checks that the expected exception was thrown by the actual.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1462"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1639"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1735"
+        },
+        {
+            "message": "Missing item type\nHolds results for a set of Jasmine spec. Allows for the results array to hold another jasmine.NestedResults",
+            "line": " ../tests/lib/jasmine/jasmine.js:1770"
+        },
+        {
+            "message": "Missing item type\nThe total count of results",
+            "line": " ../tests/lib/jasmine/jasmine.js:1776"
+        },
+        {
+            "message": "Missing item type\nNumber of passed results",
+            "line": " ../tests/lib/jasmine/jasmine.js:1780"
+        },
+        {
+            "message": "Missing item type\nNumber of failed results",
+            "line": " ../tests/lib/jasmine/jasmine.js:1784"
+        },
+        {
+            "message": "Missing item type\nWas this suite/spec skipped?",
+            "line": " ../tests/lib/jasmine/jasmine.js:1788"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1792"
+        },
+        {
+            "message": "Missing item type\nRoll up the result counts.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1798"
+        },
+        {
+            "message": "Missing item type\nAdds a log message.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1809"
+        },
+        {
+            "message": "Missing item type\nGetter for the results: message & results.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1817"
+        },
+        {
+            "message": "Missing item type\nAdds a result, tracking counts (total, passed, & failed)",
+            "line": " ../tests/lib/jasmine/jasmine.js:1824"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:1844"
+        },
+        {
+            "message": "Missing item type\nBase class for pretty printing for expectation results.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1850"
+        },
+        {
+            "message": "Missing item type\nFormats a value in a nice, human-readable string.",
+            "line": " ../tests/lib/jasmine/jasmine.js:1857"
+        },
+        {
+            "message": "Missing item type\nRunner",
+            "line": " ../tests/lib/jasmine/jasmine.js:2091"
+        },
+        {
+            "message": "Missing item type\nInternal representation of a Jasmine specification, or test.",
+            "line": " ../tests/lib/jasmine/jasmine.js:2168"
+        },
+        {
+            "message": "Missing item type\nAll parameters are pretty-printed and concatenated together, then written to the spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
+            "line": " ../tests/lib/jasmine/jasmine.js:2207"
+        },
+        {
+            "message": "Missing item type",
+            "line": " ../tests/lib/jasmine/jasmine.js:2230"
+        },
+        {
+            "message": "Missing item type\nWaits a fixed time period before moving to the next block.",
+            "line": " ../tests/lib/jasmine/jasmine.js:2243"
+        },
+        {
+            "message": "Missing item type\nWaits for the latchFunction to return true before proceeding to the next block.",
+            "line": " ../tests/lib/jasmine/jasmine.js:2255"
+        },
+        {
+            "message": "Missing item type\nInternal representation of a Jasmine suite.",
+            "line": " ../tests/lib/jasmine/jasmine.js:2411"
+        },
+        {
+            "message": "Missing item type\nA block which waits for some condition to become true, with timeout.",
+            "line": " ../tests/lib/jasmine/jasmine.js:2508"
+        }
+    ]
 }
