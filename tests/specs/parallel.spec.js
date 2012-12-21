@@ -91,7 +91,6 @@ describe("Parallel Task Tests", function() {
 			};
 
 			var group = new MonkeyBars.ParallelTask({
-				loggingEnabled:true,
 				max:3,
 				tasks:tasks,
 				onComplete:function(){

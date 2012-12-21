@@ -1,6 +1,6 @@
 "use strict";
 
-var monkeyBarsVersion = "0.9.2";
+var monkeyBarsVersion = "0.9.3";
 
 // will be added to the minified version of the library
 var monkeyBarsBanner = "/*!\n*\n* MonkeyBars v" + monkeyBarsVersion + "\n* \n* Task library that provides a simple structure for handling singular, sequential \n* and parallel units of code. \n*\n* https://github.com/mcgaryes/monkeybars\n*\n*/";

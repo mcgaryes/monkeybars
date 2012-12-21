@@ -126,7 +126,7 @@
             "extension_for": [],
             "namespace": "",
             "file": "../monkeybars.js",
-            "line": 1105,
+            "line": 1117,
             "description": "A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
             "is_constructor": 1,
@@ -1893,6 +1893,15 @@
         {
             "file": "../monkeybars.js",
             "line": 1003,
+            "description": "The max amounts of tasks that can run simultaneously",
+            "itemtype": "property",
+            "name": "max",
+            "type": "Integer",
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1015,
             "description": "Checks whether or not the group has any enabled sub tasks.",
             "itemtype": "method",
             "name": "hasNoEnabledSubTasks",
@@ -1904,7 +1913,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1026,
+            "line": 1038,
             "description": "Processes all of the sub tasks available for the group",
             "itemtype": "method",
             "name": "processSubTasks",
@@ -1912,7 +1921,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1043,
+            "line": 1055,
             "description": "This method is overridden from `TaskGroups` implementation because of the \nnature of a parallel task. When a task is added it should be immediately\nprocessed and started.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -1927,7 +1936,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1067,
+            "line": 1079,
             "description": "Overridden from TaskGroup. This method is run everytime a sub task\ncompletes. When all subtasks are complete the groups complete method\nis called.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -1935,7 +1944,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1085,
+            "line": 1097,
             "description": "Overridden from Task. First checks to see if there are any enabled\nsubtasks to process. If there arent the groups complete method is called.\nIf there are then the group processes all of the sub tasks it has.",
             "itemtype": "method",
             "name": "performTask",
@@ -1943,7 +1952,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1137,
+            "line": 1149,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
@@ -1953,7 +1962,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1151,
+            "line": 1163,
             "description": "Starts the next task in the queue after its previous sibling has completed.",
             "itemtype": "method",
             "name": "startNextSubTask",
@@ -1961,7 +1970,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1174,
+            "line": 1186,
             "description": "Overridden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task completes it starts the next sibling in the queue.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -1969,7 +1978,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1191,
+            "line": 1203,
             "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
             "itemtype": "method",
             "name": "onSubTaskCancel",
@@ -1984,7 +1993,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1209,
+            "line": 1221,
             "description": "Starts the next sub task in the sequence. If overriden you need to call the \nSequenceTask's prototype `performTask` method.",
             "itemtype": "method",
             "name": "performTask",
@@ -1999,7 +2008,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1232,
+            "line": 1244,
             "description": "Decorator to provide for loop functionality for the task. The task executes\nas many times as referenced by the count attribute provided by the instance.",
             "itemtype": "method",
             "name": "forTaskDecorator",
@@ -2016,7 +2025,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1258,
+            "line": 1270,
             "description": "Decorator to provide while loop functionaliy. The task executed until the `while`\nmethod returns false.",
             "itemtype": "method",
             "name": "whileTaskDecorator",
@@ -2033,7 +2042,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1288,
+            "line": 1300,
             "description": "The task doesnt execute until the when method provided returns true.",
             "itemtype": "method",
             "name": "whenTaskDecorator",
@@ -2050,7 +2059,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1315,
+            "line": 1326,
             "description": "description needed",
             "itemtype": "property",
             "name": "TaskStates",
@@ -2060,7 +2069,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1331,
+            "line": 1342,
             "description": "description needed",
             "itemtype": "property",
             "name": "TaskTypes",
@@ -2070,7 +2079,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1345,
+            "line": 1356,
             "description": "description needed",
             "itemtype": "property",
             "name": "TaskDecorators",
