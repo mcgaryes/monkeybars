@@ -1,5 +1,3 @@
-* Give the ability to set max amount of tasks that run at the same time on a parallel task
-
-* look into setting up chaining functionality for developers who would rather do this instead
+* Chaining functionality?
 
 * host the live docs somewhere, setup CNAME file and DNS to reroute github pages to custom URL 
