@@ -40,6 +40,70 @@ describe("Parallel Task Tests", function() {
 			expect(task.state).toEqual(4);
 		});
 
+		it("Group Completes After All Subtasks Are Complete",function(){
+
+			var subTaskComplete;
+			var groupTaskComplete;
+
+			var CustomTask = MonkeyBars.Task.extend({
+				performTask:function(){
+					this.complete();
+				}
+			});
+
+			var t1 = new CustomTask();
+			var t2 = new CustomTask();
+			var t3 = new CustomTask({
+				performTask:function(){
+					subTaskComplete = new Date().getTime();
+					this.complete();
+				}
+			});
+
+			var group = new MonkeyBars.ParallelTask({
+				tasks:[t1,t2,t3],
+				onComplete:function(){
+					groupTaskComplete = new Date().getTime();
+				}
+			});
+
+			group.start();
+
+			runs(function() {
+				setTimeout(function(){
+					expect(subTaskComplete).toBeLessThan(groupTaskComplete);
+      			},100);
+    		});
+
+		});
+
+		it("Can Only Run MAX Amount Simultaniously",function(){
+
+			var tasks = [];
+
+			for (var i = 0; i < 20; i++) {
+				tasks.push(new MonkeyBars.Task({
+					name:"task" + i,
+					performTask:function(){
+						this.complete();
+					}
+				}));
+			};
+
+			var group = new MonkeyBars.ParallelTask({
+				loggingEnabled:true,
+				max:3,
+				tasks:tasks,
+				onComplete:function(){
+					groupTaskComplete = new Date().getTime();
+				}
+			});
+
+			group.start();
+
+
+		});
+
 	});
 
 	// ===================================================================

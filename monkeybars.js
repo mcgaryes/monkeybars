@@ -43,7 +43,7 @@
      * @private
      */
 	var root = this;
-	
+
 	/**
      * Counter used to create unique task ids
      *
@@ -1001,6 +1001,18 @@
 		},
 
 		/**
+		 * The max amounts of tasks that can run simultaneously
+		 * 
+		 * @for ParallelTask
+		 * @property max
+		 * @type Integer
+		 */
+		max: {
+			value:0,
+			writable:true
+		},
+
+		/**
 		 * Checks whether or not the group has any enabled sub tasks.
 		 * 
 		 * @for ParallelTask
@@ -1297,14 +1309,13 @@
 		task.decorators.push(DECORATOR_WHEN);
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.start = function(){
-			if(this.when()){
-				Task.prototype.start.call(this);
-			}else{
-				var delegate = this;
-				setTimeout(function(){ 
-					delegate.start(); 
-				},this.interval);
-			}
+			var delegate = this;
+			var interval = setInterval(function(){
+				if(delegate.when()){
+					Task.prototype.start.call(delegate);
+					clearInterval(this);
+				}
+			},this.interval);
 		};
 	};
 
