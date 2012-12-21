@@ -3,3 +3,5 @@
 * use set interval instead of timeout for when decorator
 
 * look into setting up chaining functionality for developers who would rather do this instead
+
+* host the live docs somewhere, setup CNAME file and DNS to reroute github pages to custom URL 
