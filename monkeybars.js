@@ -630,6 +630,18 @@
 		},
 
 		/**
+		 * An incrimented number of the tasks that have already been processed.
+		 * 
+		 * @for ParallelTask
+		 * @property processedIndex
+		 * @type Integer
+		 */
+		processedIndex: {
+			value:0,
+			writable:true
+		},
+
+		/**
 		 * Adds a subtask to the groups queue. This is helpful when you want to add
 		 * a sub task after instantiation.
 		 * 
@@ -795,7 +807,10 @@
 					return true;
 				}
 
+				this.processedIndex++;
+
 				task.group = this;
+				task.processed = true;
 				task.loggingEnabled = this.loggingEnabled;
 
 				// set execution block
@@ -1043,11 +1058,11 @@
 		 */
 		processSubTasks: {
 			value: function() {
-				for(var i = 0; i < this.tasks.length; i++) {
+				var processTotal = this.max === 0 ? this.tasks.length : this.max;
+				for(var i = 0; i < processTotal; i++) {
 					var task = this.tasks[i];
-					this.currentIndex++;
 					this.processSubTask(task);
-				}
+				}				
 			},
 			writable: true
 		},
@@ -1086,9 +1101,16 @@
 		 */
 		onSubTaskComplete: {
 			value: function() {
-				this.currentIndex = this.currentIndex++;
+				this.currentIndex++;
 				if(this.currentIndex === this.tasks.length) {
 					this.complete();
+				} else {
+					if(this.max !== 0) {
+						var task = this.tasks[this.currentIndex+this.max];
+						if(task) {
+							this.processSubTask(task);
+						}
+					}
 				}
 			},
 			writable: true

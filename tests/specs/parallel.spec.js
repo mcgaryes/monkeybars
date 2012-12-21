@@ -85,12 +85,16 @@ describe("Parallel Task Tests", function() {
 				tasks.push(new MonkeyBars.Task({
 					name:"task" + i,
 					performTask:function(){
-						this.complete();
+						var delegate = this;
+						setTimeout(function(){
+							delegate.complete();
+						},10);	
 					}
 				}));
 			};
 
 			var group = new MonkeyBars.ParallelTask({
+				loggingEnabled:false,
 				max:3,
 				tasks:tasks,
 				onComplete:function(){
@@ -99,7 +103,13 @@ describe("Parallel Task Tests", function() {
 			});
 
 			group.start();
+			expect(group.processedIndex).toEqual(3);
 
+			runs(function() {
+				setTimeout(function(){
+					expect(group.state).toEqual(4);
+      			},300);
+    		});
 
 		});
 
