@@ -1,0 +1,5 @@
+* Give the ability to set max amount of tasks that run at the same time on a parallel task
+
+* use set interval instead of timeout for when decorator
+
+* look into setting up chaining functionality for developers who would rather do this instead
