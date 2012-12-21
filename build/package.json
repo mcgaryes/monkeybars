@@ -1,17 +1,7 @@
 {
-  "name": "javascript-task-build-tool",
-  "version": "0.0.1",
+  "name":"monkeybars-build-tool",
+  "version":"1.0.1",
   "private":true,
-  "author": "Eric McGary <mcgaryes@gmail.com>",
-  "description": "A simple build script for the javascript-task github project.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mcgaryes/javascript-task"
-  },
-  "contributors": [{
-    "name": "Eric McGary",
-    "email": "mcgaryes@gmail.com"
-  }],
   "devDependencies": {
     "grunt-jasmine-task": "0.2.3",
     "grunt-contrib-copy": "0.3.2",

@@ -1,18 +1,11 @@
 /*!
- *
  * MonkeyBars 
- * 
- * Task library that provides a simple structure for handling singular, sequential 
- * and parallel units of code. 
- *
- * https://github.com/mcgaryes/monkeybars
- * 
- * @version 0.9.1 
- * @author Eric McGary
  * @module MonkeyBars
  * @main MonkeyBars
  */
 (function() {
+
+	"use strict";
 
 	// ===================================================================
 	// === Constants =====================================================
@@ -50,7 +43,7 @@
      * @private
      */
 	var root = this;
-
+	
 	/**
      * Counter used to create unique task ids
      *
@@ -93,7 +86,7 @@
 
 		// check for attributes
 		if(!attributes) {
-			throw MISSING_ATTRIBUTES;
+			console.error(MISSING_ATTRIBUTES);
 			return;
 		}
 
@@ -112,14 +105,16 @@
 			var tasks = attributes.tasks;
 
 			// create any subtasks
-			if (tasks) attributes.tasks = createSubTasksFromTaskOptionsArray(tasks);
+			if (tasks) {
+				attributes.tasks = createSubTasksFromTaskOptionsArray(tasks);
+			}
 
 			if(type) {
-				if(type == TYPE_SIMPLE) {
+				if(type === TYPE_SIMPLE) {
 					task = new Task(attributes);
-				} else if(type == TYPE_SEQUENCE) {
+				} else if(type === TYPE_SEQUENCE) {
 					task = new SequenceTask(attributes);
-				} else if(type == TYPE_PARALLEL){
+				} else if(type === TYPE_PARALLEL){
 					task = new ParallelTask(attributes);
 				}
 			} else {
@@ -133,7 +128,7 @@
 		}
 
 		return task;
-	}
+	};
 
 	/**
 	 * Creates an array of tasks based on the options array passed.
@@ -150,7 +145,7 @@
 			}
 		}
 		return tempTasks;
-	}
+	};
 
 	/**
 	 * Creates property descriptors from the passes attributes.
@@ -171,7 +166,7 @@
 			};
 		}
 		return descriptors;
-	}
+	};
 
 	/** 
 	 * Resets the task to its original non executed state.
@@ -182,13 +177,13 @@
 	 */
 	var resetTask = function(task){
 		task.state = STATE_INITIALIZED;
-		if(task.type != TYPE_SIMPLE && task.tasks){
+		if(task.type !== TYPE_SIMPLE && task.tasks){
 			task.currentIndex = 0;
 			for (var i = 0; i < task.tasks.length; i++) {
 				resetTask(task.tasks[i]);
-			};
+			}
 		}
-	}
+	};
 
 	/**
 	 * Generates a unique id for each task.
@@ -199,10 +194,10 @@
 	 * @private
 	 */
 	var generateUniqueId = function(prefix){
-  		var id = taskIdCounter++;
-  		var tid = prefix ? prefix + id : TID_PREFIX + id;
-  		return tid;
-	}
+		var id = taskIdCounter++;
+		var tid = prefix ? prefix + id : TID_PREFIX + id;
+		return tid;
+	};
 
 	/**
 	 * Determains whether the first task is dependent on the second.
@@ -218,17 +213,17 @@
 			var totalDependencies = dependencies.length;
 			for (var i = 0; i <totalDependencies; i++) {
 				var dependency = dependencies[i];
-				if (dependency == task2.tid) {
+				if (dependency === task2.tid) {
 					return true;
-				} else if (dependency == task2.id) {
+				} else if (dependency === task2.id) {
 					return true;
-				} else if (dependency == task2.name && task2.name !== "undefined") {
+				} else if (dependency === task2.name && task2.name !== "undefined") {
 					return true;
 				}
 			}
 		}
 		return false;
-	}
+	};
 
 	/**
 	 * Extention functionality for various task types.
@@ -255,7 +250,7 @@
 		var childProto = createPropertyDescriptorsWithAttributes(protoProps);
 		child.prototype = Object.create(parent.prototype,childProto);
 		return child;
-	}
+	};
 
 	// ===================================================================
 	// === Tasks Objects =================================================
@@ -280,30 +275,34 @@
 				onComplete:function(){
 					alert(this.name + " is complete!");
 				}
-    		});
+			});
 
-    		task.start();
+			task.start();
 
 	 */
 	var Task = MonkeyBars.Task = function(attributes) {
-	 
-	 	// refernce for readability
-	 	var task = this;
-	 	task.tid = generateUniqueId();
+		var task = this;
+		task.tid = generateUniqueId();
 
-	 	// add our attributes
-	 	for (var prop in attributes) {
-			if (!task.hasOwnProperty(prop)) {
+		// add our attributes
+		for(var prop in attributes) {
+			if(!task.hasOwnProperty(prop)) {
 				task[prop] = attributes[prop];
 			}
 		}
 
-	 	// decorate out task
-	 	task.decorators = [];
-		if(task.count) ForTaskDecorator(task);
-		if(task.when) WhenTaskDecorator(task);
-		if(task.while) WhileTaskDecorator(task);
-	}
+		// decorate out task
+		task.decorators = [];
+		if(task.count) {
+			forTaskDecorator(task);
+		}
+		if(task.when) {
+			whenTaskDecorator(task);
+		}
+		if(task.while) {
+			whileTaskDecorator(task);
+		}
+	};
 
 	Task.prototype = Object.create({}, {
 		
@@ -331,9 +330,13 @@
 		 */
 		displayName: {
 			get: function() {
-				if(this.id) return this.id;
-				if(this.name) return this.name;
-				return this.type;
+				if(this.id) {
+					return this.id;
+				}else if(this.name) {
+					return this.name;
+				} else {
+					return this.type;
+				}
 			}
 		},
 
@@ -372,9 +375,13 @@
 		 */
 		cancel: {
 			value: function() {
-				if(this.state > STATE_STARTED) return;
+				if(this.state > STATE_STARTED) {
+					return;
+				}
 				this.state = STATE_CANCELED;
-				if(this.loggingEnabled) console.log("Canceled:" + this.displayName);
+				if(this.loggingEnabled) {
+					console.log("Canceled:" + this.displayName);
+				}
 				this.onChange(this.state);
 				this.onCancel();
 			},
@@ -399,9 +406,13 @@
 		 */
 		complete: {
 			value: function() {
-				if(this.state > STATE_STARTED) return;
+				if(this.state > STATE_STARTED) {
+					return;
+				}
 				this.state = STATE_COMPLETED;
-				if(this.loggingEnabled) console.log("Completed:" + this.displayName);
+				if(this.loggingEnabled) {
+					console.log("Completed:" + this.displayName);
+				}
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.onComplete();
 				this.onChange(this.state);
@@ -432,9 +443,13 @@
 		 */
 		fault: {
 			value: function(error) {
-				if(this.state >= STATE_CANCELED) return;
+				if(this.state >= STATE_CANCELED) {
+					return;
+				}
 				this.state = STATE_FAULTED;
-				if(this.loggingEnabled) console.log("Faulted:" + this.displayName);
+				if(this.loggingEnabled) {
+					console.log("Faulted:" + this.displayName);
+				}
 				this.onChange(this.state, error);
 				this.onFault(error);
 			},
@@ -537,7 +552,9 @@
 
 		 */
 		performTask: {
-			value: function() { throw OVERRIDE_NEEDED; },
+			value: function() { 
+				throw OVERRIDE_NEEDED; 
+			},
 			writable: true
 		},
 
@@ -550,10 +567,14 @@
 		 */
 		start: {
 			value:function() {
-				if(this.state >= STATE_STARTED) return;
+				if(this.state >= STATE_STARTED) {
+					return;
+				}
 				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
-				if(this.loggingEnabled) console.log("Started:" + this.displayName);
+				if(this.loggingEnabled) {
+					console.log("Started:" + this.displayName);
+				}
 				this.onChange(this.state);
 				this.performTask();
 				this.onStart();
@@ -572,25 +593,25 @@
 	 * @param {Object} attributes List of attributes to apply to the task group
 	 */
 	var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
-	 	// refernce for readability
-	 	var task = this;
+		var task = this;
 
-	 	// custom functionality
-	 	if(attributes) task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
+		if(attributes) {
+			task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
+		}
 
-	 	// create dependency map and populate it with subtask tids
-	 	task.dependencyMap = {};
-	 	if(task.tasks){
-		 	for (var i = 0; i < task.tasks.length; i++) {
-		 		var subtask = task.tasks[i];
-		 		this.dependencyMap[subtask.tid] = [];
+		// create dependency map and populate it with subtask tids
+		task.dependencyMap = {};
+		if(task.tasks) {
+			for(var i = 0; i < task.tasks.length; i++) {
+				var subtask = task.tasks[i];
+				this.dependencyMap[subtask.tid] = [];
 				task.setDependeciesForTask(subtask);
-		 	};
-	 	}
+			}
+		}
 
-	 	// super
-	 	Task.call(task,attributes);
-	 }
+		// super
+		Task.call(task, attributes);
+	};
 
 	TaskGroup.prototype = Object.create(Task.prototype, {
 		
@@ -639,7 +660,9 @@
 		 */
 		addSubTask: {
 			value: function(task) {
-				if(!task.tid) task = createTaskWithOptions(task);
+				if(!task.tid) {
+					task = createTaskWithOptions(task);
+				}
 				this.setDependeciesForTask(task);
 				this.tasks.push(task);
 			},
@@ -665,8 +688,12 @@
 		 */
 		addSubTaskAfterTask: {
 			value: function(task, afterTask) {
-				if(!task || this.state == STATE_CANCELED) return;
-				if(!task.tid) task = createTaskWithOptions(task);
+				if(!task || this.state === STATE_CANCELED) {
+					return;
+				}
+				if(!task.tid) {
+					task = createTaskWithOptions(task);
+				}
 				this.setDependeciesForTask(task);
 				var index = this.tasks.indexOf(afterTask);
 				this.tasks.splice(index+1, 0, task);
@@ -685,8 +712,12 @@
 		 */
 		addSubTaskBeforeTask: {
 			value: function(task, beforeTask) {
-				if(!task || this.state == STATE_CANCELED) return;
-				if(!task.tid) task = createTaskWithOptions(task);
+				if(!task || this.state === STATE_CANCELED) {
+					return;
+				}
+				if(!task.tid) {
+					task = createTaskWithOptions(task);
+				}
 				this.setDependeciesForTask(task);
 				var index = this.tasks.indexOf(beforeTask);
 				this.tasks.splice(index, 0, task);
@@ -702,7 +733,9 @@
 		 * @method onSubTaskComplete
 		 */
 		onSubTaskComplete: {
-			value: function() { throw OVERRIDE_NEEDED; },
+			value: function() { 
+				throw OVERRIDE_NEEDED;
+			},
 			writable: true
 		},
 
@@ -714,7 +747,9 @@
 		 * @param {String} error Error message.
 		 */
 		onSubTaskFault: {
-			value: function(error) { this.fault(error); },
+			value: function(error) { 
+				this.fault(error);
+			},
 			writable: true
 		},
 
@@ -750,9 +785,12 @@
 		processSubTask: {
 			value: function(task) {
 
-				if(!task) throw UNDEFINED_TASK;
+				if(!task) {
+					console.error(UNDEFINED_TASK);
+					return;
+				}
 
-				if(task.state == STATE_CANCELED) {
+				if(task.state === STATE_CANCELED) {
 					this.onSubTaskCancel(task);
 					return true;
 				}
@@ -762,10 +800,14 @@
 
 				// set execution block
 				task.onChange = function(state, error) {
-					if(state == STATE_COMPLETED) this.group.onSubTaskComplete();
-					else if(state == STATE_FAULTED) this.group.onSubTaskFault(error);
-					else if(state == STATE_CANCELED) this.group.onSubTaskCancel(task);
-				}
+					if(state === STATE_COMPLETED) {
+						this.group.onSubTaskComplete();
+					}else if(state === STATE_FAULTED) {
+						this.group.onSubTaskFault(error);
+					}else if(state === STATE_CANCELED) {
+						this.group.onSubTaskCancel(task);
+					}
+				};
 
 				task.start();
 
@@ -784,7 +826,9 @@
 		 */
 		removeSubTask: {
 			value: function(task) {
-				if(!task) return;
+				if(!task) {
+					return;
+				}
 				var index = this.tasks.indexOf(task);
 				this.tasks.splice(index, 1);
 			},
@@ -810,8 +854,10 @@
 			value: function(tid) {
 				for(var i = 0; i < this.tasks.length; i++) {
 					var task = this.tasks[i];
-					if(task.tid == tid) return task;
-				};
+					if(task.tid === tid) {
+						return task;
+					}
+				}
 			},
 			writable: true
 		},
@@ -827,8 +873,10 @@
 			value: function(id) {
 				for(var i = 0; i < this.tasks.length; i++) {
 					var task = this.tasks[i];
-					if(task.id == id) return task;
-				};
+					if(task.id === id) {
+						return task;
+					}
+				}
 			},
 			writable: true
 		},
@@ -844,8 +892,10 @@
 			value: function(name) {
 				for(var i = 0; i < this.tasks.length; i++) {
 					var task = this.tasks[i];
-					if(task.name == name) return task;
-				};
+					if(task.name === name) {
+						return task;
+					}
+				}
 			},
 			writable: true
 		},
@@ -856,27 +906,27 @@
 		 * @for TaskGroup
 		 * @method cancel
 		 */
-		cancel:{
-		 	value:function(){
+		cancel: {
+	value: function() {
 
-		 		// call cancel on this task
-		 		Task.prototype.cancel.call(this);
-		 		
-		 		// cancel all of this tasks subtasks
-		 		for (var i = 0; i < this.tasks.length; i++) {
-		 			// we only want to cancel those tasks that are currently running
-					// otherwise we want to set the canceled flag
-		 			var task = this.tasks[i];
-		 			if (task.state>STATE_INITIALIZED){
-		 				task.cancel();
-		 			} else {
-		 				task.state = STATE_CANCELED;
-		 			}
-		 		};
+			// call cancel on this task
+			Task.prototype.cancel.call(this);
 
-			},
-			writable: true
+			// cancel all of this tasks subtasks
+			for(var i = 0; i < this.tasks.length; i++) {
+				// we only want to cancel those tasks that are currently running
+				// otherwise we want to set the canceled flag
+				var task = this.tasks[i];
+				if(task.state > STATE_INITIALIZED) {
+					task.cancel();
+				} else {
+					task.state = STATE_CANCELED;
+				}
+			}
+
 		},
+		writable: true
+	},
 
 		/**
 		 * Sets dependencies for the passed task.
@@ -886,17 +936,17 @@
 		 * @static
 		 */
 		setDependeciesForTask: {
-		 	value:function(task){
-				if(task.dependencies){
+			value: function(task) {
+				if(task.dependencies) {
 					var totalDependencies = task.dependencies.length;
-					for (var i = 0; i < totalDependencies; i++) {
+					for(var i = 0; i < totalDependencies; i++) {
 						var dependency = task.dependencies[i];
 						if(dependency.tid) {
 							this.dependencyMap[task.tid].push(dependency.tid);
 						} else {
 							this.dependencyMap[task.tid].push(dependency);
 						}
-					};
+					}
 
 				}
 			},
@@ -930,12 +980,9 @@
 
 	 */
 	var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
-	 	// refernce for readability
-	 	var task = this;
-
-	 	// super
-	 	TaskGroup.call(task,attributes);
-	 }
+		var task = this;
+		TaskGroup.call(task, attributes);
+	};
 
 	ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 
@@ -962,10 +1009,14 @@
 		 */
 		hasNoEnabledSubTasks: {
 			value: function() {
-				if(!this.tasks) return true;
+				if(!this.tasks) {
+					return true;
+				}
 				for(var i = 0; i < this.tasks.length; i++) {
 					var task = this.tasks[i];
-					if(task.state != STATE_CANCELED) return false;
+					if(task.state !== STATE_CANCELED) {
+						return false;
+					}
 				}
 				return true;
 			},
@@ -1000,9 +1051,13 @@
 		 */
 		addSubTask: {
 			value: function(task) {
-				if(!task || task.state == STATE_CANCELED) return;
+				if(!task || task.state === STATE_CANCELED) {
+					return;
+				}
 				this.currentIndex++;
-				if(!task.tid) task = createTaskWithOptions(task);
+				if(!task.tid) {
+					task = createTaskWithOptions(task);
+				}
 				this.tasks.push(task);
 				this.processSubTask(task);
 			},
@@ -1020,7 +1075,7 @@
 		onSubTaskComplete: {
 			value: function() {
 				this.currentIndex = this.currentIndex++;
-				if(this.currentIndex == this.tasks.length) {
+				if(this.currentIndex === this.tasks.length) {
 					this.complete();
 				}
 			},
@@ -1072,13 +1127,10 @@
 			sequence.start();
 
 	 */
-	var SequenceTask = MonkeyBars.SequenceTask = function(attributes){
-	 	// refernce for readability
-	 	var task = this;
-
-	 	// super
-	 	TaskGroup.call(task,attributes);
-	 }
+	var SequenceTask = MonkeyBars.SequenceTask = function(attributes) {
+		var task = this;
+		TaskGroup.call(task, attributes);
+	};
 
 	SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 		
@@ -1104,10 +1156,14 @@
 		 */
 		startNextSubTask: {
 			value: function() {
-				if(this.state >= STATE_CANCELED) return;
+				if(this.state >= STATE_CANCELED) {
+					return;
+				}
 				if(this.tasks && this.currentIndex < this.tasks.length) {
 					var skipped = this.processSubTask(this.tasks[this.currentIndex++]);
-					if(skipped) this.startNextSubTask();
+					if(skipped) {
+						this.startNextSubTask();
+					}
 				} else {
 					this.complete();
 				}
@@ -1124,7 +1180,9 @@
 		 */
 		onSubTaskComplete: {
 			value: function() {
-				if(this.state == STATE_CANCELED) return;
+				if(this.state === STATE_CANCELED) {
+					return;
+				}
 				this.startNextSubTask();
 			},
 			writable: true
@@ -1141,7 +1199,9 @@
 		onSubTaskCancel: {
 			value: function(task) {
 				TaskGroup.prototype.onSubTaskCancel.call(this,task);
-				if(this.state != STATE_CANCELED) this.startNextSubTask();
+				if(this.state !== STATE_CANCELED) {
+					this.startNextSubTask();
+				}
 			},
 			writable: true
 		},
@@ -1174,43 +1234,47 @@
 	 * as many times as referenced by the count attribute provided by the instance.
 	 * 
 	 * @for MonkeyBars
-	 * @method ForTaskDecorator
+	 * @method forTaskDecorator
 	 * @param {Object} task
 	 * @private
 	 */
-	var ForTaskDecorator = function(task) {
+	var forTaskDecorator = function(task) {
 		task.decorators.push(DECORATOR_FOR);
-	 	task.itterationIndex = 0;
-	 	task.complete = function() {
-			if(this.itterationIndex != this.count - 1) {
+		task.itterationIndex = 0;
+		task.complete = function() {
+			if(this.itterationIndex !== this.count - 1) {
 				resetTask(this);
 				this.itterationIndex++;
-				if(this.loggingEnabled) console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
+				if(this.loggingEnabled) {
+					console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
+				}
 				this.performTask();
 			} else {
 				Task.prototype.complete.call(this);
 			}
-		}
-	}
+		};
+	};
 
 	/**
 	 * Decorator to provide while loop functionaliy. The task executed until the `while`
 	 * method returns false.
 	 * 
 	 * @for MonkeyBars
-	 * @method WhileTaskDecorator
+	 * @method whileTaskDecorator
 	 * @param {Object} task
 	 * @private
 	 */
-	var WhileTaskDecorator = function(task) {
+	var whileTaskDecorator = function(task) {
 		task.decorators.push(DECORATOR_WHILE);
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.complete = function() {
 			if(this.while()) {
 				this.state = STATE_INITIALIZED;
 				var delegate = this;
-				if(this.interval != 0) {
-					setTimeout(function() { delegate.start(); }, this.interval);
+				if(this.interval !== 0) {
+					setTimeout(function() { 
+						delegate.start(); 
+					}, this.interval);
 				} else {
 					delegate.start();
 				}
@@ -1218,18 +1282,18 @@
 			} else {
 				Task.prototype.complete.call(this);
 			}
-		}
-	}
+		};
+	};
 
 	/**
 	 * The task doesnt execute until the when method provided returns true.
 	 *
 	 * @for MonkeyBars
-	 * @method WhenTaskDecorator
+	 * @method whenTaskDecorator
 	 * @param {Object} task
 	 * @private
 	 */
-	var WhenTaskDecorator = function(task) {
+	var whenTaskDecorator = function(task) {
 		task.decorators.push(DECORATOR_WHEN);
 		task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 		task.start = function(){
@@ -1237,10 +1301,12 @@
 				Task.prototype.start.call(this);
 			}else{
 				var delegate = this;
-				setTimeout(function(){ delegate.start(); },this.interval);
+				setTimeout(function(){ 
+					delegate.start(); 
+				},this.interval);
 			}
-		}
-	}
+		};
+	};
 
 	// ===================================================================
 	// === Public Interface ==============================================
@@ -1290,4 +1356,4 @@
 		While:DECORATOR_WHILE
 	};
 
-}(this));
+}).call(this);
