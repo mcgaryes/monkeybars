@@ -113,6 +113,40 @@ describe("Parallel Task Tests", function() {
 
 		});
 
+		it("Sub Tasks Should Only Run Once Their Dependencies Have",function(){
+
+			return;
+
+			var t1 = new MonkeyBars.Task({
+				performTask:function(){}
+			});
+
+			var t2 = new MonkeyBars.Task({
+				dependencies:[t1],
+				performTask:function(){ this.complete(); }
+			});
+
+			var t3 = new MonkeyBars.Task({
+				performTask:function(){ this.complete(); }
+			});
+
+			var group = new MonkeyBars.ParallelTask({
+				tasks:[t1,t2,t3]
+			});
+
+			group.start();
+
+			expect(t2.state).not.toEqual(MonkeyBars.TaskStates.Completed);
+			expect(t3.state).toEqual(MonkeyBars.TaskStates.Completed);
+
+			t1.complete();
+			
+			expect(t2.state).toEqual(MonkeyBars.TaskStates.Completed);
+			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
+
+			console.log(group);
+		});
+
 	});
 
 	// ===================================================================

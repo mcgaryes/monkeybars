@@ -109,7 +109,7 @@ describe("Simple Task Tests", function() {
 			waitsFor(function() {
 		      value++;
 		      return flag;
-		    }, "task to complete", 1000);
+		    }, "the task to complete with FOR & WHEN", 1000);
 
 			runs(function() {
       			expect(task.state).toEqual(4);
@@ -167,7 +167,7 @@ describe("Simple Task Tests", function() {
 					this.complete();
 				},
 				while:function(){
-					return index < 10;
+					return index != 3;
 				}
 			});
 
@@ -175,13 +175,11 @@ describe("Simple Task Tests", function() {
 
 			waitsFor(function() { 
 				return flag; 
-			}, "task to complete", 1000);
+			}, "the task to complete with WHILE", 1000);
 
 			runs(function() {
-				setTimeout(function() { 
-					expect(task.state).toEqual(4);
-      				expect(index).toEqual(4);
-				}, 100);
+				expect(task.state).toEqual(4);
+      			expect(index).toEqual(3);
     		});
 		});
 
@@ -279,6 +277,24 @@ describe("Simple Task Tests", function() {
 			task.complete();
 			task.cancel();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+		});
+
+		it("Task Should Timeout If 'timeout' Is Set",function(){
+			
+			task.timeout = 100;
+			task.loggingEnabled = true;
+			//task.performTask = function(){ this.complete(); };
+			task.start();
+			var delegate = task;
+
+			waitsFor(function() {
+      			return task.state == MonkeyBars.TaskStates.Faulted;
+    		}, "the task to fault", 750);
+
+			runs(function() {
+		      expect(delegate.state).toEqual(MonkeyBars.TaskStates.Faulted);
+    		});
+
 		});
 
 	});

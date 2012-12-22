@@ -355,6 +355,19 @@
 		},
 
 		/**
+		 * Time in milliseconds in which a task will time out and throw a fault
+		 * 
+		 * @for Task
+		 * @property timeout
+		 * @type Integer
+		 * @default undefined
+		 */
+		timeout: {
+			value: undefined,
+			writable: true
+		},
+
+		/**
 		 * Calling this method cancels the task. However it is up to the instance to handle 
 		 * the canceled state.
 		 * 
@@ -381,6 +394,9 @@
 				this.state = STATE_CANCELED;
 				if(this.loggingEnabled) {
 					console.log("Canceled:" + this.displayName);
+				}
+				if(this.timeoutId) {
+					clearTimeout(this.timeoutId);
 				}
 				this.onChange(this.state);
 				this.onCancel();
@@ -412,6 +428,9 @@
 				this.state = STATE_COMPLETED;
 				if(this.loggingEnabled) {
 					console.log("Completed:" + this.displayName);
+				}
+				if(this.timeoutId) {
+					clearTimeout(this.timeoutId);
 				}
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.onComplete();
@@ -449,6 +468,9 @@
 				this.state = STATE_FAULTED;
 				if(this.loggingEnabled) {
 					console.log("Faulted:" + this.displayName);
+				}
+				if(this.timeoutId) {
+					clearTimeout(this.timeoutId);
 				}
 				this.onChange(this.state, error);
 				this.onFault(error);
@@ -574,6 +596,12 @@
 				this.state = STATE_STARTED;
 				if(this.loggingEnabled) {
 					console.log("Started:" + this.displayName);
+				}
+				if(this.timeout !== undefined) {
+					var delegate = this;
+					this.timeoutId = setTimeout(function(){
+						delegate.fault();
+					},this.timeout);
 				}
 				this.onChange(this.state);
 				this.performTask();
@@ -922,26 +950,25 @@
 		 * @method cancel
 		 */
 		cancel: {
-	value: function() {
+			value: function() {
 
-			// call cancel on this task
-			Task.prototype.cancel.call(this);
+				// call cancel on this task
+				Task.prototype.cancel.call(this);
 
-			// cancel all of this tasks subtasks
-			for(var i = 0; i < this.tasks.length; i++) {
-				// we only want to cancel those tasks that are currently running
-				// otherwise we want to set the canceled flag
-				var task = this.tasks[i];
-				if(task.state > STATE_INITIALIZED) {
-					task.cancel();
-				} else {
-					task.state = STATE_CANCELED;
+				// cancel all of this tasks subtasks
+				for(var i = 0; i < this.tasks.length; i++) {
+					// we only want to cancel those tasks that are currently running
+					// otherwise we want to set the canceled flag
+					var task = this.tasks[i];
+					if(task.state > STATE_INITIALIZED) {
+						task.cancel();
+					} else {
+						task.state = STATE_CANCELED;
+					}
 				}
-			}
-
+			},
+			writable: true
 		},
-		writable: true
-	},
 
 		/**
 		 * Sets dependencies for the passed task.
@@ -1276,15 +1303,19 @@
 		task.decorators.push(DECORATOR_FOR);
 		task.itterationIndex = 0;
 		task.complete = function() {
-			if(this.itterationIndex !== this.count - 1) {
-				resetTask(this);
-				this.itterationIndex++;
-				if(this.loggingEnabled) {
-					console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
+			if(this.count !== -1) {
+				if(this.itterationIndex !== this.count - 1) {
+					resetTask(this);
+					this.itterationIndex++;
+					if(this.loggingEnabled) {
+						console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
+					}
+					this.performTask();
+				} else {
+					Task.prototype.complete.call(this);
 				}
-				this.performTask();
-			} else {
-				Task.prototype.complete.call(this);
+			}else{
+				// @TODO: need to work in the functionality for a continuously running task
 			}
 		};
 	};
