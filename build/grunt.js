@@ -74,7 +74,7 @@ module.exports = function(grunt) {
                 "description": monkeyBarsDescription,
                 "version": monkeyBarsVersion,
                 "url": monkeyBarsRepository,
-                "logo":"http://sandbox.ericmcgary.com/images/github_logo_h.png",
+                "logo":"../artwork/monkeybars.png",
                 options: {
                     paths: "../",
                     outdir: "../docs/"

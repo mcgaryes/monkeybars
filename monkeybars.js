@@ -1106,7 +1106,7 @@
 		 * its own change functionality then you will need to implement the partner 
 		 * convenience methods.
 		 * 
-		 * @for TaskGroup
+		 * @for ParallelTask
 		 * @method processSubTask
 		 * @param {Task} task Subtask to process
 		 */
