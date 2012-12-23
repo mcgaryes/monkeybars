@@ -282,8 +282,6 @@ describe("Simple Task Tests", function() {
 		it("Task Should Timeout If 'timeout' Is Set",function(){
 			
 			task.timeout = 100;
-			task.loggingEnabled = true;
-			//task.performTask = function(){ this.complete(); };
 			task.start();
 			var delegate = task;
 

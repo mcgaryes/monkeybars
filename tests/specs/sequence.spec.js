@@ -206,7 +206,6 @@ describe("Sequence Task Tests", function() {
 		afterEach(function() {
 			task = t1 = t2 = t3 = undefined;
 		});
-
 		
 		it("Task Does Not Start Next Task After Canceled",function(){
 			task.start();

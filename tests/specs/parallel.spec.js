@@ -115,36 +115,39 @@ describe("Parallel Task Tests", function() {
 
 		it("Sub Tasks Should Only Run Once Their Dependencies Have",function(){
 
-			return;
-
 			var t1 = new MonkeyBars.Task({
+				name:"t1",
 				performTask:function(){}
 			});
 
 			var t2 = new MonkeyBars.Task({
+				name:"t2",
 				dependencies:[t1],
 				performTask:function(){ this.complete(); }
 			});
 
 			var t3 = new MonkeyBars.Task({
+				name:"t3",
+				dependencies:[t2],
 				performTask:function(){ this.complete(); }
 			});
 
 			var group = new MonkeyBars.ParallelTask({
+				logLevel:MonkeyBars.LogLevels.Info,
 				tasks:[t1,t2,t3]
 			});
 
 			group.start();
 
 			expect(t2.state).not.toEqual(MonkeyBars.TaskStates.Completed);
-			expect(t3.state).toEqual(MonkeyBars.TaskStates.Completed);
+			expect(t3.state).not.toEqual(MonkeyBars.TaskStates.Completed);
 
 			t1.complete();
 			
 			expect(t2.state).toEqual(MonkeyBars.TaskStates.Completed);
+			expect(t3.state).toEqual(MonkeyBars.TaskStates.Completed);
 			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
 
-			console.log(group);
 		});
 
 	});

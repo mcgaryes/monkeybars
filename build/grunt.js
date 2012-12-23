@@ -1,28 +1,29 @@
 "use strict";
 
-var monkeyBarsVersion = "0.9.3";
-
-// will be added to the minified version of the library
-var monkeyBarsBanner = "/*!\n*\n* MonkeyBars v" + monkeyBarsVersion + "\n* \n* Task library that provides a simple structure for handling singular, sequential \n* and parallel units of code. \n*\n* https://github.com/mcgaryes/monkeybars\n*\n*/";
+var monkeyBarsName          =   "MonkeyBars";
+var monkeyBarsVersion       =   "0.9.3";
+var monkeyBarsDescription   =   "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
+var monkeyBarsRepository    =   "https://github.com/mcgaryes/monkeybars/";
+var monkeyBarsBanner        =   "/*!\n*\n* MonkeyBars v" + monkeyBarsVersion + "\n* \n* " + monkeyBarsDescription + " \n*\n* " + monkeyBarsRepository + "\n*\n*/";
 
 // object will be used to create the package.json file for npm manager
 var monkeyBarsPackageJsonTemplate = {
-    "name": "monkeybars",
+    "name": monkeyBarsName.toLowerCase(),
     "version": monkeyBarsVersion,
-    "description": "Task library that provides a simple structure for handling singular, sequential and parallel units of code.",
+    "description": monkeyBarsDescription,
     "keywords": ["task", "sequence", "parallel", "asynchronous", "async", "util"],
-    "homepage": "https://github.com/mcgaryes/monkeybars",
+    "homepage": monkeyBarsRepository,
     "bugs": {
-        "url": "https://github.com/mcgaryes/monkeybars/issues"
+        "url": monkeyBarsRepository + "issues"
     },
-    "main": "monkeybars.js",
+    "main": monkeyBarsName.toLowerCase() + ".js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mcgaryes/monkeybars/"
+        "url": monkeyBarsRepository
     },
     "licenses": [{
         "type": "MIT",
-        "url": "https://raw.github.com/mcgaryes/monkeybars/master/LICENSE"
+        "url": monkeyBarsRepository + "master/LICENSE"
     }]
 };
 
@@ -69,10 +70,11 @@ module.exports = function(grunt) {
         },
         yuidoc: {
             compile: {
-                "name": "MonkeyBars",
-                "description": "Simple structure for handling singular, sequential and parallel units of code.",
-                "version": "0.0.1",
-                "url": "https://github.com/mcgaryes/monkeybars",
+                "name": monkeyBarsName,
+                "description": monkeyBarsDescription,
+                "version": monkeyBarsVersion,
+                "url": monkeyBarsRepository,
+                "logo":"http://sandbox.ericmcgary.com/images/github_logo_h.png",
                 options: {
                     paths: "../",
                     outdir: "../docs/"

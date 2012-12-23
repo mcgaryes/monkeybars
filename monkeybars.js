@@ -1,5 +1,4 @@
 /*!
- * MonkeyBars 
  * @module MonkeyBars
  * @main MonkeyBars
  */
@@ -20,6 +19,11 @@
 	var TYPE_PARALLEL		=	"parallel";
 	var TYPE_SEQUENCE		=	"sequence";
 	var TYPE_SIMPLE			=	"simple";
+
+	var LOG_NONE			=	0;
+	var LOG_ERROR			=	10;
+	var LOG_INFO			=	20;
+	var LOG_VERBOSE			=	30;
 
 	var DECORATOR_FOR		=	"for";
 	var DECORATOR_WHEN		=	"when";
@@ -86,7 +90,9 @@
 
 		// check for attributes
 		if(!attributes) {
-			console.error(MISSING_ATTRIBUTES);
+			if(attributes.logLevel >= LOG_ERROR) {
+				console.log(MISSING_ATTRIBUTES);
+			}
 			return;
 		}
 
@@ -177,8 +183,10 @@
 	 */
 	var resetTask = function(task){
 		task.state = STATE_INITIALIZED;
+		task.processed = false;
 		if(task.type !== TYPE_SIMPLE && task.tasks){
 			task.currentIndex = 0;
+			task.processedIndex = 0;
 			for (var i = 0; i < task.tasks.length; i++) {
 				resetTask(task.tasks[i]);
 			}
@@ -258,7 +266,7 @@
 
 	/**
 	 * The simplest form of a __MonkeyBars__ task. Once started the task executes all 
-	 * functionality located within the `performTask` function block. Set `loggingEnabled`
+	 * functionality located within the `performTask` function block. Set `logLevel`
 	 * to see console logs during task execution.
 	 * 
 	 * @extends Object
@@ -355,6 +363,19 @@
 		},
 
 		/**
+		 * The default logging level for tasks
+		 * 
+		 * @for Task
+		 * @property logLevel
+		 * @type Integer
+		 * @default 0
+		 */
+		logLevel: {
+			value: LOG_NONE,
+			writable: true
+		},
+
+		/**
 		 * Time in milliseconds in which a task will time out and throw a fault
 		 * 
 		 * @for Task
@@ -392,7 +413,7 @@
 					return;
 				}
 				this.state = STATE_CANCELED;
-				if(this.loggingEnabled) {
+				if(this.logLevel >= LOG_INFO) {
 					console.log("Canceled:" + this.displayName);
 				}
 				if(this.timeoutId) {
@@ -426,7 +447,7 @@
 					return;
 				}
 				this.state = STATE_COMPLETED;
-				if(this.loggingEnabled) {
+				if(this.logLevel >= LOG_INFO) {
 					console.log("Completed:" + this.displayName);
 				}
 				if(this.timeoutId) {
@@ -466,7 +487,7 @@
 					return;
 				}
 				this.state = STATE_FAULTED;
-				if(this.loggingEnabled) {
+				if(this.logLevel >= LOG_INFO) {
 					console.log("Faulted:" + this.displayName);
 				}
 				if(this.timeoutId) {
@@ -594,7 +615,7 @@
 				}
 				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
-				if(this.loggingEnabled) {
+				if(this.logLevel >= LOG_INFO) {
 					console.log("Started:" + this.displayName);
 				}
 				if(this.timeout !== undefined) {
@@ -826,7 +847,9 @@
 			value: function(task) {
 
 				if(!task) {
-					console.error(UNDEFINED_TASK);
+					if(this.logLevel >= LOG_ERROR) {
+						console.log(UNDEFINED_TASK);
+					}
 					return;
 				}
 
@@ -839,7 +862,7 @@
 
 				task.group = this;
 				task.processed = true;
-				task.loggingEnabled = this.loggingEnabled;
+				task.logLevel = this.logLevel;
 
 				// set execution block
 				task.onChange = function(state, error) {
@@ -1078,6 +1101,42 @@
 		},
 
 		/**
+		 * Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the
+		 * tasks on change functionality. If you wish to have a sub task that handles 
+		 * its own change functionality then you will need to implement the partner 
+		 * convenience methods.
+		 * 
+		 * @for TaskGroup
+		 * @method processSubTask
+		 * @param {Task} task Subtask to process
+		 */
+		processSubTask:{
+			value:function(task){
+				if(task !== undefined && task.dependencies !== undefined) {
+					var totalDependencies = task.dependencies.length;
+					var canProcess = totalDependencies;
+					var processCount = 0;
+					var dependencyNames = [];
+					for (var i = 0; i < totalDependencies; i++) {
+						var dependency = task.dependencies[i];
+						dependencyNames.push(dependency.displayName);
+						if(dependency.state > STATE_STARTED) {
+							processCount++;
+						}
+					}
+					if(processCount < canProcess) {
+						if(this.logLevel >= LOG_VERBOSE) {
+							console.log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
+						}
+						return;
+					}
+				}
+				TaskGroup.prototype.processSubTask.call(this,task);
+			},
+			writable:true
+		},
+
+		/**
 		 * Processes all of the sub tasks available for the group
 		 * 
 		 * @for ParallelTask
@@ -1088,7 +1147,9 @@
 				var processTotal = this.max === 0 ? this.tasks.length : this.max;
 				for(var i = 0; i < processTotal; i++) {
 					var task = this.tasks[i];
-					this.processSubTask(task);
+					if(!task.processed) {
+						this.processSubTask(task);
+					}
 				}				
 			},
 			writable: true
@@ -1132,12 +1193,7 @@
 				if(this.currentIndex === this.tasks.length) {
 					this.complete();
 				} else {
-					if(this.max !== 0) {
-						var task = this.tasks[this.currentIndex+this.max];
-						if(task) {
-							this.processSubTask(task);
-						}
-					}
+					this.processSubTasks();
 				}
 			},
 			writable: true
@@ -1307,7 +1363,7 @@
 				if(this.itterationIndex !== this.count - 1) {
 					resetTask(this);
 					this.itterationIndex++;
-					if(this.loggingEnabled) {
+					if(this.logLevel >= LOG_INFO) {
 						console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
 					}
 					this.performTask();
@@ -1377,7 +1433,7 @@
 	// ===================================================================
 
 	/**
-	 * description needed
+	 * Task states contstants.
 	 *
 	 * @property TaskStates
 	 * @for MonkeyBars
@@ -1393,7 +1449,7 @@
 	};
 
 	/**
-	 * description needed
+	 * Task types contstants.
 	 *
 	 * @property TaskTypes
 	 * @for MonkeyBars
@@ -1407,7 +1463,22 @@
 	};
 
 	/**
-	 * description needed
+	 * Log level contstants.
+	 *
+	 * @property LogLevels
+	 * @for MonkeyBars
+	 * @type Object
+	 * @static
+	 */
+	MonkeyBars.LogLevels = {
+		None:LOG_NONE,
+		Error:LOG_ERROR,
+		Info:LOG_INFO,
+		Verbose:LOG_VERBOSE
+	};
+
+	/**
+	 * Task decorators. These are exposed mainly to enable deeper extention.
 	 *
 	 * @property TaskDecorators
 	 * @for MonkeyBars
