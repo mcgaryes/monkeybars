@@ -255,4 +255,90 @@ describe("Sequence Task Tests", function() {
 		});
 	});
 
+	// ===================================================================
+	// === Task Product Tests ============================================
+	// ===================================================================
+
+	describe("Product Tests", function() {
+
+		it("Product Manipulates As Expected",function(){
+			
+			// * NOTE *
+			// Imagine that all of the following tasks are in seperate modules and that
+			// we need to manipulate a piece of data between all of that tasks without 
+			// having a centralized model of any kind... how would it look
+
+			var t1 = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete(this.product + 10);
+				}
+			});
+
+			var t2 = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete(this.product / 2);
+				}
+			});
+
+			var t3 = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete(this.product * 3);
+				}
+			});
+
+			var group = new MonkeyBars.SequenceTask({
+				tasks:[t1,t2,t3],
+				handleProduct:function(product) {
+					this.product = product;
+				}
+			});
+
+			// @TODO: need to have function on task group that is basically a method that gets called 
+			// everytime its product is manipulated. By default passing a product will just set the product
+			// to what was passed by the complete function... if the group has
+
+			group.product = 0;
+			group.start();
+
+			expect(group.product).toEqual(15);
+
+		});
+
+	});
+
+	// ===================================================================
+	// === Concurrent Excecution Tests ===================================
+	// ===================================================================
+
+	describe("Concurrent Excecution Tests", function() {
+		
+		// return if we can actually test concurrent functionality
+		try { var blob = new Blob([""]); } catch(e) { return; }
+
+		it("Concurrent SequenceTask Completes",function(){
+
+			var t1 = new MonkeyBars.Task({name:"t1",performTask:function(){ this.complete(); }});
+			var t2 = new MonkeyBars.Task({name:"t2",performTask:function(){ this.complete(); }});
+			var t3 = new MonkeyBars.Task({name:"t3",performTask:function(){ this.complete(); }});
+
+			var task = new MonkeyBars.SequenceTask({
+				name:"ConcurrentParallelTask",
+				concurrent:true,
+				tasks:[t1,t2,t3]
+			});
+
+			task.start();
+
+			waitsFor(function() {
+      			return task.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+    		});
+
+		});
+
+	});
+
 });

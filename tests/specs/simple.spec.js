@@ -3,32 +3,33 @@ describe("Simple Task Tests", function() {
 	// ===================================================================
 	// === Initialization Tests ==========================================
 	// ===================================================================
-
 	describe("Initialization Tests", function() {
 
-		it("Initializing With Type",function(){
-			var task = new MonkeyBars.Task({ name:"task" });
+		it("Initializing With Type", function() {
+			var task = new MonkeyBars.Task({
+				name: "task"
+			});
 			expect(task.type).toEqual("simple");
 			expect(task.name).toEqual("task");
 			expect(task.state).toEqual(0);
 		});
 
-		it("Initializing With Dot Notation",function(){
+		it("Initializing With Dot Notation", function() {
 			var task = new MonkeyBars.Task();
 			task.performTask = function() {};
 			task.start();
 			expect(task.state).toEqual(1);
 		});
 
-		it("Initializing After Traditional Extention",function(){
-			
-			var CustomTask = function(attributes){
-				MonkeyBars.Task(this);
-			};
+		it("Initializing After Traditional Extention", function() {
 
-			CustomTask.prototype = Object.create(MonkeyBars.Task.prototype,{
-				method:{
-					value:function(){
+			var CustomTask = function(attributes) {
+					MonkeyBars.Task(this);
+				};
+
+			CustomTask.prototype = Object.create(MonkeyBars.Task.prototype, {
+				method: {
+					value: function() {
 						return 24;
 					}
 				}
@@ -39,13 +40,15 @@ describe("Simple Task Tests", function() {
 			expect(task.performTask).toBeDefined();
 		});
 
-		it("Initializing After MonkeyBars Extention Method",function(){
+		it("Initializing After MonkeyBars Extention Method", function() {
 			var CustomTask = MonkeyBars.Task.extend({
-				method:function(){ 
-					return 24; 
+				method: function() {
+					return 24;
 				}
 			});
-			var task = new CustomTask({ name:"task" });
+			var task = new CustomTask({
+				name: "task"
+			});
 			expect(task.type).toEqual("simple");
 			expect(task.name).toEqual("task");
 			expect(task.method()).toEqual(24);
@@ -57,7 +60,6 @@ describe("Simple Task Tests", function() {
 	// ===================================================================
 	// === Decorator Tests ===============================================
 	// ===================================================================
-
 	describe("Decorator Tests", function() {
 
 		var value, flag;
@@ -69,11 +71,11 @@ describe("Simple Task Tests", function() {
 			flag = undefined;
 		});
 
-		it("FOR",function(){
+		it("FOR", function() {
 			var index = 0;
 			var task = new MonkeyBars.Task({
-				count:3,
-				performTask:function(){
+				count: 3,
+				performTask: function() {
 					index++;
 					this.complete();
 				}
@@ -82,105 +84,82 @@ describe("Simple Task Tests", function() {
 			expect(index).toEqual(3);
 		});
 
-		it("FOR & WHEN",function(){
-
-			runs(function() {
-				flag = false;
-				value = 0;
-				setTimeout(function() {
-					flag = true;
-				}, 200);
-			});
+		it("FOR & WHEN", function() {
 
 			var index = 0;
 			var task = new MonkeyBars.Task({
-				count:1,
-				performTask:function(){
-					index++;
+				count: 1,
+				performTask: function() {
 					this.complete();
 				},
-				when:function(){
-					return value > 0;
+				when: function() {
+					index++;
+					return index > 0;
 				}
 			});
 
 			task.start();
 
 			waitsFor(function() {
-		      value++;
-		      return flag;
-		    }, "the task to complete with FOR & WHEN", 1000);
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete with FOR & WHEN", 1000);
 
 			runs(function() {
-      			expect(task.state).toEqual(4);
-      			expect(index).toEqual(1);
-    		});
+				expect(task.state).toEqual(4);
+				expect(index).toEqual(1);
+			});
 		});
 
-		it("WHEN",function(){
+		it("WHEN", function() {
 
-			runs(function() {
-				flag = false;
-				value = 0;
-				setTimeout(function() {
-					flag = true;
-				}, 500);
-			});
+			var index = 0;
 
 			var task = new MonkeyBars.Task({
-				name:"*** SIMPLE_WHEN ***",
-				performTask:function(){
+				name: "*** SIMPLE_WHEN ***",
+				performTask: function() {
 					this.complete();
 				},
-				when:function(){
-					return value > 0;
+				when: function() {
+					index++;
+					return index > 3;
 				}
 			});
 
 			task.start();
 
 			waitsFor(function() {
-		      value++;
-		      return flag;
-		    }, "task to complete", 1000);
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "task to complete WHEN", 750);
 
 			runs(function() {
-      			expect(task.state).toEqual(4);
-    		});
+				expect(task.state).toEqual(4);
+			});
 		});
 
-		it("WHILE",function(){
-			
-			runs(function() {
-				flag = false;
-				value = 0;
-				setTimeout(function() { 
-					flag = true; 
-				}, 310);
-			});
+		it("WHILE", function() {
 
 			var index = 0;
 			var task = new MonkeyBars.Task({
-				name:"*** SIMPLE_WHEN ***",
-				performTask:function(){
+				name: "*** SIMPLE_WHEN ***",
+				performTask: function() {
 					index++;
 					this.complete();
 				},
-				while:function(){
+				while :function() {
 					return index != 3;
 				}
 			});
 
 			task.start();
 
-			waitsFor(function() { 
-				return flag; 
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
 			}, "the task to complete with WHILE", 1000);
 
 			runs(function() {
 				expect(task.state).toEqual(4);
-      			expect(index).toEqual(3);
-    		});
+				expect(index).toEqual(3);
+			});
 		});
 
 	});
@@ -188,15 +167,14 @@ describe("Simple Task Tests", function() {
 	// ===================================================================
 	// === Excecution Tests ==============================================
 	// ===================================================================
-
+	
 	describe("Excecution Tests", function() {
 
 		var task;
 
 		beforeEach(function() {
 			task = new MonkeyBars.Task({
-				performTask:function(){
-					/* ... */
+				performTask: function() { /* ... */
 				}
 			});
 		});
@@ -205,93 +183,93 @@ describe("Simple Task Tests", function() {
 			task = undefined;
 		});
 
-		it("Task Did Cancel",function(){
+		it("Task Did Cancel", function() {
 			task.cancel();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled)
 		});
 
-		it("Task Did Start",function(){
+		it("Task Did Start", function() {
 			task.start();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Started)
 		});
 
-		it("Task Did Complete",function(){
+		it("Task Did Complete", function() {
 			task.complete();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
 		});
 
-		it("Task Did Fault",function(){
+		it("Task Did Fault", function() {
 			task.fault(null);
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
 		});
 
-		it("Task Should Not Start After Completed",function(){
+		it("Task Should Not Start After Completed", function() {
 			task.complete();
 			task.start();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
 		});
 
-		it("Task Should Not Start After Faulted",function(){
+		it("Task Should Not Start After Faulted", function() {
 			task.fault(null);
 			task.start();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
 		});
 
-		it("Task Should Not Start After Canceled",function(){
+		it("Task Should Not Start After Canceled", function() {
 			task.cancel();
 			task.start();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
 		});
 
-		it("Task Should Not Fault After Canceled",function(){
+		it("Task Should Not Fault After Canceled", function() {
 			task.cancel();
 			task.fault(null);
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
 		});
 
-		it("Task Should Not Fault After Compelte",function(){
+		it("Task Should Not Fault After Compelte", function() {
 			task.complete();
 			task.fault(null);
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
 		});
 
-		it("Task Should Not Complete After Fault",function(){
+		it("Task Should Not Complete After Fault", function() {
 			task.fault(null);
 			task.complete();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
 		});
 
-		it("Task Should Not Complete After Cancel",function(){
+		it("Task Should Not Complete After Cancel", function() {
 			task.cancel();
 			task.complete();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
 		});
 
-		it("Task Should Not Cancel After Fault",function(){
+		it("Task Should Not Cancel After Fault", function() {
 			task.fault(null);
 			task.cancel();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
 		});
 
-		it("Task Should Not Cancel After Complete",function(){
+		it("Task Should Not Cancel After Complete", function() {
 			task.complete();
 			task.cancel();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
 		});
 
-		it("Task Should Timeout If 'timeout' Is Set",function(){
-			
+		it("Task Should Timeout If 'timeout' Is Set", function() {
+
 			task.timeout = 100;
 			task.start();
 			var delegate = task;
 
 			waitsFor(function() {
-      			return task.state == MonkeyBars.TaskStates.Faulted;
-    		}, "the task to fault", 750);
+				return task.state == MonkeyBars.TaskStates.Faulted;
+			}, "the task to fault", 750);
 
 			runs(function() {
-		      expect(delegate.state).toEqual(MonkeyBars.TaskStates.Faulted);
-    		});
+				expect(delegate.state).toEqual(MonkeyBars.TaskStates.Faulted);
+			});
 
 		});
 
@@ -300,21 +278,161 @@ describe("Simple Task Tests", function() {
 	// ===================================================================
 	// === Concurrent Excecution Tests ===================================
 	// ===================================================================
-
+	
 	describe("Concurrent Excecution Tests", function() {
 
-		it("'createBlobStringWithTask' Should Contain Certain String Matches",function(){
-			var task = new MonkeyBars.Task({
-				name:"ConcurrentSimpleTask",
-				concurrent:true,
-				performTask:function() { /* $!# */ }
+		// return if we can actually test concurrent functionality
+		try {
+			var blob = new Blob([""]);
+		} catch(e) {
+			return;
+		}
+
+		var task;
+
+		beforeEach(function() {
+			task = new MonkeyBars.Task({
+				name: "ConcurrentSimpleTask",
+				concurrent: true,
+				performTask: function() { /* $!# */
+				}
 			});
-			var blobString = MonkeyBars.__createBlobStringWithTask__(task);
-			expect(blobString.match(/(\$\!#)/i).length).toBeGreaterThan(0);
-			expect(blobString.match(/(workerTask)/).length).toBeGreaterThan(0);
-			expect(blobString.match(/(console)/).length).toBeGreaterThan(0);
-			expect(blobString.match(/(workerTask.performTask\(\)\;)/).length).toBeGreaterThan(0);
 		});
+
+		afterEach(function() {
+			task = undefined;
+		});
+
+		it("Concurrent Task Does Complete", function() {
+			task.performTask = function() {
+				this.complete();
+			}
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+			});
+
+		});
+
+		it("Concurrent Task Does Cancel", function() {
+
+			task.performTask = function() {
+				this.cancel();
+			}
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
+			});
+
+		});
+
+		it("Concurrent Task Does Fault", function() {
+
+			task.performTask = function() {
+				this.fault();
+			}
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+			});
+
+		});
+
+		it("Concurrent Task Does Timeout", function() {
+			task.timeout = 100;
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+			});
+
+		});
+
+		/*
+
+		it("Concurrent Task With FOR Decorator Does Complete", function() {
+			task.product = 0;
+			task.count = 3;
+			task.performTask = function() {
+				this.product++;
+				this.complete();
+			}
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.index).toEqual(3);
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+			});
+
+		});
+
+		it("Concurrent Task With WHILE Decorator Does Complete", function() {
+			task.product = 0;
+			while = function() {
+				this.product++;
+				return this.index != 3;
+			};
+			task.performTask = function() {
+				this.complete();
+			}
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+			});
+
+		});
+
+		it("Concurrent Task With WHEN Decorator Does Complete", function() {
+			task.index = 0;
+			task.when = function() {
+				this.index++;
+				return this.index == 3;
+			};
+			task.performTask = function() {
+				this.complete();
+			}
+			task.start();
+
+			waitsFor(function() {
+				return task.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+			});
+
+
+		});
+
+		*/
 
 	});
 

@@ -16,6 +16,32 @@ describe("Parallel Task Tests", function() {
 	});
 
 	// ===================================================================
+	// === Task Injection Tests ==========================================
+	// ===================================================================
+
+	describe("Task Injection Tests", function() {
+
+		it("Add Sub Task",function(){
+			
+			var group = new MonkeyBars.ParallelTask({ 
+				name:"name",
+				tasks:[{
+					name:"task"
+				}]
+			});
+
+			var parallel = new MonkeyBars.ParallelTask({name:"parallel"});
+
+			group.addSubTask(parallel);
+			expect(group.tasks[1].name).toEqual("parallel");
+			expect(group.getTaskByName("parallel")).toBeDefined();
+			expect(group.tasks.length).toEqual(2);
+
+		});
+
+	});
+
+	// ===================================================================
 	// === Execution Tests ===============================================
 	// ===================================================================
 
@@ -42,9 +68,6 @@ describe("Parallel Task Tests", function() {
 
 		it("Group Completes After All Subtasks Are Complete",function(){
 
-			var subTaskComplete;
-			var groupTaskComplete;
-
 			var CustomTask = MonkeyBars.Task.extend({
 				performTask:function(){
 					this.complete();
@@ -55,24 +78,22 @@ describe("Parallel Task Tests", function() {
 			var t2 = new CustomTask();
 			var t3 = new CustomTask({
 				performTask:function(){
-					subTaskComplete = new Date().getTime();
 					this.complete();
 				}
 			});
 
 			var group = new MonkeyBars.ParallelTask({
-				tasks:[t1,t2,t3],
-				onComplete:function(){
-					groupTaskComplete = new Date().getTime();
-				}
+				tasks:[t1,t2,t3]
 			});
 
 			group.start();
 
+			waitsFor(function() {
+      			return group.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
 			runs(function() {
-				setTimeout(function(){
-					expect(subTaskComplete).toBeLessThan(groupTaskComplete);
-      			},100);
+		      expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
     		});
 
 		});
@@ -184,6 +205,116 @@ describe("Parallel Task Tests", function() {
 			});
 			task.start();
 			expect(index).toEqual(9);
+		});
+
+	});
+
+	// ===================================================================
+	// === Concurrent Excecution Tests ===================================
+	// ===================================================================
+
+	describe("Concurrent Excecution Tests", function() {
+		
+		// return if we can actually test concurrent functionality
+		try { var blob = new Blob([""]); } catch(e) { return; }
+
+		var task,t1,t2,t3;
+
+		beforeEach(function() {
+			t1 = new MonkeyBars.Task({ name:"t1", performTask:function(){ this.complete(); } });
+			t2 = new MonkeyBars.Task({ name:"t2", performTask:function(){ this.complete(); } });
+			t3 = new MonkeyBars.Task({ name:"t3", performTask:function(){ this.complete(); } });
+			task = new MonkeyBars.ParallelTask({
+				name:"ConcurrentParallelTask",
+				concurrent:true,
+				tasks:[t1,t2,t3]
+			});
+		});
+
+		afterEach(function() {
+			value = undefined;
+			flag = undefined;
+		});
+
+		it("Concurrent ParallelTask Completes",function(){
+
+			task.start();
+
+			waitsFor(function() {
+      			return task.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+    		});
+
+		});
+
+		it("Concurrent ParallelTask Canceles",function(){
+
+			t2.performTask = function() {};
+			task.start();
+			task.cancel();
+
+			expect(t2.state).toEqual(MonkeyBars.TaskStates.Canceled);
+		    expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
+
+		});
+
+		it("Concurrent ParallelTask Faults",function(){
+
+			t2.performTask = function() { this.fault(); };
+			task.start();
+
+			waitsFor(function() {
+      			return task.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+    		});
+
+		});
+
+		it("Concurrent ParallelTask Timesout",function(){
+
+			task.timeout = 150;
+			t2.performTask = function() { /* TIMEOUT */ };
+			task.start();
+
+			waitsFor(function() {
+      			return task.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+    		});
+
+		});
+
+		it("Deeply Nested Concurrent ParallelTask Completes",function(){
+
+			var group = new MonkeyBars.ParallelTask({
+				name:"deepParallel",
+				tasks:[{
+					performTask:function(){
+						this.complete();
+					}
+				}]
+			}); 
+
+			task.addSubTask(group);
+
+			task.start();
+
+			waitsFor(function() {
+      			return task.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+    		});
+
 		});
 
 	});

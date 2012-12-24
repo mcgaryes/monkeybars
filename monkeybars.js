@@ -10,30 +10,32 @@
 	// === Constants =====================================================
 	// ===================================================================
 
-	var STATE_INITIALIZED	=	0;
-	var STATE_STARTED		=	1;
-	var STATE_CANCELED		=	2;
-	var STATE_FAULTED		=	3;
-	var STATE_COMPLETED		=	4;
+	var STATE_INITIALIZED			= 0;
+	var STATE_STARTED				= 1;
+	var STATE_CANCELED				= 2;
+	var STATE_FAULTED				= 3;
+	var STATE_COMPLETED				= 4;
 
-	var TYPE_PARALLEL		=	"parallel";
-	var TYPE_SEQUENCE		=	"sequence";
-	var TYPE_SIMPLE			=	"simple";
+	var TYPE_PARALLEL				= "parallel";
+	var TYPE_SEQUENCE				= "sequence";
+	var TYPE_SIMPLE					= "simple";
 
-	var LOG_NONE			=	0;
-	var LOG_ERROR			=	10;
-	var LOG_INFO			=	20;
-	var LOG_VERBOSE			=	30;
+	var LOG_NONE					= 0;
+	var LOG_ERROR					= 10;
+	var LOG_INFO					= 20;
+	var LOG_VERBOSE					= 30;
 
-	var DECORATOR_FOR		=	"for";
-	var DECORATOR_WHEN		=	"when";
-	var DECORATOR_WHILE		=	"while";
+	var DECORATOR_FOR				= "for";
+	var DECORATOR_WHEN				= "when";
+	var DECORATOR_WHILE				= "while";
 
-	var TID_PREFIX			=	"tid";
-	var TIMEOUT_INTERVAL	=	100;
-	var OVERRIDE_NEEDED		=	"This method must be overridden.";
-	var UNDEFINED_TASK		=	"Task is undefined.";
-	var MISSING_ATTRIBUTES	=	"You must pass some attributes in order to create a task.";
+	var TID_PREFIX					= "tid";
+	var TIMEOUT_INTERVAL			= 100;
+	var OVERRIDE_NEEDED				= "This method must be overridden.";
+	var UNDEFINED_TASK				= "Task is undefined.";
+	var MISSING_ATTRIBUTES			= "You must pass some attributes in order to create a task.";
+	var UNKNOW_TYPE_WITH_OPTIONS	= "You must initialize this task type beofre adding it to a groups tasks.";
+	var INVALID_ARGUMENTS			= "Invalid arguments were passed.";
 
 	// ===================================================================
 	// === Private Variables =============================================
@@ -74,7 +76,8 @@
 			exports = module.exports = MonkeyBars;
 		}
 	} else {
-		// reference WebWorker functionality only if we're not within node
+		// reference WebWorker functionality only if we're not within node... for some
+		// reason this is needed for linting purposes (researching ways to omit this)
 		var Worker = root.Worker;
 		var Blob = root.Blob;
 		var postMessage = root.postMessage;
@@ -127,6 +130,8 @@
 					task = new SequenceTask(attributes);
 				} else if(type === TYPE_PARALLEL){
 					task = new ParallelTask(attributes);
+				}else{
+					throw UNKNOW_TYPE_WITH_OPTIONS;
 				}
 			} else {
 				if (!tasks) {
@@ -242,52 +247,64 @@
 	 * Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/
 	 *
 	 * @method serialize
-	 * @param {Object} _obj
+	 * @param {Object} o
 	 * @return {String} Serialized string representation of the passed object
 	 * @private
 	 */
-	var serialize = function(_obj) {
+	var serialize = function(o) {
+		
 		// Let Gecko browsers do this the easy way
-		if(typeof _obj.toSource !== 'undefined' && typeof _obj.callee === 'undefined') {
-			return _obj.toSource();
+		if(typeof o.toSource !== 'undefined' && typeof o.callee === 'undefined') {
+
+			return o.toSource();
+
 		}
+
 		// Other browsers must do it the hard way
-		if(typeof _obj === "number" || typeof _obj === "boolean" || typeof _obj === "function") {
-			return _obj;
-		} else if(typeof _obj === "string") {
-			return '\'' + _obj + '\'';
-		} else if(typeof _obj === "object") {
+		if(typeof o === "number" || typeof o === "boolean" || typeof o === "function") {
+
+			return o;
+
+		} else if(typeof o === "string") {
+			
+			return '\'' + o + '\'';
+
+		} else if(typeof o === "object") {
+			
 			var str;
-			if(_obj.constructor === Array || typeof _obj.callee !== 'undefined') {
+			if(o.constructor === Array || typeof o.callee !== 'undefined') {
 				str = '[';
-				var i, len = _obj.length;
+				var i, len = o.length;
 				for(i = 0; i < len - 1; i++) {
-					str += serialize(_obj[i]) + ',';
+					str += serialize(o[i]) + ',';
 				}
-				str += serialize(_obj[i]) + ']';
+				str += serialize(o[i]) + ']';
 			} else {
 				str = '{';
 				var key;
-				for(key in _obj) {
-					str += key + ':' + serialize(_obj[key]) + ',';
+				for(key in o) {
+					str += key + ':' + serialize(o[key]) + ',';
 				}
 				str = str.replace(/\,$/, '') + '}';
 			}
 			return str;
+
 		} else {
+
 			return 'UNKNOWN';
+
 		}
 	};
 
 	/**
 	 * Creates a blob string to be used with the web worker for concurrent task execution
 	 *
-	 * @method createBlobStringWithTask
+	 * @method createBlobWithTask
 	 * @param {Task} task
-	 * @return {String} blob string
+	 * @return {Blob} Blob instance
 	 * @private
 	 */
-	var createBlobStringWithTask = MonkeyBars.__createBlobStringWithTask__ = function(task){
+	var createBlobWithTask = function(task){
 
 		// create a console wrapper
 		var consoleString = "var console = { log: function(msg) { postMessage({ type: 'console', message: msg }); } };";
@@ -297,41 +314,30 @@
 		var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
 
 		// @TODO: Need to figure out if there are vendor prefixes I need to be looking at here
-		return "onmessage = function(e) {" + consoleString + workerString + "};";
+		var blobString = "onmessage = function(e) {" + consoleString + workerString + "};";
+
+		return new Blob([blobString]);
 
 	};
 
 	/**
-	 * Performs the tasks `performTask` functionality within a web worker
+	 * Creates a web Worker instance with the passed arguments
 	 *
-	 * @method performTaskFunctionalityWithWebWorker
+	 * @method createWebWorkerWithBlobAndTask
+	 * @param {Blob} blob
 	 * @param {Task} task
+	 * @return {Worker} WebWorker instance
 	 * @private
 	 */
-	var performTaskFunctionalityWithWebWorker = function(task) {
-
-		if(Worker === undefined || Blob === undefined) {
-			if(task.logLevel >= LOG_ERROR) {
-				console.log("Cannot perform '" + task.displayName + "' on seperate thread. Web Workers are not supported.");
-			}
-			task.performTask();
-			return;
-		}
-
-		if(task.logLevel >= LOG_VERBOSE) {
-			console.log("Performing '" + task.displayName + "' Functionality With Web Worker");
-		}
-
-		// create blob from blob string
-		var blob = new Blob([createBlobStringWithTask(task)]);
-
-		// create the web worker object
+	var createWebWorkerWithBlobAndTask = function(blob,task) {
 
 		// @TODO: Need to figure out what the other browser prefixes for window.URL 
-		var URL = root.URL || root.webkitURL;	
+		var URL = root.URL || root.webkitURL;
 
 		// create our worker
 		var worker = new Worker(URL.createObjectURL(blob));
+
+		// assign worker on message callback
 		worker.onmessage = function(e) {
 			if(e.data.type === "complete") {
 				task.complete();
@@ -346,9 +352,38 @@
 				// it out or do we log something to this extent
 			}
 		};
+
+		// assign worker onerror callback
 		worker.onerror = function(e){
 			task.fault("WebWorker error.");
 		};
+
+		return worker;
+	};
+
+	/**
+	 * Performs the tasks `performTask` functionality within a web worker
+	 *
+	 * @method performTaskFunctionalityWithWebWorker
+	 * @param {Task} task
+	 * @private
+	 */
+	var performTaskFunctionalityWithWebWorker = function(task) {
+
+		if(Worker === undefined || Blob === undefined || task.type !== TYPE_SIMPLE) {
+			if(task.logLevel >= LOG_ERROR && task.type !== TYPE_SIMPLE) {
+				console.log("Cannot perform '" + task.displayName + "' on seperate thread. Web Workers are not supported.");
+			}
+			task.performTask();
+			return;
+		}
+
+		if(task.logLevel >= LOG_VERBOSE) {
+			console.log("Performing '" + task.displayName + "' Functionality With Web Worker");
+		}
+		
+		// create our worker
+		var worker = createWebWorkerWithBlobAndTask(createBlobWithTask(task),task);
 		
 		// start the worker
 		worker.postMessage();
@@ -397,6 +432,7 @@
 	 */
 	var WorkerTask = function(task) {
 		this.performTask = task.performTask;
+		this.tid = task.tid;
 	};
 
 	WorkerTask.prototype = {
@@ -487,6 +523,19 @@
 
 	Task.prototype = Object.create({}, {
 		
+		/**
+		 * Task product
+		 * 
+		 * @for Task
+		 * @property product
+		 * @type Object
+		 * @default undefined
+		 */
+		product: {
+			value:undefined,
+			writable:true
+		},
+
 		/**
 		 * The kind of task 
 		 * 
@@ -628,7 +677,7 @@
 
 		 */
 		complete: {
-			value: function() {
+			value: function(product) {
 				if(this.state > STATE_STARTED) {
 					return;
 				}
@@ -641,7 +690,7 @@
 				}
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.onComplete();
-				this.onChange(this.state);
+				this.onChange(this.state,product);
 			},
 			writable: true
 		},
@@ -679,7 +728,7 @@
 				if(this.timeoutId) {
 					clearTimeout(this.timeoutId);
 				}
-				this.onChange(this.state, error);
+				this.onChange(this.state, undefined, error);
 				this.onFault(error);
 			},
 			writable: true
@@ -710,7 +759,7 @@
 
 		 */
 		onChange: {
-			value: function(state, error) {},
+			value: function(state, product, error) {},
 			writable: true
 		},
 
@@ -782,7 +831,7 @@
 		 */
 		performTask: {
 			value: function() { 
-				throw OVERRIDE_NEEDED; 
+				throw "performTask: " + OVERRIDE_NEEDED; 
 			},
 			writable: true
 		},
@@ -856,6 +905,20 @@
 	TaskGroup.prototype = Object.create(Task.prototype, {
 		
 		/**
+		 * description
+		 * 
+		 * @for TaskGroup
+		 * @method handleProduct
+		 */
+		// @TODO: rename this method
+		handleProduct: {
+			value: function(product){
+				this.product = product;
+			},
+			writable: true
+		},
+
+		/**
 		 * The index of the subtasks that have completed execution.
 		 * 
 		 * @for Task
@@ -912,6 +975,9 @@
 		 */
 		addSubTask: {
 			value: function(task) {
+				if(!task) {
+					throw "addSubTask: " + INVALID_ARGUMENTS;
+				}
 				if(!task.tid) {
 					task = createTaskWithOptions(task);
 				}
@@ -940,6 +1006,9 @@
 		 */
 		addSubTaskAfterTask: {
 			value: function(task, afterTask) {
+				if(!task || !afterTask) {
+					throw "addSubTaskAfterTask: " + INVALID_ARGUMENTS;
+				}
 				if(!task || this.state === STATE_CANCELED) {
 					return;
 				}
@@ -964,6 +1033,9 @@
 		 */
 		addSubTaskBeforeTask: {
 			value: function(task, beforeTask) {
+				if(!task || !beforeTask) {
+					throw "addSubTaskBeforeTask: " + INVALID_ARGUMENTS;
+				}
 				if(!task || this.state === STATE_CANCELED) {
 					return;
 				}
@@ -983,10 +1055,14 @@
 		 * 
 		 * @for TaskGroup
 		 * @method onSubTaskComplete
+		 * @param {Task} task The task that just completed
+		 * @param {Object} product 
 		 */
 		onSubTaskComplete: {
-			value: function() { 
-				throw OVERRIDE_NEEDED;
+			value: function(task,product) { 
+				if(product !== undefined){
+					this.handleProduct(product);
+				}
 			},
 			writable: true
 		},
@@ -997,9 +1073,10 @@
 		 * @for TaskGroup
 		 * @method onSubTaskFault
 		 * @param {String} error Error message.
+		 * @param {Task} task The task that just completed
 		 */
 		onSubTaskFault: {
-			value: function(error) { 
+			value: function(task,error) { 
 				this.fault(error);
 			},
 			writable: true
@@ -1011,7 +1088,7 @@
 		 * 
 		 * @for TaskGroup
 		 * @method onSubTaskCancel
-		 * @param {Task} task The task that was just cancled
+		 * @param {Task} task The task that was just canceled
 		 */
 		onSubTaskCancel: {
 			value: function(task) {
@@ -1052,17 +1129,19 @@
 				this.processedIndex++;
 
 				task.group = this;
+				task.product = this.product;
+				task.concurrent = this.concurrent;
 				task.processed = true;
 				task.logLevel = this.logLevel;
 
 				// set execution block
-				task.onChange = function(state, error) {
+				task.onChange = function(state, product, error) {
 					if(state === STATE_COMPLETED) {
-						this.group.onSubTaskComplete();
+						this.group.onSubTaskComplete(this,product);
 					}else if(state === STATE_FAULTED) {
-						this.group.onSubTaskFault(error);
+						this.group.onSubTaskFault(this,undefined, error);
 					}else if(state === STATE_CANCELED) {
-						this.group.onSubTaskCancel(task);
+						this.group.onSubTaskCancel(this);
 					}
 				};
 
@@ -1377,13 +1456,16 @@
 		 * 
 		 * @for ParallelTask
 		 * @method onSubTaskComplete
+		 * @param {Task} task
+		 * @param {Object} product
 		 */
 		onSubTaskComplete: {
-			value: function() {
+			value: function(task,product) {
 				this.currentIndex++;
 				if(this.currentIndex === this.tasks.length) {
 					this.complete();
 				} else {
+					TaskGroup.prototype.onSubTaskComplete.call(this,task,product);
 					this.processSubTasks();
 				}
 			},
@@ -1485,12 +1567,15 @@
 		 * 
 		 * @for SequenceTask
 		 * @method onSubTaskComplete
+		 * @param {Task} task
+		 * @param {Object} product
 		 */
 		onSubTaskComplete: {
-			value: function() {
+			value: function(task,product) {
 				if(this.state === STATE_CANCELED) {
 					return;
 				}
+				TaskGroup.prototype.onSubTaskComplete.call(this,task,product);
 				this.startNextSubTask();
 			},
 			writable: true
