@@ -3,3 +3,4 @@ build/*.json
 tests/*
 www/*
 artwork/*
+npm-debug.log

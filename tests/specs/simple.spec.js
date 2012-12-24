@@ -297,4 +297,94 @@ describe("Simple Task Tests", function() {
 
 	});
 
+	// ===================================================================
+	// === Concurrent Excecution Tests ===================================
+	// ===================================================================
+
+	describe("Concurrent Excecution Tests", function() {
+
+		return;
+		var task;
+
+		beforeEach(function() {
+			task = new MonkeyBars.Task({
+				name:"ConcurrentSimpleTask",
+				concurrent:true,
+				performTask:function() {
+					// do nothing by default
+				}
+			});
+		});
+
+		afterEach(function() {
+			task = undefined;
+		});
+
+		it("Concurrent Task Should Complete",function(){
+			
+			task.logLevel = 1000;
+			task.performTask = function() {
+				this.complete();
+			};
+			task.start();
+
+			waitsFor(function() {
+		      return task.state > MonkeyBars.TaskStates.Started;
+		    }, "task to change from started state", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
+    		});
+
+		});
+
+		it("Concurrent Task Should Cancel",function(){
+			task.performTask = function() {
+				this.cancel();
+			};
+			task.start();
+
+			waitsFor(function() {
+		      return task.state > MonkeyBars.TaskStates.Started;
+		    }, "task to change from started state", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Canceled);
+    		});
+
+		});
+
+		it("Concurrent Task Should Fault",function(){
+			task.performTask = function() {
+				this.fault(null);
+			};
+			task.start();
+
+			waitsFor(function() {
+		      return task.state > MonkeyBars.TaskStates.Started;
+		    }, "task to change from started state", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+    		});
+		});
+
+		it("Concurrent Task Should Timeout",function(){
+			
+			task.timeout = 100;
+			task.start();
+
+			waitsFor(function() {
+		      return task.state > MonkeyBars.TaskStates.Started;
+		    }, "task to change from started state", 750);
+
+			runs(function() {
+				expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
+    		});
+
+		});
+
+	});
+
+
 });

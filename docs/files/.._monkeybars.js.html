@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.3</em>
+            <em>API Docs for: 0.9.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -50,6 +50,8 @@
                 <li><a href="..&#x2F;classes/Task.html">Task</a></li>
             
                 <li><a href="..&#x2F;classes/TaskGroup.html">TaskGroup</a></li>
+            
+                <li><a href="..&#x2F;classes/WorkerTask.html">WorkerTask</a></li>
             
             </ul>
 
@@ -160,6 +162,12 @@
      * @type Object
      *&#x2F;
 	var MonkeyBars = root.MonkeyBars = {};
+
+	&#x2F;&#x2F; @TODO These are referenced here to get past the linting errors on
+	&#x2F;&#x2F; undefined web worker constructs... how can I get rid of this????
+	var Worker = root.Worker;
+	var Blob = root.Blob;
+	var postMessage = root.postMessage;
 
 	&#x2F;&#x2F; ===================================================================
 	&#x2F;&#x2F; === NodeJS Conditional ============================================
@@ -274,7 +282,7 @@
 	 * Resets the task to its original non executed state.
 	 *
 	 * @method resetTask
-	 * @param {Object} task
+	 * @param {Task} task
 	 * @private
 	 *&#x2F;
 	var resetTask = function(task){
@@ -329,6 +337,113 @@
 		return false;
 	};
 
+
+	&#x2F;**
+	 * Variation of http:&#x2F;&#x2F;blog.stchur.com&#x2F;2007&#x2F;04&#x2F;06&#x2F;serializing-objects-in-javascript&#x2F;
+	 *
+	 * @method serialize
+	 * @param {Object} _obj
+	 *&#x2F;
+	var serialize = function(_obj) {
+		&#x2F;&#x2F; Let Gecko browsers do this the easy way
+		if(typeof _obj.toSource !== &#x27;undefined&#x27; &amp;&amp; typeof _obj.callee === &#x27;undefined&#x27;) {
+			return _obj.toSource();
+		}
+		&#x2F;&#x2F; Other browsers must do it the hard way
+		if(typeof _obj === &quot;number&quot; || typeof _obj === &quot;boolean&quot; || typeof _obj === &quot;function&quot;) {
+			return _obj;
+		} else if(typeof _obj === &quot;string&quot;) {
+			return &#x27;\&#x27;&#x27; + _obj + &#x27;\&#x27;&#x27;;
+		} else if(typeof _obj === &quot;object&quot;) {
+			var str;
+			if(_obj.constructor === Array || typeof _obj.callee !== &#x27;undefined&#x27;) {
+				str = &#x27;[&#x27;;
+				var i, len = _obj.length;
+				for(i = 0; i &lt; len - 1; i++) {
+					str += serialize(_obj[i]) + &#x27;,&#x27;;
+				}
+				str += serialize(_obj[i]) + &#x27;]&#x27;;
+			} else {
+				str = &#x27;{&#x27;;
+				var key;
+				for(key in _obj) {
+					str += key + &#x27;:&#x27; + serialize(_obj[key]) + &#x27;,&#x27;;
+				}
+				str = str.replace(&#x2F;\,$&#x2F;, &#x27;&#x27;) + &#x27;}&#x27;;
+			}
+			return str;
+		} else {
+			return &#x27;UNKNOWN&#x27;;
+		}
+	};
+
+	&#x2F;**
+	 * Performs the tasks &#x60;performTask&#x60; functionality within a web worker
+	 *
+	 * @method performTaskFunctionalityWithWebWorker
+	 * @param {Task} task
+	 * @private
+	 *&#x2F;
+	var performTaskFunctionalityWithWebWorker = function(task) {
+
+		if(Worker === undefined || Blob === undefined) {
+			if(task.logLevel &gt;= LOG_ERROR) {
+				console.log(&quot;Cannot perform &#x27;&quot; + task.displayName + &quot;&#x27; on seperate thread. Web Workers are not supported.&quot;);
+			}
+			task.performTask();
+			return;
+		}
+
+		if(task.logLevel &gt;= LOG_VERBOSE) {
+			console.log(&quot;Performing &#x27;&quot; + task.displayName + &quot;&#x27; Functionality With Web Worker&quot;);
+		}
+
+		&#x2F;&#x2F; @TODO: Need to figure out what the other browser prefixes for window.URL 
+		var URL = root.URL || root.webkitURL;
+
+		&#x2F;&#x2F; create a console wrapper
+		var consoleString = &quot;var console = { log: function(msg) { postMessage({ type: &#x27;console&#x27;, message: msg }); } };&quot;;
+
+		&#x2F;&#x2F; create our blob
+		var workerTask = new WorkerTask(task);
+		&#x2F;&#x2F;workerTask.postMessage = Worker.postMessage;
+		var workerString = &quot;var workerTask = &quot; + serialize(workerTask) + &quot;; workerTask.performTask();&quot;;
+
+		&#x2F;&#x2F; @TODO: Need to figure out if there are vendor prefixes I need to be looking at here
+		var blobString = &quot;onmessage = function(e) {&quot; + consoleString + workerString + &quot;}&quot;;
+
+		var blob = new Blob([blobString]);
+		var blobURL = URL.createObjectURL(blob);
+
+		&#x2F;&#x2F; set a reference to the blob on the task, we&#x27;ll use this to cancel the blob
+		&#x2F;&#x2F; if the task is canceld on the main thread
+		&#x2F;&#x2F;
+		&#x2F;&#x2F; @TODO: Do we actually need to cancel the blob or let it post message back
+		&#x2F;&#x2F; when complete... it should fault complete or cancel if its main thread
+		&#x2F;&#x2F; counterpart has been canceled faulted or completed anyways
+		task.blob = blob;
+
+		&#x2F;&#x2F; create our worker
+		var worker = new Worker(blobURL);
+		worker.onmessage = function(e) {
+			if(e.data.type === &quot;complete&quot;) {
+				task.complete();
+			} else if(e.data.type === &quot;fault&quot;) {
+				task.fault(e.data.error);
+			} else if(e.data.type === &quot;cancel&quot;) {
+				task.cancel();
+			} else if(e.data.type === &quot;console&quot;) {
+				console.log(e.data.message);
+			} else {
+				&#x2F;&#x2F; @TODO: we have a case here that isnt supported... do we try an figure
+				&#x2F;&#x2F; it out or do we log something to this extent
+			}
+		};
+
+		&#x2F;&#x2F; start the worker
+		worker.postMessage();
+	};
+
 	&#x2F;**
 	 * Extention functionality for various task types.
 	 *
@@ -354,6 +469,57 @@
 		var childProto = createPropertyDescriptorsWithAttributes(protoProps);
 		child.prototype = Object.create(parent.prototype,childProto);
 		return child;
+	};
+
+	&#x2F;&#x2F; ===================================================================
+	&#x2F;&#x2F; === Worker Task Objects ===========================================
+	&#x2F;&#x2F; ===================================================================
+
+	&#x2F;**
+	 * Creates a new worker representation of the task
+	 * 
+	 * @extends Object
+	 * @constructor
+	 * @class WorkerTask
+	 * @param {Task} task The task we&#x27;re creating this worker representation from
+	 * @private
+	 *&#x2F;
+	var WorkerTask = function(task) {
+		this.performTask = task.performTask;
+	};
+
+	WorkerTask.prototype = {
+
+		&#x2F;**
+		 * @TODO: Description needed.
+		 *
+		 * @for WorkerTask
+		 * @method complete
+		 *&#x2F;
+		complete: function() {
+			postMessage({type: &quot;complete&quot;});
+		},
+
+		&#x2F;**
+		 * @TODO: Description needed.
+		 *
+		 * @for WorkerTask
+		 * @method fault
+		 * @param {Object} error
+		 *&#x2F;
+		fault: function(error) {
+			postMessage({type: &quot;fault&quot;,error:error});
+		},
+
+		&#x2F;**
+		 * @TODO: Description needed.
+		 *
+		 * @for WorkerTask
+		 * @method cancel
+		 *&#x2F;
+		cancel: function() {
+			postMessage({type: &quot;cancel&quot;});
+		}
 	};
 
 	&#x2F;&#x2F; ===================================================================
@@ -422,6 +588,19 @@
 			get: function() {
 				return TYPE_SIMPLE;
 			}
+		},
+
+		&#x2F;**
+		 * Whether or not to run the task concurrently through Web Workers
+		 * 
+		 * @for Task
+		 * @property concurrent
+		 * @type Boolean
+		 * @default false
+		 *&#x2F;
+		concurrent: {
+			value:false,
+			writable:true
 		},
 
 		&#x2F;**
@@ -721,13 +900,18 @@
 					},this.timeout);
 				}
 				this.onChange(this.state);
-				this.performTask();
+				if(this.concurrent) {
+					performTaskFunctionalityWithWebWorker(this);
+				} else {
+					this.performTask();
+				}
+				
 				this.onStart();
 			},
 			writable: true
 		}
 	});
-	
+
 	&#x2F;**
 	 * A task group, and extention of task, provides the building blocks for creating
 	 * a group of tasks that is inherently a task itself. 

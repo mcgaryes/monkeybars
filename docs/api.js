@@ -5,7 +5,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "ParallelTask",
         "SequenceTask",
         "Task",
-        "TaskGroup"
+        "TaskGroup",
+        "WorkerTask"
     ],
     "modules": [],
     "allModules": []

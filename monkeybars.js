@@ -65,6 +65,12 @@
      */
 	var MonkeyBars = root.MonkeyBars = {};
 
+	// @TODO These are referenced here to get past the linting errors on
+	// undefined web worker constructs... how can I get rid of this????
+	var Worker = root.Worker;
+	var Blob = root.Blob;
+	var postMessage = root.postMessage;
+
 	// ===================================================================
 	// === NodeJS Conditional ============================================
 	// ===================================================================
@@ -178,7 +184,7 @@
 	 * Resets the task to its original non executed state.
 	 *
 	 * @method resetTask
-	 * @param {Object} task
+	 * @param {Task} task
 	 * @private
 	 */
 	var resetTask = function(task){
@@ -233,6 +239,113 @@
 		return false;
 	};
 
+
+	/**
+	 * Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/
+	 *
+	 * @method serialize
+	 * @param {Object} _obj
+	 */
+	var serialize = function(_obj) {
+		// Let Gecko browsers do this the easy way
+		if(typeof _obj.toSource !== 'undefined' && typeof _obj.callee === 'undefined') {
+			return _obj.toSource();
+		}
+		// Other browsers must do it the hard way
+		if(typeof _obj === "number" || typeof _obj === "boolean" || typeof _obj === "function") {
+			return _obj;
+		} else if(typeof _obj === "string") {
+			return '\'' + _obj + '\'';
+		} else if(typeof _obj === "object") {
+			var str;
+			if(_obj.constructor === Array || typeof _obj.callee !== 'undefined') {
+				str = '[';
+				var i, len = _obj.length;
+				for(i = 0; i < len - 1; i++) {
+					str += serialize(_obj[i]) + ',';
+				}
+				str += serialize(_obj[i]) + ']';
+			} else {
+				str = '{';
+				var key;
+				for(key in _obj) {
+					str += key + ':' + serialize(_obj[key]) + ',';
+				}
+				str = str.replace(/\,$/, '') + '}';
+			}
+			return str;
+		} else {
+			return 'UNKNOWN';
+		}
+	};
+
+	/**
+	 * Performs the tasks `performTask` functionality within a web worker
+	 *
+	 * @method performTaskFunctionalityWithWebWorker
+	 * @param {Task} task
+	 * @private
+	 */
+	var performTaskFunctionalityWithWebWorker = function(task) {
+
+		if(Worker === undefined || Blob === undefined) {
+			if(task.logLevel >= LOG_ERROR) {
+				console.log("Cannot perform '" + task.displayName + "' on seperate thread. Web Workers are not supported.");
+			}
+			task.performTask();
+			return;
+		}
+
+		if(task.logLevel >= LOG_VERBOSE) {
+			console.log("Performing '" + task.displayName + "' Functionality With Web Worker");
+		}
+
+		// @TODO: Need to figure out what the other browser prefixes for window.URL 
+		var URL = root.URL || root.webkitURL;
+
+		// create a console wrapper
+		var consoleString = "var console = { log: function(msg) { postMessage({ type: 'console', message: msg }); } };";
+
+		// create our blob
+		var workerTask = new WorkerTask(task);
+		//workerTask.postMessage = Worker.postMessage;
+		var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
+
+		// @TODO: Need to figure out if there are vendor prefixes I need to be looking at here
+		var blobString = "onmessage = function(e) {" + consoleString + workerString + "}";
+
+		var blob = new Blob([blobString]);
+		var blobURL = URL.createObjectURL(blob);
+
+		// set a reference to the blob on the task, we'll use this to cancel the blob
+		// if the task is canceld on the main thread
+		//
+		// @TODO: Do we actually need to cancel the blob or let it post message back
+		// when complete... it should fault complete or cancel if its main thread
+		// counterpart has been canceled faulted or completed anyways
+		task.blob = blob;
+
+		// create our worker
+		var worker = new Worker(blobURL);
+		worker.onmessage = function(e) {
+			if(e.data.type === "complete") {
+				task.complete();
+			} else if(e.data.type === "fault") {
+				task.fault(e.data.error);
+			} else if(e.data.type === "cancel") {
+				task.cancel();
+			} else if(e.data.type === "console") {
+				console.log(e.data.message);
+			} else {
+				// @TODO: we have a case here that isnt supported... do we try an figure
+				// it out or do we log something to this extent
+			}
+		};
+
+		// start the worker
+		worker.postMessage();
+	};
+
 	/**
 	 * Extention functionality for various task types.
 	 *
@@ -258,6 +371,57 @@
 		var childProto = createPropertyDescriptorsWithAttributes(protoProps);
 		child.prototype = Object.create(parent.prototype,childProto);
 		return child;
+	};
+
+	// ===================================================================
+	// === Worker Task Objects ===========================================
+	// ===================================================================
+
+	/**
+	 * Creates a new worker representation of the task
+	 * 
+	 * @extends Object
+	 * @constructor
+	 * @class WorkerTask
+	 * @param {Task} task The task we're creating this worker representation from
+	 * @private
+	 */
+	var WorkerTask = function(task) {
+		this.performTask = task.performTask;
+	};
+
+	WorkerTask.prototype = {
+
+		/**
+		 * @TODO: Description needed.
+		 *
+		 * @for WorkerTask
+		 * @method complete
+		 */
+		complete: function() {
+			postMessage({type: "complete"});
+		},
+
+		/**
+		 * @TODO: Description needed.
+		 *
+		 * @for WorkerTask
+		 * @method fault
+		 * @param {Object} error
+		 */
+		fault: function(error) {
+			postMessage({type: "fault",error:error});
+		},
+
+		/**
+		 * @TODO: Description needed.
+		 *
+		 * @for WorkerTask
+		 * @method cancel
+		 */
+		cancel: function() {
+			postMessage({type: "cancel"});
+		}
 	};
 
 	// ===================================================================
@@ -326,6 +490,19 @@
 			get: function() {
 				return TYPE_SIMPLE;
 			}
+		},
+
+		/**
+		 * Whether or not to run the task concurrently through Web Workers
+		 * 
+		 * @for Task
+		 * @property concurrent
+		 * @type Boolean
+		 * @default false
+		 */
+		concurrent: {
+			value:false,
+			writable:true
 		},
 
 		/**
@@ -625,13 +802,18 @@
 					},this.timeout);
 				}
 				this.onChange(this.state);
-				this.performTask();
+				if(this.concurrent) {
+					performTaskFunctionalityWithWebWorker(this);
+				} else {
+					this.performTask();
+				}
+				
 				this.onStart();
 			},
 			writable: true
 		}
 	});
-	
+
 	/**
 	 * A task group, and extention of task, provides the building blocks for creating
 	 * a group of tasks that is inherently a task itself. 

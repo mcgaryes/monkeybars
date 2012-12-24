@@ -1,10 +1,10 @@
 "use strict";
 
 var monkeyBarsName          =   "MonkeyBars";
-var monkeyBarsVersion       =   "0.9.3";
+var monkeyBarsVersion       =   "0.9.5";
 var monkeyBarsDescription   =   "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
 var monkeyBarsRepository    =   "https://github.com/mcgaryes/monkeybars/";
-var monkeyBarsBanner        =   "/*!\n*\n* MonkeyBars v" + monkeyBarsVersion + "\n* \n* " + monkeyBarsDescription + " \n*\n* " + monkeyBarsRepository + "\n*\n*/";
+var monkeyBarsBanner        =   "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
 
 // object will be used to create the package.json file for npm manager
 var monkeyBarsPackageJsonTemplate = {
@@ -95,10 +95,12 @@ module.exports = function(grunt) {
                 eqnull: true,
                 node: true,
                 es5: true,
-                smarttabs:false
+                smarttabs:false,
+                strict:true
             },
             globals: {
-                yui:true
+                yui:true,
+                worker:true
             }
         }
     });

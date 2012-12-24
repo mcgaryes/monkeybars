@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.3</em>
+            <em>API Docs for: 0.9.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -50,6 +50,8 @@
                 <li><a href="..&#x2F;classes/Task.html">Task</a></li>
             
                 <li><a href="..&#x2F;classes/TaskGroup.html">TaskGroup</a></li>
+            
+                <li><a href="..&#x2F;classes/WorkerTask.html">WorkerTask</a></li>
             
             </ul>
 
@@ -185,7 +187,21 @@
                             </li>
                         
                             <li class="index-item method private">
+                                <a href="#method_performTaskFunctionalityWithWebWorker">performTaskFunctionalityWithWebWorker</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method_resetTask">resetTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_serialize">serialize</a>
 
                                 
                                 
@@ -330,7 +346,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l156"><code>..&#x2F;monkeybars.js:156</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l162"><code>..&#x2F;monkeybars.js:162</code></a>
         
         </p>
 
@@ -419,7 +435,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l139"><code>..&#x2F;monkeybars.js:139</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l145"><code>..&#x2F;monkeybars.js:145</code></a>
         
         </p>
 
@@ -508,7 +524,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l82"><code>..&#x2F;monkeybars.js:82</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l88"><code>..&#x2F;monkeybars.js:88</code></a>
         
         </p>
 
@@ -599,7 +615,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l236"><code>..&#x2F;monkeybars.js:236</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l349"><code>..&#x2F;monkeybars.js:349</code></a>
         
         </p>
 
@@ -717,7 +733,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1349"><code>..&#x2F;monkeybars.js:1349</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1531"><code>..&#x2F;monkeybars.js:1531</code></a>
         
         </p>
 
@@ -811,7 +827,7 @@ as many times as referenced by the count attribute provided by the instance.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l196"><code>..&#x2F;monkeybars.js:196</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l202"><code>..&#x2F;monkeybars.js:202</code></a>
         
         </p>
 
@@ -919,7 +935,7 @@ as many times as referenced by the count attribute provided by the instance.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l210"><code>..&#x2F;monkeybars.js:210</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l216"><code>..&#x2F;monkeybars.js:216</code></a>
         
         </p>
 
@@ -957,6 +973,95 @@ as many times as referenced by the count attribute provided by the instance.</p>
                 <li class="param">
                     
                         <code class="param-name">task2</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_performTaskFunctionalityWithWebWorker" class="method item private">
+    <h3 class="name"><code>performTaskFunctionalityWithWebWorker</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l282"><code>..&#x2F;monkeybars.js:282</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Performs the tasks <code>performTask</code> functionality within a web worker</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
                         <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
                     
 
@@ -1023,7 +1128,7 @@ as many times as referenced by the count attribute provided by the instance.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l177"><code>..&#x2F;monkeybars.js:177</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l183"><code>..&#x2F;monkeybars.js:183</code></a>
         
         </p>
 
@@ -1046,6 +1151,93 @@ as many times as referenced by the count attribute provided by the instance.</p>
                 <li class="param">
                     
                         <code class="param-name">task</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_serialize" class="method item">
+    <h3 class="name"><code>serialize</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>_obj</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l243"><code>..&#x2F;monkeybars.js:243</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">_obj</code>
                         <span class="type">Object</span>
                     
 
@@ -1112,7 +1304,7 @@ as many times as referenced by the count attribute provided by the instance.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1409"><code>..&#x2F;monkeybars.js:1409</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1591"><code>..&#x2F;monkeybars.js:1591</code></a>
         
         </p>
 
@@ -1201,7 +1393,7 @@ as many times as referenced by the count attribute provided by the instance.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1379"><code>..&#x2F;monkeybars.js:1379</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1561"><code>..&#x2F;monkeybars.js:1561</code></a>
         
         </p>
 
@@ -1280,7 +1472,7 @@ method returns false.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1465"><code>..&#x2F;monkeybars.js:1465</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1647"><code>..&#x2F;monkeybars.js:1647</code></a>
         
         </p>
 
@@ -1416,7 +1608,7 @@ method returns false.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1480"><code>..&#x2F;monkeybars.js:1480</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1662"><code>..&#x2F;monkeybars.js:1662</code></a>
         
         </p>
 
@@ -1508,7 +1700,7 @@ method returns false.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1435"><code>..&#x2F;monkeybars.js:1435</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1617"><code>..&#x2F;monkeybars.js:1617</code></a>
         
         </p>
 
@@ -1554,7 +1746,7 @@ method returns false.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1451"><code>..&#x2F;monkeybars.js:1451</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1633"><code>..&#x2F;monkeybars.js:1633</code></a>
         
         </p>
 

@@ -94,7 +94,6 @@ describe("Parallel Task Tests", function() {
 			};
 
 			var group = new MonkeyBars.ParallelTask({
-				loggingEnabled:false,
 				max:3,
 				tasks:tasks,
 				onComplete:function(){
@@ -133,7 +132,6 @@ describe("Parallel Task Tests", function() {
 			});
 
 			var group = new MonkeyBars.ParallelTask({
-				logLevel:MonkeyBars.LogLevels.Info,
 				tasks:[t1,t2,t3]
 			});
 
