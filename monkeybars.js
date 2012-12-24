@@ -65,12 +65,6 @@
      */
 	var MonkeyBars = root.MonkeyBars = {};
 
-	// @TODO These are referenced here to get past the linting errors on
-	// undefined web worker constructs... how can I get rid of this????
-	var Worker = root.Worker;
-	var Blob = root.Blob;
-	var postMessage = root.postMessage;
-
 	// ===================================================================
 	// === NodeJS Conditional ============================================
 	// ===================================================================
@@ -79,6 +73,11 @@
 		if(typeof module !== 'undefined' && module.exports) {
 			exports = module.exports = MonkeyBars;
 		}
+	} else {
+		// reference WebWorker functionality only if we're not within node
+		var Worker = root.Worker;
+		var Blob = root.Blob;
+		var postMessage = root.postMessage;
 	}
 
 	// ===================================================================
@@ -239,12 +238,13 @@
 		return false;
 	};
 
-
 	/**
 	 * Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/
 	 *
 	 * @method serialize
 	 * @param {Object} _obj
+	 * @return {String} Serialized string representation of the passed object
+	 * @private
 	 */
 	var serialize = function(_obj) {
 		// Let Gecko browsers do this the easy way
@@ -280,6 +280,28 @@
 	};
 
 	/**
+	 * Creates a blob string to be used with the web worker for concurrent task execution
+	 *
+	 * @method createBlobStringWithTask
+	 * @param {Task} task
+	 * @return {String} blob string
+	 * @private
+	 */
+	var createBlobStringWithTask = MonkeyBars.__createBlobStringWithTask__ = function(task){
+
+		// create a console wrapper
+		var consoleString = "var console = { log: function(msg) { postMessage({ type: 'console', message: msg }); } };";
+		
+		// create our blob
+		var workerTask = new WorkerTask(task);
+		var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
+
+		// @TODO: Need to figure out if there are vendor prefixes I need to be looking at here
+		return "onmessage = function(e) {" + consoleString + workerString + "};";
+
+	};
+
+	/**
 	 * Performs the tasks `performTask` functionality within a web worker
 	 *
 	 * @method performTaskFunctionalityWithWebWorker
@@ -300,33 +322,16 @@
 			console.log("Performing '" + task.displayName + "' Functionality With Web Worker");
 		}
 
+		// create blob from blob string
+		var blob = new Blob([createBlobStringWithTask(task)]);
+
+		// create the web worker object
+
 		// @TODO: Need to figure out what the other browser prefixes for window.URL 
-		var URL = root.URL || root.webkitURL;
-
-		// create a console wrapper
-		var consoleString = "var console = { log: function(msg) { postMessage({ type: 'console', message: msg }); } };";
-
-		// create our blob
-		var workerTask = new WorkerTask(task);
-		//workerTask.postMessage = Worker.postMessage;
-		var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
-
-		// @TODO: Need to figure out if there are vendor prefixes I need to be looking at here
-		var blobString = "onmessage = function(e) {" + consoleString + workerString + "}";
-
-		var blob = new Blob([blobString]);
-		var blobURL = URL.createObjectURL(blob);
-
-		// set a reference to the blob on the task, we'll use this to cancel the blob
-		// if the task is canceld on the main thread
-		//
-		// @TODO: Do we actually need to cancel the blob or let it post message back
-		// when complete... it should fault complete or cancel if its main thread
-		// counterpart has been canceled faulted or completed anyways
-		task.blob = blob;
+		var URL = root.URL || root.webkitURL;	
 
 		// create our worker
-		var worker = new Worker(blobURL);
+		var worker = new Worker(URL.createObjectURL(blob));
 		worker.onmessage = function(e) {
 			if(e.data.type === "complete") {
 				task.complete();
@@ -341,9 +346,13 @@
 				// it out or do we log something to this extent
 			}
 		};
-
+		worker.onerror = function(e){
+			task.fault("WebWorker error.");
+		};
+		
 		// start the worker
 		worker.postMessage();
+
 	};
 
 	/**

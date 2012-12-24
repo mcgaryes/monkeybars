@@ -1,7 +1,7 @@
 var MonkeyBars = require("../monkeybars");
 
 var task = new MonkeyBars.Task({
-	loggingEnabled:true,
+	logLevel:MonkeyBars.LogLevels.Verbose,
 	performTask:function(){
 		this.complete();
 	}

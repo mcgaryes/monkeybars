@@ -55,7 +55,7 @@
 
 			task = new MonkeyBars.SequenceTask({
 				name:"complex",
-				loggingEnabled:true,
+				logLevel:MonkeyBars.LogLevels.Verbose,
 				tasks:[sequence,simple,parallel],
 				onChange:function(state,error){
 					if(state == MonkeyBars.TaskStates.Completed) {

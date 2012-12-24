@@ -17,7 +17,7 @@
 				
 				task = new MonkeyBars.Task({
 					name:"SimpleTask",
-					loggingEnabled:true,
+					logLevel:MonkeyBars.LogLevels.Verbose,
 					onChange:function(state,error){
 						if(state == MonkeyBars.TaskStates.Completed) {
 							
