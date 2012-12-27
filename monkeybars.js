@@ -36,6 +36,7 @@
 	var MISSING_ATTRIBUTES = "You must pass some attributes in order to create a task.";
 	var UNKNOW_TYPE_WITH_OPTIONS = "You must initialize this task type beofre adding it to a groups tasks.";
 	var INVALID_ARGUMENTS = "Invalid arguments were passed.";
+	var UNHANDLED_POST_MESSAGE = "Unhandled 'postMessage'";
 
 	// ===================================================================
 	// === Private Variables =============================================
@@ -173,7 +174,6 @@
 	var createPropertyDescriptorsWithAttributes = function(attributes) {
 			var descriptors = {};
 			for(var attribute in attributes) {
-				// @TODO: If the attribute in question already has property descriptors then carry those over
 				descriptors[attribute] = {
 					value: attributes[attribute],
 					writable: true,
@@ -309,14 +309,25 @@
 			// create a console wrapper
 			var consoleString = "var console = { log: function(msg) { postMessage({ type: 'console', message: msg }); } };";
 
-			// create our blob
-			var workerTask = new WorkerTask(task);
+			var workerTask;
+
+			if(task.worker !== undefined){
+				if(typeof(task.worker) === "function"){
+					workerTask = new task.worker(task);	
+				} else if (task.worker.constructor !== undefined && typeof(task.worker.constructor) === "function") {
+					workerTask = new task.worker.constructor(task);	
+				}
+			} else {
+				workerTask = new WorkerTask(task);
+			}
+
 			var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
 
-			// @TODO: Need to figure out if there are vendor prefixes I need to be looking at here
 			var blobString = "onmessage = function(e) {" + consoleString + workerString + "};";
 
-			return new Blob([blobString]);
+			return new Blob([blobString],{
+				type:"text\/javascript"
+			});
 
 		};
 
@@ -340,16 +351,21 @@
 			// assign worker on message callback
 			worker.onmessage = function(e) {
 				if(e.data.type === "complete") {
-					task.complete(e.data.product);
+					task.complete(e.data.value);
 				} else if(e.data.type === "fault") {
-					task.fault(e.data.error);
+					task.fault(e.data.value);
 				} else if(e.data.type === "cancel") {
 					task.cancel();
 				} else if(e.data.type === "console") {
 					console.log(e.data.message);
 				} else {
-					// @TODO: we have a case here that isnt supported... do we try an figure
-					// it out or do we log something to this extent
+					if(task.worker !== undefined && typeof(task.worker.handler) === "function") {
+						task.worker.handler(e);
+					} else {
+						if(task.logLevel > LOG_ERROR){
+							console.log(UNHANDLED_POST_MESSAGE + ": " + serialize(e.data));
+						}
+					}
 				}
 			};
 
@@ -370,7 +386,7 @@
 	 */
 	var performTaskFunctionalityWithWebWorker = function(task) {
 
-			if(Worker === undefined || Blob === undefined || task.type !== TYPE_SIMPLE) {
+			if(typeof(Worker) === "undefined" || typeof(Blob) === "undefined" || task.type !== TYPE_SIMPLE) {
 				if(task.logLevel >= LOG_ERROR && task.type !== TYPE_SIMPLE) {
 					console.log("Cannot perform '" + task.displayName + "' on seperate thread. Web Workers are not supported.");
 				}
@@ -430,55 +446,98 @@
 	 * @constructor
 	 * @class WorkerTask
 	 * @param {Task} task The task we're creating this worker representation from
-	 * @private
+	 * @example
+
+		var CustomWorker = MonkeyBars.WorkerTask.extend({
+			append:function(product){
+				this.postMessage("append",100);
+			},
+			devide:function(product){
+				this.postMessage("devide",2);
+				this.complete(product/2);
+			}
+		});
+
+		var task = new MonkeyBars.Task({
+			...
+			concurrent:true,
+			worker:{
+				constructor:CustomWorker,
+				handler:function(e){
+					if(e.data.type === "append") {
+						...
+					} else if(e.data.type === "devide") {
+						...
+					}
+				}
+			}
+			...
+		});
+
+		task.start();
+
 	 */
 	var WorkerTask = MonkeyBars.WorkerTask = function(task) {
 			if(!task) {
 				throw INVALID_ARGUMENTS;
 			}
 			this.performTask = task.performTask;
-			this.tid = task.tid;
 		};
 
 	WorkerTask.prototype = {
 
 		/**
-		 * @TODO: Description needed.
+		 * Post a complete message along with the product passed stating that the task 
+		 * has completed what it needs to.
 		 *
 		 * @for WorkerTask
 		 * @method complete
 		 */
 		complete: function(product) {
-			postMessage({
-				type: "complete",
-				product: product
-			});
+			this.postMessage("complete",product);
 		},
 
 		/**
-		 * @TODO: Description needed.
+		 * Posts a fault message to the main thread that the task has faulted. Passes
+		 * an error as its value.
 		 *
 		 * @for WorkerTask
 		 * @method fault
 		 * @param {Object} error
 		 */
 		fault: function(error) {
-			postMessage({
-				type: "fault",
-				error: error
-			});
+			this.postMessage("fault",error);
 		},
 
 		/**
-		 * @TODO: Description needed.
+		 * Posts a cancel message to the main thread that the task has been canceled.
 		 *
 		 * @for WorkerTask
 		 * @method cancel
 		 */
 		cancel: function() {
-			postMessage({
-				type: "cancel"
-			});
+			this.postMessage("cancel");
+		},
+
+		/**
+		 * Convenience method for posting messages to the main thread. You should opt into
+		 * using this as it is how the rest of the WorkerTask core methods communicate with
+		 * the main thread.
+		 *
+		 * @for WorkerTask
+		 * @method postMessage
+		 * @param {String} type
+		 * @param {Object} value
+		 */
+		postMessage:function(type,value){
+			var message = {};
+			if(type !== undefined && typeof(type) === "string") {
+				message.type = type;
+			}
+			if(value !== undefined) {
+				message.value = value;
+			}
+			postMessage(message);
 		}
 	};
 
@@ -558,7 +617,6 @@
 		 * @for TaskGroup
 		 * @method handleProduct
 		 */
-		// @TODO: rename this method
 		handleProduct: {
 			value: function(product) {
 				this.product = product;
@@ -590,6 +648,41 @@
 		 */
 		concurrent: {
 			value: false,
+			writable: true
+		},
+
+		/**
+		 * This object can either be simply a reference to a custom WorkerTask extention's
+		 * constructor. Or it can be an object with a constructor key/value pair. If it is the 
+		 * latter then you also have the option of passing a handler function that will be run
+		 * on the `onMessage` handler of the Worker itself.
+		 *
+		 * @for Task
+		 * @property worker
+		 * @type Object
+		 * @default undefined
+		 * @example
+
+			var task = new MonkeyBars.Task({
+				...
+				worker:{
+					constructor:CustomWorker,
+					handler:function(e){
+						// called when a postMessage is posted from the task
+					}
+				},
+				...
+			});
+
+			var task = new MonkeyBars.Task({
+				...
+				worker:CustomWorker,
+				...
+			});
+
+		 */
+		worker: {
+			value: undefined,
 			writable: true
 		},
 
@@ -1652,19 +1745,15 @@
 			task.decorators.push(DECORATOR_FOR);
 			task.itterationIndex = 0;
 			task.complete = function() {
-				if(this.count !== -1) {
-					if(this.itterationIndex !== this.count - 1) {
-						resetTask(this);
-						this.itterationIndex++;
-						if(this.logLevel >= LOG_INFO) {
-							console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
-						}
-						this.performTask();
-					} else {
-						Task.prototype.complete.call(this);
+				if(this.itterationIndex !== this.count - 1) {
+					resetTask(this);
+					this.itterationIndex++;
+					if(this.logLevel >= LOG_INFO) {
+						console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
 					}
+					this.performTask();
 				} else {
-					// @TODO: need to work in the functionality for a continuously running task
+					Task.prototype.complete.call(this);
 				}
 			};
 		};
