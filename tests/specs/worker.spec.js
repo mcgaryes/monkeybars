@@ -62,7 +62,6 @@ describe("Worker Task Tests", function() {
 			var index = 0;
 
 			var task = new MonkeyBars.Task({
-				logLevel:1000,
 				concurrent:true,
 				worker:{
 					constructor:CustomWorker,
