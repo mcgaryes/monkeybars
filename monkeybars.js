@@ -43,7 +43,7 @@
 	// ===================================================================
 
 	/**
-	 * A dictionary of dependencies for sub tasks
+	 * Reference to the global js object (i.e. brower's window)
 	 *
 	 * @property root
 	 * @type Object
