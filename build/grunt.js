@@ -100,7 +100,9 @@ module.exports = function(grunt) {
             },
             globals: {
                 yui:true,
-                worker:true
+                Worker:false,
+                Blob:false,
+                postMessage:false
             }
         }
     });

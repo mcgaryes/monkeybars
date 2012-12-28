@@ -174,12 +174,6 @@
 		if(typeof module !== &#x27;undefined&#x27; &amp;&amp; module.exports) {
 			exports = module.exports = MonkeyBars;
 		}
-	} else {
-		&#x2F;&#x2F; reference WebWorker functionality only if we&#x27;re not within node... for some
-		&#x2F;&#x2F; reason this is needed for linting purposes (researching ways to omit this)
-		var Worker = root.Worker;
-		var Blob = root.Blob;
-		var postMessage = root.postMessage;
 	}
 
 	&#x2F;&#x2F; ===================================================================

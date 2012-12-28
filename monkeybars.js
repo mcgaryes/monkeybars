@@ -76,12 +76,6 @@
 		if(typeof module !== 'undefined' && module.exports) {
 			exports = module.exports = MonkeyBars;
 		}
-	} else {
-		// reference WebWorker functionality only if we're not within node... for some
-		// reason this is needed for linting purposes (researching ways to omit this)
-		var Worker = root.Worker;
-		var Blob = root.Blob;
-		var postMessage = root.postMessage;
 	}
 
 	// ===================================================================
