@@ -1394,7 +1394,7 @@
         {
             "file": "../monkeybars.js",
             "line": 45,
-            "description": "A dictionary of dependencies for sub tasks",
+            "description": "Reference to the global js object (i.e. brower's window)",
             "itemtype": "property",
             "name": "root",
             "type": "Object",
