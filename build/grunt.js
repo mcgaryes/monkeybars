@@ -1,7 +1,7 @@
 "use strict";
 
 var monkeyBarsName          =   "MonkeyBars";
-var monkeyBarsVersion       =   "0.9.5";
+var monkeyBarsVersion       =   "0.9.6";
 var monkeyBarsDescription   =   "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
 var monkeyBarsRepository    =   "https://github.com/mcgaryes/monkeybars/";
 var monkeyBarsBanner        =   "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
@@ -100,7 +100,9 @@ module.exports = function(grunt) {
             },
             globals: {
                 yui:true,
-                worker:true
+                Worker:false,
+                Blob:false,
+                postMessage:false
             }
         }
     });
