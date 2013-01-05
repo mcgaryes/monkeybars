@@ -225,7 +225,7 @@
 				var totalDependencies = dependencies.length;
 				for(var i = 0; i < totalDependencies; i++) {
 					var dependency = dependencies[i];
-					if(dependency === task2.tid) {
+					if(dependency.tid === task2.tid) {
 						return true;
 					} else if(dependency === task2.id) {
 						return true;

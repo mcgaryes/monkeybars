@@ -162,16 +162,19 @@ describe("Sequence Task Tests", function() {
 			});
 
 			var sequence = new MonkeyBars.SequenceTask({
-				loggingEnabled:false,
 				tasks:[
 					t1,
 					new Custom({ name:"two_name"}),
-					new Custom({ id:"three", name:"three", dependencies:["one"] }),
+					new Custom({ id:"three", name:"three", dependencies:[t1] }),
 					new Custom({ id:"four_id", name:"four" }),
 					{ 
 						id:"five", 
 						name:"five", 
-						dependencies:["three"] 
+						dependencies:["three"],
+						performTask:function(){
+							index++;
+							this.complete();
+						}
 					},
 					new Custom({ id:"six", name:"six", dependencies:["five"] })
 				]
