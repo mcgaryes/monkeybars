@@ -381,7 +381,7 @@
 	var performTaskFunctionalityWithWebWorker = function(task) {
 
 			if(typeof(Worker) === "undefined" || typeof(Blob) === "undefined" || task.type !== TYPE_SIMPLE) {
-				if(task.logLevel >= LOG_ERROR && task.type !== TYPE_SIMPLE) {
+				if(task.logLevel >= LOG_ERROR && task.type === TYPE_SIMPLE) {
 					console.log("Cannot perform '" + task.displayName + "' on seperate thread. Web Workers are not supported.");
 				}
 				task.performTask();
@@ -474,6 +474,9 @@
 	var WorkerTask = MonkeyBars.WorkerTask = function(task) {
 			if(!task) {
 				throw INVALID_ARGUMENTS;
+			}
+			if(task.product !== undefined) {
+				this.product = task.product;
 			}
 			this.performTask = task.performTask;
 		};

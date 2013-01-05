@@ -304,6 +304,37 @@ describe("Sequence Task Tests", function() {
 
 		});
 
+		// return if we can actually test concurrent functionality
+		try { var blob = new Blob([""]); } catch(e) { return; }
+
+		it("Product Manipulates As Expected While Concurrent",function(){
+
+			var perform = function(){
+				for ( var i = 0; i < 5000; i++ ) { this.product++; }
+				this.complete(this.product);
+			};
+
+			var t1 = new MonkeyBars.Task({ name:"t1", performTask:perform });
+			var t2 = new MonkeyBars.Task({ name:"t2", performTask:perform });
+
+			var group = new MonkeyBars.SequenceTask({
+				concurrent:true,
+				tasks:[t1,t2]
+			});
+
+			group.product = 0;
+			group.start();
+
+			waitsFor(function() {
+      			return group.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+				expect(group.product).toEqual(10000);
+    		});
+
+		});
+
 	});
 
 	// ===================================================================
@@ -334,6 +365,7 @@ describe("Sequence Task Tests", function() {
     		}, "the task to complete", 750);
 
 			runs(function() {
+				console.log(task);
 		      expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
     		});
 
