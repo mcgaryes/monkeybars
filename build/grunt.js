@@ -66,6 +66,16 @@ module.exports = function(grunt) {
                 files: {
                     "../package.json": "../package.json"
                 }
+            },
+            version: {
+                options: {
+                    processContent: function() {
+                        return monkeyBarsVersion;
+                    }
+                },
+                files: {
+                    "../VERSION": "../VERSION"
+                }
             }
         },
         yuidoc: {
@@ -113,5 +123,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
     // tasks
-    grunt.registerTask('default', 'lint jasmine min copy:examples copy:package yuidoc');
+    grunt.registerTask('default', 'lint jasmine min copy:examples copy:package copy:version yuidoc');
 };
