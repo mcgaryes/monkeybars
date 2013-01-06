@@ -61,6 +61,7 @@ describe("Simple Task Tests", function() {
 	// ===================================================================
 	// === Decorator Tests ===============================================
 	// ===================================================================
+	
 	describe("Decorator Tests", function() {
 
 		var value, flag;
@@ -367,73 +368,6 @@ describe("Simple Task Tests", function() {
 			});
 
 		});
-
-		/*
-
-		it("Concurrent Task With FOR Decorator Does Complete", function() {
-			task.product = 0;
-			task.count = 3;
-			task.performTask = function() {
-				this.product++;
-				this.complete();
-			}
-			task.start();
-
-			waitsFor(function() {
-				return task.state > MonkeyBars.TaskStates.Started;
-			}, "the task to complete", 750);
-
-			runs(function() {
-				expect(task.index).toEqual(3);
-				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
-			});
-
-		});
-
-		it("Concurrent Task With WHILE Decorator Does Complete", function() {
-			task.product = 0;
-			while = function() {
-				this.product++;
-				return this.index != 3;
-			};
-			task.performTask = function() {
-				this.complete();
-			}
-			task.start();
-
-			waitsFor(function() {
-				return task.state > MonkeyBars.TaskStates.Started;
-			}, "the task to complete", 750);
-
-			runs(function() {
-				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
-			});
-
-		});
-
-		it("Concurrent Task With WHEN Decorator Does Complete", function() {
-			task.index = 0;
-			task.when = function() {
-				this.index++;
-				return this.index == 3;
-			};
-			task.performTask = function() {
-				this.complete();
-			}
-			task.start();
-
-			waitsFor(function() {
-				return task.state > MonkeyBars.TaskStates.Started;
-			}, "the task to complete", 750);
-
-			runs(function() {
-				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
-			});
-
-
-		});
-
-		*/
 
 	});
 
