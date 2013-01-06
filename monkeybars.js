@@ -430,7 +430,7 @@
 		};
 
 	// ===================================================================
-	// === Worker Task Objects ===========================================
+	// === Worker Task ===================================================
 	// ===================================================================
 
 	/**
@@ -541,7 +541,7 @@
 	WorkerTask.extend = extend;
 
 	// ===================================================================
-	// === Tasks Objects =================================================
+	// === Simple Task ===================================================
 	// ===================================================================
 
 	/**
@@ -992,6 +992,12 @@
 			writable: true
 		}
 	});
+	
+	Task.extend = extend;
+
+	// ===================================================================
+	// === Task Group ====================================================
+	// ===================================================================
 
 	/**
 	 * A task group, and extention of task, provides the building blocks for creating
@@ -1396,6 +1402,12 @@
 		}
 	});
 
+	TaskGroup.extend = extend;
+
+	// ===================================================================
+	// === Parallel Task =================================================
+	// ===================================================================
+
 	/**
 	 * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
 	 * complete functionality is run when all of its sub tasks are complete.
@@ -1599,6 +1611,12 @@
 		}
 	});
 
+	ParallelTask.extend = extend;
+
+	// ===================================================================
+	// === Sequence Task =================================================
+	// ===================================================================
+
 	/**
 	 * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
 	 * complete functionality is run when all of its sub tasks are complete.
@@ -1722,8 +1740,7 @@
 		}
 	});
 
-	// add the extend functionality to all of the task constructor functions
-	Task.extend = TaskGroup.extend = ParallelTask.extend = SequenceTask.extend = extend;
+	SequenceTask.extend = extend;
 
 	// ===================================================================
 	// === Task Decorators ===============================================
