@@ -9,7 +9,6 @@
 	// ===================================================================
 	// === Constants =====================================================
 	// ===================================================================
-
 	var STATE_INITIALIZED = 0;
 	var STATE_STARTED = 1;
 	var STATE_CANCELED = 2;
@@ -34,14 +33,13 @@
 	var OVERRIDE_NEEDED = "This method must be overridden.";
 	var UNDEFINED_TASK = "Task is undefined.";
 	var MISSING_ATTRIBUTES = "You must pass some attributes in order to create a task.";
-	var UNKNOW_TYPE_WITH_OPTIONS = "You must initialize this task type beofre adding it to a groups tasks.";
+	var UNKNOW_TYPE_WITH_OPTIONS = "Unknown task type referenced.";
 	var INVALID_ARGUMENTS = "Invalid arguments were passed.";
 	var UNHANDLED_POST_MESSAGE = "Unhandled 'postMessage'";
 
 	// ===================================================================
 	// === Private Variables =============================================
 	// ===================================================================
-
 	/**
 	 * Reference to the global js object (i.e. brower's window)
 	 *
@@ -61,6 +59,22 @@
 	var taskIdCounter = 0;
 
 	/**
+	 * List of all whitelisted properties for a task
+	 *
+	 * @property taskOptions
+	 * @type Array
+	 * @private
+	 */
+	var taskOptions = [
+		// task
+		"name", "tid", "id", "product", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout",  "dependencies",
+		// group
+		"tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
+		// decorators
+		"count", "interval"
+	];
+
+	/**
 	 * Object returned by module. Works as namespace for the task library.
 	 *
 	 * @property MonkeyBars
@@ -71,9 +85,9 @@
 	// ===================================================================
 	// === NodeJS Conditional ============================================
 	// ===================================================================
-
+	
 	if(typeof exports !== 'undefined') {
-		if(typeof module !== 'undefined' && module.exports) {
+		if(typeof(module) !== 'undefined' && module.exports) {
 			exports = module.exports = MonkeyBars;
 		}
 	}
@@ -81,7 +95,7 @@
 	// ===================================================================
 	// === Helper Methods ================================================
 	// ===================================================================
-
+	
 	/**
 	 * Creates task based on the options passed.
 	 *
@@ -170,15 +184,13 @@
 			for(var attribute in attributes) {
 				descriptors[attribute] = {
 					value: attributes[attribute],
-					writable: true,
-					configurable: true,
-					enumerable: true
+					writable: true
 				};
 			}
 			return descriptors;
 		};
 
-	/** 
+	/**
 	 * Resets the task to its original non executed state.
 	 *
 	 * @method resetTask
@@ -256,7 +268,6 @@
 
 			// Other browsers must do it the hard way
 			if(typeof o === "number" || typeof o === "boolean" || typeof o === "function") {
-
 				return o;
 
 			} else if(typeof o === "string") {
@@ -305,22 +316,23 @@
 
 			var workerTask;
 
-			if(task.worker !== undefined){
-				if(typeof(task.worker) === "function"){
-					workerTask = new task.worker(task);	
-				} else if (task.worker.constructor !== undefined && typeof(task.worker.constructor) === "function") {
-					workerTask = new task.worker.constructor(task);	
+			if(task.worker !== undefined) {
+				if(typeof(task.worker) === "function") {
+					workerTask = new task.worker(task);
+				} else if(task.worker.constructor !== undefined && typeof(task.worker.constructor) === "function") {
+					workerTask = new task.worker.constructor(task);
 				}
 			} else {
 				workerTask = new WorkerTask(task);
 			}
 
-			var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
+			//console.log(workerTask);
 
+			var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
 			var blobString = "onmessage = function(e) {" + consoleString + workerString + "};";
 
-			return new Blob([blobString],{
-				type:"text\/javascript"
+			return new Blob([blobString], {
+				type: "text\/javascript"
 			});
 
 		};
@@ -336,7 +348,7 @@
 	 */
 	var createWebWorkerWithBlobAndTask = function(blob, task) {
 
-			// @TODO: Need to figure out what the other browser prefixes for window.URL 
+			// @TODO: Need to figure out what the other browser prefixes for window.URL
 			var URL = root.URL || root.webkitURL;
 
 			// create our worker
@@ -356,7 +368,7 @@
 					if(task.worker !== undefined && typeof(task.worker.handler) === "function") {
 						task.worker.handler(e);
 					} else {
-						if(task.logLevel > LOG_ERROR){
+						if(task.logLevel > LOG_ERROR) {
 							console.log(UNHANDLED_POST_MESSAGE + ": " + serialize(e.data));
 						}
 					}
@@ -401,6 +413,25 @@
 		};
 
 	/**
+	 * @method decorateTaskBasedOnAttributes
+	 * @param {Task} task
+	 * @param {Object} attributes
+	 * @private
+	 */
+	var decorateTaskBasedOnAttributes = function(task, attributes) {
+			task.decorators = [];
+			if(task.count) {
+				forTaskDecorator(task);
+			}
+			if(task.when) {
+				whenTaskDecorator(task);
+			}
+			if(task.doWhile) {
+				whileTaskDecorator(task);
+			}
+		};
+
+	/**
 	 * Extention functionality for various task types.
 	 *
 	 * @method extend
@@ -422,8 +453,8 @@
 	var extend = function(protoProps) {
 			var parent = this;
 			var child = function() {
-					parent.apply(this, arguments);
-				};
+				parent.apply(this, arguments);
+			};
 			var childProto = createPropertyDescriptorsWithAttributes(protoProps);
 			child.prototype = Object.create(parent.prototype, childProto);
 			return child;
@@ -432,7 +463,6 @@
 	// ===================================================================
 	// === Worker Task ===================================================
 	// ===================================================================
-
 	/**
 	 * Creates a new worker representation of the task
 	 *
@@ -484,14 +514,14 @@
 	WorkerTask.prototype = {
 
 		/**
-		 * Post a complete message along with the product passed stating that the task 
+		 * Post a complete message along with the product passed stating that the task
 		 * has completed what it needs to.
 		 *
 		 * @for WorkerTask
 		 * @method complete
 		 */
 		complete: function(product) {
-			this.postMessage("complete",product);
+			this.postMessage("complete", product);
 		},
 
 		/**
@@ -503,7 +533,7 @@
 		 * @param {Object} error
 		 */
 		fault: function(error) {
-			this.postMessage("fault",error);
+			this.postMessage("fault", error);
 		},
 
 		/**
@@ -526,7 +556,7 @@
 		 * @param {String} type
 		 * @param {Object} value
 		 */
-		postMessage:function(type,value){
+		postMessage: function(type, value) {
 			var message = {};
 			if(type !== undefined && typeof(type) === "string") {
 				message.type = type;
@@ -543,12 +573,12 @@
 	// ===================================================================
 	// === Simple Task ===================================================
 	// ===================================================================
-
+	
 	/**
-	 * The simplest form of a __MonkeyBars__ task. Once started the task executes all 
+	 * The simplest form of a __MonkeyBars__ task. Once started the task executes all
 	 * functionality located within the `performTask` function block. Set `logLevel`
 	 * to see console logs during task execution.
-	 * 
+	 *
 	 * @extends Object
 	 * @constructor
 	 * @class Task
@@ -569,28 +599,41 @@
 
 	 */
 	var Task = MonkeyBars.Task = function(attributes) {
+			
 			var task = this;
 			task.tid = generateUniqueId();
 
 			// add our attributes
-			for(var prop in attributes) {
-				if(!task.hasOwnProperty(prop)) {
-					task[prop] = attributes[prop];
+			for(var attribute in attributes) {
+				if(attributes.hasOwnProperty(attribute)) {
+					var option = true;
+					for(var i = 0; i < taskOptions.length; i++) {
+						// @TODO: Need to add functionality here to make sure that the options passed
+						// match up to their type
+						if(attribute === taskOptions[i] || typeof(attributes[attribute]) === "function") {
+							option = false;
+							break;
+						}
+					}
+					if(option) {
+						if(task.options === undefined) {
+							task.options = {};
+						}
+						task.options[attribute] = attributes[attribute];
+					} else {
+						if(!task.hasOwnProperty(attribute)) {
+							task[attribute] = attributes[attribute];
+						}
+					}
 				}
 			}
 
-			// decorate out task
-			task.decorators = [];
-			if(task.count) {
-				forTaskDecorator(task);
-			}
-			if(task.when) {
-				whenTaskDecorator(task);
-			}
-			if(task.
-			while) {
-				whileTaskDecorator(task);
-			}
+			// decorate our task
+			decorateTaskBasedOnAttributes(task, attributes);
+
+			// initialize the task
+			task.initialize(task.options);
+
 		};
 
 	Task.prototype = Object.create({}, {
@@ -630,9 +673,8 @@
 		 * @readonly
 		 */
 		type: {
-			get: function() {
-				return TYPE_SIMPLE;
-			}
+			value: TYPE_SIMPLE,
+			writable: true
 		},
 
 		/**
@@ -650,7 +692,7 @@
 
 		/**
 		 * This object can either be simply a reference to a custom WorkerTask extention's
-		 * constructor. Or it can be an object with a constructor key/value pair. If it is the 
+		 * constructor. Or it can be an object with a constructor key/value pair. If it is the
 		 * latter then you also have the option of passing a handler function that will be run
 		 * on the `onMessage` handler of the Worker itself.
 		 *
@@ -744,9 +786,9 @@
 		},
 
 		/**
-		 * Calling this method cancels the task. However it is up to the instance to handle 
+		 * Calling this method cancels the task. However it is up to the instance to handle
 		 * the canceled state.
-		 * 
+		 *
 		 * @for Task
 		 * @method cancel
 		 * @example
@@ -782,7 +824,7 @@
 
 		/**
 		 * Calling this method says that the tasks execution is now complete.
-		 * 
+		 *
 		 * @for Task
 		 * @method complete
 		 * @example
@@ -810,16 +852,16 @@
 				}
 				this.executionTime = (new Date().getTime()) - this.startTime;
 				this.handleProduct(product);
-				this.onComplete();
+				this.onComplete(product);
 				this.onChange(this.state, product);
 			},
 			writable: true
 		},
 
 		/**
-		 * Calling this method to fault a task. If it is part of a group task this will 
+		 * Calling this method to fault a task. If it is part of a group task this will
 		 * also call the groups fault method passing the error up to the group.
-		 * 
+		 *
 		 * @for Task
 		 * @method fault
 		 * @param {String} error Message associated with the cause of the fault.
@@ -858,7 +900,7 @@
 		/**
 		 * This method is called during the execution lifecycle of the task. It is intentionally
 		 * left blank and is up to the instance to describe it functionality.
-		 * 
+		 *
 		 * @for Task
 		 * @method onChange
 		 * @param {Integer} state The current state of the task
@@ -914,7 +956,7 @@
 		 * @method onComplete
 		 */
 		onComplete: {
-			value: function() {},
+			value: function(product) {},
 			writable: true
 		},
 
@@ -930,11 +972,11 @@
 		},
 
 		/**
-		 * This method is required for **simple** tasks and will throw an exception if it 
+		 * This method is required for **simple** tasks and will throw an exception if it
 		 * is called and not overridden. If you overwrite this method on a task group
 		 * then you need to make sure that you call the extended/implemented classes
 		 * original prototype method (see the example below).
-		 * 
+		 *
 		 * @for Task
 		 * @method performTask
 		 * @required
@@ -969,6 +1011,7 @@
 				if(this.state >= STATE_STARTED) {
 					return;
 				}
+
 				this.startTime = new Date().getTime();
 				this.state = STATE_STARTED;
 				if(this.logLevel >= LOG_INFO) {
@@ -990,15 +1033,27 @@
 				this.onStart();
 			},
 			writable: true
+		},
+
+		/**
+		 * Initialization functionality
+		 *
+		 * @for Task
+		 * @method initialize
+		 * @param {Object} attributes
+		 */
+		initialize: {
+			value: function(attributes) {},
+			writable: true
 		}
+
 	});
-	
+
 	Task.extend = extend;
 
 	// ===================================================================
 	// === Task Group ====================================================
 	// ===================================================================
-
 	/**
 	 * A task group, and extention of task, provides the building blocks for creating
 	 * a group of tasks that is inherently a task itself.
@@ -1060,7 +1115,7 @@
 		/**
 		 * Adds a subtask to the groups queue. This is helpful when you want to add
 		 * a sub task after instantiation.
-		 * 
+		 *
 		 * @for TaskGroup
 		 * @method addSubTask
 		 * @param {Object} task Either an object containing attributes of a task or
@@ -1101,8 +1156,8 @@
 		},
 
 		/**
-		 * description
-		 * 
+		 * Adds a subtask after another task
+		 *
 		 * @for TaskGroup
 		 * @method addSubTaskAfterTask
 		 * @param {Object} task Either an object containing attributes of a task or
@@ -1286,7 +1341,7 @@
 
 		/**
 		 * Return a Task object, if it exists, based on the `tid` passed.
-		 * 
+		 *
 		 * @for TaskGroup
 		 * @method getTaskByTid
 		 * @param {String} tid The id of the task you want
@@ -1407,11 +1462,10 @@
 	// ===================================================================
 	// === Parallel Task =================================================
 	// ===================================================================
-
 	/**
 	 * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
 	 * complete functionality is run when all of its sub tasks are complete.
-	 * 
+	 *
 	 * @extends TaskGroup
 	 * @constructor
 	 * @class ParallelTask
@@ -1449,9 +1503,8 @@
 		 * @readonly
 		 */
 		type: {
-			get: function() {
-				return TYPE_PARALLEL;
-			}
+			value: TYPE_PARALLEL,
+			writable: true
 		},
 
 		/**
@@ -1616,11 +1669,10 @@
 	// ===================================================================
 	// === Sequence Task =================================================
 	// ===================================================================
-
 	/**
 	 * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
 	 * complete functionality is run when all of its sub tasks are complete.
-	 * 
+	 *
 	 * @extends TaskGroup
 	 * @constructor
 	 * @class SequenceTask
@@ -1658,9 +1710,8 @@
 		 * @readonly
 		 */
 		type: {
-			get: function() {
-				return TYPE_SEQUENCE;
-			}
+			value: TYPE_SEQUENCE,
+			writable: true
 		},
 
 		/**
@@ -1675,8 +1726,12 @@
 					return;
 				}
 				if(this.tasks && this.currentIndex < this.tasks.length) {
-					var skipped = this.processSubTask(this.tasks[this.currentIndex++]);
+					var task = this.tasks[this.currentIndex++];
+					var skipped = this.processSubTask(task);
 					if(skipped) {
+						if(this.logLevel >= LOG_INFO) {
+							console.log("Skipped: " + task.displayName + " Group: " + this.displayName);
+						}
 						this.startNextSubTask();
 					}
 				} else {
@@ -1745,7 +1800,6 @@
 	// ===================================================================
 	// === Task Decorators ===============================================
 	// ===================================================================
-
 	/**
 	 * Decorator to provide for loop functionality for the task. The task executes
 	 * as many times as referenced by the count attribute provided by the instance.
@@ -1785,12 +1839,12 @@
 			task.decorators.push(DECORATOR_WHILE);
 			task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 			task.complete = function() {
-				if(this.
-				while()) {
+				if(this.doWhile()) {
 					this.state = STATE_INITIALIZED;
 					var delegate = this;
 					if(this.interval !== 0) {
 						setTimeout(function() {
+							resetTask(delegate);
 							delegate.start();
 						}, this.interval);
 					} else {
@@ -1828,7 +1882,6 @@
 	// ===================================================================
 	// === Public Interface ==============================================
 	// ===================================================================
-	
 	/**
 	 * Task states contstants.
 	 *

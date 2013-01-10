@@ -25,8 +25,8 @@ describe("Simple Task Tests", function() {
 		it("Initializing After Traditional Extention", function() {
 
 			var CustomTask = function(attributes) {
-					MonkeyBars.Task(this);
-				};
+				MonkeyBars.Task.call(this,attributes);
+			};
 
 			CustomTask.prototype = Object.create(MonkeyBars.Task.prototype, {
 				method: {
@@ -147,7 +147,7 @@ describe("Simple Task Tests", function() {
 					index++;
 					this.complete();
 				},
-				while :function() {
+				doWhile :function() {
 					return index != 3;
 				}
 			});

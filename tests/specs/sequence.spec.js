@@ -79,8 +79,6 @@ describe("Sequence Task Tests", function() {
 
 
 		it("Canceling SubTask Cancels Its Dependencies",function(){
-			
-			return;
 
 			var index = 0;
 
@@ -105,7 +103,6 @@ describe("Sequence Task Tests", function() {
 			var t5 = new Custom({ name:"five", dependencies:[t3] });
 
 			var sequence = new MonkeyBars.SequenceTask({
-				loggingEnabled:false,
 				tasks:[t1,t2,t3,t4,t5]
 			});
 
@@ -290,10 +287,7 @@ describe("Sequence Task Tests", function() {
 			});
 
 			var group = new MonkeyBars.SequenceTask({
-				tasks:[t1,t2,t3],
-				handleProduct:function(product) {
-					this.product = product;
-				}
+				tasks:[t1,t2,t3]
 			});
 
 			// @TODO: need to have function on task group that is basically a method that gets called 
@@ -301,6 +295,49 @@ describe("Sequence Task Tests", function() {
 			// to what was passed by the complete function... if the group has
 
 			group.product = 0;
+			group.start();
+
+			expect(group.product).toEqual(15);
+
+		});
+
+		it("Overridden 'handleProduct' Performs As Expected",function(){
+			
+			console.log("need to re code this");
+
+			return;
+
+			// * NOTE *
+			// Imagine that all of the following tasks are in seperate modules and that
+			// we need to manipulate a piece of data between all of that tasks without 
+			// having a centralized model of any kind... how would it look
+
+			var t1 = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete(this.product + 10);
+				}
+			});
+
+			var t2 = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete(this.product + 5);
+				}
+			});
+
+			var t3 = new MonkeyBars.Task({
+				performTask:function(){
+					this.complete(this.product + 5);
+				}
+			});
+
+			var group = new MonkeyBars.SequenceTask({
+				tasks:[t1,t2,t3],
+				product:0,
+				handleProduct:function(product) {
+					this.product = product/2;
+				}
+			});
+
 			group.start();
 
 			expect(group.product).toEqual(15);
@@ -368,7 +405,6 @@ describe("Sequence Task Tests", function() {
     		}, "the task to complete", 750);
 
 			runs(function() {
-				console.log(task);
 		      expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
     		});
 
