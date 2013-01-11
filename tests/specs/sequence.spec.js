@@ -256,12 +256,12 @@ describe("Sequence Task Tests", function() {
 	});
 
 	// ===================================================================
-	// === Task Product Tests ============================================
+	// === Task Data Tests ============================================
 	// ===================================================================
 
-	describe("Product Tests", function() {
+	describe("Data Tests", function() {
 
-		it("Product Manipulates As Expected",function(){
+		it("Data Manipulates As Expected",function(){
 			
 			// * NOTE *
 			// Imagine that all of the following tasks are in seperate modules and that
@@ -276,44 +276,73 @@ describe("Sequence Task Tests", function() {
 
 			var t0 = new MonkeyBars.Task({
 				performTask:function() {
-					// set value to 100
-					this.complete();
+					this.complete(100);
 				}
 			});
 
 			var t1 = new MonkeyBars.Task({
 				performTask:function() {
-					// devide value by 2
-					this.complete();
+					this.complete(this.data/2);
 				}
 			});
 
 			var t2 = new MonkeyBars.Task({
 				performTask:function() {
-					// multiply the value by 3
-					this.complete();
+					this.complete(this.data*3);
 				}
 			});
 
 			var t3 = new MonkeyBars.Task({
 				performTask:function() {
-					// subtract 100
-					this.complete();
+					this.complete(this.data-100);
 				}
 			});
 
 			var group = new MonkeyBars.SequenceTask({
-				logLevel:1000,
-				tasks:[t0,t1,t2,t3],
-				handleProduct:function(product){
-					console.log(product);
-				},
-				onComplete:function(product){
-					console.log(product);
-				}
+				tasks:[t0,t1,t2,t3]
 			});
 
 			group.start();
+			expect(group.data).toEqual(50);
+
+		});
+
+		it("Nested Tasks Manipulates Data As Expected",function(){
+			
+			var t0 = new MonkeyBars.Task({
+				performTask:function() {
+					this.complete(100);
+				}
+			});
+
+			var t1 = new MonkeyBars.Task({
+				performTask:function() {
+					this.complete(this.data/2);
+				}
+			});
+
+			var t2 = new MonkeyBars.Task({
+				performTask:function() {
+					this.complete(this.data*3);
+				}
+			});
+
+			var t3 = new MonkeyBars.Task({
+				performTask:function() {
+					this.complete(this.data-100);
+				}
+			});
+
+			var group = new MonkeyBars.SequenceTask({
+				tasks:[{
+					tasks:[t0,t1]
+				},{
+					tasks:[t2,t3]
+				}]
+			});
+
+			group.start();
+			expect(group.data).toEqual(50);
 
 		});
 

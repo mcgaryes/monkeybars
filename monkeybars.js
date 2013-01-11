@@ -69,7 +69,7 @@
 	 */
 	var taskOptions = [
 		// task
-		"name", "tid", "id", "product", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout",  "dependencies", "group", "processed",
+		"name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout",  "dependencies", "group", "processed",
 		// group
 		"tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
 		// decorators
@@ -474,12 +474,12 @@
 	 * @example
 
 		var CustomWorker = MonkeyBars.WorkerTask.extend({
-			append:function(product){
+			append:function(data){
 				this.postMessage("append",100);
 			},
-			devide:function(product){
+			devide:function(data){
 				this.postMessage("devide",2);
-				this.complete(product/2);
+				this.complete(data/2);
 			}
 		});
 
@@ -506,8 +506,8 @@
 			if(!task) {
 				throw INVALID_ARGUMENTS;
 			}
-			if(task.product !== undefined) {
-				this.product = task.product;
+			if(task.data !== undefined) {
+				this.data = task.data;
 			}
 			this.performTask = task.performTask;
 		};
@@ -515,14 +515,14 @@
 	WorkerTask.prototype = {
 
 		/**
-		 * Post a complete message along with the product passed stating that the task
+		 * Post a complete message along with the data passed stating that the task
 		 * has completed what it needs to.
 		 *
 		 * @for WorkerTask
 		 * @method complete
 		 */
-		complete: function(product) {
-			this.postMessage("complete", product);
+		complete: function(data) {
+			this.postMessage("complete", data);
 		},
 
 		/**
@@ -640,14 +640,14 @@
 	Task.prototype = Object.create({}, {
 
 		/**
-		 * Task product
+		 * Task data
 		 *
 		 * @for Task
-		 * @property product
+		 * @property data
 		 * @type Object
 		 * @default undefined
 		 */
-		product: {
+		data: {
 			value: undefined,
 			writable: true
 		},
@@ -656,11 +656,14 @@
 		 * description
 		 *
 		 * @for TaskGroup
-		 * @method handleProduct
+		 * @method handleData
 		 */
-		handleProduct: {
-			value: function(product) {
-				this.product = product;
+		handleData: {
+			value: function(data) {
+				if(arguments.length < 0) {
+					return;
+				}
+				this.data = data;
 			},
 			writable: true
 		},
@@ -840,7 +843,7 @@
 
 		 */
 		complete: {
-			value: function(product) {
+			value: function(data) {
 				if(this.state > STATE_STARTED) {
 					return;
 				}
@@ -852,9 +855,12 @@
 					clearTimeout(this.timeoutId);
 				}
 				this.executionTime = (new Date().getTime()) - this.startTime;
-				this.handleProduct(product);
-				this.onComplete(product);
-				this.onChange(this.state, product);
+
+				if(arguments.length > 0) {
+					this.handleData(data);
+				}
+				this.onComplete(data);
+				this.onChange(this.state, data);
 			},
 			writable: true
 		},
@@ -923,7 +929,7 @@
 
 		 */
 		onChange: {
-			value: function(state, product, error) {},
+			value: function(state, data, error) {},
 			writable: true
 		},
 
@@ -957,7 +963,7 @@
 		 * @method onComplete
 		 */
 		onComplete: {
-			value: function(product) {},
+			value: function(data) {},
 			writable: true
 		},
 
@@ -1226,12 +1232,12 @@
 		 * @for TaskGroup
 		 * @method onSubTaskComplete
 		 * @param {Task} task The task that just completed
-		 * @param {Object} product
+		 * @param {Object} data
 		 */
 		onSubTaskComplete: {
-			value: function(task, product) {
-				if(product !== undefined) {
-					this.handleProduct(product);
+			value: function(task, data) {
+				if(data !== undefined) {
+					this.handleData(data);
 				}
 			},
 			writable: true
@@ -1299,15 +1305,15 @@
 				this.processedIndex++;
 
 				task.group = this;
-				// task.product = this.product;
+				task.data = this.data;
 				task.concurrent = this.concurrent;
 				task.processed = true;
 				task.logLevel = this.logLevel;
 
 				// set execution block
-				task.onChange = function(state, product, error) {
+				task.onChange = function(state, data, error) {
 					if(state === STATE_COMPLETED) {
-						this.group.onSubTaskComplete(this, product);
+						this.group.onSubTaskComplete(this, data);
 					} else if(state === STATE_FAULTED) {
 						this.group.onSubTaskFault(this, undefined, error);
 					} else if(state === STATE_CANCELED) {
@@ -1457,6 +1463,7 @@
 			},
 			writable: false
 		}
+
 	});
 
 	TaskGroup.extend = extend;
@@ -1632,15 +1639,36 @@
 		 * @for ParallelTask
 		 * @method onSubTaskComplete
 		 * @param {Task} task
-		 * @param {Object} product
+		 * @param {Object} data
 		 */
 		onSubTaskComplete: {
-			value: function(task, product) {
+			value: function(task, data) {
 				this.currentIndex++;
 				if(this.currentIndex === this.tasks.length) {
-					this.complete(this.product);
+					
+
+
+
+
+
+
+					///*
+					if(this.group !== undefined) {
+						this.complete(this.data);
+					} else {
+						this.complete();
+					}
+					//*/
+
+					// this.complete(this.data);
+
+
+
+
+
+
 				} else {
-					TaskGroup.prototype.onSubTaskComplete.call(this, task, product);
+					TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
 					this.processSubTasks();
 				}
 			},
@@ -1739,7 +1767,25 @@
 						this.startNextSubTask();
 					}
 				} else {
-					this.complete(this.product);
+
+
+
+
+
+					///*
+					if(this.group !== undefined) {
+						this.complete(this.data);
+					} else {
+						this.complete();
+					}
+					//*/
+
+					// this.complete(this.data);
+
+
+
+
+
 				}
 			},
 			writable: true
@@ -1752,14 +1798,14 @@
 		 * @for SequenceTask
 		 * @method onSubTaskComplete
 		 * @param {Task} task
-		 * @param {Object} product
+		 * @param {Object} data
 		 */
 		onSubTaskComplete: {
-			value: function(task, product) {
+			value: function(task, data) {
 				if(this.state === STATE_CANCELED) {
 					return;
 				}
-				TaskGroup.prototype.onSubTaskComplete.call(this, task, product);
+				TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
 				this.startNextSubTask();
 			},
 			writable: true
