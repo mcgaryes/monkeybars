@@ -9,6 +9,7 @@
 	// ===================================================================
 	// === Constants =====================================================
 	// ===================================================================
+
 	var STATE_INITIALIZED = 0;
 	var STATE_STARTED = 1;
 	var STATE_CANCELED = 2;
@@ -40,6 +41,7 @@
 	// ===================================================================
 	// === Private Variables =============================================
 	// ===================================================================
+	
 	/**
 	 * Reference to the global js object (i.e. brower's window)
 	 *
@@ -67,7 +69,7 @@
 	 */
 	var taskOptions = [
 		// task
-		"name", "tid", "id", "product", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout",  "dependencies",
+		"name", "tid", "id", "product", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout",  "dependencies", "group", "processed",
 		// group
 		"tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
 		// decorators
@@ -326,8 +328,6 @@
 				workerTask = new WorkerTask(task);
 			}
 
-			//console.log(workerTask);
-
 			var workerString = "var workerTask = " + serialize(workerTask) + "; workerTask.performTask();";
 			var blobString = "onmessage = function(e) {" + consoleString + workerString + "};";
 
@@ -463,6 +463,7 @@
 	// ===================================================================
 	// === Worker Task ===================================================
 	// ===================================================================
+	
 	/**
 	 * Creates a new worker representation of the task
 	 *
@@ -1054,6 +1055,7 @@
 	// ===================================================================
 	// === Task Group ====================================================
 	// ===================================================================
+	
 	/**
 	 * A task group, and extention of task, provides the building blocks for creating
 	 * a group of tasks that is inherently a task itself.
@@ -1297,7 +1299,7 @@
 				this.processedIndex++;
 
 				task.group = this;
-				task.product = this.product;
+				// task.product = this.product;
 				task.concurrent = this.concurrent;
 				task.processed = true;
 				task.logLevel = this.logLevel;
@@ -1462,6 +1464,7 @@
 	// ===================================================================
 	// === Parallel Task =================================================
 	// ===================================================================
+	
 	/**
 	 * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
 	 * complete functionality is run when all of its sub tasks are complete.
@@ -1669,6 +1672,7 @@
 	// ===================================================================
 	// === Sequence Task =================================================
 	// ===================================================================
+	
 	/**
 	 * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
 	 * complete functionality is run when all of its sub tasks are complete.
@@ -1800,6 +1804,7 @@
 	// ===================================================================
 	// === Task Decorators ===============================================
 	// ===================================================================
+	
 	/**
 	 * Decorator to provide for loop functionality for the task. The task executes
 	 * as many times as referenced by the count attribute provided by the instance.
@@ -1882,6 +1887,7 @@
 	// ===================================================================
 	// === Public Interface ==============================================
 	// ===================================================================
+	
 	/**
 	 * Task states contstants.
 	 *

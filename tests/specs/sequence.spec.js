@@ -268,110 +268,52 @@ describe("Sequence Task Tests", function() {
 			// we need to manipulate a piece of data between all of that tasks without 
 			// having a centralized model of any kind... how would it look
 
+			// take an value 100
+			// devide it by 2
+			// multiply it by 3
+			// substract 100
+			// should be 50
+
+			var t0 = new MonkeyBars.Task({
+				performTask:function() {
+					// set value to 100
+					this.complete();
+				}
+			});
+
 			var t1 = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete(this.product + 10);
+				performTask:function() {
+					// devide value by 2
+					this.complete();
 				}
 			});
 
 			var t2 = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete(this.product / 2);
+				performTask:function() {
+					// multiply the value by 3
+					this.complete();
 				}
 			});
 
 			var t3 = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete(this.product * 3);
+				performTask:function() {
+					// subtract 100
+					this.complete();
 				}
 			});
 
 			var group = new MonkeyBars.SequenceTask({
-				tasks:[t1,t2,t3]
-			});
-
-			// @TODO: need to have function on task group that is basically a method that gets called 
-			// everytime its product is manipulated. By default passing a product will just set the product
-			// to what was passed by the complete function... if the group has
-
-			group.product = 0;
-			group.start();
-
-			expect(group.product).toEqual(15);
-
-		});
-
-		it("Overridden 'handleProduct' Performs As Expected",function(){
-			
-			console.log("need to re code this");
-
-			return;
-
-			// * NOTE *
-			// Imagine that all of the following tasks are in seperate modules and that
-			// we need to manipulate a piece of data between all of that tasks without 
-			// having a centralized model of any kind... how would it look
-
-			var t1 = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete(this.product + 10);
-				}
-			});
-
-			var t2 = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete(this.product + 5);
-				}
-			});
-
-			var t3 = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete(this.product + 5);
-				}
-			});
-
-			var group = new MonkeyBars.SequenceTask({
-				tasks:[t1,t2,t3],
-				product:0,
-				handleProduct:function(product) {
-					this.product = product/2;
+				logLevel:1000,
+				tasks:[t0,t1,t2,t3],
+				handleProduct:function(product){
+					console.log(product);
+				},
+				onComplete:function(product){
+					console.log(product);
 				}
 			});
 
 			group.start();
-
-			expect(group.product).toEqual(15);
-
-		});
-
-		// return if we can actually test concurrent functionality
-		try { var blob = new Blob([""]); } catch(e) { return; }
-
-		it("Product Manipulates As Expected While Concurrent",function(){
-
-			var perform = function(){
-				for ( var i = 0; i < 5000; i++ ) { this.product++; }
-				this.complete(this.product);
-			};
-
-			var t1 = new MonkeyBars.Task({ name:"t1", performTask:perform });
-			var t2 = new MonkeyBars.Task({ name:"t2", performTask:perform });
-
-			var group = new MonkeyBars.SequenceTask({
-				concurrent:true,
-				tasks:[t1,t2]
-			});
-
-			group.product = 0;
-			group.start();
-
-			waitsFor(function() {
-      			return group.state > MonkeyBars.TaskStates.Started;
-    		}, "the task to complete", 750);
-
-			runs(function() {
-				expect(group.product).toEqual(10000);
-    		});
 
 		});
 
