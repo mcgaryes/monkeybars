@@ -27,6 +27,13 @@ var monkeyBarsPackageJsonTemplate = {
     }]
 };
 
+// /*!
+//  * @module MonkeyBars
+//  * @main MonkeyBars
+//  */
+// (function() {
+// }).call(this);
+
 // grunt config
 module.exports = function(grunt) {
 
