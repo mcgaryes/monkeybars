@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		
+
+		<!-- Jasmine -->
+		<link rel="stylesheet" type="text/css" href="lib/jasmine-1.3.1/jasmine.css">
+		<script type="text/javascript" src="lib/jasmine-1.3.1/jasmine.js"></script>
+		<script type="text/javascript" src="lib/jasmine-1.3.1/jasmine-html.js"></script>
+
+		<!-- MonkeyBars -->
+		<script type="text/javascript" src="../monkeybars.min.js"></script>
+
+		<!-- Specs -->
+		<script type="text/javascript" src="specs/simple.spec.js"></script>
+		<script type="text/javascript" src="specs/worker.spec.js"></script>
+		<script type="text/javascript" src="specs/group.spec.js"></script>
+		<script type="text/javascript" src="specs/parallel.spec.js"></script>
+		<script type="text/javascript" src="specs/sequence.spec.js"></script>
+
+		<!-- Jasmine Startup -->
+		<script type="text/javascript">
+
+			var jasmineEnv = jasmine.getEnv();
+			jasmineEnv.updateInterval = 250;
+
+			var htmlReporter = new jasmine.HtmlReporter();
+			jasmineEnv.addReporter(htmlReporter);
+
+			jasmineEnv.specFilter = function(spec) {
+				return htmlReporter.specFilter(spec);
+			};
+
+			var currentWindowOnload = window.onload;
+			
+			window.onload = function() {
+				if (currentWindowOnload) currentWindowOnload();
+				execJasmine();
+			};
+
+			function execJasmine() {
+				jasmineEnv.execute();
+			}
+
+		</script>
+
+	</head>
+
+	<body></body>
+	
+</html>

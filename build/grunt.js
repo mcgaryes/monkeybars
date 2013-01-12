@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         },
         jasmine: {
             all: {
-                src: ['../tests/index.html'],
+                src: ['../tests/index-dist.html'],
                 errorReporting: true
             }
         },
@@ -51,18 +51,9 @@ module.exports = function(grunt) {
             }
         },
         combine: {
-            source:{
+            source: {
                 token: '// token',
-                replacements: [
-                    "/*!\n * @module MonkeyBars\n * @main MonkeyBars\n */\n(function() {", 
-                    "../source/worker.js",
-                    "../source/simple.js", 
-                    "../source/group.js", 
-                    "../source/parallel.js", 
-                    "../source/sequence.js", 
-                    "../source/decorators.js", 
-                    "}).call(this);"
-                ],
+                replacements: ["/*!\n * @module MonkeyBars\n * @main MonkeyBars\n */\n(function() {", "../source/worker.js", "../source/simple.js", "../source/group.js", "../source/parallel.js", "../source/sequence.js", "../source/decorators.js", "}).call(this);"],
                 input: "../source/core.js",
                 output: "../monkeybars.js"
             }
