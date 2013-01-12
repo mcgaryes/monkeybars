@@ -28,4 +28,4 @@ There are detailed explanations for different aspects of the library available w
 * [Task Options](https://github.com/mcgaryes/monkeybars/wiki/Task-Options)
 * [Concurrency](https://github.com/mcgaryes/monkeybars/wiki/Concurrency)
 
-Full documentation can be seen from within the [docs](https://github.com/mcgaryes/monkeybars/tree/master/docs) directory of this project.
+API documentation, including methods and properties available to task types, can be seen [here](http://mcgaryes.github.com/monkeybars/docs/).
