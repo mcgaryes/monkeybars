@@ -1,4 +1,4 @@
-/*!
+	/*!
  * @module MonkeyBars
  * @main MonkeyBars
  */
@@ -41,7 +41,7 @@
 	// ===================================================================
 	// === Private Variables =============================================
 	// ===================================================================
-	
+
 	/**
 	 * Reference to the global js object (i.e. brower's window)
 	 *
@@ -69,7 +69,7 @@
 	 */
 	var taskOptions = [
 		// task
-		"name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout",  "dependencies", "group", "processed",
+		"name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
 		// group
 		"tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
 		// decorators
@@ -87,7 +87,7 @@
 	// ===================================================================
 	// === NodeJS Conditional ============================================
 	// ===================================================================
-	
+
 	if(typeof exports !== 'undefined') {
 		if(typeof(module) !== 'undefined' && module.exports) {
 			exports = module.exports = MonkeyBars;
@@ -97,7 +97,7 @@
 	// ===================================================================
 	// === Helper Methods ================================================
 	// ===================================================================
-	
+
 	/**
 	 * Creates task based on the options passed.
 	 *
@@ -432,29 +432,29 @@
 		};
 
 	/**
-	 * Extention functionality for various task types.
-	 *
-	 * @method extend
-	 * @for MonkeyBars
-	 * @param {Object} protoProps
-	 * @return {Function} child Constructor function for extended task type
-	 * @example
-			
-			var CustomTask = MonkeyBars.Task.extend({
-				name:"CustomTask",
-				newMethod:function(){
-					console.log("Executing newMethod");
-				}
-			});
+		 * Extention functionality for various task types.
+		 *
+		 * @method extend
+		 * @for MonkeyBars
+		 * @param {Object} protoProps
+		 * @return {Function} child Constructor function for extended task type
+		 * @example
+				
+				var CustomTask = MonkeyBars.Task.extend({
+					name:"CustomTask",
+					newMethod:function(){
+						console.log("Executing newMethod");
+					}
+				});
 
-			var instance = new CustomTask();
+				var instance = new CustomTask();
 
-	 */
+		 */
 	var extend = function(protoProps) {
 			var parent = this;
 			var child = function() {
-				parent.apply(this, arguments);
-			};
+					parent.apply(this, arguments);
+				};
 			var childProto = createPropertyDescriptorsWithAttributes(protoProps);
 			child.prototype = Object.create(parent.prototype, childProto);
 			return child;
@@ -463,8 +463,8 @@
 	// ===================================================================
 	// === Worker Task ===================================================
 	// ===================================================================
-	
-	/**
+
+		/**
 	 * Creates a new worker representation of the task
 	 *
 	 * @extends Object
@@ -574,8 +574,8 @@
 	// ===================================================================
 	// === Simple Task ===================================================
 	// ===================================================================
-	
-	/**
+
+		/**
 	 * The simplest form of a __MonkeyBars__ task. Once started the task executes all
 	 * functionality located within the `performTask` function block. Set `logLevel`
 	 * to see console logs during task execution.
@@ -600,7 +600,7 @@
 
 	 */
 	var Task = MonkeyBars.Task = function(attributes) {
-			
+
 			var task = this;
 			task.tid = generateUniqueId();
 
@@ -695,35 +695,35 @@
 		},
 
 		/**
-		 * This object can either be simply a reference to a custom WorkerTask extention's
-		 * constructor. Or it can be an object with a constructor key/value pair. If it is the
-		 * latter then you also have the option of passing a handler function that will be run
-		 * on the `onMessage` handler of the Worker itself.
-		 *
-		 * @for Task
-		 * @property worker
-		 * @type Object
-		 * @default undefined
-		 * @example
+			 * This object can either be simply a reference to a custom WorkerTask extention's
+			 * constructor. Or it can be an object with a constructor key/value pair. If it is the
+			 * latter then you also have the option of passing a handler function that will be run
+			 * on the `onMessage` handler of the Worker itself.
+			 *
+			 * @for Task
+			 * @property worker
+			 * @type Object
+			 * @default undefined
+			 * @example
 
-			var task = new MonkeyBars.Task({
-				...
-				worker:{
-					constructor:CustomWorker,
-					handler:function(e){
-						// called when a postMessage is posted from the task
-					}
-				},
-				...
-			});
+				var task = new MonkeyBars.Task({
+					...
+					worker:{
+						constructor:CustomWorker,
+						handler:function(e){
+							// called when a postMessage is posted from the task
+						}
+					},
+					...
+				});
 
-			var task = new MonkeyBars.Task({
-				...
-				worker:CustomWorker,
-				...
-			});
+				var task = new MonkeyBars.Task({
+					...
+					worker:CustomWorker,
+					...
+				});
 
-		 */
+			 */
 		worker: {
 			value: undefined,
 			writable: true
@@ -790,24 +790,24 @@
 		},
 
 		/**
-		 * Calling this method cancels the task. However it is up to the instance to handle
-		 * the canceled state.
-		 *
-		 * @for Task
-		 * @method cancel
-		 * @example
+			 * Calling this method cancels the task. However it is up to the instance to handle
+			 * the canceled state.
+			 *
+			 * @for Task
+			 * @method cancel
+			 * @example
 
-			var task = new MonkeyBars.Task({
-				performTask:function(){
-					if(true){
-						this.cancel();
+				var task = new MonkeyBars.Task({
+					performTask:function(){
+						if(true){
+							this.cancel();
+						}
 					}
-				}
-			});
+				});
 
-			task.start();
+				task.start();
 
-		 */
+			 */
 		cancel: {
 			value: function() {
 				if(this.state > STATE_STARTED) {
@@ -827,21 +827,21 @@
 		},
 
 		/**
-		 * Calling this method says that the tasks execution is now complete.
-		 *
-		 * @for Task
-		 * @method complete
-		 * @example
+			 * Calling this method says that the tasks execution is now complete.
+			 *
+			 * @for Task
+			 * @method complete
+			 * @example
 
-			var task = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete();
-				}
-			});
+				var task = new MonkeyBars.Task({
+					performTask:function(){
+						this.complete();
+					}
+				});
 
-			task.start();
+				task.start();
 
-		 */
+			 */
 		complete: {
 			value: function(data) {
 				if(this.state > STATE_STARTED) {
@@ -866,26 +866,26 @@
 		},
 
 		/**
-		 * Calling this method to fault a task. If it is part of a group task this will
-		 * also call the groups fault method passing the error up to the group.
-		 *
-		 * @for Task
-		 * @method fault
-		 * @param {String} error Message associated with the cause of the fault.
-		 * @example
+			 * Calling this method to fault a task. If it is part of a group task this will
+			 * also call the groups fault method passing the error up to the group.
+			 *
+			 * @for Task
+			 * @method fault
+			 * @param {String} error Message associated with the cause of the fault.
+			 * @example
 
-			var task = new MonkeyBars.Task({
-				performTask:function(){
-					var a = "a";
-					if(a != "b") {
-						this.fault("a != b");
+				var task = new MonkeyBars.Task({
+					performTask:function(){
+						var a = "a";
+						if(a != "b") {
+							this.fault("a != b");
+						}
 					}
-				}
-			});
+				});
 
-			task.start();
+				task.start();
 
-		 */
+			 */
 		fault: {
 			value: function(error) {
 				if(this.state >= STATE_CANCELED) {
@@ -905,29 +905,29 @@
 		},
 
 		/**
-		 * This method is called during the execution lifecycle of the task. It is intentionally
-		 * left blank and is up to the instance to describe it functionality.
-		 *
-		 * @for Task
-		 * @method onChange
-		 * @param {Integer} state The current state of the task
-		 * @param {String} error Message describing error
-		 * @example
+			 * This method is called during the execution lifecycle of the task. It is intentionally
+			 * left blank and is up to the instance to describe it functionality.
+			 *
+			 * @for Task
+			 * @method onChange
+			 * @param {Integer} state The current state of the task
+			 * @param {String} error Message describing error
+			 * @example
 
-			var task = new MonkeyBars.Task({
-				performTask:function(){
-					this.complete();
-				},
-				onChange:function(state,error){
-					if(state == MonkeyBars.TaskStates.Completed){
-						alert("complete");
+				var task = new MonkeyBars.Task({
+					performTask:function(){
+						this.complete();
+					},
+					onChange:function(state,error){
+						if(state == MonkeyBars.TaskStates.Completed){
+							alert("complete");
+						}
 					}
-				}
-			});
+				});
 
-			task.start();
+				task.start();
 
-		 */
+			 */
 		onChange: {
 			value: function(state, data, error) {},
 			writable: true
@@ -979,26 +979,26 @@
 		},
 
 		/**
-		 * This method is required for **simple** tasks and will throw an exception if it
-		 * is called and not overridden. If you overwrite this method on a task group
-		 * then you need to make sure that you call the extended/implemented classes
-		 * original prototype method (see the example below).
-		 *
-		 * @for Task
-		 * @method performTask
-		 * @required
-		 * @example
+			 * This method is required for **simple** tasks and will throw an exception if it
+			 * is called and not overridden. If you overwrite this method on a task group
+			 * then you need to make sure that you call the extended/implemented classes
+			 * original prototype method (see the example below).
+			 *
+			 * @for Task
+			 * @method performTask
+			 * @required
+			 * @example
 
-			var parallel = new MonkeyBars.ParallelTask({
-				...
-				performTask:function(){
-					// custom functionality
-					MonkeyBars.ParallelTask.prototype.performTask.call(this);
-				}
-				...
-			})
+				var parallel = new MonkeyBars.ParallelTask({
+					...
+					performTask:function(){
+						// custom functionality
+						MonkeyBars.ParallelTask.prototype.performTask.call(this);
+					}
+					...
+				})
 
-		 */
+			 */
 		performTask: {
 			value: function() {
 				throw "performTask: " + OVERRIDE_NEEDED;
@@ -1061,8 +1061,8 @@
 	// ===================================================================
 	// === Task Group ====================================================
 	// ===================================================================
-	
-	/**
+
+		/**
 	 * A task group, and extention of task, provides the building blocks for creating
 	 * a group of tasks that is inherently a task itself.
 	 *
@@ -1121,34 +1121,34 @@
 		},
 
 		/**
-		 * Adds a subtask to the groups queue. This is helpful when you want to add
-		 * a sub task after instantiation.
-		 *
-		 * @for TaskGroup
-		 * @method addSubTask
-		 * @param {Object} task Either an object containing attributes of a task or
-		 * an already instantiated task
-		 * @example
+			 * Adds a subtask to the groups queue. This is helpful when you want to add
+			 * a sub task after instantiation.
+			 *
+			 * @for TaskGroup
+			 * @method addSubTask
+			 * @param {Object} task Either an object containing attributes of a task or
+			 * an already instantiated task
+			 * @example
 
-			var parallel = new MonkeyBars.ParallelTask();
-			
-			parallel.addSubTask({
-				name:"subtask",
-				performTask:function(){
-					this.complete();
-				}
-			});
+				var parallel = new MonkeyBars.ParallelTask();
+				
+				parallel.addSubTask({
+					name:"subtask",
+					performTask:function(){
+						this.complete();
+					}
+				});
 
-			var simple = new MonkeyBars.simple({
-				name:"subtask",
-				performTask:function(){
-					this.complete();
-				}
-			});
+				var simple = new MonkeyBars.simple({
+					name:"subtask",
+					performTask:function(){
+						this.complete();
+					}
+				});
 
-			parallel.addSubTask(simple);
+				parallel.addSubTask(simple);
 
-		 */
+			 */
 		addSubTask: {
 			value: function(task) {
 				if(!task) {
@@ -1471,32 +1471,32 @@
 	// ===================================================================
 	// === Parallel Task =================================================
 	// ===================================================================
-	
-	/**
-	 * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
-	 * complete functionality is run when all of its sub tasks are complete.
-	 *
-	 * @extends TaskGroup
-	 * @constructor
-	 * @class ParallelTask
-	 * @param {Object} attributes List of attributes to apply to the task group
-	 * @example
 
-			var parallel = new MonkeyBars.ParallelTask({
-				name:"ParallelTask",
-				tasks:[new MonkeyBars.Task({
-					performTask:function(){
-						this.complete();
+		/**
+		 * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
+		 * complete functionality is run when all of its sub tasks are complete.
+		 *
+		 * @extends TaskGroup
+		 * @constructor
+		 * @class ParallelTask
+		 * @param {Object} attributes List of attributes to apply to the task group
+		 * @example
+
+				var parallel = new MonkeyBars.ParallelTask({
+					name:"ParallelTask",
+					tasks:[new MonkeyBars.Task({
+						performTask:function(){
+							this.complete();
+						}
+					})],
+					onComplete:function(){
+						alert(this.name + " is complete!");
 					}
-				})],
-				onComplete:function(){
-					alert(this.name + " is complete!");
-				}
-			});
+				});
 
-			parallel.start();
+				parallel.start();
 
-	 */
+		 */
 	var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
 			var task = this;
 			TaskGroup.call(task, attributes);
@@ -1645,11 +1645,6 @@
 			value: function(task, data) {
 				this.currentIndex++;
 				if(this.currentIndex === this.tasks.length) {
-					
-
-
-
-
 
 
 					///*
@@ -1659,12 +1654,7 @@
 						this.complete();
 					}
 					//*/
-
 					// this.complete(this.data);
-
-
-
-
 
 
 				} else {
@@ -1700,8 +1690,8 @@
 	// ===================================================================
 	// === Sequence Task =================================================
 	// ===================================================================
-	
-	/**
+
+		/**
 	 * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
 	 * complete functionality is run when all of its sub tasks are complete.
 	 *
@@ -1769,9 +1759,6 @@
 				} else {
 
 
-
-
-
 					///*
 					if(this.group !== undefined) {
 						this.complete(this.data);
@@ -1779,11 +1766,7 @@
 						this.complete();
 					}
 					//*/
-
 					// this.complete(this.data);
-
-
-
 
 
 				}
@@ -1850,8 +1833,8 @@
 	// ===================================================================
 	// === Task Decorators ===============================================
 	// ===================================================================
-	
-	/**
+
+		/**
 	 * Decorator to provide for loop functionality for the task. The task executes
 	 * as many times as referenced by the count attribute provided by the instance.
 	 *
@@ -1933,7 +1916,7 @@
 	// ===================================================================
 	// === Public Interface ==============================================
 	// ===================================================================
-	
+
 	/**
 	 * Task states contstants.
 	 *
@@ -1993,4 +1976,4 @@
 		While: DECORATOR_WHILE
 	};
 
-}).call(this);
+	}).call(this);

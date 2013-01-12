@@ -1,10 +1,10 @@
 "use strict";
 
-var monkeyBarsName          =   "MonkeyBars";
-var monkeyBarsVersion       =   "0.9.9";
-var monkeyBarsDescription   =   "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
-var monkeyBarsRepository    =   "https://github.com/mcgaryes/monkeybars/";
-var monkeyBarsBanner        =   "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
+var monkeyBarsName = "MonkeyBars";
+var monkeyBarsVersion = "0.9.10";
+var monkeyBarsDescription = "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
+var monkeyBarsRepository = "https://github.com/mcgaryes/monkeybars/";
+var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
 
 // object will be used to create the package.json file for npm manager
 var monkeyBarsPackageJsonTemplate = {
@@ -27,20 +27,13 @@ var monkeyBarsPackageJsonTemplate = {
     }]
 };
 
-// /*!
-//  * @module MonkeyBars
-//  * @main MonkeyBars
-//  */
-// (function() {
-// }).call(this);
-
 // grunt config
 module.exports = function(grunt) {
 
     // config
     grunt.initConfig({
         lint: {
-            files: ['grunt.js','../monkeybars.js']
+            files: ['grunt.js', '../monkeybars.js']
         },
         meta: {
             banner: monkeyBarsBanner
@@ -57,13 +50,24 @@ module.exports = function(grunt) {
                 dest: '../monkeybars.min.js'
             }
         },
+        combine: {
+            source:{
+                token: '// token',
+                replacements: [
+                    "/*!\n * @module MonkeyBars\n * @main MonkeyBars\n */\n(function() {", 
+                    "../source/worker.js",
+                    "../source/simple.js", 
+                    "../source/group.js", 
+                    "../source/parallel.js", 
+                    "../source/sequence.js", 
+                    "../source/decorators.js", 
+                    "}).call(this);"
+                ],
+                input: "../source/core.js",
+                output: "../monkeybars.js"
+            }
+        },
         copy: {
-            examples: {
-                files: {
-                    "../www/monkeybars.min.js": "../monkeybars.min.js",
-                    "../www/": "../examples/**"
-                }
-            },
             package: {
                 options: {
                     processContent: function() {
@@ -91,7 +95,7 @@ module.exports = function(grunt) {
                 "description": monkeyBarsDescription,
                 "version": monkeyBarsVersion,
                 "url": monkeyBarsRepository,
-                "logo":"../artwork/monkeybars.png",
+                "logo": "../artwork/monkeybars.png",
                 options: {
                     paths: "../",
                     outdir: "../docs/"
@@ -112,14 +116,14 @@ module.exports = function(grunt) {
                 eqnull: true,
                 node: true,
                 es5: true,
-                smarttabs:false,
-                strict:true
+                smarttabs: false,
+                strict: true
             },
             globals: {
-                yui:true,
-                Worker:false,
-                Blob:false,
-                postMessage:false
+                yui: true,
+                Worker: false,
+                Blob: false,
+                postMessage: false
             }
         }
     });
@@ -128,7 +132,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jasmine-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
+    grunt.loadNpmTasks('grunt-combine');
 
     // tasks
-    grunt.registerTask('default', 'lint jasmine min copy:examples copy:package copy:version yuidoc');
+    grunt.registerTask('default', 'combine:source lint jasmine min copy:package copy:version yuidoc');
 };
