@@ -52,10 +52,33 @@ module.exports = function(grunt) {
         },
         combine: {
             source: {
-                token: '// token',
-                replacements: ["/*!\n * @module MonkeyBars\n * @main MonkeyBars\n */\n(function() {", "../source/worker.js", "../source/simple.js", "../source/group.js", "../source/parallel.js", "../source/sequence.js", "../source/decorators.js", "}).call(this);"],
                 input: "../source/core.js",
-                output: "../monkeybars.js"
+                output: "../monkeybars.js",
+                tokens: [{
+                    token:"//%pre",
+                    string:"/*!\n * @module MonkeyBars\n * @main MonkeyBars\n */\n(function() {"
+                },{
+                    token:"//%worker",
+                    file:"../source/worker.js"
+                },{
+                    token:"//%simple",
+                    file:"../source/simple.js"
+                },{
+                    token:"//%group",
+                    file:"../source/group.js"
+                },{
+                    token:"//%parallel",
+                    file:"../source/parallel.js"
+                },{
+                    token:"//%sequence",
+                    file:"../source/sequence.js"
+                },{
+                    token:"//%decorators",
+                    file:"../source/decorators.js"
+                },{
+                    token:"//%post",
+                    string:"}).call(this);"
+                }]
             }
         },
         copy: {
