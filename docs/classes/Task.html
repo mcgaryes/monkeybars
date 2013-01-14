@@ -15,11 +15,11 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;artwork&#x2F;monkeybars.png" title="MonkeyBars"></h1>
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.8</em>
+            <em>API Docs for: 0.9.10</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -104,7 +104,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l547"><code>..&#x2F;monkeybars.js:547</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l577"><code>..&#x2F;monkeybars.js:577</code></a>
         </div>
     
 
@@ -116,7 +116,7 @@
 
 
 <div class="box intro">
-    <p>The simplest form of a <strong>MonkeyBars</strong> task. Once started the task executes all 
+    <p>The simplest form of a <strong>MonkeyBars</strong> task. Once started the task executes all
 functionality located within the <code>performTask</code> function block. Set <code>logLevel</code>
 to see console logs during task execution.</p>
 </div>
@@ -166,7 +166,7 @@ to see console logs during task execution.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l547"><code>..&#x2F;monkeybars.js:547</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l577"><code>..&#x2F;monkeybars.js:577</code></a>
         
         </p>
 
@@ -212,17 +212,16 @@ to see console logs during task execution.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            name:"ExampleTask",
-            performTask:function(){
-                this.complete();
-            },
-            onComplete:function(){
-                alert(this.name + " is complete!");
-            }
-        });
-
-        task.start();
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    name:"ExampleTask",
+    performTask:function(){
+        this.complete();
+    },
+    onComplete:function(){
+        alert(this.name + " is complete!");
+    }
+});
+task.start();
 </code></pre>
             </div>
         </div>
@@ -264,6 +263,20 @@ to see console logs during task execution.</p>
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_cancel">cancel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_complete">complete</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_complete">complete</a>
 
                                 
@@ -272,6 +285,34 @@ to see console logs during task execution.</p>
                         
                             <li class="index-item method">
                                 <a href="#method_fault">fault</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_fault">fault</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_initialize">initialize</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_initialize">initialize</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_onCancel">onCancel</a>
 
                                 
                                 
@@ -292,7 +333,28 @@ to see console logs during task execution.</p>
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_onChange">onChange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_onComplete">onComplete</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_onComplete">onComplete</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_onFault">onFault</a>
 
                                 
                                 
@@ -313,7 +375,28 @@ to see console logs during task execution.</p>
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_onStart">onStart</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_performTask">performTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_performTask">performTask</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_start">start</a>
 
                                 
                                 
@@ -344,7 +427,42 @@ to see console logs during task execution.</p>
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_concurrent">concurrent</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_currentIndex">currentIndex</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_currentIndex">currentIndex</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_data">data</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_data">data</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_displayName">displayName</a>
 
                                 
                                 
@@ -365,7 +483,14 @@ to see console logs during task execution.</p>
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_product">product</a>
+                                <a href="#property_logLevel">logLevel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_state">state</a>
 
                                 
                                 
@@ -386,7 +511,28 @@ to see console logs during task execution.</p>
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_timeout">timeout</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_type">type</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_type">type</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_worker">worker</a>
 
                                 
                                 
@@ -445,7 +591,7 @@ to see console logs during task execution.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l746"><code>..&#x2F;monkeybars.js:746</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l790"><code>..&#x2F;monkeybars.js:790</code></a>
         
         </p>
 
@@ -456,7 +602,7 @@ to see console logs during task execution.</p>
     </div>
 
     <div class="description">
-        <p>Calling this method cancels the task. However it is up to the instance to handle 
+        <p>Calling this method cancels the task. However it is up to the instance to handle
 the canceled state.</p>
     </div>
 
@@ -469,15 +615,87 @@ the canceled state.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            performTask:function(){
-                if(true){
-                    this.cancel();
-                }
-            }
-        });
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        if(true){
+            this.cancel();
+        }
+    }
+});
 
-        task.start();
+task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_cancel" class="method item">
+    <h3 class="name"><code>cancel</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l214"><code>..&#x2F;source&#x2F;simple.js:214</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calling this method cancels the task. However it is up to the instance to handle
+the canceled state.</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        if(true){
+            this.cancel();
+        }
+    }
+});
+
+task.start();
 </code></pre>
             </div>
         </div>
@@ -517,7 +735,7 @@ the canceled state.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l783"><code>..&#x2F;monkeybars.js:783</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l827"><code>..&#x2F;monkeybars.js:827</code></a>
         
         </p>
 
@@ -540,13 +758,82 @@ the canceled state.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            performTask:function(){
-                this.complete();
-            }
-        });
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        this.complete();
+    }
+});
 
-        task.start();
+task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_complete" class="method item">
+    <h3 class="name"><code>complete</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l251"><code>..&#x2F;source&#x2F;simple.js:251</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calling this method says that the tasks execution is now complete.</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        this.complete();
+    }
+});
+
+task.start();
 </code></pre>
             </div>
         </div>
@@ -596,7 +883,7 @@ the canceled state.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l819"><code>..&#x2F;monkeybars.js:819</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l866"><code>..&#x2F;monkeybars.js:866</code></a>
         
         </p>
 
@@ -607,7 +894,7 @@ the canceled state.</p>
     </div>
 
     <div class="description">
-        <p>Calling this method to fault a task. If it is part of a group task this will 
+        <p>Calling this method to fault a task. If it is part of a group task this will
 also call the groups fault method passing the error up to the group.</p>
     </div>
 
@@ -643,19 +930,299 @@ also call the groups fault method passing the error up to the group.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            performTask:function(){
-                var a = "a";
-                if(a != "b") {
-                    this.fault("a != b");
-                }
-            }
-        });
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        var a = "a";
+        if(a != "b") {
+            this.fault("a != b");
+        }
+    }
+});
 
-        task.start();
+task.start();
 </code></pre>
             </div>
         </div>
+    
+</div>
+
+                
+                    <div id="method_fault" class="method item">
+    <h3 class="name"><code>fault</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l290"><code>..&#x2F;source&#x2F;simple.js:290</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calling this method to fault a task. If it is part of a group task this will
+also call the groups fault method passing the error up to the group.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message associated with the cause of the fault.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        var a = "a";
+        if(a != "b") {
+            this.fault("a != b");
+        }
+    }
+});
+
+task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_initialize" class="method item">
+    <h3 class="name"><code>initialize</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>attributes</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1043"><code>..&#x2F;monkeybars.js:1043</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialization functionality</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">attributes</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initialize" class="method item">
+    <h3 class="name"><code>initialize</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>attributes</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l467"><code>..&#x2F;source&#x2F;simple.js:467</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialization functionality</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">attributes</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
     
 </div>
 
@@ -692,7 +1259,61 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l921"><code>..&#x2F;monkeybars.js:921</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l968"><code>..&#x2F;monkeybars.js:968</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task is canceled.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onCancel" class="method item">
+    <h3 class="name"><code>onCancel</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l392"><code>..&#x2F;source&#x2F;simple.js:392</code></a>
         
         </p>
 
@@ -762,7 +1383,7 @@ also call the groups fault method passing the error up to the group.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l858"><code>..&#x2F;monkeybars.js:858</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l905"><code>..&#x2F;monkeybars.js:905</code></a>
         
         </p>
 
@@ -824,18 +1445,147 @@ left blank and is up to the instance to describe it functionality.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            performTask:function(){
-                this.complete();
-            },
-            onChange:function(state,error){
-                if(state == MonkeyBars.TaskStates.Completed){
-                    alert("complete");
-                }
-            }
-        });
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        this.complete();
+    },
+    onChange:function(state,error){
+        if(state == MonkeyBars.TaskStates.Completed){
+            alert("complete");
+        }
+    }
+});
 
-        task.start();
+task.start();
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_onChange" class="method item">
+    <h3 class="name"><code>onChange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>state</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l329"><code>..&#x2F;source&#x2F;simple.js:329</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method is called during the execution lifecycle of the task. It is intentionally
+left blank and is up to the instance to describe it functionality.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">state</code>
+                        <span class="type">Integer</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The current state of the task</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message describing error</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    performTask:function(){
+        this.complete();
+    },
+    onChange:function(state,error){
+        if(state == MonkeyBars.TaskStates.Completed){
+            alert("complete");
+        }
+    }
+});
+
+task.start();
 </code></pre>
             </div>
         </div>
@@ -875,7 +1625,61 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l910"><code>..&#x2F;monkeybars.js:910</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l957"><code>..&#x2F;monkeybars.js:957</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task completes.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onComplete" class="method item">
+    <h3 class="name"><code>onComplete</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l381"><code>..&#x2F;source&#x2F;simple.js:381</code></a>
         
         </p>
 
@@ -939,7 +1743,94 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l898"><code>..&#x2F;monkeybars.js:898</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l369"><code>..&#x2F;source&#x2F;simple.js:369</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task faults.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message describing error</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onFault" class="method item">
+    <h3 class="name"><code>onFault</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l945"><code>..&#x2F;monkeybars.js:945</code></a>
         
         </p>
 
@@ -1016,7 +1907,61 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l887"><code>..&#x2F;monkeybars.js:887</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l358"><code>..&#x2F;source&#x2F;simple.js:358</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Convenience method called when the task starts.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_onStart" class="method item">
+    <h3 class="name"><code>onStart</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l934"><code>..&#x2F;monkeybars.js:934</code></a>
         
         </p>
 
@@ -1070,7 +2015,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l932"><code>..&#x2F;monkeybars.js:932</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l403"><code>..&#x2F;source&#x2F;simple.js:403</code></a>
         
         </p>
 
@@ -1081,7 +2026,7 @@ left blank and is up to the instance to describe it functionality.</p>
     </div>
 
     <div class="description">
-        <p>This method is required for <strong>simple</strong> tasks and will throw an exception if it 
+        <p>This method is required for <strong>simple</strong> tasks and will throw an exception if it
 is called and not overridden. If you overwrite this method on a task group
 then you need to make sure that you call the extended/implemented classes
 original prototype method (see the example below).</p>
@@ -1096,14 +2041,87 @@ original prototype method (see the example below).</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var parallel = new MonkeyBars.ParallelTask({
-            ...
-            performTask:function(){
-                // custom functionality
-                MonkeyBars.ParallelTask.prototype.performTask.call(this);
-            }
-            ...
-        })
+                <pre class="code prettyprint"><code>var parallel = new MonkeyBars.ParallelTask({
+    ...
+    performTask:function(){
+        // custom functionality
+        MonkeyBars.ParallelTask.prototype.performTask.call(this);
+    }
+    ...
+})
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_performTask" class="method item">
+    <h3 class="name"><code>performTask</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l979"><code>..&#x2F;monkeybars.js:979</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method is required for <strong>simple</strong> tasks and will throw an exception if it
+is called and not overridden. If you overwrite this method on a task group
+then you need to make sure that you call the extended/implemented classes
+original prototype method (see the example below).</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var parallel = new MonkeyBars.ParallelTask({
+    ...
+    performTask:function(){
+        // custom functionality
+        MonkeyBars.ParallelTask.prototype.performTask.call(this);
+    }
+    ...
+})
 </code></pre>
             </div>
         </div>
@@ -1143,7 +2161,62 @@ original prototype method (see the example below).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l960"><code>..&#x2F;monkeybars.js:960</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l431"><code>..&#x2F;source&#x2F;simple.js:431</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Kicks off the execution of the task by calling the tasks <code>performTask</code> method.
+This method can only be run once on a task.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_start" class="method item">
+    <h3 class="name"><code>start</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1007"><code>..&#x2F;monkeybars.js:1007</code></a>
         
         </p>
 
@@ -1197,7 +2270,53 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l638"><code>..&#x2F;monkeybars.js:638</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l682"><code>..&#x2F;monkeybars.js:682</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Whether or not to run the task concurrently through Web Workers</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_concurrent" class="property item">
+    <h3 class="name"><code>concurrent</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l106"><code>..&#x2F;source&#x2F;simple.js:106</code></a>
         
         </p>
 
@@ -1243,7 +2362,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1028"><code>..&#x2F;monkeybars.js:1028</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_group.js.html#l33"><code>..&#x2F;source&#x2F;group.js:33</code></a>
         
         </p>
 
@@ -1258,6 +2377,144 @@ This method can only be run once on a task.</p>
 
     
         <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_currentIndex" class="property item">
+    <h3 class="name"><code>currentIndex</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l1094"><code>..&#x2F;monkeybars.js:1094</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The index of the subtasks that have completed execution.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_data" class="property item">
+    <h3 class="name"><code>data</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l639"><code>..&#x2F;monkeybars.js:639</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Task data</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> undefined</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_data" class="property item">
+    <h3 class="name"><code>data</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l63"><code>..&#x2F;source&#x2F;simple.js:63</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Task data</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> undefined</p>
     
 
     
@@ -1289,7 +2546,51 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l686"><code>..&#x2F;monkeybars.js:686</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l154"><code>..&#x2F;source&#x2F;simple.js:154</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Display name for task. Used in logging output.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_displayName" class="property item">
+    <h3 class="name"><code>displayName</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l730"><code>..&#x2F;monkeybars.js:730</code></a>
         
         </p>
 
@@ -1333,7 +2634,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l720"><code>..&#x2F;monkeybars.js:720</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l188"><code>..&#x2F;source&#x2F;simple.js:188</code></a>
         
         </p>
 
@@ -1356,9 +2657,9 @@ This method can only be run once on a task.</p>
 </div>
 
                 
-                    <div id="property_product" class="property item">
-    <h3 class="name"><code>product</code></h3>
-    <span class="type">Object</span>
+                    <div id="property_logLevel" class="property item">
+    <h3 class="name"><code>logLevel</code></h3>
+    <span class="type">Integer</span>
 
     
 
@@ -1379,7 +2680,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l598"><code>..&#x2F;monkeybars.js:598</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l764"><code>..&#x2F;monkeybars.js:764</code></a>
         
         </p>
 
@@ -1389,11 +2690,11 @@ This method can only be run once on a task.</p>
     </div>
 
     <div class="description">
-        <p>Task product</p>
+        <p>The default logging level for tasks</p>
     </div>
 
     
-        <p><strong>Default:</strong> undefined</p>
+        <p><strong>Default:</strong> 0</p>
     
 
     
@@ -1425,7 +2726,53 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l706"><code>..&#x2F;monkeybars.js:706</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l174"><code>..&#x2F;source&#x2F;simple.js:174</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The current state of the task</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_state" class="property item">
+    <h3 class="name"><code>state</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l750"><code>..&#x2F;monkeybars.js:750</code></a>
         
         </p>
 
@@ -1471,7 +2818,53 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l733"><code>..&#x2F;monkeybars.js:733</code></a>
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l201"><code>..&#x2F;source&#x2F;simple.js:201</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Time in milliseconds in which a task will time out and throw a fault</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> undefined</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_timeout" class="property item">
+    <h3 class="name"><code>timeout</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l777"><code>..&#x2F;monkeybars.js:777</code></a>
         
         </p>
 
@@ -1517,7 +2910,51 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l624"><code>..&#x2F;monkeybars.js:624</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l669"><code>..&#x2F;monkeybars.js:669</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The kind of task</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_type" class="property item">
+    <h3 class="name"><code>type</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l93"><code>..&#x2F;source&#x2F;simple.js:93</code></a>
         
         </p>
 
@@ -1561,7 +2998,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l651"><code>..&#x2F;monkeybars.js:651</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l695"><code>..&#x2F;monkeybars.js:695</code></a>
         
         </p>
 
@@ -1572,7 +3009,7 @@ This method can only be run once on a task.</p>
 
     <div class="description">
         <p>This object can either be simply a reference to a custom WorkerTask extention's
-constructor. Or it can be an object with a constructor key/value pair. If it is the 
+constructor. Or it can be an object with a constructor key/value pair. If it is the
 latter then you also have the option of passing a handler function that will be run
 on the <code>onMessage</code> handler of the Worker itself.</p>
     </div>
@@ -1586,22 +3023,95 @@ on the <code>onMessage</code> handler of the Worker itself.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>        var task = new MonkeyBars.Task({
-            ...
-            worker:{
-                constructor:CustomWorker,
-                handler:function(e){
-                    // called when a postMessage is posted from the task
-                }
-            },
-            ...
-        });
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    ...
+    worker:{
+        constructor:CustomWorker,
+        handler:function(e){
+            // called when a postMessage is posted from the task
+        }
+    },
+    ...
+});
 
-        var task = new MonkeyBars.Task({
-            ...
-            worker:CustomWorker,
-            ...
-        });
+var task = new MonkeyBars.Task({
+    ...
+    worker:CustomWorker,
+    ...
+});
+</code></pre>
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="property_worker" class="property item">
+    <h3 class="name"><code>worker</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._source_simple.js.html#l119"><code>..&#x2F;source&#x2F;simple.js:119</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This object can either be simply a reference to a custom WorkerTask extention's
+constructor. Or it can be an object with a constructor key/value pair. If it is the
+latter then you also have the option of passing a handler function that will be run
+on the <code>onMessage</code> handler of the Worker itself.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> undefined</p>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
+    ...
+    worker:{
+        constructor:CustomWorker,
+        handler:function(e){
+            // called when a postMessage is posted from the task
+        }
+    },
+    ...
+});
+
+var task = new MonkeyBars.Task({
+    ...
+    worker:CustomWorker,
+    ...
+});
 </code></pre>
             </div>
         </div>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>..&#x2F;source&#x2F;simple.js - MonkeyBars</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.8.0pr2&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.8.0pr2&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.9.10</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/MonkeyBars.html">MonkeyBars</a></li>
+            
+                <li><a href="..&#x2F;classes/ParallelTask.html">ParallelTask</a></li>
+            
+                <li><a href="..&#x2F;classes/SequenceTask.html">SequenceTask</a></li>
+            
+                <li><a href="..&#x2F;classes/Task.html">Task</a></li>
+            
+                <li><a href="..&#x2F;classes/TaskGroup.html">TaskGroup</a></li>
+            
+                <li><a href="..&#x2F;classes/WorkerTask.html">WorkerTask</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: ..&#x2F;source&#x2F;simple.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * The simplest form of a __MonkeyBars__ task. Once started the task executes all
+ * functionality located within the &#x60;performTask&#x60; function block. Set &#x60;logLevel&#x60;
+ * to see console logs during task execution.
+ *
+ * @extends Object
+ * @constructor
+ * @class Task
+ * @param {Object} attributes List of attributes to apply to the task
+ * @example
+ *
+ *	var task = new MonkeyBars.Task({
+ *		name:&quot;ExampleTask&quot;,
+ *		performTask:function(){
+ *			this.complete();
+ *		},
+ *		onComplete:function(){
+ *			alert(this.name + &quot; is complete!&quot;);
+ *		}
+ *	});
+ *	task.start();
+ *
+ *&#x2F;
+var Task = MonkeyBars.Task = function(attributes) {
+
+	var task = this;
+	task.tid = generateUniqueId();
+
+	&#x2F;&#x2F; add our attributes
+	for(var attribute in attributes) {
+		if(attributes.hasOwnProperty(attribute)) {
+			var option = true;
+			for(var i = 0; i &lt; taskOptions.length; i++) {
+				&#x2F;&#x2F; @TODO: Need to add functionality here to make sure that the options passed
+				&#x2F;&#x2F; match up to their type
+				if(attribute === taskOptions[i] || typeof(attributes[attribute]) === &quot;function&quot;) {
+					option = false;
+					break;
+				}
+			}
+			if(option) {
+				if(task.options === undefined) {
+					task.options = {};
+				}
+				task.options[attribute] = attributes[attribute];
+			} else {
+				if(!task.hasOwnProperty(attribute)) {
+					task[attribute] = attributes[attribute];
+				}
+			}
+		}
+	}
+
+	&#x2F;&#x2F; decorate our task
+	decorateTaskBasedOnAttributes(task, attributes);
+
+	&#x2F;&#x2F; initialize the task
+	task.initialize(task.options);
+};
+
+Task.prototype = Object.create({}, {
+
+	&#x2F;**
+	 * Task data
+	 *
+	 * @for Task
+	 * @property data
+	 * @type Object
+	 * @default undefined
+	 *&#x2F;
+	data: {
+		value: undefined,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Callback for handling data manipulated by a taskj. Overwrite this method
+	 * to do something other than setting data to what is passed.
+	 *
+	 * @for TaskGroup
+	 * @method handleData
+	 *&#x2F;
+	handleData: {
+		value: function(data) {
+			if(arguments.length &lt; 0) {
+				return;
+			}
+			this.data = data;
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * The kind of task
+	 *
+	 * @for Task
+	 * @property type
+	 * @type String
+	 * @readonly
+	 *&#x2F;
+	type: {
+		value: TYPE_SIMPLE,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Whether or not to run the task concurrently through Web Workers
+	 *
+	 * @for Task
+	 * @property concurrent
+	 * @type Boolean
+	 * @default false
+	 *&#x2F;
+	concurrent: {
+		value: false,
+		writable: true
+	},
+
+	&#x2F;**
+	 * This object can either be simply a reference to a custom WorkerTask extention&#x27;s
+	 * constructor. Or it can be an object with a constructor key&#x2F;value pair. If it is the
+	 * latter then you also have the option of passing a handler function that will be run
+	 * on the &#x60;onMessage&#x60; handler of the Worker itself.
+	 *
+	 * @for Task
+	 * @property worker
+	 * @type Object
+	 * @default undefined
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		...
+	 *		worker:{
+	 *			constructor:CustomWorker,
+	 *			handler:function(e){
+	 *				&#x2F;&#x2F; called when a postMessage is posted from the task
+	 *			}
+	 *		},
+	 *		...
+	 *	});
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		...
+	 *		worker:CustomWorker,
+	 *		...
+	 *	});
+	 *
+	 *&#x2F;
+	worker: {
+		value: undefined,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Display name for task. Used in logging output.
+	 *
+	 * @for Task
+	 * @property displayName
+	 * @type String
+	 * @readonly
+	 *&#x2F;
+	displayName: {
+		get: function() {
+			if(this.id) {
+				return this.id;
+			} else if(this.name) {
+				return this.name;
+			} else {
+				return this.type;
+			}
+		}
+	},
+
+	&#x2F;**
+	 * The current state of the task
+	 *
+	 * @for Task
+	 * @property state
+	 * @type Integer
+	 * @readonly
+	 * @default 0
+	 *&#x2F;
+	state: {
+		value: STATE_INITIALIZED,
+		writable: true
+	},
+
+	&#x2F;**
+	 * The default logging level for tasks
+	 *
+	 * @for Task
+	 * @property logLevel
+	 * @type Integer
+	 * @default 0
+	 *&#x2F;
+	logLevel: {
+		value: LOG_NONE,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Time in milliseconds in which a task will time out and throw a fault
+	 *
+	 * @for Task
+	 * @property timeout
+	 * @type Integer
+	 * @default undefined
+	 *&#x2F;
+	timeout: {
+		value: undefined,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Calling this method cancels the task. However it is up to the instance to handle
+	 * the canceled state.
+	 *
+	 * @for Task
+	 * @method cancel
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		performTask:function(){
+	 *			if(true){
+	 *				this.cancel();
+	 *			}
+	 *		}
+	 *	});
+	 *
+	 *	task.start();
+	 *
+	 *&#x2F;
+	cancel: {
+		value: function() {
+			if(this.state &gt; STATE_STARTED) {
+				return;
+			}
+			this.state = STATE_CANCELED;
+			if(this.logLevel &gt;= LOG_INFO) {
+				console.log(&quot;Canceled:&quot; + this.displayName);
+			}
+			if(this.timeoutId) {
+				clearTimeout(this.timeoutId);
+			}
+			this.onChange(this.state);
+			this.onCancel();
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Calling this method says that the tasks execution is now complete.
+	 *
+	 * @for Task
+	 * @method complete
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		performTask:function(){
+	 *			this.complete();
+	 *		}
+	 *	});
+	 *
+	 *	task.start();
+	 *
+	 *&#x2F;
+	complete: {
+		value: function(data) {
+			if(this.state &gt; STATE_STARTED) {
+				return;
+			}
+			this.state = STATE_COMPLETED;
+			if(this.logLevel &gt;= LOG_INFO) {
+				console.log(&quot;Completed:&quot; + this.displayName);
+			}
+			if(this.timeoutId) {
+				clearTimeout(this.timeoutId);
+			}
+			this.executionTime = (new Date().getTime()) - this.startTime;
+
+			if(arguments.length &gt; 0) {
+				this.handleData(data);
+			}
+			this.onComplete(data);
+			this.onChange(this.state, data);
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Calling this method to fault a task. If it is part of a group task this will
+	 * also call the groups fault method passing the error up to the group.
+	 *
+	 * @for Task
+	 * @method fault
+	 * @param {String} error Message associated with the cause of the fault.
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		performTask:function(){
+	 *			var a = &quot;a&quot;;
+	 *			if(a != &quot;b&quot;) {
+	 *				this.fault(&quot;a != b&quot;);
+	 *			}
+	 *		}
+	 *	});
+	 *
+	 *	task.start();
+	 *
+	 *&#x2F;
+	fault: {
+		value: function(error) {
+			if(this.state &gt;= STATE_CANCELED) {
+				return;
+			}
+			this.state = STATE_FAULTED;
+			if(this.logLevel &gt;= LOG_INFO) {
+				console.log(&quot;Faulted:&quot; + this.displayName);
+			}
+			if(this.timeoutId) {
+				clearTimeout(this.timeoutId);
+			}
+			this.onChange(this.state, undefined, error);
+			this.onFault(error);
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * This method is called during the execution lifecycle of the task. It is intentionally
+	 * left blank and is up to the instance to describe it functionality.
+	 *
+	 * @for Task
+	 * @method onChange
+	 * @param {Integer} state The current state of the task
+	 * @param {String} error Message describing error
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		performTask:function(){
+	 *			this.complete();
+	 *		},
+	 *		onChange:function(state,error){
+	 *			if(state == MonkeyBars.TaskStates.Completed){
+	 *				alert(&quot;complete&quot;);
+	 *			}
+	 *		}
+	 *	});
+	 *
+	 *	task.start();
+	 *
+	 *&#x2F;
+	onChange: {
+		value: function(state, data, error) {},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Convenience method called when the task starts.
+	 *
+	 * @for Task
+	 * @method onStart
+	 *&#x2F;
+	onStart: {
+		value: function() {},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Convenience method called when the task faults.
+	 *
+	 * @for Task
+	 * @method onFault
+	 * @param {String} error Message describing error
+	 *&#x2F;
+	onFault: {
+		value: function(error) {},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Convenience method called when the task completes.
+	 *
+	 * @for Task
+	 * @method onComplete
+	 *&#x2F;
+	onComplete: {
+		value: function(data) {},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Convenience method called when the task is canceled.
+	 *
+	 * @for Task
+	 * @method onCancel
+	 *&#x2F;
+	onCancel: {
+		value: function() {},
+		writable: true
+	},
+
+	&#x2F;**
+	 * This method is required for **simple** tasks and will throw an exception if it
+	 * is called and not overridden. If you overwrite this method on a task group
+	 * then you need to make sure that you call the extended&#x2F;implemented classes
+	 * original prototype method (see the example below).
+	 *
+	 * @for Task
+	 * @method performTask
+	 * @required
+	 * @example
+	 *
+	 *	var parallel = new MonkeyBars.ParallelTask({
+	 *		...
+	 *		performTask:function(){
+	 *			&#x2F;&#x2F; custom functionality
+	 *			MonkeyBars.ParallelTask.prototype.performTask.call(this);
+	 *		}
+	 *		...
+	 *	})
+	 *
+	 *&#x2F;
+	performTask: {
+		value: function() {
+			throw &quot;performTask: &quot; + OVERRIDE_NEEDED;
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Kicks off the execution of the task by calling the tasks &#x60;performTask&#x60; method.
+	 * This method can only be run once on a task.
+	 *
+	 * @for Task
+	 * @method start
+	 *&#x2F;
+	start: {
+		value: function() {
+			if(this.state &gt;= STATE_STARTED) {
+				return;
+			}
+
+			this.startTime = new Date().getTime();
+			this.state = STATE_STARTED;
+			if(this.logLevel &gt;= LOG_INFO) {
+				console.log(&quot;Started:&quot; + this.displayName);
+			}
+			if(this.timeout !== undefined) {
+				var delegate = this;
+				this.timeoutId = setTimeout(function() {
+					delegate.fault();
+				}, this.timeout);
+			}
+			this.onChange(this.state);
+			if(this.concurrent) {
+				performTaskFunctionalityWithWebWorker(this);
+			} else {
+				this.performTask();
+			}
+
+			this.onStart();
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Initialization functionality
+	 *
+	 * @for Task
+	 * @method initialize
+	 * @param {Object} attributes
+	 *&#x2F;
+	initialize: {
+		value: function(attributes) {},
+		writable: true
+	}
+});
+
+Task.extend = extend;
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
