@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;artwork&#x2F;monkeybars.png" title="MonkeyBars"></h1>
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -96,144 +96,144 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
+&#x2F;**
+ * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
+ * complete functionality is run when all of its sub tasks are complete.
+ *
+ * @extends TaskGroup
+ * @constructor
+ * @class SequenceTask
+ * @param {Object} attributes List of attributes to apply to the task group
+ * @example
+ *
+ *		var sequence = new MonkeyBars.SequenceTask({
+ *			name:&quot;ParallelTask&quot;,
+ *			tasks:[new MonkeyBars.Task({
+ *				performTask:function(){
+ *					this.complete();
+ *				}
+ *			})],
+ *			onComplete:function(){
+ *				alert(this.name + &quot; is complete!&quot;);
+ *			}
+ *		});
+ *
+ *		sequence.start();
+ *
+ *&#x2F;
+var SequenceTask = MonkeyBars.SequenceTask = function(attributes) {
+	var task = this;
+	TaskGroup.call(task, attributes);
+};
+
+SequenceTask.prototype = Object.create(TaskGroup.prototype, {
+
 	&#x2F;**
-	 * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
-	 * complete functionality is run when all of its sub tasks are complete.
+	 * The kind of task
 	 *
-	 * @extends TaskGroup
-	 * @constructor
-	 * @class SequenceTask
-	 * @param {Object} attributes List of attributes to apply to the task group
-	 * @example
-
-			var sequence = new MonkeyBars.SequenceTask({
-				name:&quot;ParallelTask&quot;,
-				tasks:[new MonkeyBars.Task({
-					performTask:function(){
-						this.complete();
-					}
-				})],
-				onComplete:function(){
-					alert(this.name + &quot; is complete!&quot;);
-				}
-			});
-
-			sequence.start();
-
+	 * @for SequenceTask
+	 * @property type
+	 * @type String
+	 * @readonly
 	 *&#x2F;
-	var SequenceTask = MonkeyBars.SequenceTask = function(attributes) {
-			var task = this;
-			TaskGroup.call(task, attributes);
-		};
+	type: {
+		value: TYPE_SEQUENCE,
+		writable: true
+	},
 
-	SequenceTask.prototype = Object.create(TaskGroup.prototype, {
-
-		&#x2F;**
-		 * The kind of task
-		 *
-		 * @for SequenceTask
-		 * @property type
-		 * @type String
-		 * @readonly
-		 *&#x2F;
-		type: {
-			value: TYPE_SEQUENCE,
-			writable: true
-		},
-
-		&#x2F;**
-		 * Starts the next task in the queue after its previous sibling has completed.
-		 *
-		 * @for SequenceTask
-		 * @method startNextSubTask
-		 *&#x2F;
-		startNextSubTask: {
-			value: function() {
-				if(this.state &gt;= STATE_CANCELED) {
-					return;
-				}
-				if(this.tasks &amp;&amp; this.currentIndex &lt; this.tasks.length) {
-					var task = this.tasks[this.currentIndex++];
-					var skipped = this.processSubTask(task);
-					if(skipped) {
-						if(this.logLevel &gt;= LOG_INFO) {
-							console.log(&quot;Skipped: &quot; + task.displayName + &quot; Group: &quot; + this.displayName);
-						}
-						this.startNextSubTask();
+	&#x2F;**
+	 * Starts the next task in the queue after its previous sibling has completed.
+	 *
+	 * @for SequenceTask
+	 * @method startNextSubTask
+	 *&#x2F;
+	startNextSubTask: {
+		value: function() {
+			if(this.state &gt;= STATE_CANCELED) {
+				return;
+			}
+			if(this.tasks &amp;&amp; this.currentIndex &lt; this.tasks.length) {
+				var task = this.tasks[this.currentIndex++];
+				var skipped = this.processSubTask(task);
+				if(skipped) {
+					if(this.logLevel &gt;= LOG_INFO) {
+						console.log(&quot;Skipped: &quot; + task.displayName + &quot; Group: &quot; + this.displayName);
 					}
-				} else {
-
-
-					&#x2F;&#x2F;&#x2F;*
-					if(this.group !== undefined) {
-						this.complete(this.data);
-					} else {
-						this.complete();
-					}
-					&#x2F;&#x2F;*&#x2F;
-					&#x2F;&#x2F; this.complete(this.data);
-
-
-				}
-			},
-			writable: true
-		},
-
-		&#x2F;**
-		 * Overridden from TaskGroup. As long as the group has not been canceled,
-		 * when a sub task completes it starts the next sibling in the queue.
-		 *
-		 * @for SequenceTask
-		 * @method onSubTaskComplete
-		 * @param {Task} task
-		 * @param {Object} data
-		 *&#x2F;
-		onSubTaskComplete: {
-			value: function(task, data) {
-				if(this.state === STATE_CANCELED) {
-					return;
-				}
-				TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
-				this.startNextSubTask();
-			},
-			writable: true
-		},
-
-		&#x2F;**
-		 * Overriden from TaskGroup. As long as the group has not been canceled,
-		 * when a sub task is canceled it simply moves on to the next task in the queue.
-		 *
-		 * @for SequenceTask
-		 * @method onSubTaskCancel
-		 * @param {Task} task
-		 *&#x2F;
-		onSubTaskCancel: {
-			value: function(task) {
-				TaskGroup.prototype.onSubTaskCancel.call(this, task);
-				if(this.state !== STATE_CANCELED) {
 					this.startNextSubTask();
 				}
-			},
-			writable: true
+			} else {
+
+
+				&#x2F;&#x2F;&#x2F;*
+				if(this.group !== undefined) {
+					this.complete(this.data);
+				} else {
+					this.complete();
+				}
+				&#x2F;&#x2F;*&#x2F;
+				&#x2F;&#x2F; this.complete(this.data);
+
+
+			}
 		},
+		writable: true
+	},
 
-		&#x2F;**
-		 * Starts the next sub task in the sequence. If overriden you need to call the
-		 * SequenceTask&#x27;s prototype &#x60;performTask&#x60; method.
-		 *
-		 * @for SequenceTask
-		 * @method performTask
-		 * @param {Task} task
-		 *&#x2F;
-		performTask: {
-			value: function() {
+	&#x2F;**
+	 * Overridden from TaskGroup. As long as the group has not been canceled,
+	 * when a sub task completes it starts the next sibling in the queue.
+	 *
+	 * @for SequenceTask
+	 * @method onSubTaskComplete
+	 * @param {Task} task
+	 * @param {Object} data
+	 *&#x2F;
+	onSubTaskComplete: {
+		value: function(task, data) {
+			if(this.state === STATE_CANCELED) {
+				return;
+			}
+			TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
+			this.startNextSubTask();
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Overriden from TaskGroup. As long as the group has not been canceled,
+	 * when a sub task is canceled it simply moves on to the next task in the queue.
+	 *
+	 * @for SequenceTask
+	 * @method onSubTaskCancel
+	 * @param {Task} task
+	 *&#x2F;
+	onSubTaskCancel: {
+		value: function(task) {
+			TaskGroup.prototype.onSubTaskCancel.call(this, task);
+			if(this.state !== STATE_CANCELED) {
 				this.startNextSubTask();
-			},
-			writable: true
-		}
-	});
+			}
+		},
+		writable: true
+	},
 
-	SequenceTask.extend = extend;
+	&#x2F;**
+	 * Starts the next sub task in the sequence. If overriden you need to call the
+	 * SequenceTask&#x27;s prototype &#x60;performTask&#x60; method.
+	 *
+	 * @for SequenceTask
+	 * @method performTask
+	 * @param {Task} task
+	 *&#x2F;
+	performTask: {
+		value: function() {
+			this.startNextSubTask();
+		},
+		writable: true
+	}
+});
+
+SequenceTask.extend = extend;
     </pre>
 </div>
 

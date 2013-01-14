@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;artwork&#x2F;monkeybars.png" title="MonkeyBars"></h1>
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -96,112 +96,112 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
+&#x2F;**
+ * Creates a new worker representation of the task
+ *
+ * @extends Object
+ * @constructor
+ * @class WorkerTask
+ * @param {Task} task The task we&#x27;re creating this worker representation from
+ * @example
+ *
+ *	var CustomWorker = MonkeyBars.WorkerTask.extend({
+ *		append:function(data){
+ *			this.postMessage(&quot;append&quot;,100);
+ *		},
+ *		devide:function(data){
+ *			this.postMessage(&quot;devide&quot;,2);
+ *			this.complete(data&#x2F;2);
+ *		}
+ *	});
+ *
+ *	var task = new MonkeyBars.Task({
+ *		...
+ *		concurrent:true,
+ *		worker:{
+ *			constructor:CustomWorker,
+ *			handler:function(e){
+ *				if(e.data.type === &quot;append&quot;) {
+ *					...
+ *				} else if(e.data.type === &quot;devide&quot;) {
+ *					...
+ *				}
+ *			}
+ *		}
+ *		...
+ *	});
+ *
+ *	task.start();
+ *
+ *&#x2F;
+var WorkerTask = MonkeyBars.WorkerTask = function(task) {
+	if(!task) {
+		throw INVALID_ARGUMENTS;
+	}
+	if(task.data !== undefined) {
+		this.data = task.data;
+	}
+	this.performTask = task.performTask;
+};
+
+WorkerTask.prototype = {
+
 	&#x2F;**
-	 * Creates a new worker representation of the task
+	 * Post a complete message along with the data passed stating that the task
+	 * has completed what it needs to.
 	 *
-	 * @extends Object
-	 * @constructor
-	 * @class WorkerTask
-	 * @param {Task} task The task we&#x27;re creating this worker representation from
-	 * @example
-
-		var CustomWorker = MonkeyBars.WorkerTask.extend({
-			append:function(data){
-				this.postMessage(&quot;append&quot;,100);
-			},
-			devide:function(data){
-				this.postMessage(&quot;devide&quot;,2);
-				this.complete(data&#x2F;2);
-			}
-		});
-
-		var task = new MonkeyBars.Task({
-			...
-			concurrent:true,
-			worker:{
-				constructor:CustomWorker,
-				handler:function(e){
-					if(e.data.type === &quot;append&quot;) {
-						...
-					} else if(e.data.type === &quot;devide&quot;) {
-						...
-					}
-				}
-			}
-			...
-		});
-
-		task.start();
-
+	 * @for WorkerTask
+	 * @method complete
 	 *&#x2F;
-	var WorkerTask = MonkeyBars.WorkerTask = function(task) {
-			if(!task) {
-				throw INVALID_ARGUMENTS;
-			}
-			if(task.data !== undefined) {
-				this.data = task.data;
-			}
-			this.performTask = task.performTask;
-		};
+	complete: function(data) {
+		this.postMessage(&quot;complete&quot;, data);
+	},
 
-	WorkerTask.prototype = {
+	&#x2F;**
+	 * Posts a fault message to the main thread that the task has faulted. Passes
+	 * an error as its value.
+	 *
+	 * @for WorkerTask
+	 * @method fault
+	 * @param {Object} error
+	 *&#x2F;
+	fault: function(error) {
+		this.postMessage(&quot;fault&quot;, error);
+	},
 
-		&#x2F;**
-		 * Post a complete message along with the data passed stating that the task
-		 * has completed what it needs to.
-		 *
-		 * @for WorkerTask
-		 * @method complete
-		 *&#x2F;
-		complete: function(data) {
-			this.postMessage(&quot;complete&quot;, data);
-		},
+	&#x2F;**
+	 * Posts a cancel message to the main thread that the task has been canceled.
+	 *
+	 * @for WorkerTask
+	 * @method cancel
+	 *&#x2F;
+	cancel: function() {
+		this.postMessage(&quot;cancel&quot;);
+	},
 
-		&#x2F;**
-		 * Posts a fault message to the main thread that the task has faulted. Passes
-		 * an error as its value.
-		 *
-		 * @for WorkerTask
-		 * @method fault
-		 * @param {Object} error
-		 *&#x2F;
-		fault: function(error) {
-			this.postMessage(&quot;fault&quot;, error);
-		},
-
-		&#x2F;**
-		 * Posts a cancel message to the main thread that the task has been canceled.
-		 *
-		 * @for WorkerTask
-		 * @method cancel
-		 *&#x2F;
-		cancel: function() {
-			this.postMessage(&quot;cancel&quot;);
-		},
-
-		&#x2F;**
-		 * Convenience method for posting messages to the main thread. You should opt into
-		 * using this as it is how the rest of the WorkerTask core methods communicate with
-		 * the main thread.
-		 *
-		 * @for WorkerTask
-		 * @method postMessage
-		 * @param {String} type
-		 * @param {Object} value
-		 *&#x2F;
-		postMessage: function(type, value) {
-			var message = {};
-			if(type !== undefined &amp;&amp; typeof(type) === &quot;string&quot;) {
-				message.type = type;
-			}
-			if(value !== undefined) {
-				message.value = value;
-			}
-			postMessage(message);
+	&#x2F;**
+	 * Convenience method for posting messages to the main thread. You should opt into
+	 * using this as it is how the rest of the WorkerTask core methods communicate with
+	 * the main thread.
+	 *
+	 * @for WorkerTask
+	 * @method postMessage
+	 * @param {String} type
+	 * @param {Object} value
+	 *&#x2F;
+	postMessage: function(type, value) {
+		var message = {};
+		if(type !== undefined &amp;&amp; typeof(type) === &quot;string&quot;) {
+			message.type = type;
 		}
-	};
+		if(value !== undefined) {
+			message.value = value;
+		}
+		postMessage(message);
+	}
+};
 
-	WorkerTask.extend = extend;
+WorkerTask.extend = extend;
     </pre>
 </div>
 

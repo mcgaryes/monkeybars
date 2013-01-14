@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;artwork&#x2F;monkeybars.png" title="MonkeyBars"></h1>
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -104,7 +104,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l467"><code>..&#x2F;monkeybars.js:467</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l466"><code>..&#x2F;monkeybars.js:466</code></a>
         </div>
     
 
@@ -164,7 +164,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l467"><code>..&#x2F;monkeybars.js:467</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l466"><code>..&#x2F;monkeybars.js:466</code></a>
         
         </p>
 
@@ -210,33 +210,33 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>    var CustomWorker = MonkeyBars.WorkerTask.extend({
-        append:function(data){
-            this.postMessage("append",100);
-        },
-        devide:function(data){
-            this.postMessage("devide",2);
-            this.complete(data/2);
-        }
-    });
+                <pre class="code prettyprint"><code>var CustomWorker = MonkeyBars.WorkerTask.extend({
+    append:function(data){
+        this.postMessage("append",100);
+    },
+    devide:function(data){
+        this.postMessage("devide",2);
+        this.complete(data/2);
+    }
+});
 
-    var task = new MonkeyBars.Task({
-        ...
-        concurrent:true,
-        worker:{
-            constructor:CustomWorker,
-            handler:function(e){
-                if(e.data.type === "append") {
-                    ...
-                } else if(e.data.type === "devide") {
-                    ...
-                }
+var task = new MonkeyBars.Task({
+    ...
+    concurrent:true,
+    worker:{
+        constructor:CustomWorker,
+        handler:function(e){
+            if(e.data.type === "append") {
+                ...
+            } else if(e.data.type === "devide") {
+                ...
             }
         }
-        ...
-    });
+    }
+    ...
+});
 
-    task.start();
+task.start();
 </code></pre>
             </div>
         </div>
@@ -426,7 +426,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l540"><code>..&#x2F;monkeybars.js:540</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l539"><code>..&#x2F;monkeybars.js:539</code></a>
         
         </p>
 
@@ -535,7 +535,7 @@ has completed what it needs to.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l517"><code>..&#x2F;monkeybars.js:517</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l516"><code>..&#x2F;monkeybars.js:516</code></a>
         
         </p>
 
@@ -688,7 +688,7 @@ an error as its value.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l528"><code>..&#x2F;monkeybars.js:528</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l527"><code>..&#x2F;monkeybars.js:527</code></a>
         
         </p>
 
@@ -892,7 +892,7 @@ the main thread.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l550"><code>..&#x2F;monkeybars.js:550</code></a>
+        <a href="..&#x2F;files&#x2F;.._monkeybars.js.html#l549"><code>..&#x2F;monkeybars.js:549</code></a>
         
         </p>
 

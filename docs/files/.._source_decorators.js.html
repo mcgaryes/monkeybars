@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;artwork&#x2F;monkeybars.png" title="MonkeyBars"></h1>
+                <h1><img src="..&#x2F;assets/css/logo.png" title="MonkeyBars"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -96,84 +96,84 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-	&#x2F;**
-	 * Decorator to provide for loop functionality for the task. The task executes
-	 * as many times as referenced by the count attribute provided by the instance.
-	 *
-	 * @for MonkeyBars
-	 * @method forTaskDecorator
-	 * @param {Object} task
-	 * @private
-	 *&#x2F;
-	var forTaskDecorator = function(task) {
-			task.decorators.push(DECORATOR_FOR);
-			task.itterationIndex = 0;
-			task.complete = function() {
-				if(this.itterationIndex !== this.count - 1) {
-					resetTask(this);
-					this.itterationIndex++;
-					if(this.logLevel &gt;= LOG_INFO) {
-						console.log(&quot;Completed:&quot; + this.displayName + &quot; &quot; + this.itterationIndex + &quot; out of &quot; + this.count + &quot; times&quot;);
-					}
-					this.performTask();
-				} else {
-					Task.prototype.complete.call(this);
-				}
-			};
-		};
+&#x2F;**
+ * Decorator to provide for loop functionality for the task. The task executes
+ * as many times as referenced by the count attribute provided by the instance.
+ *
+ * @for MonkeyBars
+ * @method forTaskDecorator
+ * @param {Object} task
+ * @private
+ *&#x2F;
+var forTaskDecorator = function(task) {
+	task.decorators.push(DECORATOR_FOR);
+	task.itterationIndex = 0;
+	task.complete = function() {
+		if(this.itterationIndex !== this.count - 1) {
+			resetTask(this);
+			this.itterationIndex++;
+			if(this.logLevel &gt;= LOG_INFO) {
+				console.log(&quot;Completed:&quot; + this.displayName + &quot; &quot; + this.itterationIndex + &quot; out of &quot; + this.count + &quot; times&quot;);
+			}
+			this.performTask();
+		} else {
+			Task.prototype.complete.call(this);
+		}
+	};
+};
 
-	&#x2F;**
-	 * Decorator to provide while loop functionaliy. The task executed until the &#x60;while&#x60;
-	 * method returns false.
-	 *
-	 * @for MonkeyBars
-	 * @method whileTaskDecorator
-	 * @param {Object} task
-	 * @private
-	 *&#x2F;
-	var whileTaskDecorator = function(task) {
-			task.decorators.push(DECORATOR_WHILE);
-			task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
-			task.complete = function() {
-				if(this.doWhile()) {
-					this.state = STATE_INITIALIZED;
-					var delegate = this;
-					if(this.interval !== 0) {
-						setTimeout(function() {
-							resetTask(delegate);
-							delegate.start();
-						}, this.interval);
-					} else {
-						delegate.start();
-					}
-
-				} else {
-					Task.prototype.complete.call(this);
-				}
-			};
-		};
-
-	&#x2F;**
-	 * The task doesnt execute until the when method provided returns true.
-	 *
-	 * @for MonkeyBars
-	 * @method whenTaskDecorator
-	 * @param {Object} task
-	 * @private
-	 *&#x2F;
-	var whenTaskDecorator = function(task) {
-			task.decorators.push(DECORATOR_WHEN);
-			task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
-			task.start = function() {
-				var delegate = this;
-				var interval = setInterval(function() {
-					if(delegate.when()) {
-						Task.prototype.start.call(delegate);
-						clearInterval(this);
-					}
+&#x2F;**
+ * Decorator to provide while loop functionaliy. The task executed until the &#x60;while&#x60;
+ * method returns false.
+ *
+ * @for MonkeyBars
+ * @method whileTaskDecorator
+ * @param {Object} task
+ * @private
+ *&#x2F;
+var whileTaskDecorator = function(task) {
+	task.decorators.push(DECORATOR_WHILE);
+	task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
+	task.complete = function() {
+		if(this.doWhile()) {
+			this.state = STATE_INITIALIZED;
+			var delegate = this;
+			if(this.interval !== 0) {
+				setTimeout(function() {
+					resetTask(delegate);
+					delegate.start();
 				}, this.interval);
-			};
-		};
+			} else {
+				delegate.start();
+			}
+
+		} else {
+			Task.prototype.complete.call(this);
+		}
+	};
+};
+
+&#x2F;**
+ * The task doesnt execute until the when method provided returns true.
+ *
+ * @for MonkeyBars
+ * @method whenTaskDecorator
+ * @param {Object} task
+ * @private
+ *&#x2F;
+var whenTaskDecorator = function(task) {
+	task.decorators.push(DECORATOR_WHEN);
+	task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
+	task.start = function() {
+		var delegate = this;
+		var interval = setInterval(function() {
+			if(delegate.when()) {
+				Task.prototype.start.call(delegate);
+				clearInterval(this);
+			}
+		}, this.interval);
+	};
+};
     </pre>
 </div>
 

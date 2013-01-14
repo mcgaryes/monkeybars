@@ -1,34 +1,33 @@
-"use strict";
-
-var monkeyBarsName = "MonkeyBars";
-var monkeyBarsVersion = "0.9.10";
-var monkeyBarsDescription = "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
-var monkeyBarsRepository = "https://github.com/mcgaryes/monkeybars/";
-var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
-
-// object will be used to create the package.json file for npm manager
-var monkeyBarsPackageJsonTemplate = {
-    "name": monkeyBarsName.toLowerCase(),
-    "version": monkeyBarsVersion,
-    "description": monkeyBarsDescription,
-    "keywords": ["task", "sequence", "parallel", "asynchronous", "async", "util"],
-    "homepage": monkeyBarsRepository,
-    "bugs": {
-        "url": monkeyBarsRepository + "issues"
-    },
-    "main": monkeyBarsName.toLowerCase() + ".js",
-    "repository": {
-        "type": "git",
-        "url": monkeyBarsRepository
-    },
-    "licenses": [{
-        "type": "MIT",
-        "url": monkeyBarsRepository + "master/LICENSE"
-    }]
-};
-
-// grunt config
 module.exports = function(grunt) {
+
+    "use strict";
+
+    var monkeyBarsName = "MonkeyBars";
+    var monkeyBarsVersion = "0.9.10";
+    var monkeyBarsDescription = "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
+    var monkeyBarsRepository = "https://github.com/mcgaryes/monkeybars/";
+    var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
+
+    // object will be used to create the package.json file for npm manager
+    var monkeyBarsPackageJsonTemplate = {
+        "name": monkeyBarsName.toLowerCase(),
+        "version": monkeyBarsVersion,
+        "description": monkeyBarsDescription,
+        "keywords": ["task", "sequence", "parallel", "asynchronous", "async", "util"],
+        "homepage": monkeyBarsRepository,
+        "bugs": {
+            "url": monkeyBarsRepository + "issues"
+        },
+        "main": monkeyBarsName.toLowerCase() + ".js",
+        "repository": {
+            "type": "git",
+            "url": monkeyBarsRepository
+        },
+        "licenses": [{
+            "type": "MIT",
+            "url": monkeyBarsRepository + "master/LICENSE"
+        }]
+    };
 
     // config
     grunt.initConfig({
@@ -56,7 +55,7 @@ module.exports = function(grunt) {
                 output: "../monkeybars.js",
                 tokens: [{
                     token:"//%pre",
-                    string:"/*!\n * @module MonkeyBars\n * @main MonkeyBars\n */\n(function() {"
+                    string:"/*!\n * @module MonkeyBars\n * @main MonkeyBars\n*/\n\n(function() {"
                 },{
                     token:"//%worker",
                     file:"../source/worker.js"
@@ -109,12 +108,30 @@ module.exports = function(grunt) {
                 "description": monkeyBarsDescription,
                 "version": monkeyBarsVersion,
                 "url": monkeyBarsRepository,
-                "logo": "../artwork/monkeybars.png",
                 options: {
                     paths: "../",
                     outdir: "../docs/"
                 }
             }
+        },
+        jsbeautifier : {
+          files : ["../monkeybars.js"],
+          options : {
+            "indent_size": 4
+            // "indent_char": " ",
+            // "indent_level": 0,
+            // "indent_with_tabs": false,
+            // "preserve_newlines": true,
+            // "max_preserve_newlines": 10,
+            // "jslint_happy": false,
+            // "brace_style": "collapse",
+            // "keep_array_indentation": false,
+            // "keep_function_indentation": false,
+            // "space_before_conditional": true,
+            // "eval_code": false,
+            // "indent_case": false,
+            // "unescape_strings": false
+          }
         },
         jshint: {
             options: {
@@ -147,7 +164,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-combine');
+    grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // tasks
-    grunt.registerTask('default', 'combine:source lint jasmine min copy:package copy:version yuidoc');
+    grunt.registerTask('default', 'combine:source lint min jasmine jsbeautifier copy:package copy:version yuidoc');
+
 };
