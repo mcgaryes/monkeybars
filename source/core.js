@@ -21,17 +21,13 @@ var LOG_ERROR = 10;
 var LOG_INFO = 20;
 var LOG_VERBOSE = 30;
 
-var DECORATOR_FOR = "for";
-var DECORATOR_WHEN = "when";
-var DECORATOR_WHILE = "while";
-
 var TID_PREFIX = "tid";
 var TIMEOUT_INTERVAL = 100;
-var OVERRIDE_NEEDED = "This method must be overridden.";
-var UNDEFINED_TASK = "Task is undefined.";
-var MISSING_ATTRIBUTES = "You must pass some attributes in order to create a task.";
-var UNKNOW_TYPE_WITH_OPTIONS = "Unknown task type referenced.";
-var INVALID_ARGUMENTS = "Invalid arguments were passed.";
+var OVERRIDE_NEEDED = "Override Needed";
+var UNDEFINED_TASK = "Undefined Task";
+var MISSING_ATTRIBUTES = "No Attributes";
+var UNKNOW_TYPE_WITH_OPTIONS = "Unknown Task Type";
+var INVALID_ARGUMENTS = "Invalid Arguments";
 var UNHANDLED_POST_MESSAGE = "Unhandled 'postMessage'";
 
 // ===================================================================
@@ -415,7 +411,6 @@ var performTaskFunctionalityWithWebWorker = function(task) {
  * @private
  */
 var decorateTaskBasedOnAttributes = function(task, attributes) {
-	task.decorators = [];
 	if(task.count) {
 		forTaskDecorator(task);
 	}
@@ -538,20 +533,6 @@ MonkeyBars.LogLevels = {
 	Error: LOG_ERROR,
 	Info: LOG_INFO,
 	Verbose: LOG_VERBOSE
-};
-
-/**
- * Task decorators. These are exposed mainly to enable deeper extention.
- *
- * @property TaskDecorators
- * @for MonkeyBars
- * @type Object
- * @static
- */
-MonkeyBars.TaskDecorators = {
-	For: DECORATOR_FOR,
-	When: DECORATOR_WHEN,
-	While: DECORATOR_WHILE
 };
 
 //%post

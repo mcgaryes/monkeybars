@@ -32,11 +32,11 @@
 
     var TID_PREFIX = "tid";
     var TIMEOUT_INTERVAL = 100;
-    var OVERRIDE_NEEDED = "This method must be overridden.";
-    var UNDEFINED_TASK = "Task is undefined.";
-    var MISSING_ATTRIBUTES = "You must pass some attributes in order to create a task.";
-    var UNKNOW_TYPE_WITH_OPTIONS = "Unknown task type referenced.";
-    var INVALID_ARGUMENTS = "Invalid arguments were passed.";
+    var OVERRIDE_NEEDED = "Override Needed";
+    var UNDEFINED_TASK = "Undefined Task";
+    var MISSING_ATTRIBUTES = "No Attributes";
+    var UNKNOW_TYPE_WITH_OPTIONS = "Unknown Task Type";
+    var INVALID_ARGUMENTS = "Invalid Arguments";
     var UNHANDLED_POST_MESSAGE = "Unhandled 'postMessage'";
 
     // ===================================================================

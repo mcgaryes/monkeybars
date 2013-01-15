@@ -56,6 +56,7 @@ var Task = MonkeyBars.Task = function(attributes) {
 
 	// initialize the task
 	task.initialize(task.options);
+	
 };
 
 Task.prototype = Object.create({}, {

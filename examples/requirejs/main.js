@@ -17,7 +17,7 @@ require(["monkeybars"], function(MonkeyBars) {
   'use strict';
 
   var task = new MonkeyBars.Task({
-  	logLevel:MonkeyBars.LogLevels.Verbose,
+  	logLevel:1000,
   	performTask:function(){
   		this.complete();
   	}

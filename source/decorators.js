@@ -8,7 +8,6 @@
  * @private
  */
 var forTaskDecorator = function(task) {
-	task.decorators.push(DECORATOR_FOR);
 	task.itterationIndex = 0;
 	task.complete = function() {
 		if(this.itterationIndex !== this.count - 1) {
@@ -34,7 +33,6 @@ var forTaskDecorator = function(task) {
  * @private
  */
 var whileTaskDecorator = function(task) {
-	task.decorators.push(DECORATOR_WHILE);
 	task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 	task.complete = function() {
 		if(this.doWhile()) {
@@ -64,7 +62,6 @@ var whileTaskDecorator = function(task) {
  * @private
  */
 var whenTaskDecorator = function(task) {
-	task.decorators.push(DECORATOR_WHEN);
 	task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 	task.start = function() {
 		var delegate = this;
