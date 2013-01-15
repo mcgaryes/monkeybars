@@ -718,9 +718,7 @@
          */
         displayName: {
             get: function() {
-                if (this.id) {
-                    return this.id;
-                } else if (this.name) {
+                if (this.name) {
                     return this.name;
                 } else {
                     return this.type;
@@ -1217,25 +1215,6 @@
          */
         currentIndex: {
             value: 0,
-            writable: true
-        },
-
-        /**
-         * Return a Task object, if it exists, based on the `id` passed.
-         *
-         * @for TaskGroup
-         * @method getTaskById
-         * @param {String} id The user defined id
-         */
-        getTaskById: {
-            value: function(id) {
-                for (var i = 0; i < this.tasks.length; i++) {
-                    var task = this.tasks[i];
-                    if (task.id === id) {
-                        return task;
-                    }
-                }
-            },
             writable: true
         },
 

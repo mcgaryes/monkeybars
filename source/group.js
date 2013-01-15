@@ -177,25 +177,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	},
 
 	/**
-	 * Return a Task object, if it exists, based on the `id` passed.
-	 *
-	 * @for TaskGroup
-	 * @method getTaskById
-	 * @param {String} id The user defined id
-	 */
-	getTaskById: {
-		value: function(id) {
-			for(var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
-				if(task.id === id) {
-					return task;
-				}
-			}
-		},
-		writable: true
-	},
-
-	/**
 	 * Return a Task object, if it exists, based on the `name` passed.
 	 *
 	 * @for TaskGroup

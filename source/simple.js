@@ -173,9 +173,7 @@ Task.prototype = Object.create({}, {
 	 */
 	displayName: {
 		get: function() {
-			if(this.id) {
-				return this.id;
-			} else if(this.name) {
+			if(this.name) {
 				return this.name;
 			} else {
 				return this.type;
