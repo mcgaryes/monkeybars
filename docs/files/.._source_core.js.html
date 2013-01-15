@@ -119,16 +119,12 @@ var LOG_ERROR = 10;
 var LOG_INFO = 20;
 var LOG_VERBOSE = 30;
 
-var DECORATOR_FOR = &quot;for&quot;;
-var DECORATOR_WHEN = &quot;when&quot;;
-var DECORATOR_WHILE = &quot;while&quot;;
-
-var TID_PREFIX = &quot;tid&quot;;
+var TID_PREFIX = &quot;task&quot;;
 var TIMEOUT_INTERVAL = 100;
 var OVERRIDE_NEEDED = &quot;Override Needed&quot;;
 var UNDEFINED_TASK = &quot;Undefined Task&quot;;
 var MISSING_ATTRIBUTES = &quot;No Attributes&quot;;
-var UNKNOW_TYPE_WITH_OPTIONS = &quot;Unknown Task Type&quot;;
+var UNKNOW_TYPE = &quot;Unknown Task Type&quot;;
 var INVALID_ARGUMENTS = &quot;Invalid Arguments&quot;;
 var UNHANDLED_POST_MESSAGE = &quot;Unhandled &#x27;postMessage&#x27;&quot;;
 
@@ -236,7 +232,7 @@ var createTaskWithOptions = function(attributes) {
 			} else if(type === TYPE_PARALLEL) {
 				task = new ParallelTask(attributes);
 			} else {
-				throw UNKNOW_TYPE_WITH_OPTIONS;
+				throw UNKNOW_TYPE;
 			}
 		} else {
 			if(!tasks) {
@@ -487,15 +483,8 @@ var createWebWorkerWithBlobAndTask = function(blob, task) {
 var performTaskFunctionalityWithWebWorker = function(task) {
 
 	if(typeof(Worker) === &quot;undefined&quot; || typeof(Blob) === &quot;undefined&quot; || task.type !== TYPE_SIMPLE) {
-		if(task.logLevel &gt;= LOG_ERROR &amp;&amp; task.type === TYPE_SIMPLE) {
-			console.log(&quot;Cannot perform &#x27;&quot; + task.displayName + &quot;&#x27; on seperate thread. Web Workers are not supported.&quot;);
-		}
 		task.performTask();
 		return;
-	}
-
-	if(task.logLevel &gt;= LOG_VERBOSE) {
-		console.log(&quot;Performing &#x27;&quot; + task.displayName + &quot;&#x27; Functionality With Web Worker&quot;);
 	}
 
 	&#x2F;&#x2F; create our worker
@@ -513,7 +502,6 @@ var performTaskFunctionalityWithWebWorker = function(task) {
  * @private
  *&#x2F;
 var decorateTaskBasedOnAttributes = function(task, attributes) {
-	task.decorators = [];
 	if(task.count) {
 		forTaskDecorator(task);
 	}
@@ -636,20 +624,6 @@ MonkeyBars.LogLevels = {
 	Error: LOG_ERROR,
 	Info: LOG_INFO,
 	Verbose: LOG_VERBOSE
-};
-
-&#x2F;**
- * Task decorators. These are exposed mainly to enable deeper extention.
- *
- * @property TaskDecorators
- * @for MonkeyBars
- * @type Object
- * @static
- *&#x2F;
-MonkeyBars.TaskDecorators = {
-	For: DECORATOR_FOR,
-	When: DECORATOR_WHEN,
-	While: DECORATOR_WHILE
 };
 
 &#x2F;&#x2F;%post

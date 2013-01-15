@@ -21,12 +21,12 @@ var LOG_ERROR = 10;
 var LOG_INFO = 20;
 var LOG_VERBOSE = 30;
 
-var TID_PREFIX = "tid";
+var TID_PREFIX = "task";
 var TIMEOUT_INTERVAL = 100;
 var OVERRIDE_NEEDED = "Override Needed";
 var UNDEFINED_TASK = "Undefined Task";
 var MISSING_ATTRIBUTES = "No Attributes";
-var UNKNOW_TYPE_WITH_OPTIONS = "Unknown Task Type";
+var UNKNOW_TYPE = "Unknown Task Type";
 var INVALID_ARGUMENTS = "Invalid Arguments";
 var UNHANDLED_POST_MESSAGE = "Unhandled 'postMessage'";
 
@@ -134,7 +134,7 @@ var createTaskWithOptions = function(attributes) {
 			} else if(type === TYPE_PARALLEL) {
 				task = new ParallelTask(attributes);
 			} else {
-				throw UNKNOW_TYPE_WITH_OPTIONS;
+				throw UNKNOW_TYPE;
 			}
 		} else {
 			if(!tasks) {
@@ -385,15 +385,8 @@ var createWebWorkerWithBlobAndTask = function(blob, task) {
 var performTaskFunctionalityWithWebWorker = function(task) {
 
 	if(typeof(Worker) === "undefined" || typeof(Blob) === "undefined" || task.type !== TYPE_SIMPLE) {
-		if(task.logLevel >= LOG_ERROR && task.type === TYPE_SIMPLE) {
-			console.log("Cannot perform '" + task.displayName + "' on seperate thread. Web Workers are not supported.");
-		}
 		task.performTask();
 		return;
-	}
-
-	if(task.logLevel >= LOG_VERBOSE) {
-		console.log("Performing '" + task.displayName + "' Functionality With Web Worker");
 	}
 
 	// create our worker

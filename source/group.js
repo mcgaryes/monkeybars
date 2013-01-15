@@ -31,32 +31,6 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
-	 * The index of the subtasks that have completed execution.
-	 *
-	 * @for Task
-	 * @property currentIndex
-	 * @type Integer
-	 * @readonly
-	 * @default 0
-	 */
-	currentIndex: {
-		value: 0,
-		writable: true
-	},
-
-	/**
-	 * An incrimented number of the tasks that have already been processed.
-	 *
-	 * @for ParallelTask
-	 * @property processedIndex
-	 * @type Integer
-	 */
-	processedIndex: {
-		value: 0,
-		writable: true
-	},
-
-	/**
 	 * Adds a subtask to the groups queue. This is helpful when you want to add
 	 * a sub task after instantiation.
 	 *
@@ -162,6 +136,131 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	},
 
 	/**
+	 * Cancel the group and cancel all of its subtasks
+	 *
+	 * @for TaskGroup
+	 * @method cancel
+	 */
+	cancel: {
+		value: function() {
+
+			// call cancel on this task
+			Task.prototype.cancel.call(this);
+
+			// cancel all of this tasks subtasks
+			for(var i = 0; i < this.tasks.length; i++) {
+				// we only want to cancel those tasks that are currently running
+				// otherwise we want to set the canceled flag
+				var task = this.tasks[i];
+				if(task.state > STATE_INITIALIZED) {
+					task.cancel();
+				} else {
+					task.state = STATE_CANCELED;
+				}
+			}
+		},
+		writable: true
+	},
+
+	/**
+	 * The index of the subtasks that have completed execution.
+	 *
+	 * @for Task
+	 * @property currentIndex
+	 * @type Integer
+	 * @readonly
+	 * @default 0
+	 */
+	currentIndex: {
+		value: 0,
+		writable: true
+	},
+
+	/**
+	 * Return a Task object, if it exists, based on the `id` passed.
+	 *
+	 * @for TaskGroup
+	 * @method getTaskById
+	 * @param {String} id The user defined id
+	 */
+	getTaskById: {
+		value: function(id) {
+			for(var i = 0; i < this.tasks.length; i++) {
+				var task = this.tasks[i];
+				if(task.id === id) {
+					return task;
+				}
+			}
+		},
+		writable: true
+	},
+
+	/**
+	 * Return a Task object, if it exists, based on the `name` passed.
+	 *
+	 * @for TaskGroup
+	 * @method getTaskByName
+	 * @param {String} name The user defined name
+	 */
+	getTaskByName: {
+		value: function(name) {
+			for(var i = 0; i < this.tasks.length; i++) {
+				var task = this.tasks[i];
+				if(task.name === name) {
+					return task;
+				}
+			}
+		},
+		writable: true
+	},
+
+	/**
+	 * Return a Task object, if it exists, based on the `tid` passed.
+	 *
+	 * @for TaskGroup
+	 * @method getTaskByTid
+	 * @param {String} tid The id of the task you want
+	 * @example
+	 *
+	 *	var parallel = new MonkeyBars.ParallelTask({
+	 *		tasks:[task1,task3]
+	 *	});
+	 *
+	 *	parallel.getTaskByTid(task1.tid);
+	 *
+	 */
+	getTaskByTid: {
+		value: function(tid) {
+			for(var i = 0; i < this.tasks.length; i++) {
+				var task = this.tasks[i];
+				if(task.tid === tid) {
+					return task;
+				}
+			}
+		},
+		writable: true
+	},
+	
+	/**
+	 * Called when a subtask calls its cancel method. When a subtask is canceled
+	 * any other subtasks that are dependent on the canceled task are cancled.
+	 *
+	 * @for TaskGroup
+	 * @method onSubTaskCancel
+	 * @param {Task} task The task that was just canceled
+	 */
+	onSubTaskCancel: {
+		value: function(task) {
+			for(var i = 0; i < this.tasks.length; i++) {
+				if(isTaskDependentOnTask(this.tasks[i], task)) {
+					this.tasks[i].state = STATE_CANCELED;
+				}
+			}
+		},
+		writable: true
+	},
+
+	/**
 	 * Called when a sub task completes. Must be overridden with functionality
 	 * provided by the extending class.
 	 *
@@ -195,21 +294,14 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	},
 
 	/**
-	 * Called when a subtask calls its cancel method. When a subtask is canceled
-	 * any other subtasks that are dependent on the canceled task are cancled.
+	 * An incrimented number of the tasks that have already been processed.
 	 *
-	 * @for TaskGroup
-	 * @method onSubTaskCancel
-	 * @param {Task} task The task that was just canceled
+	 * @for ParallelTask
+	 * @property processedIndex
+	 * @type Integer
 	 */
-	onSubTaskCancel: {
-		value: function(task) {
-			for(var i = 0; i < this.tasks.length; i++) {
-				if(isTaskDependentOnTask(this.tasks[i], task)) {
-					this.tasks[i].state = STATE_CANCELED;
-				}
-			}
-		},
+	processedIndex: {
+		value: 0,
 		writable: true
 	},
 
@@ -279,98 +371,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			}
 			var index = this.tasks.indexOf(task);
 			this.tasks.splice(index, 1);
-		},
-		writable: true
-	},
-
-	/**
-	 * Return a Task object, if it exists, based on the `tid` passed.
-	 *
-	 * @for TaskGroup
-	 * @method getTaskByTid
-	 * @param {String} tid The id of the task you want
-	 * @example
-	 *
-	 *	var parallel = new MonkeyBars.ParallelTask({
-	 *		tasks:[task1,task3]
-	 *	});
-	 *
-	 *	parallel.getTaskByTid(task1.tid);
-	 *
-	 */
-	getTaskByTid: {
-		value: function(tid) {
-			for(var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
-				if(task.tid === tid) {
-					return task;
-				}
-			}
-		},
-		writable: true
-	},
-
-	/**
-	 * Return a Task object, if it exists, based on the `id` passed.
-	 *
-	 * @for TaskGroup
-	 * @method getTaskById
-	 * @param {String} id The user defined id
-	 */
-	getTaskById: {
-		value: function(id) {
-			for(var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
-				if(task.id === id) {
-					return task;
-				}
-			}
-		},
-		writable: true
-	},
-
-	/**
-	 * Return a Task object, if it exists, based on the `name` passed.
-	 *
-	 * @for TaskGroup
-	 * @method getTaskByName
-	 * @param {String} name The user defined name
-	 */
-	getTaskByName: {
-		value: function(name) {
-			for(var i = 0; i < this.tasks.length; i++) {
-				var task = this.tasks[i];
-				if(task.name === name) {
-					return task;
-				}
-			}
-		},
-		writable: true
-	},
-
-	/**
-	 * Cancel the group and cancel all of its subtasks
-	 *
-	 * @for TaskGroup
-	 * @method cancel
-	 */
-	cancel: {
-		value: function() {
-
-			// call cancel on this task
-			Task.prototype.cancel.call(this);
-
-			// cancel all of this tasks subtasks
-			for(var i = 0; i < this.tasks.length; i++) {
-				// we only want to cancel those tasks that are currently running
-				// otherwise we want to set the canceled flag
-				var task = this.tasks[i];
-				if(task.state > STATE_INITIALIZED) {
-					task.cancel();
-				} else {
-					task.state = STATE_CANCELED;
-				}
-			}
 		},
 		writable: true
 	},

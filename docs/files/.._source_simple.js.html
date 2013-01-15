@@ -154,161 +154,11 @@ var Task = MonkeyBars.Task = function(attributes) {
 
 	&#x2F;&#x2F; initialize the task
 	task.initialize(task.options);
+	
 };
 
 Task.prototype = Object.create({}, {
-
-	&#x2F;**
-	 * Task data
-	 *
-	 * @for Task
-	 * @property data
-	 * @type Object
-	 * @default undefined
-	 *&#x2F;
-	data: {
-		value: undefined,
-		writable: true
-	},
-
-	&#x2F;**
-	 * Callback for handling data manipulated by a taskj. Overwrite this method
-	 * to do something other than setting data to what is passed.
-	 *
-	 * @for TaskGroup
-	 * @method handleData
-	 *&#x2F;
-	handleData: {
-		value: function(data) {
-			if(arguments.length &lt; 0) {
-				return;
-			}
-			this.data = data;
-		},
-		writable: true
-	},
-
-	&#x2F;**
-	 * The kind of task
-	 *
-	 * @for Task
-	 * @property type
-	 * @type String
-	 * @readonly
-	 *&#x2F;
-	type: {
-		value: TYPE_SIMPLE,
-		writable: true
-	},
-
-	&#x2F;**
-	 * Whether or not to run the task concurrently through Web Workers
-	 *
-	 * @for Task
-	 * @property concurrent
-	 * @type Boolean
-	 * @default false
-	 *&#x2F;
-	concurrent: {
-		value: false,
-		writable: true
-	},
-
-	&#x2F;**
-	 * This object can either be simply a reference to a custom WorkerTask extention&#x27;s
-	 * constructor. Or it can be an object with a constructor key&#x2F;value pair. If it is the
-	 * latter then you also have the option of passing a handler function that will be run
-	 * on the &#x60;onMessage&#x60; handler of the Worker itself.
-	 *
-	 * @for Task
-	 * @property worker
-	 * @type Object
-	 * @default undefined
-	 * @example
-	 *
-	 *	var task = new MonkeyBars.Task({
-	 *		...
-	 *		worker:{
-	 *			constructor:CustomWorker,
-	 *			handler:function(e){
-	 *				&#x2F;&#x2F; called when a postMessage is posted from the task
-	 *			}
-	 *		},
-	 *		...
-	 *	});
-	 *
-	 *	var task = new MonkeyBars.Task({
-	 *		...
-	 *		worker:CustomWorker,
-	 *		...
-	 *	});
-	 *
-	 *&#x2F;
-	worker: {
-		value: undefined,
-		writable: true
-	},
-
-	&#x2F;**
-	 * Display name for task. Used in logging output.
-	 *
-	 * @for Task
-	 * @property displayName
-	 * @type String
-	 * @readonly
-	 *&#x2F;
-	displayName: {
-		get: function() {
-			if(this.id) {
-				return this.id;
-			} else if(this.name) {
-				return this.name;
-			} else {
-				return this.type;
-			}
-		}
-	},
-
-	&#x2F;**
-	 * The current state of the task
-	 *
-	 * @for Task
-	 * @property state
-	 * @type Integer
-	 * @readonly
-	 * @default 0
-	 *&#x2F;
-	state: {
-		value: STATE_INITIALIZED,
-		writable: true
-	},
-
-	&#x2F;**
-	 * The default logging level for tasks
-	 *
-	 * @for Task
-	 * @property logLevel
-	 * @type Integer
-	 * @default 0
-	 *&#x2F;
-	logLevel: {
-		value: LOG_NONE,
-		writable: true
-	},
-
-	&#x2F;**
-	 * Time in milliseconds in which a task will time out and throw a fault
-	 *
-	 * @for Task
-	 * @property timeout
-	 * @type Integer
-	 * @default undefined
-	 *&#x2F;
-	timeout: {
-		value: undefined,
-		writable: true
-	},
-
+	
 	&#x2F;**
 	 * Calling this method cancels the task. However it is up to the instance to handle
 	 * the canceled state.
@@ -345,7 +195,7 @@ Task.prototype = Object.create({}, {
 		},
 		writable: true
 	},
-
+	
 	&#x2F;**
 	 * Calling this method says that the tasks execution is now complete.
 	 *
@@ -386,6 +236,52 @@ Task.prototype = Object.create({}, {
 	},
 
 	&#x2F;**
+	 * Whether or not to run the task concurrently through Web Workers
+	 *
+	 * @for Task
+	 * @property concurrent
+	 * @type Boolean
+	 * @default false
+	 *&#x2F;
+	concurrent: {
+		value: false,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Task data
+	 *
+	 * @for Task
+	 * @property data
+	 * @type Object
+	 * @default undefined
+	 *&#x2F;
+	data: {
+		value: undefined,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Display name for task. Used in logging output.
+	 *
+	 * @for Task
+	 * @property displayName
+	 * @type String
+	 * @readonly
+	 *&#x2F;
+	displayName: {
+		get: function() {
+			if(this.id) {
+				return this.id;
+			} else if(this.name) {
+				return this.name;
+			} else {
+				return this.type;
+			}
+		}
+	},
+
+	&#x2F;**
 	 * Calling this method to fault a task. If it is part of a group task this will
 	 * also call the groups fault method passing the error up to the group.
 	 *
@@ -423,7 +319,60 @@ Task.prototype = Object.create({}, {
 		},
 		writable: true
 	},
-
+	
+	&#x2F;**
+	 * Callback for handling data manipulated by a taskj. Overwrite this method
+	 * to do something other than setting data to what is passed.
+	 *
+	 * @for TaskGroup
+	 * @method handleData
+	 *&#x2F;
+	handleData: {
+		value: function(data) {
+			if(arguments.length &lt; 0) {
+				return;
+			}
+			this.data = data;
+		},
+		writable: true
+	},
+	
+	&#x2F;**
+	 * Initialization functionality
+	 *
+	 * @for Task
+	 * @method initialize
+	 * @param {Object} attributes
+	 *&#x2F;
+	initialize: {
+		value: function(attributes) {},
+		writable: true
+	},
+	
+	&#x2F;**
+	 * The default logging level for tasks
+	 *
+	 * @for Task
+	 * @property logLevel
+	 * @type Integer
+	 * @default 0
+	 *&#x2F;
+	logLevel: {
+		value: LOG_NONE,
+		writable: true
+	},
+	
+	&#x2F;**
+	 * Convenience method called when the task is canceled.
+	 *
+	 * @for Task
+	 * @method onCancel
+	 *&#x2F;
+	onCancel: {
+		value: function() {},
+		writable: true
+	},
+	
 	&#x2F;**
 	 * This method is called during the execution lifecycle of the task. It is intentionally
 	 * left blank and is up to the instance to describe it functionality.
@@ -452,15 +401,15 @@ Task.prototype = Object.create({}, {
 		value: function(state, data, error) {},
 		writable: true
 	},
-
+	
 	&#x2F;**
-	 * Convenience method called when the task starts.
+	 * Convenience method called when the task completes.
 	 *
 	 * @for Task
-	 * @method onStart
+	 * @method onComplete
 	 *&#x2F;
-	onStart: {
-		value: function() {},
+	onComplete: {
+		value: function(data) {},
 		writable: true
 	},
 
@@ -475,29 +424,18 @@ Task.prototype = Object.create({}, {
 		value: function(error) {},
 		writable: true
 	},
-
+	
 	&#x2F;**
-	 * Convenience method called when the task completes.
+	 * Convenience method called when the task starts.
 	 *
 	 * @for Task
-	 * @method onComplete
+	 * @method onStart
 	 *&#x2F;
-	onComplete: {
-		value: function(data) {},
-		writable: true
-	},
-
-	&#x2F;**
-	 * Convenience method called when the task is canceled.
-	 *
-	 * @for Task
-	 * @method onCancel
-	 *&#x2F;
-	onCancel: {
+	onStart: {
 		value: function() {},
 		writable: true
 	},
-
+	
 	&#x2F;**
 	 * This method is required for **simple** tasks and will throw an exception if it
 	 * is called and not overridden. If you overwrite this method on a task group
@@ -525,7 +463,7 @@ Task.prototype = Object.create({}, {
 		},
 		writable: true
 	},
-
+	
 	&#x2F;**
 	 * Kicks off the execution of the task by calling the tasks &#x60;performTask&#x60; method.
 	 * This method can only be run once on a task.
@@ -561,16 +499,79 @@ Task.prototype = Object.create({}, {
 		},
 		writable: true
 	},
-
+	
 	&#x2F;**
-	 * Initialization functionality
+	 * The current state of the task
 	 *
 	 * @for Task
-	 * @method initialize
-	 * @param {Object} attributes
+	 * @property state
+	 * @type Integer
+	 * @readonly
+	 * @default 0
 	 *&#x2F;
-	initialize: {
-		value: function(attributes) {},
+	state: {
+		value: STATE_INITIALIZED,
+		writable: true
+	},
+	
+	&#x2F;**
+	 * Time in milliseconds in which a task will time out and throw a fault
+	 *
+	 * @for Task
+	 * @property timeout
+	 * @type Integer
+	 * @default undefined
+	 *&#x2F;
+	timeout: {
+		value: undefined,
+		writable: true
+	},
+	
+	&#x2F;**
+	 * The kind of task
+	 *
+	 * @for Task
+	 * @property type
+	 * @type String
+	 * @readonly
+	 *&#x2F;
+	type: {
+		value: TYPE_SIMPLE,
+		writable: true
+	},
+	
+	&#x2F;**
+	 * This object can either be simply a reference to a custom WorkerTask extention&#x27;s
+	 * constructor. Or it can be an object with a constructor key&#x2F;value pair. If it is the
+	 * latter then you also have the option of passing a handler function that will be run
+	 * on the &#x60;onMessage&#x60; handler of the Worker itself.
+	 *
+	 * @for Task
+	 * @property worker
+	 * @type Object
+	 * @default undefined
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		...
+	 *		worker:{
+	 *			constructor:CustomWorker,
+	 *			handler:function(e){
+	 *				&#x2F;&#x2F; called when a postMessage is posted from the task
+	 *			}
+	 *		},
+	 *		...
+	 *	});
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		...
+	 *		worker:CustomWorker,
+	 *		...
+	 *	});
+	 *
+	 *&#x2F;
+	worker: {
+		value: undefined,
 		writable: true
 	}
 });

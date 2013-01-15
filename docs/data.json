@@ -29,9 +29,9 @@
             "modules": {},
             "classes": {},
             "fors": {
+                "TaskGroup": 1,
                 "Task": 1,
-                "ParallelTask": 1,
-                "TaskGroup": 1
+                "ParallelTask": 1
             },
             "namespaces": {}
         },
@@ -120,7 +120,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "../monkeybars.js",
-            "line": 1062,
+            "line": 1051,
             "description": "A task group, and extention of task, provides the building blocks for creating\na group of tasks that is inherently a task itself.",
             "extends": "Task",
             "is_constructor": 1,
@@ -141,7 +141,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "../monkeybars.js",
-            "line": 577,
+            "line": 565,
             "description": "The simplest form of a __MonkeyBars__ task. Once started the task executes all\nfunctionality located within the `performTask` function block. Set `logLevel`\nto see console logs during task execution.",
             "extends": "Object",
             "is_constructor": 1,
@@ -165,7 +165,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "../monkeybars.js",
-            "line": 1471,
+            "line": 1460,
             "description": "A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
             "is_constructor": 1,
@@ -189,7 +189,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "../monkeybars.js",
-            "line": 1690,
+            "line": 1679,
             "description": "A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
             "is_constructor": 1,
@@ -213,7 +213,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "../monkeybars.js",
-            "line": 466,
+            "line": 454,
             "description": "Creates a new worker representation of the task",
             "extends": "Object",
             "is_constructor": 1,
@@ -232,7 +232,7 @@
     "classitems": [
         {
             "file": "../source/core.js",
-            "line": 41,
+            "line": 37,
             "description": "Reference to the global js object (i.e. brower's window)",
             "itemtype": "property",
             "name": "root",
@@ -243,7 +243,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 50,
+            "line": 46,
             "description": "Counter used to create unique task ids",
             "itemtype": "property",
             "name": "taskIdCounter",
@@ -254,7 +254,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 59,
+            "line": 55,
             "description": "List of all whitelisted properties for a task",
             "itemtype": "property",
             "name": "taskOptions",
@@ -265,7 +265,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 75,
+            "line": 71,
             "description": "Object returned by module. Works as namespace for the task library.",
             "itemtype": "property",
             "name": "MonkeyBars",
@@ -274,7 +274,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 97,
+            "line": 93,
             "description": "Creates task based on the options passed.",
             "itemtype": "method",
             "name": "createTaskWithOptions",
@@ -291,7 +291,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 156,
+            "line": 152,
             "description": "Creates an array of tasks based on the options array passed.",
             "itemtype": "method",
             "name": "createSubTasksFromTaskOptionsArray",
@@ -308,7 +308,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 173,
+            "line": 169,
             "description": "Creates property descriptors from the passes attributes.",
             "itemtype": "method",
             "name": "createPropertyDescriptorsWithAttributes",
@@ -325,7 +325,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 191,
+            "line": 187,
             "description": "Resets the task to its original non executed state.",
             "itemtype": "method",
             "name": "resetTask",
@@ -342,7 +342,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 210,
+            "line": 206,
             "description": "Generates a unique id for each task.",
             "itemtype": "method",
             "name": "generateUniqueId",
@@ -363,7 +363,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 224,
+            "line": 220,
             "description": "Determains whether the first task is dependent on the second.",
             "itemtype": "method",
             "name": "isTaskDependentOnTask",
@@ -385,7 +385,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 250,
+            "line": 246,
             "description": "Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/",
             "itemtype": "method",
             "name": "serialize",
@@ -406,7 +406,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 302,
+            "line": 298,
             "description": "Creates a blob string to be used with the web worker for concurrent task execution",
             "itemtype": "method",
             "name": "createBlobWithTask",
@@ -427,7 +427,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 336,
+            "line": 332,
             "description": "Creates a web Worker instance with the passed arguments",
             "itemtype": "method",
             "name": "createWebWorkerWithBlobAndTask",
@@ -453,7 +453,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 382,
+            "line": 378,
             "description": "Performs the tasks `performTask` functionality within a web worker",
             "itemtype": "method",
             "name": "performTaskFunctionalityWithWebWorker",
@@ -470,7 +470,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 411,
+            "line": 400,
             "itemtype": "method",
             "name": "decorateTaskBasedOnAttributes",
             "params": [
@@ -491,7 +491,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 430,
+            "line": 418,
             "description": "Extention functionality for various task types.",
             "itemtype": "method",
             "name": "extend",
@@ -513,7 +513,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 498,
+            "line": 486,
             "description": "Task states contstants.",
             "itemtype": "property",
             "name": "TaskStates",
@@ -523,7 +523,7 @@
         },
         {
             "file": "../source/core.js",
-            "line": 514,
+            "line": 502,
             "description": "Task types contstants.",
             "itemtype": "property",
             "name": "TaskTypes",
@@ -533,20 +533,10 @@
         },
         {
             "file": "../source/core.js",
-            "line": 528,
+            "line": 516,
             "description": "Log level contstants.",
             "itemtype": "property",
             "name": "LogLevels",
-            "type": "Object",
-            "static": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 543,
-            "description": "Task decorators. These are exposed mainly to enable deeper extention.",
-            "itemtype": "property",
-            "name": "TaskDecorators",
             "type": "Object",
             "static": 1,
             "class": "MonkeyBars"
@@ -570,7 +560,7 @@
         },
         {
             "file": "../source/decorators.js",
-            "line": 27,
+            "line": 26,
             "description": "Decorator to provide while loop functionaliy. The task executed until the `while`\nmethod returns false.",
             "itemtype": "method",
             "name": "whileTaskDecorator",
@@ -587,7 +577,7 @@
         },
         {
             "file": "../source/decorators.js",
-            "line": 58,
+            "line": 56,
             "description": "The task doesnt execute until the when method provided returns true.",
             "itemtype": "method",
             "name": "whenTaskDecorator",
@@ -605,26 +595,6 @@
         {
             "file": "../source/group.js",
             "line": 33,
-            "description": "The index of the subtasks that have completed execution.",
-            "itemtype": "property",
-            "name": "currentIndex",
-            "type": "Integer",
-            "readonly": "",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 47,
-            "description": "An incrimented number of the tasks that have already been processed.",
-            "itemtype": "property",
-            "name": "processedIndex",
-            "type": "Integer",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 59,
             "description": "Adds a subtask to the groups queue. This is helpful when you want to add\na sub task after instantiation.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -642,7 +612,7 @@
         },
         {
             "file": "../source/group.js",
-            "line": 102,
+            "line": 76,
             "description": "Adds a subtask after another task",
             "itemtype": "method",
             "name": "addSubTaskAfterTask",
@@ -665,7 +635,7 @@
         },
         {
             "file": "../source/group.js",
-            "line": 137,
+            "line": 111,
             "description": "Very similar to `addSubTaskAfterTask` except the inject task appears\nbefore the second arguments position.",
             "itemtype": "method",
             "name": "addSubTaskBeforeTask",
@@ -685,7 +655,89 @@
         },
         {
             "file": "../source/group.js",
-            "line": 164,
+            "line": 138,
+            "description": "Cancel the group and cancel all of its subtasks",
+            "itemtype": "method",
+            "name": "cancel",
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../source/group.js",
+            "line": 165,
+            "description": "The index of the subtasks that have completed execution.",
+            "itemtype": "property",
+            "name": "currentIndex",
+            "type": "Integer",
+            "readonly": "",
+            "default": "0",
+            "class": "Task"
+        },
+        {
+            "file": "../source/group.js",
+            "line": 179,
+            "description": "Return a Task object, if it exists, based on the `id` passed.",
+            "itemtype": "method",
+            "name": "getTaskById",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The user defined id",
+                    "type": "String"
+                }
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../source/group.js",
+            "line": 198,
+            "description": "Return a Task object, if it exists, based on the `name` passed.",
+            "itemtype": "method",
+            "name": "getTaskByName",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The user defined name",
+                    "type": "String"
+                }
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../source/group.js",
+            "line": 217,
+            "description": "Return a Task object, if it exists, based on the `tid` passed.",
+            "itemtype": "method",
+            "name": "getTaskByTid",
+            "params": [
+                {
+                    "name": "tid",
+                    "description": "The id of the task you want",
+                    "type": "String"
+                }
+            ],
+            "example": [
+                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\ttasks:[task1,task3]\n\t});\n\n\tparallel.getTaskByTid(task1.tid);\n"
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../source/group.js",
+            "line": 244,
+            "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
+            "itemtype": "method",
+            "name": "onSubTaskCancel",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "The task that was just canceled",
+                    "type": "Task"
+                }
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../source/group.js",
+            "line": 263,
             "description": "Called when a sub task completes. Must be overridden with functionality\nprovided by the extending class.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -705,7 +757,7 @@
         },
         {
             "file": "../source/group.js",
-            "line": 182,
+            "line": 281,
             "description": "Called when a subtask calls its fault method.",
             "itemtype": "method",
             "name": "onSubTaskFault",
@@ -725,22 +777,16 @@
         },
         {
             "file": "../source/group.js",
-            "line": 197,
-            "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
-            "itemtype": "method",
-            "name": "onSubTaskCancel",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "The task that was just canceled",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
+            "line": 296,
+            "description": "An incrimented number of the tasks that have already been processed.",
+            "itemtype": "property",
+            "name": "processedIndex",
+            "type": "Integer",
+            "class": "ParallelTask"
         },
         {
             "file": "../source/group.js",
-            "line": 216,
+            "line": 308,
             "description": "Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
             "itemtype": "method",
             "name": "processSubTask",
@@ -755,7 +801,7 @@
         },
         {
             "file": "../source/group.js",
-            "line": 267,
+            "line": 359,
             "description": "Removes a task from its group. Removing the task after it has executed will\nhave no apparent affect as it has already ran.",
             "itemtype": "method",
             "name": "removeSubTask",
@@ -766,62 +812,6 @@
                     "type": "Task"
                 }
             ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 286,
-            "description": "Return a Task object, if it exists, based on the `tid` passed.",
-            "itemtype": "method",
-            "name": "getTaskByTid",
-            "params": [
-                {
-                    "name": "tid",
-                    "description": "The id of the task you want",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\ttasks:[task1,task3]\n\t});\n\n\tparallel.getTaskByTid(task1.tid);\n"
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 313,
-            "description": "Return a Task object, if it exists, based on the `id` passed.",
-            "itemtype": "method",
-            "name": "getTaskById",
-            "params": [
-                {
-                    "name": "id",
-                    "description": "The user defined id",
-                    "type": "String"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 332,
-            "description": "Return a Task object, if it exists, based on the `name` passed.",
-            "itemtype": "method",
-            "name": "getTaskByName",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "The user defined name",
-                    "type": "String"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 351,
-            "description": "Cancel the group and cancel all of its subtasks",
-            "itemtype": "method",
-            "name": "cancel",
             "class": "TaskGroup"
         },
         {
@@ -843,60 +833,6 @@
         {
             "file": "../source/parallel.js",
             "line": 33,
-            "description": "The kind of task",
-            "itemtype": "property",
-            "name": "type",
-            "type": "String",
-            "readonly": "",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 46,
-            "description": "The max amounts of tasks that can run simultaneously",
-            "itemtype": "property",
-            "name": "max",
-            "type": "Integer",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 58,
-            "description": "Checks whether or not the group has any enabled sub tasks.",
-            "itemtype": "method",
-            "name": "hasNoEnabledSubTasks",
-            "return": {
-                "description": "Has sub tasks or not",
-                "type": "Boolean"
-            },
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 81,
-            "description": "Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
-            "itemtype": "method",
-            "name": "processSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Subtask to process",
-                    "type": "Task"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 117,
-            "description": "Processes all of the sub tasks available for the group",
-            "itemtype": "method",
-            "name": "processSubTasks",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 136,
             "description": "This method is overridden from `TaskGroups` implementation because of the\nnature of a parallel task. When a task is added it should be immediately\nprocessed and started.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -911,7 +847,28 @@
         },
         {
             "file": "../source/parallel.js",
-            "line": 160,
+            "line": 57,
+            "description": "Checks whether or not the group has any enabled sub tasks.",
+            "itemtype": "method",
+            "name": "hasNoEnabledSubTasks",
+            "return": {
+                "description": "Has sub tasks or not",
+                "type": "Boolean"
+            },
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../source/parallel.js",
+            "line": 80,
+            "description": "The max amounts of tasks that can run simultaneously",
+            "itemtype": "property",
+            "name": "max",
+            "type": "Integer",
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../source/parallel.js",
+            "line": 92,
             "description": "Overridden from TaskGroup. This method is run everytime a sub task\ncompletes. When all subtasks are complete the groups complete method\nis called.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -931,33 +888,63 @@
         },
         {
             "file": "../source/parallel.js",
-            "line": 194,
+            "line": 126,
             "description": "Overridden from Task. First checks to see if there are any enabled\nsubtasks to process. If there arent the groups complete method is called.\nIf there are then the group processes all of the sub tasks it has.",
             "itemtype": "method",
             "name": "performTask",
             "class": "ParallelTask"
         },
         {
-            "file": "../source/sequence.js",
-            "line": 33,
+            "file": "../source/parallel.js",
+            "line": 145,
+            "description": "Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
+            "itemtype": "method",
+            "name": "processSubTask",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "Subtask to process",
+                    "type": "Task"
+                }
+            ],
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../source/parallel.js",
+            "line": 181,
+            "description": "Processes all of the sub tasks available for the group",
+            "itemtype": "method",
+            "name": "processSubTasks",
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../source/parallel.js",
+            "line": 200,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
             "type": "String",
             "readonly": "",
-            "class": "SequenceTask"
+            "class": "ParallelTask"
         },
         {
             "file": "../source/sequence.js",
-            "line": 46,
-            "description": "Starts the next task in the queue after its previous sibling has completed.",
+            "line": 33,
+            "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
             "itemtype": "method",
-            "name": "startNextSubTask",
+            "name": "onSubTaskCancel",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "",
+                    "type": "Task"
+                }
+            ],
             "class": "SequenceTask"
         },
         {
             "file": "../source/sequence.js",
-            "line": 84,
+            "line": 51,
             "description": "Overridden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task completes it starts the next sibling in the queue.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -977,22 +964,7 @@
         },
         {
             "file": "../source/sequence.js",
-            "line": 104,
-            "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
-            "itemtype": "method",
-            "name": "onSubTaskCancel",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../source/sequence.js",
-            "line": 122,
+            "line": 71,
             "description": "Starts the next sub task in the sequence. If overriden you need to call the\nSequenceTask's prototype `performTask` method.",
             "itemtype": "method",
             "name": "performTask",
@@ -1006,100 +978,26 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../source/simple.js",
-            "line": 63,
-            "description": "Task data",
-            "itemtype": "property",
-            "name": "data",
-            "type": "Object",
-            "default": "undefined",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 76,
-            "description": "Callback for handling data manipulated by a taskj. Overwrite this method\nto do something other than setting data to what is passed.",
+            "file": "../source/sequence.js",
+            "line": 86,
+            "description": "Starts the next task in the queue after its previous sibling has completed.",
             "itemtype": "method",
-            "name": "handleData",
-            "class": "TaskGroup"
+            "name": "startNextSubTask",
+            "class": "SequenceTask"
         },
         {
-            "file": "../source/simple.js",
-            "line": 93,
+            "file": "../source/sequence.js",
+            "line": 124,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
             "type": "String",
             "readonly": "",
-            "class": "Task"
+            "class": "SequenceTask"
         },
         {
             "file": "../source/simple.js",
-            "line": 106,
-            "description": "Whether or not to run the task concurrently through Web Workers",
-            "itemtype": "property",
-            "name": "concurrent",
-            "type": "Boolean",
-            "default": "false",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 119,
-            "description": "This object can either be simply a reference to a custom WorkerTask extention's\nconstructor. Or it can be an object with a constructor key/value pair. If it is the\nlatter then you also have the option of passing a handler function that will be run\non the `onMessage` handler of the Worker itself.",
-            "itemtype": "property",
-            "name": "worker",
-            "type": "Object",
-            "default": "undefined",
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\t// called when a postMessage is posted from the task\n\t\t\t}\n\t\t},\n\t\t...\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:CustomWorker,\n\t\t...\n\t});\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 154,
-            "description": "Display name for task. Used in logging output.",
-            "itemtype": "property",
-            "name": "displayName",
-            "type": "String",
-            "readonly": "",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 174,
-            "description": "The current state of the task",
-            "itemtype": "property",
-            "name": "state",
-            "type": "Integer",
-            "readonly": "",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 188,
-            "description": "The default logging level for tasks",
-            "itemtype": "property",
-            "name": "logLevel",
-            "type": "Integer",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 201,
-            "description": "Time in milliseconds in which a task will time out and throw a fault",
-            "itemtype": "property",
-            "name": "timeout",
-            "type": "Integer",
-            "default": "undefined",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 214,
+            "line": 64,
             "description": "Calling this method cancels the task. However it is up to the instance to handle\nthe canceled state.",
             "itemtype": "method",
             "name": "cancel",
@@ -1110,7 +1008,7 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 251,
+            "line": 101,
             "description": "Calling this method says that the tasks execution is now complete.",
             "itemtype": "method",
             "name": "complete",
@@ -1121,7 +1019,37 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 290,
+            "line": 140,
+            "description": "Whether or not to run the task concurrently through Web Workers",
+            "itemtype": "property",
+            "name": "concurrent",
+            "type": "Boolean",
+            "default": "false",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 153,
+            "description": "Task data",
+            "itemtype": "property",
+            "name": "data",
+            "type": "Object",
+            "default": "undefined",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 166,
+            "description": "Display name for task. Used in logging output.",
+            "itemtype": "property",
+            "name": "displayName",
+            "type": "String",
+            "readonly": "",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 186,
             "description": "Calling this method to fault a task. If it is part of a group task this will\nalso call the groups fault method passing the error up to the group.",
             "itemtype": "method",
             "name": "fault",
@@ -1139,7 +1067,48 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 329,
+            "line": 225,
+            "description": "Callback for handling data manipulated by a taskj. Overwrite this method\nto do something other than setting data to what is passed.",
+            "itemtype": "method",
+            "name": "handleData",
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 242,
+            "description": "Initialization functionality",
+            "itemtype": "method",
+            "name": "initialize",
+            "params": [
+                {
+                    "name": "attributes",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 254,
+            "description": "The default logging level for tasks",
+            "itemtype": "property",
+            "name": "logLevel",
+            "type": "Integer",
+            "default": "0",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 267,
+            "description": "Convenience method called when the task is canceled.",
+            "itemtype": "method",
+            "name": "onCancel",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 278,
             "description": "This method is called during the execution lifecycle of the task. It is intentionally\nleft blank and is up to the instance to describe it functionality.",
             "itemtype": "method",
             "name": "onChange",
@@ -1162,15 +1131,15 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 358,
-            "description": "Convenience method called when the task starts.",
+            "line": 307,
+            "description": "Convenience method called when the task completes.",
             "itemtype": "method",
-            "name": "onStart",
+            "name": "onComplete",
             "class": "Task"
         },
         {
             "file": "../source/simple.js",
-            "line": 369,
+            "line": 318,
             "description": "Convenience method called when the task faults.",
             "itemtype": "method",
             "name": "onFault",
@@ -1185,23 +1154,15 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 381,
-            "description": "Convenience method called when the task completes.",
+            "line": 330,
+            "description": "Convenience method called when the task starts.",
             "itemtype": "method",
-            "name": "onComplete",
+            "name": "onStart",
             "class": "Task"
         },
         {
             "file": "../source/simple.js",
-            "line": 392,
-            "description": "Convenience method called when the task is canceled.",
-            "itemtype": "method",
-            "name": "onCancel",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 403,
+            "line": 341,
             "description": "This method is required for **simple** tasks and will throw an exception if it\nis called and not overridden. If you overwrite this method on a task group\nthen you need to make sure that you call the extended/implemented classes\noriginal prototype method (see the example below).",
             "itemtype": "method",
             "name": "performTask",
@@ -1213,7 +1174,7 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 431,
+            "line": 369,
             "description": "Kicks off the execution of the task by calling the tasks `performTask` method.\nThis method can only be run once on a task.",
             "itemtype": "method",
             "name": "start",
@@ -1221,16 +1182,45 @@
         },
         {
             "file": "../source/simple.js",
-            "line": 467,
-            "description": "Initialization functionality",
-            "itemtype": "method",
-            "name": "initialize",
-            "params": [
-                {
-                    "name": "attributes",
-                    "description": "",
-                    "type": "Object"
-                }
+            "line": 405,
+            "description": "The current state of the task",
+            "itemtype": "property",
+            "name": "state",
+            "type": "Integer",
+            "readonly": "",
+            "default": "0",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 419,
+            "description": "Time in milliseconds in which a task will time out and throw a fault",
+            "itemtype": "property",
+            "name": "timeout",
+            "type": "Integer",
+            "default": "undefined",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 432,
+            "description": "The kind of task",
+            "itemtype": "property",
+            "name": "type",
+            "type": "String",
+            "readonly": "",
+            "class": "Task"
+        },
+        {
+            "file": "../source/simple.js",
+            "line": 445,
+            "description": "This object can either be simply a reference to a custom WorkerTask extention's\nconstructor. Or it can be an object with a constructor key/value pair. If it is the\nlatter then you also have the option of passing a handler function that will be run\non the `onMessage` handler of the Worker itself.",
+            "itemtype": "property",
+            "name": "worker",
+            "type": "Object",
+            "default": "undefined",
+            "example": [
+                "\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\t// called when a postMessage is posted from the task\n\t\t\t}\n\t\t},\n\t\t...\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:CustomWorker,\n\t\t...\n\t});\n"
             ],
             "class": "Task"
         },
@@ -2507,7 +2497,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 46,
+            "line": 42,
             "description": "Reference to the global js object (i.e. brower's window)",
             "itemtype": "property",
             "name": "root",
@@ -2518,7 +2508,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 55,
+            "line": 51,
             "description": "Counter used to create unique task ids",
             "itemtype": "property",
             "name": "taskIdCounter",
@@ -2529,7 +2519,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 64,
+            "line": 60,
             "description": "List of all whitelisted properties for a task",
             "itemtype": "property",
             "name": "taskOptions",
@@ -2540,7 +2530,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 79,
+            "line": 75,
             "description": "Object returned by module. Works as namespace for the task library.",
             "itemtype": "property",
             "name": "MonkeyBars",
@@ -2549,7 +2539,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 101,
+            "line": 97,
             "description": "Creates task based on the options passed.",
             "itemtype": "method",
             "name": "createTaskWithOptions",
@@ -2566,7 +2556,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 160,
+            "line": 156,
             "description": "Creates an array of tasks based on the options array passed.",
             "itemtype": "method",
             "name": "createSubTasksFromTaskOptionsArray",
@@ -2583,7 +2573,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 177,
+            "line": 173,
             "description": "Creates property descriptors from the passes attributes.",
             "itemtype": "method",
             "name": "createPropertyDescriptorsWithAttributes",
@@ -2600,7 +2590,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 195,
+            "line": 191,
             "description": "Resets the task to its original non executed state.",
             "itemtype": "method",
             "name": "resetTask",
@@ -2617,7 +2607,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 214,
+            "line": 210,
             "description": "Generates a unique id for each task.",
             "itemtype": "method",
             "name": "generateUniqueId",
@@ -2638,7 +2628,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 228,
+            "line": 224,
             "description": "Determains whether the first task is dependent on the second.",
             "itemtype": "method",
             "name": "isTaskDependentOnTask",
@@ -2660,7 +2650,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 254,
+            "line": 250,
             "description": "Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/",
             "itemtype": "method",
             "name": "serialize",
@@ -2681,7 +2671,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 306,
+            "line": 302,
             "description": "Creates a blob string to be used with the web worker for concurrent task execution",
             "itemtype": "method",
             "name": "createBlobWithTask",
@@ -2702,7 +2692,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 340,
+            "line": 336,
             "description": "Creates a web Worker instance with the passed arguments",
             "itemtype": "method",
             "name": "createWebWorkerWithBlobAndTask",
@@ -2728,7 +2718,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 386,
+            "line": 382,
             "description": "Performs the tasks `performTask` functionality within a web worker",
             "itemtype": "method",
             "name": "performTaskFunctionalityWithWebWorker",
@@ -2745,7 +2735,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 415,
+            "line": 404,
             "itemtype": "method",
             "name": "decorateTaskBasedOnAttributes",
             "params": [
@@ -2766,7 +2756,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 434,
+            "line": 422,
             "description": "Extention functionality for various task types.",
             "itemtype": "method",
             "name": "extend",
@@ -2788,7 +2778,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 516,
+            "line": 504,
             "description": "Post a complete message along with the data passed stating that the task\nhas completed what it needs to.",
             "itemtype": "method",
             "name": "complete",
@@ -2796,7 +2786,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 527,
+            "line": 515,
             "description": "Posts a fault message to the main thread that the task has faulted. Passes\nan error as its value.",
             "itemtype": "method",
             "name": "fault",
@@ -2811,7 +2801,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 539,
+            "line": 527,
             "description": "Posts a cancel message to the main thread that the task has been canceled.",
             "itemtype": "method",
             "name": "cancel",
@@ -2819,7 +2809,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 549,
+            "line": 537,
             "description": "Convenience method for posting messages to the main thread. You should opt into\nusing this as it is how the rest of the WorkerTask core methods communicate with\nthe main thread.",
             "itemtype": "method",
             "name": "postMessage",
@@ -2839,35 +2829,29 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 639,
-            "description": "Task data",
-            "itemtype": "property",
-            "name": "data",
-            "type": "Object",
-            "default": "undefined",
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 652,
-            "description": "Callback for handling data manipulated by a taskj. Overwrite this method\nto do something other than setting data to what is passed.",
+            "line": 628,
+            "description": "Calling this method cancels the task. However it is up to the instance to handle\nthe canceled state.",
             "itemtype": "method",
-            "name": "handleData",
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 669,
-            "description": "The kind of task",
-            "itemtype": "property",
-            "name": "type",
-            "type": "String",
-            "readonly": "",
+            "name": "cancel",
+            "example": [
+                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tif(true){\n\t\t\t\tthis.cancel();\n\t\t\t}\n\t\t}\n\t});\n\n\ttask.start();\n"
+            ],
             "class": "Task"
         },
         {
             "file": "../monkeybars.js",
-            "line": 682,
+            "line": 665,
+            "description": "Calling this method says that the tasks execution is now complete.",
+            "itemtype": "method",
+            "name": "complete",
+            "example": [
+                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t}\n\t});\n\n\ttask.start();\n"
+            ],
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 704,
             "description": "Whether or not to run the task concurrently through Web Workers",
             "itemtype": "property",
             "name": "concurrent",
@@ -2877,15 +2861,12 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 695,
-            "description": "This object can either be simply a reference to a custom WorkerTask extention's\nconstructor. Or it can be an object with a constructor key/value pair. If it is the\nlatter then you also have the option of passing a handler function that will be run\non the `onMessage` handler of the Worker itself.",
+            "line": 717,
+            "description": "Task data",
             "itemtype": "property",
-            "name": "worker",
+            "name": "data",
             "type": "Object",
             "default": "undefined",
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\t// called when a postMessage is posted from the task\n\t\t\t}\n\t\t},\n\t\t...\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:CustomWorker,\n\t\t...\n\t});\n"
-            ],
             "class": "Task"
         },
         {
@@ -2901,59 +2882,6 @@
         {
             "file": "../monkeybars.js",
             "line": 750,
-            "description": "The current state of the task",
-            "itemtype": "property",
-            "name": "state",
-            "type": "Integer",
-            "readonly": "",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 764,
-            "description": "The default logging level for tasks",
-            "itemtype": "property",
-            "name": "logLevel",
-            "type": "Integer",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 777,
-            "description": "Time in milliseconds in which a task will time out and throw a fault",
-            "itemtype": "property",
-            "name": "timeout",
-            "type": "Integer",
-            "default": "undefined",
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 790,
-            "description": "Calling this method cancels the task. However it is up to the instance to handle\nthe canceled state.",
-            "itemtype": "method",
-            "name": "cancel",
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tif(true){\n\t\t\t\tthis.cancel();\n\t\t\t}\n\t\t}\n\t});\n\n\ttask.start();\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 827,
-            "description": "Calling this method says that the tasks execution is now complete.",
-            "itemtype": "method",
-            "name": "complete",
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t}\n\t});\n\n\ttask.start();\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 866,
             "description": "Calling this method to fault a task. If it is part of a group task this will\nalso call the groups fault method passing the error up to the group.",
             "itemtype": "method",
             "name": "fault",
@@ -2971,7 +2899,48 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 905,
+            "line": 789,
+            "description": "Callback for handling data manipulated by a taskj. Overwrite this method\nto do something other than setting data to what is passed.",
+            "itemtype": "method",
+            "name": "handleData",
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 806,
+            "description": "Initialization functionality",
+            "itemtype": "method",
+            "name": "initialize",
+            "params": [
+                {
+                    "name": "attributes",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 818,
+            "description": "The default logging level for tasks",
+            "itemtype": "property",
+            "name": "logLevel",
+            "type": "Integer",
+            "default": "0",
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 831,
+            "description": "Convenience method called when the task is canceled.",
+            "itemtype": "method",
+            "name": "onCancel",
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 842,
             "description": "This method is called during the execution lifecycle of the task. It is intentionally\nleft blank and is up to the instance to describe it functionality.",
             "itemtype": "method",
             "name": "onChange",
@@ -2994,15 +2963,15 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 934,
-            "description": "Convenience method called when the task starts.",
+            "line": 871,
+            "description": "Convenience method called when the task completes.",
             "itemtype": "method",
-            "name": "onStart",
+            "name": "onComplete",
             "class": "Task"
         },
         {
             "file": "../monkeybars.js",
-            "line": 945,
+            "line": 882,
             "description": "Convenience method called when the task faults.",
             "itemtype": "method",
             "name": "onFault",
@@ -3017,23 +2986,15 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 957,
-            "description": "Convenience method called when the task completes.",
+            "line": 894,
+            "description": "Convenience method called when the task starts.",
             "itemtype": "method",
-            "name": "onComplete",
+            "name": "onStart",
             "class": "Task"
         },
         {
             "file": "../monkeybars.js",
-            "line": 968,
-            "description": "Convenience method called when the task is canceled.",
-            "itemtype": "method",
-            "name": "onCancel",
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 979,
+            "line": 905,
             "description": "This method is required for **simple** tasks and will throw an exception if it\nis called and not overridden. If you overwrite this method on a task group\nthen you need to make sure that you call the extended/implemented classes\noriginal prototype method (see the example below).",
             "itemtype": "method",
             "name": "performTask",
@@ -3045,7 +3006,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1007,
+            "line": 933,
             "description": "Kicks off the execution of the task by calling the tasks `performTask` method.\nThis method can only be run once on a task.",
             "itemtype": "method",
             "name": "start",
@@ -3053,25 +3014,10 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1043,
-            "description": "Initialization functionality",
-            "itemtype": "method",
-            "name": "initialize",
-            "params": [
-                {
-                    "name": "attributes",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1094,
-            "description": "The index of the subtasks that have completed execution.",
+            "line": 969,
+            "description": "The current state of the task",
             "itemtype": "property",
-            "name": "currentIndex",
+            "name": "state",
             "type": "Integer",
             "readonly": "",
             "default": "0",
@@ -3079,16 +3025,40 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1108,
-            "description": "An incrimented number of the tasks that have already been processed.",
+            "line": 983,
+            "description": "Time in milliseconds in which a task will time out and throw a fault",
             "itemtype": "property",
-            "name": "processedIndex",
+            "name": "timeout",
             "type": "Integer",
-            "class": "ParallelTask"
+            "default": "undefined",
+            "class": "Task"
         },
         {
             "file": "../monkeybars.js",
-            "line": 1120,
+            "line": 996,
+            "description": "The kind of task",
+            "itemtype": "property",
+            "name": "type",
+            "type": "String",
+            "readonly": "",
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1009,
+            "description": "This object can either be simply a reference to a custom WorkerTask extention's\nconstructor. Or it can be an object with a constructor key/value pair. If it is the\nlatter then you also have the option of passing a handler function that will be run\non the `onMessage` handler of the Worker itself.",
+            "itemtype": "property",
+            "name": "worker",
+            "type": "Object",
+            "default": "undefined",
+            "example": [
+                "\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\t// called when a postMessage is posted from the task\n\t\t\t}\n\t\t},\n\t\t...\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:CustomWorker,\n\t\t...\n\t});\n"
+            ],
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1083,
             "description": "Adds a subtask to the groups queue. This is helpful when you want to add\na sub task after instantiation.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -3106,7 +3076,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1163,
+            "line": 1126,
             "description": "Adds a subtask after another task",
             "itemtype": "method",
             "name": "addSubTaskAfterTask",
@@ -3129,7 +3099,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1198,
+            "line": 1161,
             "description": "Very similar to `addSubTaskAfterTask` except the inject task appears\nbefore the second arguments position.",
             "itemtype": "method",
             "name": "addSubTaskBeforeTask",
@@ -3149,7 +3119,89 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1225,
+            "line": 1188,
+            "description": "Cancel the group and cancel all of its subtasks",
+            "itemtype": "method",
+            "name": "cancel",
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1215,
+            "description": "The index of the subtasks that have completed execution.",
+            "itemtype": "property",
+            "name": "currentIndex",
+            "type": "Integer",
+            "readonly": "",
+            "default": "0",
+            "class": "Task"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1229,
+            "description": "Return a Task object, if it exists, based on the `id` passed.",
+            "itemtype": "method",
+            "name": "getTaskById",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "The user defined id",
+                    "type": "String"
+                }
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1248,
+            "description": "Return a Task object, if it exists, based on the `name` passed.",
+            "itemtype": "method",
+            "name": "getTaskByName",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The user defined name",
+                    "type": "String"
+                }
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1267,
+            "description": "Return a Task object, if it exists, based on the `tid` passed.",
+            "itemtype": "method",
+            "name": "getTaskByTid",
+            "params": [
+                {
+                    "name": "tid",
+                    "description": "The id of the task you want",
+                    "type": "String"
+                }
+            ],
+            "example": [
+                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\ttasks:[task1,task3]\n\t});\n\n\tparallel.getTaskByTid(task1.tid);\n"
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1294,
+            "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
+            "itemtype": "method",
+            "name": "onSubTaskCancel",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "The task that was just canceled",
+                    "type": "Task"
+                }
+            ],
+            "class": "TaskGroup"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1313,
             "description": "Called when a sub task completes. Must be overridden with functionality\nprovided by the extending class.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -3169,7 +3221,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1243,
+            "line": 1331,
             "description": "Called when a subtask calls its fault method.",
             "itemtype": "method",
             "name": "onSubTaskFault",
@@ -3189,22 +3241,16 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1258,
-            "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
-            "itemtype": "method",
-            "name": "onSubTaskCancel",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "The task that was just canceled",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
+            "line": 1346,
+            "description": "An incrimented number of the tasks that have already been processed.",
+            "itemtype": "property",
+            "name": "processedIndex",
+            "type": "Integer",
+            "class": "ParallelTask"
         },
         {
             "file": "../monkeybars.js",
-            "line": 1277,
+            "line": 1358,
             "description": "Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
             "itemtype": "method",
             "name": "processSubTask",
@@ -3219,7 +3265,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1328,
+            "line": 1409,
             "description": "Removes a task from its group. Removing the task after it has executed will\nhave no apparent affect as it has already ran.",
             "itemtype": "method",
             "name": "removeSubTask",
@@ -3234,63 +3280,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1347,
-            "description": "Return a Task object, if it exists, based on the `tid` passed.",
-            "itemtype": "method",
-            "name": "getTaskByTid",
-            "params": [
-                {
-                    "name": "tid",
-                    "description": "The id of the task you want",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\ttasks:[task1,task3]\n\t});\n\n\tparallel.getTaskByTid(task1.tid);\n"
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1374,
-            "description": "Return a Task object, if it exists, based on the `id` passed.",
-            "itemtype": "method",
-            "name": "getTaskById",
-            "params": [
-                {
-                    "name": "id",
-                    "description": "The user defined id",
-                    "type": "String"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1393,
-            "description": "Return a Task object, if it exists, based on the `name` passed.",
-            "itemtype": "method",
-            "name": "getTaskByName",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "The user defined name",
-                    "type": "String"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1412,
-            "description": "Cancel the group and cancel all of its subtasks",
-            "itemtype": "method",
-            "name": "cancel",
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1439,
+            "line": 1428,
             "description": "Sets dependencies for the passed task.",
             "itemtype": "method",
             "name": "setDependeciesForTask",
@@ -3306,61 +3296,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1503,
-            "description": "The kind of task",
-            "itemtype": "property",
-            "name": "type",
-            "type": "String",
-            "readonly": "",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1516,
-            "description": "The max amounts of tasks that can run simultaneously",
-            "itemtype": "property",
-            "name": "max",
-            "type": "Integer",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1528,
-            "description": "Checks whether or not the group has any enabled sub tasks.",
-            "itemtype": "method",
-            "name": "hasNoEnabledSubTasks",
-            "return": {
-                "description": "Has sub tasks or not",
-                "type": "Boolean"
-            },
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1551,
-            "description": "Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
-            "itemtype": "method",
-            "name": "processSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Subtask to process",
-                    "type": "Task"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1587,
-            "description": "Processes all of the sub tasks available for the group",
-            "itemtype": "method",
-            "name": "processSubTasks",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1606,
+            "line": 1492,
             "description": "This method is overridden from `TaskGroups` implementation because of the\nnature of a parallel task. When a task is added it should be immediately\nprocessed and started.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -3375,7 +3311,28 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1630,
+            "line": 1516,
+            "description": "Checks whether or not the group has any enabled sub tasks.",
+            "itemtype": "method",
+            "name": "hasNoEnabledSubTasks",
+            "return": {
+                "description": "Has sub tasks or not",
+                "type": "Boolean"
+            },
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1539,
+            "description": "The max amounts of tasks that can run simultaneously",
+            "itemtype": "property",
+            "name": "max",
+            "type": "Integer",
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1551,
             "description": "Overridden from TaskGroup. This method is run everytime a sub task\ncompletes. When all subtasks are complete the groups complete method\nis called.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -3395,7 +3352,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1664,
+            "line": 1585,
             "description": "Overridden from Task. First checks to see if there are any enabled\nsubtasks to process. If there arent the groups complete method is called.\nIf there are then the group processes all of the sub tasks it has.",
             "itemtype": "method",
             "name": "performTask",
@@ -3403,25 +3360,55 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1722,
+            "line": 1604,
+            "description": "Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
+            "itemtype": "method",
+            "name": "processSubTask",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "Subtask to process",
+                    "type": "Task"
+                }
+            ],
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1640,
+            "description": "Processes all of the sub tasks available for the group",
+            "itemtype": "method",
+            "name": "processSubTasks",
+            "class": "ParallelTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1659,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
             "type": "String",
             "readonly": "",
-            "class": "SequenceTask"
+            "class": "ParallelTask"
         },
         {
             "file": "../monkeybars.js",
-            "line": 1735,
-            "description": "Starts the next task in the queue after its previous sibling has completed.",
+            "line": 1711,
+            "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
             "itemtype": "method",
-            "name": "startNextSubTask",
+            "name": "onSubTaskCancel",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "",
+                    "type": "Task"
+                }
+            ],
             "class": "SequenceTask"
         },
         {
             "file": "../monkeybars.js",
-            "line": 1773,
+            "line": 1729,
             "description": "Overridden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task completes it starts the next sibling in the queue.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -3441,22 +3428,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1793,
-            "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
-            "itemtype": "method",
-            "name": "onSubTaskCancel",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1811,
+            "line": 1749,
             "description": "Starts the next sub task in the sequence. If overriden you need to call the\nSequenceTask's prototype `performTask` method.",
             "itemtype": "method",
             "name": "performTask",
@@ -3471,7 +3443,25 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1833,
+            "line": 1764,
+            "description": "Starts the next task in the queue after its previous sibling has completed.",
+            "itemtype": "method",
+            "name": "startNextSubTask",
+            "class": "SequenceTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1802,
+            "description": "The kind of task",
+            "itemtype": "property",
+            "name": "type",
+            "type": "String",
+            "readonly": "",
+            "class": "SequenceTask"
+        },
+        {
+            "file": "../monkeybars.js",
+            "line": 1822,
             "description": "Decorator to provide for loop functionality for the task. The task executes\nas many times as referenced by the count attribute provided by the instance.",
             "itemtype": "method",
             "name": "forTaskDecorator",
@@ -3488,7 +3478,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1859,
+            "line": 1847,
             "description": "Decorator to provide while loop functionaliy. The task executed until the `while`\nmethod returns false.",
             "itemtype": "method",
             "name": "whileTaskDecorator",
@@ -3505,7 +3495,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1890,
+            "line": 1877,
             "description": "The task doesnt execute until the when method provided returns true.",
             "itemtype": "method",
             "name": "whenTaskDecorator",
@@ -3522,7 +3512,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1916,
+            "line": 1902,
             "description": "Task states contstants.",
             "itemtype": "property",
             "name": "TaskStates",
@@ -3532,7 +3522,7 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1932,
+            "line": 1918,
             "description": "Task types contstants.",
             "itemtype": "property",
             "name": "TaskTypes",
@@ -3542,20 +3532,10 @@
         },
         {
             "file": "../monkeybars.js",
-            "line": 1946,
+            "line": 1932,
             "description": "Log level contstants.",
             "itemtype": "property",
             "name": "LogLevels",
-            "type": "Object",
-            "static": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 1961,
-            "description": "Task decorators. These are exposed mainly to enable deeper extention.",
-            "itemtype": "property",
-            "name": "TaskDecorators",
             "type": "Object",
             "static": 1,
             "class": "MonkeyBars"

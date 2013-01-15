@@ -127,29 +127,28 @@ var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
 };
 
 ParallelTask.prototype = Object.create(TaskGroup.prototype, {
-
+	
 	&#x2F;**
-	 * The kind of task
+	 * This method is overridden from &#x60;TaskGroups&#x60; implementation because of the
+	 * nature of a parallel task. When a task is added it should be immediately
+	 * processed and started.
 	 *
 	 * @for ParallelTask
-	 * @property type
-	 * @type String
-	 * @readonly
+	 * @method addSubTask
+	 * @param {Object} task Either an object containing attributes of a task or
 	 *&#x2F;
-	type: {
-		value: TYPE_PARALLEL,
-		writable: true
-	},
-
-	&#x2F;**
-	 * The max amounts of tasks that can run simultaneously
-	 *
-	 * @for ParallelTask
-	 * @property max
-	 * @type Integer
-	 *&#x2F;
-	max: {
-		value: 0,
+	addSubTask: {
+		value: function(task) {
+			if(!task || task.state === STATE_CANCELED) {
+				return;
+			}
+			this.currentIndex++;
+			if(!task.tid) {
+				task = createTaskWithOptions(task);
+			}
+			this.tasks.push(task);
+			this.processSubTask(task);
+		},
 		writable: true
 	},
 
@@ -172,6 +171,71 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 				}
 			}
 			return true;
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * The max amounts of tasks that can run simultaneously
+	 *
+	 * @for ParallelTask
+	 * @property max
+	 * @type Integer
+	 *&#x2F;
+	max: {
+		value: 0,
+		writable: true
+	},
+
+	&#x2F;**
+	 * Overridden from TaskGroup. This method is run everytime a sub task
+	 * completes. When all subtasks are complete the groups complete method
+	 * is called.
+	 *
+	 * @for ParallelTask
+	 * @method onSubTaskComplete
+	 * @param {Task} task
+	 * @param {Object} data
+	 *&#x2F;
+	onSubTaskComplete: {
+		value: function(task, data) {
+			this.currentIndex++;
+			if(this.currentIndex === this.tasks.length) {
+
+
+				&#x2F;&#x2F;&#x2F;*
+				if(this.group !== undefined) {
+					this.complete(this.data);
+				} else {
+					this.complete();
+				}
+				&#x2F;&#x2F;*&#x2F;
+				&#x2F;&#x2F; this.complete(this.data);
+
+
+			} else {
+				TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
+				this.processSubTasks();
+			}
+		},
+		writable: true
+	},
+
+	&#x2F;**
+	 * Overridden from Task. First checks to see if there are any enabled
+	 * subtasks to process. If there arent the groups complete method is called.
+	 * If there are then the group processes all of the sub tasks it has.
+	 *
+	 * @for ParallelTask
+	 * @method performTask
+	 *&#x2F;
+	performTask: {
+		value: function() {
+			if(this.hasNoEnabledSubTasks()) {
+				this.complete();
+			} else {
+				this.processSubTasks();
+			}
 		},
 		writable: true
 	},
@@ -232,79 +296,15 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	},
 
 	&#x2F;**
-	 * This method is overridden from &#x60;TaskGroups&#x60; implementation because of the
-	 * nature of a parallel task. When a task is added it should be immediately
-	 * processed and started.
+	 * The kind of task
 	 *
 	 * @for ParallelTask
-	 * @method addSubTask
-	 * @param {Object} task Either an object containing attributes of a task or
+	 * @property type
+	 * @type String
+	 * @readonly
 	 *&#x2F;
-	addSubTask: {
-		value: function(task) {
-			if(!task || task.state === STATE_CANCELED) {
-				return;
-			}
-			this.currentIndex++;
-			if(!task.tid) {
-				task = createTaskWithOptions(task);
-			}
-			this.tasks.push(task);
-			this.processSubTask(task);
-		},
-		writable: true
-	},
-
-	&#x2F;**
-	 * Overridden from TaskGroup. This method is run everytime a sub task
-	 * completes. When all subtasks are complete the groups complete method
-	 * is called.
-	 *
-	 * @for ParallelTask
-	 * @method onSubTaskComplete
-	 * @param {Task} task
-	 * @param {Object} data
-	 *&#x2F;
-	onSubTaskComplete: {
-		value: function(task, data) {
-			this.currentIndex++;
-			if(this.currentIndex === this.tasks.length) {
-
-
-				&#x2F;&#x2F;&#x2F;*
-				if(this.group !== undefined) {
-					this.complete(this.data);
-				} else {
-					this.complete();
-				}
-				&#x2F;&#x2F;*&#x2F;
-				&#x2F;&#x2F; this.complete(this.data);
-
-
-			} else {
-				TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
-				this.processSubTasks();
-			}
-		},
-		writable: true
-	},
-
-	&#x2F;**
-	 * Overridden from Task. First checks to see if there are any enabled
-	 * subtasks to process. If there arent the groups complete method is called.
-	 * If there are then the group processes all of the sub tasks it has.
-	 *
-	 * @for ParallelTask
-	 * @method performTask
-	 *&#x2F;
-	performTask: {
-		value: function() {
-			if(this.hasNoEnabledSubTasks()) {
-				this.complete();
-			} else {
-				this.processSubTasks();
-			}
-		},
+	type: {
+		value: TYPE_PARALLEL,
 		writable: true
 	}
 });
