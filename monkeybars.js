@@ -66,7 +66,7 @@
      */
     var taskOptions = [
     // task
-    "name", "tid", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
+    "name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
     // group
     "tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
     // decorators
