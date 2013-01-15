@@ -253,6 +253,17 @@ describe("Sequence Task Tests", function() {
 			subtask.complete();
 			expect(task.currentIndex).toEqual(2);
 		});
+
+		it("Task Resets As Expected",function(){
+			t1.performTask = t2.performTask = t3.performTask = function(){
+				this.complete();
+			}
+			task.start();
+			task.reset();
+			expect(task.state).toEqual(0);
+			expect(t1.state).toEqual(0);
+		});
+
 	});
 
 	// ===================================================================

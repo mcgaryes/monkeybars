@@ -367,6 +367,19 @@ Task.prototype = Object.create({}, {
 	},
 	
 	/**
+	 * Resets a task to its original state
+	 *
+	 * @for Task
+	 * @method reset
+	 */
+	reset:{
+		value:function(){
+			this.state = STATE_INITIALIZED;
+			this.processed = false;
+		}
+	},
+
+	/**
 	 * Kicks off the execution of the task by calling the tasks `performTask` method.
 	 * This method can only be run once on a task.
 	 *

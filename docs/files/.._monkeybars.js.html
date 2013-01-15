@@ -287,25 +287,6 @@
     };
 
     &#x2F;**
-     * Resets the task to its original non executed state.
-     *
-     * @method resetTask
-     * @param {Task} task
-     * @private
-     *&#x2F;
-    var resetTask = function(task) {
-        task.state = STATE_INITIALIZED;
-        task.processed = false;
-        if (task.type !== TYPE_SIMPLE &amp;&amp; task.tasks) {
-            task.currentIndex = 0;
-            task.processedIndex = 0;
-            for (var i = 0; i &lt; task.tasks.length; i++) {
-                resetTask(task.tasks[i]);
-            }
-        }
-    };
-
-    &#x2F;**
      * Generates a unique id for each task.
      *
      * @method generateUniqueId
@@ -1029,6 +1010,19 @@
         },
 
         &#x2F;**
+         * Resets a task to its original state
+         *
+         * @for Task
+         * @method reset
+         *&#x2F;
+        reset: {
+            value: function() {
+                this.state = STATE_INITIALIZED;
+                this.processed = false;
+            }
+        },
+
+        &#x2F;**
          * Kicks off the execution of the task by calling the tasks &#x60;performTask&#x60; method.
          * This method can only be run once on a task.
          *
@@ -1524,6 +1518,25 @@
         },
 
         &#x2F;**
+         * Resets a task to its original state
+         *
+         * @for Task
+         * @method reset
+         *&#x2F;
+        reset: {
+            value: function() {
+                if (this.tasks) {
+                    this.currentIndex = 0;
+                    this.processedIndex = 0;
+                    for (var i = 0; i &lt; this.tasks.length; i++) {
+                        this.tasks[i].reset();
+                    }
+                }
+                Task.prototype.reset.call(this);
+            }
+        },
+
+        &#x2F;**
          * Sets dependencies for the passed task.
          *
          * @method setDependeciesForTask
@@ -1930,7 +1943,7 @@
         task.itterationIndex = 0;
         task.complete = function() {
             if (this.itterationIndex !== this.count - 1) {
-                resetTask(this);
+                this.reset();
                 this.itterationIndex++;
                 if (this.logLevel &gt;= LOG_INFO) {
                     console.log(&quot;Completed:&quot; + this.displayName + &quot; &quot; + this.itterationIndex + &quot; out of &quot; + this.count + &quot; times&quot;);
@@ -1959,7 +1972,7 @@
                 var delegate = this;
                 if (this.interval !== 0) {
                     setTimeout(function() {
-                        resetTask(delegate);
+                        delegate.reset();
                         delegate.start();
                     }, this.interval);
                 } else {

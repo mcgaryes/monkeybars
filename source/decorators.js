@@ -11,7 +11,7 @@ var forTaskDecorator = function(task) {
 	task.itterationIndex = 0;
 	task.complete = function() {
 		if(this.itterationIndex !== this.count - 1) {
-			resetTask(this);
+			this.reset();
 			this.itterationIndex++;
 			if(this.logLevel >= LOG_INFO) {
 				console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
@@ -40,7 +40,7 @@ var whileTaskDecorator = function(task) {
 			var delegate = this;
 			if(this.interval !== 0) {
 				setTimeout(function() {
-					resetTask(delegate);
+					delegate.reset();
 					delegate.start();
 				}, this.interval);
 			} else {

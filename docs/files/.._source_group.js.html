@@ -338,7 +338,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 		},
 		writable: true
 	},
-	
+
 	&#x2F;**
 	 * Called when a subtask calls its cancel method. When a subtask is canceled
 	 * any other subtasks that are dependent on the canceled task are cancled.
@@ -471,6 +471,25 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			this.tasks.splice(index, 1);
 		},
 		writable: true
+	},
+
+	&#x2F;**
+	 * Resets a task to its original state
+	 *
+	 * @for Task
+	 * @method reset
+	 *&#x2F;
+	reset:{
+		value:function(){
+			if(this.tasks) {
+				this.currentIndex = 0;
+				this.processedIndex = 0;
+				for(var i = 0; i &lt; this.tasks.length; i++) {
+					this.tasks[i].reset();
+				}
+			}
+			Task.prototype.reset.call(this);
+		}
 	},
 
 	&#x2F;**

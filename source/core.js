@@ -185,25 +185,6 @@ var createPropertyDescriptorsWithAttributes = function(attributes) {
 };
 
 /**
- * Resets the task to its original non executed state.
- *
- * @method resetTask
- * @param {Task} task
- * @private
- */
-var resetTask = function(task) {
-	task.state = STATE_INITIALIZED;
-	task.processed = false;
-	if(task.type !== TYPE_SIMPLE && task.tasks) {
-		task.currentIndex = 0;
-		task.processedIndex = 0;
-		for(var i = 0; i < task.tasks.length; i++) {
-			resetTask(task.tasks[i]);
-		}
-	}
-};
-
-/**
  * Generates a unique id for each task.
  *
  * @method generateUniqueId

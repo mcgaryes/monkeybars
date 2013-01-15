@@ -275,6 +275,15 @@ describe("Simple Task Tests", function() {
 
 		});
 
+		it("Task resets as expected",function(){
+			task.start();
+			task.performTask = function(){
+				this.complete();
+			}
+			task.reset();
+			expect(task.state).toEqual(0);
+		});
+
 	});
 
 	// ===================================================================
