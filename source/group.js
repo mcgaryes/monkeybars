@@ -15,6 +15,7 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 	}
 
 	// create dependency map and populate it with subtask tids
+	/*
 	task.dependencyMap = {};
 	if(task.tasks) {
 		for(var i = 0; i < task.tasks.length; i++) {
@@ -23,6 +24,7 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 			task.setDependeciesForTask(subtask);
 		}
 	}
+	*/
 
 	// super
 	Task.call(task, attributes);
@@ -128,7 +130,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			this.setDependeciesForTask(task);
+			//this.setDependeciesForTask(task);
 			var index = this.tasks.indexOf(beforeTask);
 			this.tasks.splice(index, 0, task);
 		},
@@ -163,9 +165,24 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	},
 
 	/**
+	 * Here i need to remove all of the attributes besides the 
+	 * state so that the task wont start again as well as processed...
+	 * @for Task
+	 * @function cleanUp
+	 */
+	cleanUp:{
+		value:function(){
+			// remove all of the tasks subtasks from the taskDictionary
+			
+			Task.prototype.cleanUp.call(this);
+		},
+		writable:true
+	},
+
+	/**
 	 * The index of the subtasks that have completed execution.
 	 *
-	 * @for Task
+	 * @for TaskGroup
 	 * @property currentIndex
 	 * @type Integer
 	 * @readonly
@@ -248,13 +265,10 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 * @for TaskGroup
 	 * @method onSubTaskComplete
 	 * @param {Task} task The task that just completed
-	 * @param {Object} data
 	 */
 	onSubTaskComplete: {
-		value: function(task, data) {
-			if(data !== undefined) {
-				this.handleData(data);
-			}
+		value: function(task) {
+			this.operate(task.data,task);
 		},
 		writable: true
 	},
@@ -301,7 +315,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 			if(!task) {
 				if(this.logLevel >= LOG_ERROR) {
-					console.log(UNDEFINED_TASK);
+					log(UNDEFINED_TASK);
 				}
 				return;
 			}
@@ -313,20 +327,25 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 			this.processedIndex++;
 
-			task.group = this;
-			task.data = this.data;
-			task.concurrent = this.concurrent;
+			// task.group = this;
+			task.gid = this.tid;
 			task.processed = true;
-			task.logLevel = this.logLevel;
-
+			if(task.concurrent) {
+				task.concurrent = this.concurrent;
+			}
+			if(task.logLevel != LOG_NONE) {
+				task.logLevel = this.logLevel;
+			}
+			
 			// set execution block
-			task.onChange = function(state, data, error) {
+			var group = this;
+			task.onChange = function(state, error) {
 				if(state === STATE_COMPLETED) {
-					this.group.onSubTaskComplete(this, data);
+					group.onSubTaskComplete(this);
 				} else if(state === STATE_FAULTED) {
-					this.group.onSubTaskFault(this, undefined, error);
+					group.onSubTaskFault(this, error);
 				} else if(state === STATE_CANCELED) {
-					this.group.onSubTaskCancel(this);
+					group.onSubTaskCancel(this);
 				}
 			};
 

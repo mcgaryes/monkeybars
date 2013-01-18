@@ -166,7 +166,7 @@
     &#x2F;&#x2F; task
     &quot;name&quot;, &quot;tid&quot;, &quot;id&quot;, &quot;data&quot;, &quot;type&quot;, &quot;concurrent&quot;, &quot;worker&quot;, &quot;displayName&quot;, &quot;state&quot;, &quot;logLevel&quot;, &quot;timeout&quot;, &quot;dependencies&quot;, &quot;group&quot;, &quot;processed&quot;,
     &#x2F;&#x2F; group
-    &quot;tasks&quot;, &quot;currentIndex&quot;, &quot;processedIndex&quot;, &quot;max&quot;, &quot;dependencyMap&quot;,
+    &quot;tasks&quot;, &quot;currentIndex&quot;, &quot;processedIndex&quot;, &quot;max&quot;, &quot;dependencyMap&quot;, &quot;operationType&quot;,
     &#x2F;&#x2F; decorators
     &quot;count&quot;, &quot;interval&quot;];
 
@@ -526,6 +526,19 @@
         return child;
     };
 
+    &#x2F;**
+     * Simple console.log wrapper
+     *
+     * @method extend
+     * @for MonkeyBars
+     * @param {Object} msg
+     *&#x2F;
+    var log = function(msg) {
+        if (console) {
+            console.log(msg);
+        }
+    };
+
     &#x2F;&#x2F; ===================================================================
     &#x2F;&#x2F; === Worker Task ===================================================
     &#x2F;&#x2F; ===================================================================
@@ -730,7 +743,7 @@
                 }
                 this.state = STATE_CANCELED;
                 if (this.logLevel &gt;= LOG_INFO) {
-                    console.log(&quot;Canceled:&quot; + this.displayName);
+                    log(&quot;Canceled: &quot; + this.displayName);
                 }
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
@@ -746,36 +759,43 @@
          *
          * @for Task
          * @method complete
+         * @param {Object} data
+         * @param {String} operation
          * @example
-         *
          *	var task = new MonkeyBars.Task({
          *		performTask:function(){
          *			this.complete();
          *		}
          *	});
-         *
          *	task.start();
-         *
          *&#x2F;
         complete: {
-            value: function(data) {
+            value: function(data, operation) {
                 if (this.state &gt; STATE_STARTED) {
                     return;
                 }
                 this.state = STATE_COMPLETED;
+
+                this.executionTime = (new Date().getTime()) - this.startTime;
+
+
                 if (this.logLevel &gt;= LOG_INFO) {
-                    console.log(&quot;Completed:&quot; + this.displayName);
+                    log(&quot;Completed: &quot; + this.displayName + &quot; in &quot; + this.executionTime + &quot;ms&quot;);
                 }
+
+                &#x2F;&#x2F; clear the timeout interval if we actually had one
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
                 }
-                this.executionTime = (new Date().getTime()) - this.startTime;
 
-                if (arguments.length &gt; 0) {
-                    this.handleData(data);
+                &#x2F;&#x2F; run the data operation
+                if (arguments.length !== 0) {
+                    this.operate(data, this);
                 }
-                this.onComplete(data);
-                this.onChange(this.state, data);
+
+                &#x2F;&#x2F; call completion methods
+                this.onComplete();
+                this.onChange(this.state);
             },
             writable: true
         },
@@ -790,19 +810,6 @@
          *&#x2F;
         concurrent: {
             value: false,
-            writable: true
-        },
-
-        &#x2F;**
-         * Task data
-         *
-         * @for Task
-         * @property data
-         * @type Object
-         * @default undefined
-         *&#x2F;
-        data: {
-            value: undefined,
             writable: true
         },
 
@@ -852,30 +859,13 @@
                 }
                 this.state = STATE_FAULTED;
                 if (this.logLevel &gt;= LOG_INFO) {
-                    console.log(&quot;Faulted:&quot; + this.displayName);
+                    log(&quot;Faulted: &quot; + this.displayName);
                 }
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
                 }
                 this.onChange(this.state, undefined, error);
                 this.onFault(error);
-            },
-            writable: true
-        },
-
-        &#x2F;**
-         * Callback for handling data manipulated by a taskj. Overwrite this method
-         * to do something other than setting data to what is passed.
-         *
-         * @for TaskGroup
-         * @method handleData
-         *&#x2F;
-        handleData: {
-            value: function(data) {
-                if (arguments.length &lt; 0) {
-                    return;
-                }
-                this.data = data;
             },
             writable: true
         },
@@ -941,7 +931,7 @@
          *
          *&#x2F;
         onChange: {
-            value: function(state, data, error) {},
+            value: function(state, error) {},
             writable: true
         },
 
@@ -952,7 +942,7 @@
          * @method onComplete
          *&#x2F;
         onComplete: {
-            value: function(data) {},
+            value: function() {},
             writable: true
         },
 
@@ -976,6 +966,13 @@
          *&#x2F;
         onStart: {
             value: function() {},
+            writable: true
+        },
+
+        operate: {
+            value: function(data, task) {
+                this.data = data;
+            },
             writable: true
         },
 
@@ -1036,7 +1033,7 @@
                 this.startTime = new Date().getTime();
                 this.state = STATE_STARTED;
                 if (this.logLevel &gt;= LOG_INFO) {
-                    console.log(&quot;Started:&quot; + this.displayName);
+                    log(&quot;Started: &quot; + this.displayName);
                 }
                 if (this.timeout !== undefined) {
                     var delegate = this;
@@ -1305,7 +1302,7 @@
         &#x2F;**
          * The index of the subtasks that have completed execution.
          *
-         * @for Task
+         * @for TaskGroup
          * @property currentIndex
          * @type Integer
          * @readonly
@@ -1388,13 +1385,10 @@
          * @for TaskGroup
          * @method onSubTaskComplete
          * @param {Task} task The task that just completed
-         * @param {Object} data
          *&#x2F;
         onSubTaskComplete: {
-            value: function(task, data) {
-                if (data !== undefined) {
-                    this.handleData(data);
-                }
+            value: function(task) {
+                this.operate(task.data, task);
             },
             writable: true
         },
@@ -1441,7 +1435,7 @@
 
                 if (!task) {
                     if (this.logLevel &gt;= LOG_ERROR) {
-                        console.log(UNDEFINED_TASK);
+                        log(UNDEFINED_TASK);
                     }
                     return;
                 }
@@ -1454,17 +1448,16 @@
                 this.processedIndex++;
 
                 task.group = this;
-                task.data = this.data;
                 task.concurrent = this.concurrent;
                 task.processed = true;
                 task.logLevel = this.logLevel;
 
                 &#x2F;&#x2F; set execution block
-                task.onChange = function(state, data, error) {
+                task.onChange = function(state, error) {
                     if (state === STATE_COMPLETED) {
-                        this.group.onSubTaskComplete(this, data);
+                        this.group.onSubTaskComplete(this);
                     } else if (state === STATE_FAULTED) {
-                        this.group.onSubTaskFault(this, undefined, error);
+                        this.group.onSubTaskFault(this, error);
                     } else if (state === STATE_CANCELED) {
                         this.group.onSubTaskCancel(this);
                     }
@@ -1646,26 +1639,14 @@
          * @for ParallelTask
          * @method onSubTaskComplete
          * @param {Task} task
-         * @param {Object} data
          *&#x2F;
         onSubTaskComplete: {
-            value: function(task, data) {
+            value: function(task) {
                 this.currentIndex++;
+                TaskGroup.prototype.onSubTaskComplete.call(this, task);
                 if (this.currentIndex === this.tasks.length) {
-
-
-                    &#x2F;&#x2F;&#x2F;*
-                    if (this.group !== undefined) {
-                        this.complete(this.data);
-                    } else {
-                        this.complete();
-                    }
-                    &#x2F;&#x2F;*&#x2F;
-                    &#x2F;&#x2F; this.complete(this.data);
-
-
+                    this.complete();
                 } else {
-                    TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
                     this.processSubTasks();
                 }
             },
@@ -1717,7 +1698,7 @@
                     }
                     if (processCount &lt; canProcess) {
                         if (this.logLevel &gt;= LOG_VERBOSE) {
-                            console.log(&quot;Cannot process &quot; + task.displayName + &quot; until its dependencies [&quot; + dependencyNames.join(&quot;,&quot;) + &quot;] have run&quot;);
+                            log(&quot;Cannot process &quot; + task.displayName + &quot; until its dependencies [&quot; + dependencyNames.join(&quot;,&quot;) + &quot;] have run&quot;);
                         }
                         return;
                     }
@@ -1823,14 +1804,13 @@
          * @for SequenceTask
          * @method onSubTaskComplete
          * @param {Task} task
-         * @param {Object} data
          *&#x2F;
         onSubTaskComplete: {
-            value: function(task, data) {
+            value: function(task) {
                 if (this.state === STATE_CANCELED) {
                     return;
                 }
-                TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
+                TaskGroup.prototype.onSubTaskComplete.call(this, task);
                 this.startNextSubTask();
             },
             writable: true
@@ -1867,23 +1847,12 @@
                     var skipped = this.processSubTask(task);
                     if (skipped) {
                         if (this.logLevel &gt;= LOG_INFO) {
-                            console.log(&quot;Skipped: &quot; + task.displayName + &quot; Group: &quot; + this.displayName);
+                            log(&quot;Skipped: &quot; + task.displayName + &quot; Group: &quot; + this.displayName);
                         }
                         this.startNextSubTask();
                     }
                 } else {
-
-
-                    &#x2F;&#x2F;&#x2F;*
-                    if (this.group !== undefined) {
-                        this.complete(this.data);
-                    } else {
-                        this.complete();
-                    }
-                    &#x2F;&#x2F;*&#x2F;
-                    &#x2F;&#x2F; this.complete(this.data);
-
-
+                    this.complete(this.data, this.operationType);
                 }
             },
             writable: true

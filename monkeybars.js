@@ -68,7 +68,7 @@
     // task
     "name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
     // group
-    "tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
+    "tasks", "currentIndex", "processedIndex", "max", "dependencyMap", "operationType",
     // decorators
     "count", "interval"];
 
@@ -428,6 +428,19 @@
         return child;
     };
 
+    /**
+     * Simple console.log wrapper
+     *
+     * @method extend
+     * @for MonkeyBars
+     * @param {Object} msg
+     */
+    var log = function(msg) {
+        if (console) {
+            console.log(msg);
+        }
+    };
+
     // ===================================================================
     // === Worker Task ===================================================
     // ===================================================================
@@ -632,7 +645,7 @@
                 }
                 this.state = STATE_CANCELED;
                 if (this.logLevel >= LOG_INFO) {
-                    console.log("Canceled:" + this.displayName);
+                    log("Canceled: " + this.displayName);
                 }
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
@@ -648,36 +661,43 @@
          *
          * @for Task
          * @method complete
+         * @param {Object} data
+         * @param {String} operation
          * @example
-         *
          *	var task = new MonkeyBars.Task({
          *		performTask:function(){
          *			this.complete();
          *		}
          *	});
-         *
          *	task.start();
-         *
          */
         complete: {
-            value: function(data) {
+            value: function(data, operation) {
                 if (this.state > STATE_STARTED) {
                     return;
                 }
                 this.state = STATE_COMPLETED;
+
+                this.executionTime = (new Date().getTime()) - this.startTime;
+
+
                 if (this.logLevel >= LOG_INFO) {
-                    console.log("Completed:" + this.displayName);
+                    log("Completed: " + this.displayName + " in " + this.executionTime + "ms");
                 }
+
+                // clear the timeout interval if we actually had one
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
                 }
-                this.executionTime = (new Date().getTime()) - this.startTime;
 
-                if (arguments.length > 0) {
-                    this.handleData(data);
+                // run the data operation
+                if (arguments.length !== 0) {
+                    this.operate(data, this);
                 }
-                this.onComplete(data);
-                this.onChange(this.state, data);
+
+                // call completion methods
+                this.onComplete();
+                this.onChange(this.state);
             },
             writable: true
         },
@@ -692,19 +712,6 @@
          */
         concurrent: {
             value: false,
-            writable: true
-        },
-
-        /**
-         * Task data
-         *
-         * @for Task
-         * @property data
-         * @type Object
-         * @default undefined
-         */
-        data: {
-            value: undefined,
             writable: true
         },
 
@@ -754,30 +761,13 @@
                 }
                 this.state = STATE_FAULTED;
                 if (this.logLevel >= LOG_INFO) {
-                    console.log("Faulted:" + this.displayName);
+                    log("Faulted: " + this.displayName);
                 }
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
                 }
                 this.onChange(this.state, undefined, error);
                 this.onFault(error);
-            },
-            writable: true
-        },
-
-        /**
-         * Callback for handling data manipulated by a taskj. Overwrite this method
-         * to do something other than setting data to what is passed.
-         *
-         * @for TaskGroup
-         * @method handleData
-         */
-        handleData: {
-            value: function(data) {
-                if (arguments.length < 0) {
-                    return;
-                }
-                this.data = data;
             },
             writable: true
         },
@@ -843,7 +833,7 @@
          *
          */
         onChange: {
-            value: function(state, data, error) {},
+            value: function(state, error) {},
             writable: true
         },
 
@@ -854,7 +844,7 @@
          * @method onComplete
          */
         onComplete: {
-            value: function(data) {},
+            value: function() {},
             writable: true
         },
 
@@ -878,6 +868,13 @@
          */
         onStart: {
             value: function() {},
+            writable: true
+        },
+
+        operate: {
+            value: function(data, task) {
+                this.data = data;
+            },
             writable: true
         },
 
@@ -938,7 +935,7 @@
                 this.startTime = new Date().getTime();
                 this.state = STATE_STARTED;
                 if (this.logLevel >= LOG_INFO) {
-                    console.log("Started:" + this.displayName);
+                    log("Started: " + this.displayName);
                 }
                 if (this.timeout !== undefined) {
                     var delegate = this;
@@ -1207,7 +1204,7 @@
         /**
          * The index of the subtasks that have completed execution.
          *
-         * @for Task
+         * @for TaskGroup
          * @property currentIndex
          * @type Integer
          * @readonly
@@ -1290,13 +1287,10 @@
          * @for TaskGroup
          * @method onSubTaskComplete
          * @param {Task} task The task that just completed
-         * @param {Object} data
          */
         onSubTaskComplete: {
-            value: function(task, data) {
-                if (data !== undefined) {
-                    this.handleData(data);
-                }
+            value: function(task) {
+                this.operate(task.data, task);
             },
             writable: true
         },
@@ -1343,7 +1337,7 @@
 
                 if (!task) {
                     if (this.logLevel >= LOG_ERROR) {
-                        console.log(UNDEFINED_TASK);
+                        log(UNDEFINED_TASK);
                     }
                     return;
                 }
@@ -1356,17 +1350,16 @@
                 this.processedIndex++;
 
                 task.group = this;
-                task.data = this.data;
                 task.concurrent = this.concurrent;
                 task.processed = true;
                 task.logLevel = this.logLevel;
 
                 // set execution block
-                task.onChange = function(state, data, error) {
+                task.onChange = function(state, error) {
                     if (state === STATE_COMPLETED) {
-                        this.group.onSubTaskComplete(this, data);
+                        this.group.onSubTaskComplete(this);
                     } else if (state === STATE_FAULTED) {
-                        this.group.onSubTaskFault(this, undefined, error);
+                        this.group.onSubTaskFault(this, error);
                     } else if (state === STATE_CANCELED) {
                         this.group.onSubTaskCancel(this);
                     }
@@ -1548,26 +1541,14 @@
          * @for ParallelTask
          * @method onSubTaskComplete
          * @param {Task} task
-         * @param {Object} data
          */
         onSubTaskComplete: {
-            value: function(task, data) {
+            value: function(task) {
                 this.currentIndex++;
+                TaskGroup.prototype.onSubTaskComplete.call(this, task);
                 if (this.currentIndex === this.tasks.length) {
-
-
-                    ///*
-                    if (this.group !== undefined) {
-                        this.complete(this.data);
-                    } else {
-                        this.complete();
-                    }
-                    //*/
-                    // this.complete(this.data);
-
-
+                    this.complete();
                 } else {
-                    TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
                     this.processSubTasks();
                 }
             },
@@ -1619,7 +1600,7 @@
                     }
                     if (processCount < canProcess) {
                         if (this.logLevel >= LOG_VERBOSE) {
-                            console.log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
+                            log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
                         }
                         return;
                     }
@@ -1725,14 +1706,13 @@
          * @for SequenceTask
          * @method onSubTaskComplete
          * @param {Task} task
-         * @param {Object} data
          */
         onSubTaskComplete: {
-            value: function(task, data) {
+            value: function(task) {
                 if (this.state === STATE_CANCELED) {
                     return;
                 }
-                TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
+                TaskGroup.prototype.onSubTaskComplete.call(this, task);
                 this.startNextSubTask();
             },
             writable: true
@@ -1769,23 +1749,12 @@
                     var skipped = this.processSubTask(task);
                     if (skipped) {
                         if (this.logLevel >= LOG_INFO) {
-                            console.log("Skipped: " + task.displayName + " Group: " + this.displayName);
+                            log("Skipped: " + task.displayName + " Group: " + this.displayName);
                         }
                         this.startNextSubTask();
                     }
                 } else {
-
-
-                    ///*
-                    if (this.group !== undefined) {
-                        this.complete(this.data);
-                    } else {
-                        this.complete();
-                    }
-                    //*/
-                    // this.complete(this.data);
-
-
+                    this.complete(this.data, this.operationType);
                 }
             },
             writable: true

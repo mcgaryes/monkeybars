@@ -55,14 +55,13 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	 * @for SequenceTask
 	 * @method onSubTaskComplete
 	 * @param {Task} task
-	 * @param {Object} data
 	 */
 	onSubTaskComplete: {
-		value: function(task, data) {
+		value: function(task) {
 			if(this.state === STATE_CANCELED) {
 				return;
 			}
-			TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
+			TaskGroup.prototype.onSubTaskComplete.call(this, task);
 			this.startNextSubTask();
 		},
 		writable: true
@@ -99,23 +98,12 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 				var skipped = this.processSubTask(task);
 				if(skipped) {
 					if(this.logLevel >= LOG_INFO) {
-						console.log("Skipped: " + task.displayName + " Group: " + this.displayName);
+						log("Skipped: " + task.displayName + " Group: " + this.displayName);
 					}
 					this.startNextSubTask();
 				}
 			} else {
-
-
-				///*
-				if(this.group !== undefined) {
-					this.complete(this.data);
-				} else {
-					this.complete();
-				}
-				//*/
-				// this.complete(this.data);
-
-
+				this.complete(this.data,this.operationType);
 			}
 		},
 		writable: true

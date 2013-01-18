@@ -63,7 +63,7 @@ var taskOptions = [
 	// task
 	"name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
 	// group
-	"tasks", "currentIndex", "processedIndex", "max", "dependencyMap",
+	"tasks", "currentIndex", "processedIndex", "max", "dependencyMap", "operationType",
 	// decorators
 	"count", "interval"
 ];
@@ -75,6 +75,15 @@ var taskOptions = [
  * @type Object
  */
 var MonkeyBars = root.MonkeyBars = {};
+
+/**
+ * Reference holder for all tasks created with the MonkeyBars library
+ *
+ * @property silo
+ * @type Array
+ * @private
+ */
+ var taskDictionary = MonkeyBars.taskDictionary = {};
 
 // ===================================================================
 // === NodeJS Conditional ============================================
@@ -423,6 +432,46 @@ var extend = function(protoProps) {
 	child.prototype = Object.create(parent.prototype, childProto);
 	return child;
 };
+
+/**
+ * Simple console.log wrapper
+ *
+ * @method extend
+ * @for MonkeyBars
+ * @param {Object} msg
+ */
+var log = function(msg) {
+	if(console) { 
+		console.log(msg);
+	}
+};
+
+/**
+ * Query function to get a speciic task from the task dictionary
+ * @method lookupTask
+ * @param {String} tid The task id to look up
+ * @return {Task}
+ */
+ var lookupTask = function(tid) {
+ 	return taskDictionary[tid];
+ }
+
+ var deleteTaskProperties = function (task,whitelist) {
+	for(var prop in task) {
+		var isWhitelisted = false;
+		if(whitelist !== undefined) {
+			for (var i = 0; i < whitelist.length; i++) {
+				if(prop === whitelist[i]) {
+					isWhitelisted = true;
+					break;
+				}
+			}
+		}
+		if(!isWhitelisted) {
+			delete task[prop];
+		}
+	}
+ }
 
 // ===================================================================
 // === Worker Task ===================================================

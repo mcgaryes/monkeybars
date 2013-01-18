@@ -161,7 +161,7 @@ var taskOptions = [
 	&#x2F;&#x2F; task
 	&quot;name&quot;, &quot;tid&quot;, &quot;id&quot;, &quot;data&quot;, &quot;type&quot;, &quot;concurrent&quot;, &quot;worker&quot;, &quot;displayName&quot;, &quot;state&quot;, &quot;logLevel&quot;, &quot;timeout&quot;, &quot;dependencies&quot;, &quot;group&quot;, &quot;processed&quot;,
 	&#x2F;&#x2F; group
-	&quot;tasks&quot;, &quot;currentIndex&quot;, &quot;processedIndex&quot;, &quot;max&quot;, &quot;dependencyMap&quot;,
+	&quot;tasks&quot;, &quot;currentIndex&quot;, &quot;processedIndex&quot;, &quot;max&quot;, &quot;dependencyMap&quot;, &quot;operationType&quot;,
 	&#x2F;&#x2F; decorators
 	&quot;count&quot;, &quot;interval&quot;
 ];
@@ -520,6 +520,19 @@ var extend = function(protoProps) {
 	var childProto = createPropertyDescriptorsWithAttributes(protoProps);
 	child.prototype = Object.create(parent.prototype, childProto);
 	return child;
+};
+
+&#x2F;**
+ * Simple console.log wrapper
+ *
+ * @method extend
+ * @for MonkeyBars
+ * @param {Object} msg
+ *&#x2F;
+var log = function(msg) {
+	if(console) { 
+		console.log(msg);
+	}
 };
 
 &#x2F;&#x2F; ===================================================================

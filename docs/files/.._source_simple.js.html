@@ -185,7 +185,7 @@ Task.prototype = Object.create({}, {
 			}
 			this.state = STATE_CANCELED;
 			if(this.logLevel &gt;= LOG_INFO) {
-				console.log(&quot;Canceled:&quot; + this.displayName);
+				log(&quot;Canceled: &quot; + this.displayName);
 			}
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
@@ -201,36 +201,43 @@ Task.prototype = Object.create({}, {
 	 *
 	 * @for Task
 	 * @method complete
+	 * @param {Object} data
+	 * @param {String} operation
 	 * @example
-	 *
 	 *	var task = new MonkeyBars.Task({
 	 *		performTask:function(){
 	 *			this.complete();
 	 *		}
 	 *	});
-	 *
 	 *	task.start();
-	 *
 	 *&#x2F;
 	complete: {
-		value: function(data) {
+		value: function(data, operation) {
 			if(this.state &gt; STATE_STARTED) {
 				return;
 			}
 			this.state = STATE_COMPLETED;
+
+			this.executionTime = (new Date().getTime()) - this.startTime;
+
+
 			if(this.logLevel &gt;= LOG_INFO) {
-				console.log(&quot;Completed:&quot; + this.displayName);
+				log(&quot;Completed: &quot; + this.displayName + &quot; in &quot; + this.executionTime + &quot;ms&quot;);
 			}
+
+			&#x2F;&#x2F; clear the timeout interval if we actually had one
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
 			}
-			this.executionTime = (new Date().getTime()) - this.startTime;
-
-			if(arguments.length &gt; 0) {
-				this.handleData(data);
+			
+			&#x2F;&#x2F; run the data operation
+			if(arguments.length !== 0) {
+				this.operate(data,this);
 			}
-			this.onComplete(data);
-			this.onChange(this.state, data);
+
+			&#x2F;&#x2F; call completion methods
+			this.onComplete();
+			this.onChange(this.state);
 		},
 		writable: true
 	},
@@ -245,19 +252,6 @@ Task.prototype = Object.create({}, {
 	 *&#x2F;
 	concurrent: {
 		value: false,
-		writable: true
-	},
-
-	&#x2F;**
-	 * Task data
-	 *
-	 * @for Task
-	 * @property data
-	 * @type Object
-	 * @default undefined
-	 *&#x2F;
-	data: {
-		value: undefined,
 		writable: true
 	},
 
@@ -307,30 +301,13 @@ Task.prototype = Object.create({}, {
 			}
 			this.state = STATE_FAULTED;
 			if(this.logLevel &gt;= LOG_INFO) {
-				console.log(&quot;Faulted:&quot; + this.displayName);
+				log(&quot;Faulted: &quot; + this.displayName);
 			}
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
 			}
 			this.onChange(this.state, undefined, error);
 			this.onFault(error);
-		},
-		writable: true
-	},
-	
-	&#x2F;**
-	 * Callback for handling data manipulated by a taskj. Overwrite this method
-	 * to do something other than setting data to what is passed.
-	 *
-	 * @for TaskGroup
-	 * @method handleData
-	 *&#x2F;
-	handleData: {
-		value: function(data) {
-			if(arguments.length &lt; 0) {
-				return;
-			}
-			this.data = data;
 		},
 		writable: true
 	},
@@ -396,7 +373,7 @@ Task.prototype = Object.create({}, {
 	 *
 	 *&#x2F;
 	onChange: {
-		value: function(state, data, error) {},
+		value: function(state, error) {},
 		writable: true
 	},
 	
@@ -407,7 +384,7 @@ Task.prototype = Object.create({}, {
 	 * @method onComplete
 	 *&#x2F;
 	onComplete: {
-		value: function(data) {},
+		value: function() {},
 		writable: true
 	},
 
@@ -434,6 +411,13 @@ Task.prototype = Object.create({}, {
 		writable: true
 	},
 	
+	operate:{
+		value:function(data, task){
+			this.data = data;
+		},
+		writable:true
+	},
+
 	&#x2F;**
 	 * This method is required for **simple** tasks and will throw an exception if it
 	 * is called and not overridden. If you overwrite this method on a task group
@@ -491,7 +475,7 @@ Task.prototype = Object.create({}, {
 			this.startTime = new Date().getTime();
 			this.state = STATE_STARTED;
 			if(this.logLevel &gt;= LOG_INFO) {
-				console.log(&quot;Started:&quot; + this.displayName);
+				log(&quot;Started: &quot; + this.displayName);
 			}
 			if(this.timeout !== undefined) {
 				var delegate = this;

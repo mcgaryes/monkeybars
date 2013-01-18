@@ -78,14 +78,15 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	},
 
 	/**
-	 * The max amounts of tasks that can run simultaneously
+	 * The max amounts of tasks that can run simultaneously.
 	 *
 	 * @for ParallelTask
 	 * @property max
 	 * @type Integer
+	 * @default 20
 	 */
 	max: {
-		value: 0,
+		value: 20,
 		writable: true
 	},
 
@@ -97,26 +98,14 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 * @for ParallelTask
 	 * @method onSubTaskComplete
 	 * @param {Task} task
-	 * @param {Object} data
 	 */
 	onSubTaskComplete: {
-		value: function(task, data) {
+		value: function(task) {
 			this.currentIndex++;
+			TaskGroup.prototype.onSubTaskComplete.call(this, task);
 			if(this.currentIndex === this.tasks.length) {
-
-
-				///*
-				if(this.group !== undefined) {
-					this.complete(this.data);
-				} else {
-					this.complete();
-				}
-				//*/
-				// this.complete(this.data);
-
-
+				this.complete();
 			} else {
-				TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
 				this.processSubTasks();
 			}
 		},
@@ -168,7 +157,7 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 				}
 				if(processCount < canProcess) {
 					if(this.logLevel >= LOG_VERBOSE) {
-						console.log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
+						log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
 					}
 					return;
 				}
@@ -189,7 +178,7 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			var processTotal = this.max === 0 ? this.tasks.length : this.max;
 			for(var i = 0; i < processTotal; i++) {
 				var task = this.tasks[i];
-				if(!task.processed) {
+				if(task !== undefined && !task.processed) {
 					this.processSubTask(task);
 				}
 			}

@@ -4,3 +4,5 @@ tests/*
 www/*
 artwork/*
 npm-debug.log
+docs/*
+source/*

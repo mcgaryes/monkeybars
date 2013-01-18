@@ -56,6 +56,9 @@ var Task = MonkeyBars.Task = function(attributes) {
 
 	// initialize the task
 	task.initialize(task.options);
+
+	// add the task to the task dictionary for later use
+	taskDictionary[task.tid] = task;
 	
 };
 
@@ -87,7 +90,7 @@ Task.prototype = Object.create({}, {
 			}
 			this.state = STATE_CANCELED;
 			if(this.logLevel >= LOG_INFO) {
-				console.log("Canceled:" + this.displayName);
+				log("Canceled: " + this.displayName);
 			}
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
@@ -99,40 +102,66 @@ Task.prototype = Object.create({}, {
 	},
 	
 	/**
+	 * Here i need to remove all of the attributes besides the 
+	 * state so that the task wont start again as well as processed...
+	 * @for Task
+	 * @function cleanUp
+	 */
+	cleanUp:{
+		value:function(){
+			if(this.gid) {
+				deleteTaskProperties(this,["processed","tid","gid"]);
+			} else {
+				// just go ahead and delete the whole thing
+				deleteTaskProperties(this);
+			}
+			//console.log(this);
+		},
+		writable:true
+	},
+
+	/**
 	 * Calling this method says that the tasks execution is now complete.
 	 *
 	 * @for Task
 	 * @method complete
+	 * @param {Object} data
+	 * @param {String} operation
 	 * @example
-	 *
 	 *	var task = new MonkeyBars.Task({
 	 *		performTask:function(){
 	 *			this.complete();
 	 *		}
 	 *	});
-	 *
 	 *	task.start();
-	 *
 	 */
 	complete: {
-		value: function(data) {
+		value: function(data, operation) {
 			if(this.state > STATE_STARTED) {
 				return;
 			}
 			this.state = STATE_COMPLETED;
+
+			//this.executionTime = (new Date().getTime()) - this.startTime;
+
 			if(this.logLevel >= LOG_INFO) {
-				console.log("Completed:" + this.displayName);
+				log("Completed: " + this.displayName + " in " + this.executionTime + "ms");
 			}
+
+			// clear the timeout interval if we actually had one
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
 			}
-			this.executionTime = (new Date().getTime()) - this.startTime;
-
-			if(arguments.length > 0) {
-				this.handleData(data);
+			
+			// run the data operation
+			if(arguments.length !== 0) {
+				this.operate(data,this);
 			}
-			this.onComplete(data);
-			this.onChange(this.state, data);
+
+			// call completion methods
+			this.onComplete();
+			this.onChange(this.state);
+			this.cleanUp();
 		},
 		writable: true
 	},
@@ -147,19 +176,6 @@ Task.prototype = Object.create({}, {
 	 */
 	concurrent: {
 		value: false,
-		writable: true
-	},
-
-	/**
-	 * Task data
-	 *
-	 * @for Task
-	 * @property data
-	 * @type Object
-	 * @default undefined
-	 */
-	data: {
-		value: undefined,
 		writable: true
 	},
 
@@ -209,30 +225,13 @@ Task.prototype = Object.create({}, {
 			}
 			this.state = STATE_FAULTED;
 			if(this.logLevel >= LOG_INFO) {
-				console.log("Faulted:" + this.displayName);
+				log("Faulted: " + this.displayName);
 			}
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
 			}
 			this.onChange(this.state, undefined, error);
 			this.onFault(error);
-		},
-		writable: true
-	},
-	
-	/**
-	 * Callback for handling data manipulated by a taskj. Overwrite this method
-	 * to do something other than setting data to what is passed.
-	 *
-	 * @for TaskGroup
-	 * @method handleData
-	 */
-	handleData: {
-		value: function(data) {
-			if(arguments.length < 0) {
-				return;
-			}
-			this.data = data;
 		},
 		writable: true
 	},
@@ -298,7 +297,7 @@ Task.prototype = Object.create({}, {
 	 *
 	 */
 	onChange: {
-		value: function(state, data, error) {},
+		value: function(state, error) {},
 		writable: true
 	},
 	
@@ -309,7 +308,7 @@ Task.prototype = Object.create({}, {
 	 * @method onComplete
 	 */
 	onComplete: {
-		value: function(data) {},
+		value: function() {},
 		writable: true
 	},
 
@@ -336,6 +335,13 @@ Task.prototype = Object.create({}, {
 		writable: true
 	},
 	
+	operate:{
+		value:function(data, task){
+			this.data = data;
+		},
+		writable:true
+	},
+
 	/**
 	 * This method is required for **simple** tasks and will throw an exception if it
 	 * is called and not overridden. If you overwrite this method on a task group
@@ -390,10 +396,10 @@ Task.prototype = Object.create({}, {
 				return;
 			}
 
-			this.startTime = new Date().getTime();
+			//this.startTime = new Date().getTime();
 			this.state = STATE_STARTED;
 			if(this.logLevel >= LOG_INFO) {
-				console.log("Started:" + this.displayName);
+				log("Started: " + this.displayName);
 			}
 			if(this.timeout !== undefined) {
 				var delegate = this;

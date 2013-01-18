@@ -195,26 +195,14 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 * @for ParallelTask
 	 * @method onSubTaskComplete
 	 * @param {Task} task
-	 * @param {Object} data
 	 *&#x2F;
 	onSubTaskComplete: {
-		value: function(task, data) {
+		value: function(task) {
 			this.currentIndex++;
+			TaskGroup.prototype.onSubTaskComplete.call(this, task);
 			if(this.currentIndex === this.tasks.length) {
-
-
-				&#x2F;&#x2F;&#x2F;*
-				if(this.group !== undefined) {
-					this.complete(this.data);
-				} else {
-					this.complete();
-				}
-				&#x2F;&#x2F;*&#x2F;
-				&#x2F;&#x2F; this.complete(this.data);
-
-
+				this.complete();
 			} else {
-				TaskGroup.prototype.onSubTaskComplete.call(this, task, data);
 				this.processSubTasks();
 			}
 		},
@@ -266,7 +254,7 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 				}
 				if(processCount &lt; canProcess) {
 					if(this.logLevel &gt;= LOG_VERBOSE) {
-						console.log(&quot;Cannot process &quot; + task.displayName + &quot; until its dependencies [&quot; + dependencyNames.join(&quot;,&quot;) + &quot;] have run&quot;);
+						log(&quot;Cannot process &quot; + task.displayName + &quot; until its dependencies [&quot; + dependencyNames.join(&quot;,&quot;) + &quot;] have run&quot;);
 					}
 					return;
 				}

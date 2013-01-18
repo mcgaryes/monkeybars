@@ -154,7 +154,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // tasks
-    grunt.registerTask('default', 'lint jasmine');
-    grunt.registerTask('release', 'combine:source lint min jasmine jsbeautifier copy:package copy:version yuidoc');
+    grunt.registerTask('default', 'combine:source lint min jasmine jsbeautifier copy:package copy:version yuidoc');
 
 };

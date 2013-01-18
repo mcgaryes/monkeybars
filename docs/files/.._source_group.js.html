@@ -263,7 +263,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	&#x2F;**
 	 * The index of the subtasks that have completed execution.
 	 *
-	 * @for Task
+	 * @for TaskGroup
 	 * @property currentIndex
 	 * @type Integer
 	 * @readonly
@@ -346,13 +346,10 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 * @for TaskGroup
 	 * @method onSubTaskComplete
 	 * @param {Task} task The task that just completed
-	 * @param {Object} data
 	 *&#x2F;
 	onSubTaskComplete: {
-		value: function(task, data) {
-			if(data !== undefined) {
-				this.handleData(data);
-			}
+		value: function(task) {
+			this.operate(task.data,task);
 		},
 		writable: true
 	},
@@ -399,7 +396,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 			if(!task) {
 				if(this.logLevel &gt;= LOG_ERROR) {
-					console.log(UNDEFINED_TASK);
+					log(UNDEFINED_TASK);
 				}
 				return;
 			}
@@ -412,17 +409,16 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			this.processedIndex++;
 
 			task.group = this;
-			task.data = this.data;
 			task.concurrent = this.concurrent;
 			task.processed = true;
 			task.logLevel = this.logLevel;
 
 			&#x2F;&#x2F; set execution block
-			task.onChange = function(state, data, error) {
+			task.onChange = function(state, error) {
 				if(state === STATE_COMPLETED) {
-					this.group.onSubTaskComplete(this, data);
+					this.group.onSubTaskComplete(this);
 				} else if(state === STATE_FAULTED) {
-					this.group.onSubTaskFault(this, undefined, error);
+					this.group.onSubTaskFault(this, error);
 				} else if(state === STATE_CANCELED) {
 					this.group.onSubTaskCancel(this);
 				}
