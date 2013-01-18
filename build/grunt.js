@@ -3,10 +3,11 @@ module.exports = function(grunt) {
     "use strict";
 
     var monkeyBarsName = "MonkeyBars";
-    var monkeyBarsVersion = "0.9.10";
+    var monkeyBarsVersion = "0.9.11";
     var monkeyBarsDescription = "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
     var monkeyBarsRepository = "https://github.com/mcgaryes/monkeybars/";
-    var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsRepository + "\n*/";
+    var monkeyBarsHomePage = "http://mcgaryes.github.com/monkeybars/";
+    var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsHomePage + "\n*/";
 
     // object will be used to create the package.json file for npm manager
     var monkeyBarsPackageJsonTemplate = {
@@ -14,7 +15,7 @@ module.exports = function(grunt) {
         "version": monkeyBarsVersion,
         "description": monkeyBarsDescription,
         "keywords": ["task", "sequence", "parallel", "asynchronous", "async", "util"],
-        "homepage": monkeyBarsRepository,
+        "homepage": monkeyBarsHomePage,
         "bugs": {
             "url": monkeyBarsRepository + "issues"
         },
@@ -107,7 +108,7 @@ module.exports = function(grunt) {
                 "name": monkeyBarsName,
                 "description": monkeyBarsDescription,
                 "version": monkeyBarsVersion,
-                "url": monkeyBarsRepository,
+                "url": monkeyBarsHomePage,
                 options: {
                     paths: "../",
                     outdir: "../docs/"

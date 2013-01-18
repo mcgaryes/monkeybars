@@ -8,7 +8,7 @@ This library also makes it possible to run tasks [concurrrently](http://en.wikip
 
 ### Installation
 
-The library itself has no ties to the browser, and because of this it works both in client side & server side javascript projects. Include *monkeybars.min.js* for your client side projects or install using [npm](https://npmjs.org/package/monkeybars) by running the following command from within your project:
+The library itself has no hard ties to the browser, and because of this it works both in client side & server side javascript projects. Include *monkeybars.min.js* for your client side projects or install using [npm](https://npmjs.org/package/monkeybars) by running the following command from within your project:
 
 <pre>
 $ npm install monkeybars [-g]
@@ -22,10 +22,14 @@ Examples for the library can be found in the [examples](https://github.com/mcgar
 
 There are detailed explanations for different aspects of the library available within the wiki pages.
 
-* [Task Implementation](https://github.com/mcgaryes/monkeybars/wiki/Task-Implementation)
-* [Extending Tasks](https://github.com/mcgaryes/monkeybars/wiki/Extending-Tasks)
-* [Decorating Tasks](https://github.com/mcgaryes/monkeybars/wiki/Decorating-Tasks)
-* [Task Options](https://github.com/mcgaryes/monkeybars/wiki/Task-Options)
 * [Concurrency](https://github.com/mcgaryes/monkeybars/wiki/Concurrency)
+* [Decorating Tasks](https://github.com/mcgaryes/monkeybars/wiki/Decorating-Tasks)
+* [Dependency Mapping](https://github.com/mcgaryes/monkeybars/wiki/Dependency-Mapping)
+* [Extending Tasks](https://github.com/mcgaryes/monkeybars/wiki/Extending-Tasks)
+* [Nesting](https://github.com/mcgaryes/monkeybars/wiki/Nesting)
+* [Product-Manipulation](https://github.com/mcgaryes/monkeybars/wiki/Product-Manipulation)
+* [Runtime Insertion](https://github.com/mcgaryes/monkeybars/wiki/Runtime-Insertion)
+* [Task Implementation](https://github.com/mcgaryes/monkeybars/wiki/Task-Implementation)
+* [Task Options](https://github.com/mcgaryes/monkeybars/wiki/Task-Options)
 
 API documentation, including methods and properties available to task types, can be seen [here](http://mcgaryes.github.com/monkeybars/docs/).
