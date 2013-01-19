@@ -11,7 +11,7 @@ This library also makes it possible to run tasks [concurrrently](http://en.wikip
 The library itself has no hard ties to the browser, and because of this it works both in client side & server side javascript projects. Include *monkeybars.min.js* for your client side projects or install using [npm](https://npmjs.org/package/monkeybars) by running the following command from within your project:
 
 <pre>
-$ npm install monkeybars [-g]
+$ npm install [-g] monkeybars
 </pre>
 
 ### Examples
