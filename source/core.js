@@ -76,15 +76,6 @@ var taskOptions = [
  */
 var MonkeyBars = root.MonkeyBars = {};
 
-/**
- * Reference holder for all tasks created with the MonkeyBars library
- *
- * @property silo
- * @type Array
- * @private
- */
- var taskDictionary = MonkeyBars.taskDictionary = {};
-
 // ===================================================================
 // === NodeJS Conditional ============================================
 // ===================================================================
@@ -242,7 +233,6 @@ var isTaskDependentOnTask = function(task1, task2) {
  * @private
  */
 var serialize = function(o) {
-
 	// Let Gecko browsers do this the easy way
 	if(typeof o.toSource !== 'undefined' && typeof o.callee === 'undefined') {
 
@@ -445,33 +435,6 @@ var log = function(msg) {
 		console.log(msg);
 	}
 };
-
-/**
- * Query function to get a speciic task from the task dictionary
- * @method lookupTask
- * @param {String} tid The task id to look up
- * @return {Task}
- */
- var lookupTask = function(tid) {
- 	return taskDictionary[tid];
- }
-
- var deleteTaskProperties = function (task,whitelist) {
-	for(var prop in task) {
-		var isWhitelisted = false;
-		if(whitelist !== undefined) {
-			for (var i = 0; i < whitelist.length; i++) {
-				if(prop === whitelist[i]) {
-					isWhitelisted = true;
-					break;
-				}
-			}
-		}
-		if(!isWhitelisted) {
-			delete task[prop];
-		}
-	}
- }
 
 // ===================================================================
 // === Worker Task ===================================================

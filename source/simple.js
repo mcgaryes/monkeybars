@@ -58,7 +58,7 @@ var Task = MonkeyBars.Task = function(attributes) {
 	task.initialize(task.options);
 
 	// add the task to the task dictionary for later use
-	taskDictionary[task.tid] = task;
+	//taskDictionary[task.tid] = task;
 	
 };
 
@@ -101,24 +101,18 @@ Task.prototype = Object.create({}, {
 		writable: true
 	},
 	
-	/**
-	 * Here i need to remove all of the attributes besides the 
-	 * state so that the task wont start again as well as processed...
-	 * @for Task
-	 * @function cleanUp
-	 */
+	 /*
 	cleanUp:{
 		value:function(){
-			if(this.gid) {
-				deleteTaskProperties(this,["processed","tid","gid"]);
-			} else {
-				// just go ahead and delete the whole thing
+			if(!this.group) {
 				deleteTaskProperties(this);
+			} else {
+				//deleteTaskProperties(this,["processed","tid","gid"]);
 			}
-			//console.log(this);
 		},
 		writable:true
 	},
+	*/
 
 	/**
 	 * Calling this method says that the tasks execution is now complete.
@@ -161,7 +155,7 @@ Task.prototype = Object.create({}, {
 			// call completion methods
 			this.onComplete();
 			this.onChange(this.state);
-			this.cleanUp();
+			//this.cleanUp();
 		},
 		writable: true
 	},
@@ -177,6 +171,21 @@ Task.prototype = Object.create({}, {
 	concurrent: {
 		value: false,
 		writable: true
+	},
+
+	/**
+	 * @for Task
+	 * @function destroy
+	 */
+	destroy:{
+		value:function(){
+			for(var prop in this) {
+				if(this.hasOwnProperty(prop)){
+					delete this[prop];
+				}
+			}
+		},
+		writable:true
 	},
 
 	/**

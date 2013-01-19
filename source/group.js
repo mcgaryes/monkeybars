@@ -10,7 +10,7 @@
 var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 	var task = this;
 
-	if(attributes) {
+	if(attributes && attributes.tasks) {
 		task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
 	}
 
@@ -69,7 +69,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			this.setDependeciesForTask(task);
+			//this.setDependeciesForTask(task);
 			this.tasks.push(task);
 		},
 		writable: true
@@ -103,7 +103,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			this.setDependeciesForTask(task);
+			//this.setDependeciesForTask(task);
+			// @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(afterTask);
 			this.tasks.splice(index + 1, 0, task);
 		},
@@ -131,6 +132,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 				task = createTaskWithOptions(task);
 			}
 			//this.setDependeciesForTask(task);
+			// @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(beforeTask);
 			this.tasks.splice(index, 0, task);
 		},
@@ -153,6 +155,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			for(var i = 0; i < this.tasks.length; i++) {
 				// we only want to cancel those tasks that are currently running
 				// otherwise we want to set the canceled flag
+				// @TODO: Need to reference the task through the tid
 				var task = this.tasks[i];
 				if(task.state > STATE_INITIALIZED) {
 					task.cancel();
@@ -162,21 +165,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			}
 		},
 		writable: true
-	},
-
-	/**
-	 * Here i need to remove all of the attributes besides the 
-	 * state so that the task wont start again as well as processed...
-	 * @for Task
-	 * @function cleanUp
-	 */
-	cleanUp:{
-		value:function(){
-			// remove all of the tasks subtasks from the taskDictionary
-			
-			Task.prototype.cleanUp.call(this);
-		},
-		writable:true
 	},
 
 	/**
@@ -202,6 +190,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 */
 	getTaskByName: {
 		value: function(name) {
+			// @TODO: Need to reference the task through the tid
 			for(var i = 0; i < this.tasks.length; i++) {
 				var task = this.tasks[i];
 				if(task.name === name) {
@@ -229,6 +218,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 */
 	getTaskByTid: {
 		value: function(tid) {
+			// @TODO: Need to reference the task through the tid
 			for(var i = 0; i < this.tasks.length; i++) {
 				var task = this.tasks[i];
 				if(task.tid === tid) {
@@ -251,6 +241,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 		value: function(task) {
 			for(var i = 0; i < this.tasks.length; i++) {
 				if(isTaskDependentOnTask(this.tasks[i], task)) {
+					// @TODO: Need to reference the task through the tid
 					this.tasks[i].state = STATE_CANCELED;
 				}
 			}
@@ -268,6 +259,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 */
 	onSubTaskComplete: {
 		value: function(task) {
+			// @TODO: Need to reference the task through the tid
 			this.operate(task.data,task);
 		},
 		writable: true
@@ -327,8 +319,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 			this.processedIndex++;
 
-			// task.group = this;
-			task.gid = this.tid;
+			task.group = this;
+			// task.gid = this.tid;
 			task.processed = true;
 			if(task.concurrent) {
 				task.concurrent = this.concurrent;
