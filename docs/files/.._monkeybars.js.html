@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.10</em>
+            <em>API Docs for: 0.9.11</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -335,7 +335,6 @@
      * @private
      *&#x2F;
     var serialize = function(o) {
-
         &#x2F;&#x2F; Let Gecko browsers do this the easy way
         if (typeof o.toSource !== &#x27;undefined&#x27; &amp;&amp; typeof o.callee === &#x27;undefined&#x27;) {
 
@@ -713,6 +712,9 @@
         &#x2F;&#x2F; initialize the task
         task.initialize(task.options);
 
+        &#x2F;&#x2F; add the task to the task dictionary for later use
+        &#x2F;&#x2F;taskDictionary[task.tid] = task;
+
     };
 
     Task.prototype = Object.create({}, {
@@ -754,6 +756,19 @@
             writable: true
         },
 
+        &#x2F;*
+	cleanUp:{
+		value:function(){
+			if(!this.group) {
+				deleteTaskProperties(this);
+			} else {
+				&#x2F;&#x2F;deleteTaskProperties(this,[&quot;processed&quot;,&quot;tid&quot;,&quot;gid&quot;]);
+			}
+		},
+		writable:true
+	},
+	*&#x2F;
+
         &#x2F;**
          * Calling this method says that the tasks execution is now complete.
          *
@@ -776,8 +791,7 @@
                 }
                 this.state = STATE_COMPLETED;
 
-                this.executionTime = (new Date().getTime()) - this.startTime;
-
+                &#x2F;&#x2F;this.executionTime = (new Date().getTime()) - this.startTime;
 
                 if (this.logLevel &gt;= LOG_INFO) {
                     log(&quot;Completed: &quot; + this.displayName + &quot; in &quot; + this.executionTime + &quot;ms&quot;);
@@ -796,6 +810,7 @@
                 &#x2F;&#x2F; call completion methods
                 this.onComplete();
                 this.onChange(this.state);
+                &#x2F;&#x2F;this.cleanUp();
             },
             writable: true
         },
@@ -810,6 +825,21 @@
          *&#x2F;
         concurrent: {
             value: false,
+            writable: true
+        },
+
+        &#x2F;**
+         * @for Task
+         * @function destroy
+         *&#x2F;
+        destroy: {
+            value: function() {
+                for (var prop in this) {
+                    if (this.hasOwnProperty(prop)) {
+                        delete this[prop];
+                    }
+                }
+            },
             writable: true
         },
 
@@ -1030,7 +1060,7 @@
                     return;
                 }
 
-                this.startTime = new Date().getTime();
+                &#x2F;&#x2F;this.startTime = new Date().getTime();
                 this.state = STATE_STARTED;
                 if (this.logLevel &gt;= LOG_INFO) {
                     log(&quot;Started: &quot; + this.displayName);
@@ -1045,7 +1075,14 @@
                 if (this.concurrent) {
                     performTaskFunctionalityWithWebWorker(this);
                 } else {
+                    &#x2F;&#x2F;if(this.group){
+                    &#x2F;&#x2F;var delegate = this;
+                    &#x2F;&#x2F;setTimeout(function(){
+                    &#x2F;&#x2F;delegate.performTask(); 
+                    &#x2F;&#x2F;},1);
+                    &#x2F;&#x2F;}else{
                     this.performTask();
+                    &#x2F;&#x2F;}
                 }
 
                 this.onStart();
@@ -1147,19 +1184,21 @@
     var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
         var task = this;
 
-        if (attributes) {
+        if (attributes &amp;&amp; attributes.tasks) {
             task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
         }
 
         &#x2F;&#x2F; create dependency map and populate it with subtask tids
-        task.dependencyMap = {};
-        if (task.tasks) {
-            for (var i = 0; i &lt; task.tasks.length; i++) {
-                var subtask = task.tasks[i];
-                this.dependencyMap[subtask.tid] = [];
-                task.setDependeciesForTask(subtask);
-            }
-        }
+        &#x2F;*
+	task.dependencyMap = {};
+	if(task.tasks) {
+		for(var i = 0; i &lt; task.tasks.length; i++) {
+			var subtask = task.tasks[i];
+			this.dependencyMap[subtask.tid] = [];
+			task.setDependeciesForTask(subtask);
+		}
+	}
+	*&#x2F;
 
         &#x2F;&#x2F; super
         Task.call(task, attributes);
@@ -1204,7 +1243,7 @@
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
-                this.setDependeciesForTask(task);
+                &#x2F;&#x2F;this.setDependeciesForTask(task);
                 this.tasks.push(task);
             },
             writable: true
@@ -1238,7 +1277,8 @@
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
-                this.setDependeciesForTask(task);
+                &#x2F;&#x2F;this.setDependeciesForTask(task);
+                &#x2F;&#x2F; @TODO: Need to add the tid of the task and not the task itself
                 var index = this.tasks.indexOf(afterTask);
                 this.tasks.splice(index + 1, 0, task);
             },
@@ -1265,7 +1305,8 @@
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
-                this.setDependeciesForTask(task);
+                &#x2F;&#x2F;this.setDependeciesForTask(task);
+                &#x2F;&#x2F; @TODO: Need to add the tid of the task and not the task itself
                 var index = this.tasks.indexOf(beforeTask);
                 this.tasks.splice(index, 0, task);
             },
@@ -1288,6 +1329,7 @@
                 for (var i = 0; i &lt; this.tasks.length; i++) {
                     &#x2F;&#x2F; we only want to cancel those tasks that are currently running
                     &#x2F;&#x2F; otherwise we want to set the canceled flag
+                    &#x2F;&#x2F; @TODO: Need to reference the task through the tid
                     var task = this.tasks[i];
                     if (task.state &gt; STATE_INITIALIZED) {
                         task.cancel();
@@ -1322,6 +1364,7 @@
          *&#x2F;
         getTaskByName: {
             value: function(name) {
+                &#x2F;&#x2F; @TODO: Need to reference the task through the tid
                 for (var i = 0; i &lt; this.tasks.length; i++) {
                     var task = this.tasks[i];
                     if (task.name === name) {
@@ -1349,6 +1392,7 @@
          *&#x2F;
         getTaskByTid: {
             value: function(tid) {
+                &#x2F;&#x2F; @TODO: Need to reference the task through the tid
                 for (var i = 0; i &lt; this.tasks.length; i++) {
                     var task = this.tasks[i];
                     if (task.tid === tid) {
@@ -1371,6 +1415,7 @@
             value: function(task) {
                 for (var i = 0; i &lt; this.tasks.length; i++) {
                     if (isTaskDependentOnTask(this.tasks[i], task)) {
+                        &#x2F;&#x2F; @TODO: Need to reference the task through the tid
                         this.tasks[i].state = STATE_CANCELED;
                     }
                 }
@@ -1388,6 +1433,7 @@
          *&#x2F;
         onSubTaskComplete: {
             value: function(task) {
+                &#x2F;&#x2F; @TODO: Need to reference the task through the tid
                 this.operate(task.data, task);
             },
             writable: true
@@ -1448,18 +1494,24 @@
                 this.processedIndex++;
 
                 task.group = this;
-                task.concurrent = this.concurrent;
+                &#x2F;&#x2F; task.gid = this.tid;
                 task.processed = true;
-                task.logLevel = this.logLevel;
+                if (task.concurrent) {
+                    task.concurrent = this.concurrent;
+                }
+                if (task.logLevel !== LOG_NONE) {
+                    task.logLevel = this.logLevel;
+                }
 
                 &#x2F;&#x2F; set execution block
+                var group = this;
                 task.onChange = function(state, error) {
                     if (state === STATE_COMPLETED) {
-                        this.group.onSubTaskComplete(this);
+                        group.onSubTaskComplete(this);
                     } else if (state === STATE_FAULTED) {
-                        this.group.onSubTaskFault(this, error);
+                        group.onSubTaskFault(this, error);
                     } else if (state === STATE_CANCELED) {
-                        this.group.onSubTaskCancel(this);
+                        group.onSubTaskCancel(this);
                     }
                 };
 
@@ -1620,14 +1672,15 @@
         },
 
         &#x2F;**
-         * The max amounts of tasks that can run simultaneously
+         * The max amounts of tasks that can run simultaneously.
          *
          * @for ParallelTask
          * @property max
          * @type Integer
+         * @default 20
          *&#x2F;
         max: {
-            value: 0,
+            value: 20,
             writable: true
         },
 
@@ -1716,10 +1769,12 @@
          *&#x2F;
         processSubTasks: {
             value: function() {
-                var processTotal = this.max === 0 ? this.tasks.length : this.max;
-                for (var i = 0; i &lt; processTotal; i++) {
+                &#x2F;*
+			@TODO: THIS IS NOT CURRENTLY WORKING
+			*&#x2F;
+                for (var i = this.currentIndex; i &lt; this.currentIndex + this.max; i++) {
                     var task = this.tasks[i];
-                    if (!task.processed) {
+                    if (task !== undefined &amp;&amp; !task.processed) {
                         this.processSubTask(task);
                     }
                 }

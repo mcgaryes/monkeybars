@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.10</em>
+            <em>API Docs for: 0.9.11</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -176,14 +176,15 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	},
 
 	&#x2F;**
-	 * The max amounts of tasks that can run simultaneously
+	 * The max amounts of tasks that can run simultaneously.
 	 *
 	 * @for ParallelTask
 	 * @property max
 	 * @type Integer
+	 * @default 20
 	 *&#x2F;
 	max: {
-		value: 0,
+		value: 20,
 		writable: true
 	},
 
@@ -272,10 +273,12 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 *&#x2F;
 	processSubTasks: {
 		value: function() {
-			var processTotal = this.max === 0 ? this.tasks.length : this.max;
-			for(var i = 0; i &lt; processTotal; i++) {
+			&#x2F;*
+			@TODO: THIS IS NOT CURRENTLY WORKING
+			*&#x2F;
+			for(var i = this.currentIndex; i &lt; this.currentIndex + this.max; i++) {
 				var task = this.tasks[i];
-				if(!task.processed) {
+				if(task !== undefined &amp;&amp; !task.processed) {
 					this.processSubTask(task);
 				}
 			}

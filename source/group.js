@@ -325,7 +325,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(task.concurrent) {
 				task.concurrent = this.concurrent;
 			}
-			if(task.logLevel != LOG_NONE) {
+			if(task.logLevel !== LOG_NONE) {
 				task.logLevel = this.logLevel;
 			}
 			

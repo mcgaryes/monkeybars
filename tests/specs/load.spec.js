@@ -2,9 +2,8 @@ describe("Load Tests", function() {
 	var group;
 
 	beforeEach(function() {
-		
 		var tasks = [];
-		for(var i = 0;i<100;i++) {
+		for(var i = 0;i<10000;i++) {
 			tasks.push({
 				name:"sub-" + i,
 				performTask:function(){
@@ -13,20 +12,16 @@ describe("Load Tests", function() {
 					// over 2000 tasks is causing the call stack to max out
 					setTimeout(function(){
 						delegate.complete(); 
-					},10);
+					},1);
 				}
 			});
 		}
-		//group.tasks = tasks;
-		group = new MonkeyBars.ParallelTask({
-			tasks:tasks,
-			onComplete:function(){
-				this.destroy();
-			}
-		});
+		group = new MonkeyBars.ParallelTask({tasks:tasks});
+		// group = new MonkeyBars.SequenceTask({tasks:tasks});
 	});
 
 	afterEach(function() {
+		//group.destroy();
 		group = null;
 		group = undefined;
 	});
@@ -34,6 +29,13 @@ describe("Load Tests", function() {
 	it("does handle load",function(){
 		group.start();
 		console.log(group);
+		waitsFor(function() {
+			return group.state > MonkeyBars.TaskStates.Started;
+		}, "the task to complete", 20000);
+
+		runs(function() {
+			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
+		});
 	});
 
 

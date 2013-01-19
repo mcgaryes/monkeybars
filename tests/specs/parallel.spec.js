@@ -431,6 +431,8 @@ describe("Parallel Task Tests", function() {
 
 			task.start();
 
+			console.log(task);
+
 			waitsFor(function() {
 				return task.state > MonkeyBars.TaskStates.Started;
 			}, "the task to complete", 750);

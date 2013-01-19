@@ -101,7 +101,7 @@ Task.prototype = Object.create({}, {
 		writable: true
 	},
 	
-	 /*
+	/*
 	cleanUp:{
 		value:function(){
 			if(!this.group) {
@@ -420,7 +420,14 @@ Task.prototype = Object.create({}, {
 			if(this.concurrent) {
 				performTaskFunctionalityWithWebWorker(this);
 			} else {
+				//if(this.group){
+				//var delegate = this;
+				//setTimeout(function(){
+				//delegate.performTask(); 
+				//},1);
+				//}else{
 				this.performTask();
+				//}
 			}
 
 			this.onStart();

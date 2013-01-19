@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.10</em>
+            <em>API Docs for: 0.9.11</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -154,6 +154,9 @@ var Task = MonkeyBars.Task = function(attributes) {
 
 	&#x2F;&#x2F; initialize the task
 	task.initialize(task.options);
+
+	&#x2F;&#x2F; add the task to the task dictionary for later use
+	&#x2F;&#x2F;taskDictionary[task.tid] = task;
 	
 };
 
@@ -196,6 +199,19 @@ Task.prototype = Object.create({}, {
 		writable: true
 	},
 	
+	&#x2F;*
+	cleanUp:{
+		value:function(){
+			if(!this.group) {
+				deleteTaskProperties(this);
+			} else {
+				&#x2F;&#x2F;deleteTaskProperties(this,[&quot;processed&quot;,&quot;tid&quot;,&quot;gid&quot;]);
+			}
+		},
+		writable:true
+	},
+	*&#x2F;
+
 	&#x2F;**
 	 * Calling this method says that the tasks execution is now complete.
 	 *
@@ -218,8 +234,7 @@ Task.prototype = Object.create({}, {
 			}
 			this.state = STATE_COMPLETED;
 
-			this.executionTime = (new Date().getTime()) - this.startTime;
-
+			&#x2F;&#x2F;this.executionTime = (new Date().getTime()) - this.startTime;
 
 			if(this.logLevel &gt;= LOG_INFO) {
 				log(&quot;Completed: &quot; + this.displayName + &quot; in &quot; + this.executionTime + &quot;ms&quot;);
@@ -238,6 +253,7 @@ Task.prototype = Object.create({}, {
 			&#x2F;&#x2F; call completion methods
 			this.onComplete();
 			this.onChange(this.state);
+			&#x2F;&#x2F;this.cleanUp();
 		},
 		writable: true
 	},
@@ -253,6 +269,21 @@ Task.prototype = Object.create({}, {
 	concurrent: {
 		value: false,
 		writable: true
+	},
+
+	&#x2F;**
+	 * @for Task
+	 * @function destroy
+	 *&#x2F;
+	destroy:{
+		value:function(){
+			for(var prop in this) {
+				if(this.hasOwnProperty(prop)){
+					delete this[prop];
+				}
+			}
+		},
+		writable:true
 	},
 
 	&#x2F;**
@@ -472,7 +503,7 @@ Task.prototype = Object.create({}, {
 				return;
 			}
 
-			this.startTime = new Date().getTime();
+			&#x2F;&#x2F;this.startTime = new Date().getTime();
 			this.state = STATE_STARTED;
 			if(this.logLevel &gt;= LOG_INFO) {
 				log(&quot;Started: &quot; + this.displayName);
@@ -487,7 +518,14 @@ Task.prototype = Object.create({}, {
 			if(this.concurrent) {
 				performTaskFunctionalityWithWebWorker(this);
 			} else {
+				&#x2F;&#x2F;if(this.group){
+				&#x2F;&#x2F;var delegate = this;
+				&#x2F;&#x2F;setTimeout(function(){
+				&#x2F;&#x2F;delegate.performTask(); 
+				&#x2F;&#x2F;},1);
+				&#x2F;&#x2F;}else{
 				this.performTask();
+				&#x2F;&#x2F;}
 			}
 
 			this.onStart();

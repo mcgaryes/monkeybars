@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.10</em>
+            <em>API Docs for: 0.9.11</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -108,11 +108,12 @@
 var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 	var task = this;
 
-	if(attributes) {
+	if(attributes &amp;&amp; attributes.tasks) {
 		task.tasks = createSubTasksFromTaskOptionsArray(attributes.tasks);
 	}
 
 	&#x2F;&#x2F; create dependency map and populate it with subtask tids
+	&#x2F;*
 	task.dependencyMap = {};
 	if(task.tasks) {
 		for(var i = 0; i &lt; task.tasks.length; i++) {
@@ -121,6 +122,7 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 			task.setDependeciesForTask(subtask);
 		}
 	}
+	*&#x2F;
 
 	&#x2F;&#x2F; super
 	Task.call(task, attributes);
@@ -165,7 +167,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			this.setDependeciesForTask(task);
+			&#x2F;&#x2F;this.setDependeciesForTask(task);
 			this.tasks.push(task);
 		},
 		writable: true
@@ -199,7 +201,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			this.setDependeciesForTask(task);
+			&#x2F;&#x2F;this.setDependeciesForTask(task);
+			&#x2F;&#x2F; @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(afterTask);
 			this.tasks.splice(index + 1, 0, task);
 		},
@@ -226,7 +229,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			this.setDependeciesForTask(task);
+			&#x2F;&#x2F;this.setDependeciesForTask(task);
+			&#x2F;&#x2F; @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(beforeTask);
 			this.tasks.splice(index, 0, task);
 		},
@@ -249,6 +253,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			for(var i = 0; i &lt; this.tasks.length; i++) {
 				&#x2F;&#x2F; we only want to cancel those tasks that are currently running
 				&#x2F;&#x2F; otherwise we want to set the canceled flag
+				&#x2F;&#x2F; @TODO: Need to reference the task through the tid
 				var task = this.tasks[i];
 				if(task.state &gt; STATE_INITIALIZED) {
 					task.cancel();
@@ -283,6 +288,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 *&#x2F;
 	getTaskByName: {
 		value: function(name) {
+			&#x2F;&#x2F; @TODO: Need to reference the task through the tid
 			for(var i = 0; i &lt; this.tasks.length; i++) {
 				var task = this.tasks[i];
 				if(task.name === name) {
@@ -310,6 +316,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 *&#x2F;
 	getTaskByTid: {
 		value: function(tid) {
+			&#x2F;&#x2F; @TODO: Need to reference the task through the tid
 			for(var i = 0; i &lt; this.tasks.length; i++) {
 				var task = this.tasks[i];
 				if(task.tid === tid) {
@@ -332,6 +339,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 		value: function(task) {
 			for(var i = 0; i &lt; this.tasks.length; i++) {
 				if(isTaskDependentOnTask(this.tasks[i], task)) {
+					&#x2F;&#x2F; @TODO: Need to reference the task through the tid
 					this.tasks[i].state = STATE_CANCELED;
 				}
 			}
@@ -349,6 +357,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 *&#x2F;
 	onSubTaskComplete: {
 		value: function(task) {
+			&#x2F;&#x2F; @TODO: Need to reference the task through the tid
 			this.operate(task.data,task);
 		},
 		writable: true
@@ -409,18 +418,24 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			this.processedIndex++;
 
 			task.group = this;
-			task.concurrent = this.concurrent;
+			&#x2F;&#x2F; task.gid = this.tid;
 			task.processed = true;
-			task.logLevel = this.logLevel;
-
+			if(task.concurrent) {
+				task.concurrent = this.concurrent;
+			}
+			if(task.logLevel !== LOG_NONE) {
+				task.logLevel = this.logLevel;
+			}
+			
 			&#x2F;&#x2F; set execution block
+			var group = this;
 			task.onChange = function(state, error) {
 				if(state === STATE_COMPLETED) {
-					this.group.onSubTaskComplete(this);
+					group.onSubTaskComplete(this);
 				} else if(state === STATE_FAULTED) {
-					this.group.onSubTaskFault(this, error);
+					group.onSubTaskFault(this, error);
 				} else if(state === STATE_CANCELED) {
-					this.group.onSubTaskCancel(this);
+					group.onSubTaskCancel(this);
 				}
 			};
 

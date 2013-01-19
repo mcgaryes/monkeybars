@@ -175,13 +175,10 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	processSubTasks: {
 		value: function() {
-
 			/*
 			@TODO: THIS IS NOT CURRENTLY WORKING
 			*/
-
-
-			for(var i = 0; i < this.max; i++) {
+			for(var i = this.currentIndex; i < this.currentIndex + this.max; i++) {
 				var task = this.tasks[i];
 				if(task !== undefined && !task.processed) {
 					this.processSubTask(task);
