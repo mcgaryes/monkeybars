@@ -1,11 +1,12 @@
-describe("Parallel Task Tests", function() {
+describe("parallel", function() {
 
 	// ===================================================================
 	// === Initialization Tests ==========================================
 	// ===================================================================
-	describe("Initialization Tests", function() {
+	
+	describe("task initialization", function() {
 
-		it("Initialization", function() {
+		it("initializes", function() {
 			var task = new MonkeyBars.ParallelTask({
 				name: "name"
 			});
@@ -19,9 +20,10 @@ describe("Parallel Task Tests", function() {
 	// ===================================================================
 	// === Task Injection Tests ==========================================
 	// ===================================================================
-	describe("Task Injection Tests", function() {
+	
+	describe("task injection", function() {
 
-		it("Add Sub Task", function() {
+		it("works", function() {
 
 			var group = new MonkeyBars.ParallelTask({
 				name: "name",
@@ -46,15 +48,16 @@ describe("Parallel Task Tests", function() {
 	// ===================================================================
 	// === Execution Tests ===============================================
 	// ===================================================================
-	describe("Execution Tests", function() {
+	
+	describe("task executes", function() {
 
-		it("Execution With No Subtasks", function() {
+		it("with no subtasks", function() {
 			var task = new MonkeyBars.ParallelTask();
 			task.start();
 			expect(task.state).toEqual(4);
 		});
 
-		it("Execution With Subtasks", function() {
+		it("with subtasks", function() {
 			var task = new MonkeyBars.ParallelTask({
 				tasks: [{
 					performTask: function() {
@@ -67,7 +70,7 @@ describe("Parallel Task Tests", function() {
 			expect(task.state).toEqual(4);
 		});
 
-		it("Group Completes After All Subtasks Are Complete", function() {
+		it("and only completes after all subtasks are complete", function() {
 
 			var CustomTask = MonkeyBars.Task.extend({
 				performTask: function() {
@@ -99,7 +102,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Can Only Run MAX Amount Simultaniously", function() {
+		it("can only run MAX amount simultaniously", function() {
 
 			var tasks = [];
 
@@ -134,7 +137,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Sub Tasks Should Only Run Once Their Dependencies Have", function() {
+		it("only once its dependencies have", function() {
 
 			var t1 = new MonkeyBars.Task({
 				name: "t1",
@@ -180,9 +183,9 @@ describe("Parallel Task Tests", function() {
 	// === Data Operation Tests ==========================================
 	// ===================================================================
 
-	describe("Data Operation Tests", function() {
+	describe("task operates", function() {
 
-		it("Simple", function() {
+		it("with simple", function() {
 
 			var CustomTask = MonkeyBars.Task.extend({
 				performTask: function() {
@@ -202,7 +205,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Overridden Operation Case 1", function() {
+		it("when overridden", function() {
 
 			var CustomTask = MonkeyBars.Task.extend({
 				performTask: function() {
@@ -226,7 +229,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Overridden Operation Case 2", function() {
+		it("when deeply overridden", function() {
 
 			var CustomTask = MonkeyBars.Task.extend({
 				performTask: function() {
@@ -279,7 +282,8 @@ describe("Parallel Task Tests", function() {
 	// ===================================================================
 	// === Decorator Tests ===============================================
 	// ===================================================================
-	describe("Decorator Tests", function() {
+	
+	describe("task decorates", function() {
 
 		var value, flag;
 
@@ -290,7 +294,7 @@ describe("Parallel Task Tests", function() {
 			flag = undefined;
 		});
 
-		it("FOR", function() {
+		it("with count", function() {
 			var index = 0;
 			var task = new MonkeyBars.ParallelTask({
 				count: 3,
@@ -315,7 +319,8 @@ describe("Parallel Task Tests", function() {
 	// ===================================================================
 	// === Concurrent Excecution Tests ===================================
 	// ===================================================================
-	describe("Concurrent Excecution Tests", function() {
+	
+	describe("concurrent tasks", function() {
 
 		// return if we can actually test concurrent functionality
 		try {
@@ -357,7 +362,7 @@ describe("Parallel Task Tests", function() {
 			flag = undefined;
 		});
 
-		it("Concurrent ParallelTask Completes", function() {
+		it("complete", function() {
 
 			task.start();
 
@@ -371,7 +376,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Concurrent ParallelTask Canceles", function() {
+		it("cancel", function() {
 
 			t2.performTask = function() {};
 			task.start();
@@ -382,7 +387,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Concurrent ParallelTask Faults", function() {
+		it("fault", function() {
 
 			t2.performTask = function() {
 				this.fault();
@@ -399,7 +404,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Concurrent ParallelTask Timesout", function() {
+		it("timeout", function() {
 
 			task.timeout = 150;
 			t2.performTask = function() { /* TIMEOUT */
@@ -416,7 +421,7 @@ describe("Parallel Task Tests", function() {
 
 		});
 
-		it("Deeply Nested Concurrent ParallelTask Completes", function() {
+		it("complete when deeply nested", function() {
 
 			var group = new MonkeyBars.ParallelTask({
 				name: "deepParallel",

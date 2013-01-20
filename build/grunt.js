@@ -51,33 +51,33 @@ module.exports = function(grunt) {
             }
         },
         combine: {
-            source: {
+            all: {
                 input: "../source/core.js",
                 output: "../monkeybars.js",
                 tokens: [{
-                    token:"//%pre",
-                    string:"/*!\n * @module MonkeyBars\n * @main MonkeyBars\n*/\n\n(function() {"
-                },{
-                    token:"//%worker",
-                    file:"../source/worker.js"
-                },{
-                    token:"//%simple",
-                    file:"../source/simple.js"
-                },{
-                    token:"//%group",
-                    file:"../source/group.js"
-                },{
-                    token:"//%parallel",
-                    file:"../source/parallel.js"
-                },{
-                    token:"//%sequence",
-                    file:"../source/sequence.js"
-                },{
-                    token:"//%decorators",
-                    file:"../source/decorators.js"
-                },{
-                    token:"//%post",
-                    string:"}).call(this);"
+                    token: "//%pre",
+                    string: "/*!\n * @module MonkeyBars\n * @main MonkeyBars\n*/\n\n(function() {"
+                }, {
+                    token: "//%worker",
+                    file: "../source/worker.js"
+                }, {
+                    token: "//%simple",
+                    file: "../source/simple.js"
+                }, {
+                    token: "//%group",
+                    file: "../source/group.js"
+                }, {
+                    token: "//%parallel",
+                    file: "../source/parallel.js"
+                }, {
+                    token: "//%sequence",
+                    file: "../source/sequence.js"
+                }, {
+                    token: "//%decorators",
+                    file: "../source/decorators.js"
+                }, {
+                    token: "//%post",
+                    string: "}).call(this);"
                 }]
             }
         },
@@ -115,11 +115,11 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jsbeautifier : {
-          files : ["../monkeybars.js"],
-          options : {
-            "indent_size": 4
-          }
+        jsbeautifier: {
+            files: ["../monkeybars.js"],
+            options: {
+                "indent_size": 4
+            }
         },
         jshint: {
             options: {
@@ -155,6 +155,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // tasks
-    grunt.registerTask('default', 'combine:source lint min jasmine jsbeautifier copy:package copy:version yuidoc');
+    grunt.registerTask('default', ['combine', 'lint', 'min', 'jasmine', 'jsbeautifier', 'copy:package', 'copy:version', 'yuidoc']);
 
 };

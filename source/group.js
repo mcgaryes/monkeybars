@@ -15,7 +15,6 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 	}
 
 	// create dependency map and populate it with subtask tids
-	/*
 	task.dependencyMap = {};
 	if(task.tasks) {
 		for(var i = 0; i < task.tasks.length; i++) {
@@ -24,7 +23,6 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 			task.setDependeciesForTask(subtask);
 		}
 	}
-	*/
 
 	// super
 	Task.call(task, attributes);
@@ -69,7 +67,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			//this.setDependeciesForTask(task);
+			this.setDependeciesForTask(task);
 			this.tasks.push(task);
 		},
 		writable: true
@@ -103,7 +101,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			//this.setDependeciesForTask(task);
+			this.setDependeciesForTask(task);
 			// @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(afterTask);
 			this.tasks.splice(index + 1, 0, task);
@@ -131,7 +129,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
-			//this.setDependeciesForTask(task);
+			this.setDependeciesForTask(task);
 			// @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(beforeTask);
 			this.tasks.splice(index, 0, task);
@@ -320,7 +318,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			this.processedIndex++;
 
 			task.group = this;
-			// task.gid = this.tid;
 			task.processed = true;
 			if(task.concurrent) {
 				task.concurrent = this.concurrent;

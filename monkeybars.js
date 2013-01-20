@@ -549,7 +549,28 @@
         }
     };
 
-    WorkerTask.extend = extend;
+    /**
+     * Extention functionality for worker tasks. This is different than the core extend
+     * functionality because we need to make sure that all of the protoprops provided
+     * are available on the task because of its concurrent nature.
+     *
+     * @method extend
+     * @for WorkerTask
+     * @param {Object} protoProps
+     * @return {Function} child Constructor function for extended task type
+     */
+    WorkerTask.extend = function(protoProps) {
+        var parent = this;
+        var child = function() {
+            parent.apply(this, arguments);
+        };
+        var proto = Object.create(parent.prototype);
+        for (var prop in protoProps) {
+            proto[prop] = protoProps[prop];
+        }
+        child.prototype = proto;
+        return child;
+    };
 
     // ===================================================================
     // === Simple Task ===================================================
@@ -1091,16 +1112,14 @@
         }
 
         // create dependency map and populate it with subtask tids
-        /*
-	task.dependencyMap = {};
-	if(task.tasks) {
-		for(var i = 0; i < task.tasks.length; i++) {
-			var subtask = task.tasks[i];
-			this.dependencyMap[subtask.tid] = [];
-			task.setDependeciesForTask(subtask);
-		}
-	}
-	*/
+        task.dependencyMap = {};
+        if (task.tasks) {
+            for (var i = 0; i < task.tasks.length; i++) {
+                var subtask = task.tasks[i];
+                this.dependencyMap[subtask.tid] = [];
+                task.setDependeciesForTask(subtask);
+            }
+        }
 
         // super
         Task.call(task, attributes);
@@ -1145,7 +1164,7 @@
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
-                //this.setDependeciesForTask(task);
+                this.setDependeciesForTask(task);
                 this.tasks.push(task);
             },
             writable: true
@@ -1179,7 +1198,7 @@
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
-                //this.setDependeciesForTask(task);
+                this.setDependeciesForTask(task);
                 // @TODO: Need to add the tid of the task and not the task itself
                 var index = this.tasks.indexOf(afterTask);
                 this.tasks.splice(index + 1, 0, task);
@@ -1207,7 +1226,7 @@
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
-                //this.setDependeciesForTask(task);
+                this.setDependeciesForTask(task);
                 // @TODO: Need to add the tid of the task and not the task itself
                 var index = this.tasks.indexOf(beforeTask);
                 this.tasks.splice(index, 0, task);
@@ -1396,7 +1415,6 @@
                 this.processedIndex++;
 
                 task.group = this;
-                // task.gid = this.tid;
                 task.processed = true;
                 if (task.concurrent) {
                     task.concurrent = this.concurrent;

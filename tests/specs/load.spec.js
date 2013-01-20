@@ -21,14 +21,12 @@ describe("Load Tests", function() {
 	});
 
 	afterEach(function() {
-		//group.destroy();
 		group = null;
 		group = undefined;
 	});
 
 	it("does handle load",function(){
 		group.start();
-		console.log(group);
 		waitsFor(function() {
 			return group.state > MonkeyBars.TaskStates.Started;
 		}, "the task to complete", 20000);

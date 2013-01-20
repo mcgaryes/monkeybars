@@ -103,4 +103,23 @@ WorkerTask.prototype = {
 	}
 };
 
-WorkerTask.extend = extend;
+/**
+ * Extention functionality for worker tasks. This is different than the core extend
+ * functionality because we need to make sure that all of the protoprops provided
+ * are available on the task because of its concurrent nature.
+ *
+ * @method extend
+ * @for WorkerTask
+ * @param {Object} protoProps
+ * @return {Function} child Constructor function for extended task type
+ */
+WorkerTask.extend = function(protoProps) {
+	var parent = this;
+	var child = function() { parent.apply(this, arguments); };
+	var proto = Object.create(parent.prototype);
+	for(var prop in protoProps) {
+		proto[prop] = protoProps[prop];
+	}
+	child.prototype = proto;
+	return child;
+};

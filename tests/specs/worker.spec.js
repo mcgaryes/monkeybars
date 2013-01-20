@@ -1,10 +1,10 @@
-describe("Worker Task Tests", function() {
+describe("worker", function() {
 
 	// ===================================================================
 	// === Extention Tests ===============================================
 	// ===================================================================
 
-	describe("Extention Tests", function() {
+	describe("task extends", function() {
 
 		// return if we can actually test concurrent functionality
 		try {
@@ -13,7 +13,7 @@ describe("Worker Task Tests", function() {
 			return;
 		}
 
-		it("WorkerTask Should Extend",function(){
+		it("correctly",function(){
 
 			var CustomWorker = MonkeyBars.WorkerTask.extend({
 				customMethod:function(){
@@ -37,7 +37,7 @@ describe("Worker Task Tests", function() {
 	// === Execution Tests ===============================================
 	// ===================================================================
 
-	describe("Execution Tests", function() {
+	describe("task executes", function() {
 
 		// return if we can actually test concurrent functionality
 		try {
@@ -46,11 +46,8 @@ describe("Worker Task Tests", function() {
 			return;
 		}
 
-		it("Custom WorkerTask Executes As Expected",function(){
+		it("correctly",function(){
 
-			console.log("need to re code this");
-
-			/*
 			var CustomWorker = MonkeyBars.WorkerTask.extend({
 				append:function(product){
 					this.postMessage("append",100);
@@ -77,8 +74,7 @@ describe("Worker Task Tests", function() {
 					}
 				},
 				performTask:function(){
-					console.log(this.append);
-					//this.append(0);
+					this.append(0);
 				}
 			});
 
@@ -90,11 +86,10 @@ describe("Worker Task Tests", function() {
 
 			runs(function() {
 				expect(task.state).toEqual(MonkeyBars.TaskStates.Completed);
-				expect(task.product).toEqual(50);
+				expect(task.data).toEqual(50);
 				expect(index).toEqual(50);
 			});
 
-			*/
 
 		});
 		
