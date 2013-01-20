@@ -14,7 +14,7 @@ var forTaskDecorator = function(task) {
 			this.reset();
 			this.itterationIndex++;
 			if(this.logLevel >= LOG_INFO) {
-				console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
+				log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
 			}
 			this.performTask();
 		} else {

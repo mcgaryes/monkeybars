@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             }
         },
         min: {
-            dist: {
+            all: {
                 src: ['<banner>', '../monkeybars.js'],
                 dest: '../monkeybars.min.js'
             }
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
                 output: "../monkeybars.js",
                 tokens: [{
                     token: "//%pre",
-                    string: "/*!\n * @module MonkeyBars\n * @main MonkeyBars\n*/\n\n(function() {"
+                    string: "/*!\n * @main MonkeyBars\n*/\n\n(function() {"
                 }, {
                     token: "//%worker",
                     file: "../source/worker.js"
@@ -101,16 +101,21 @@ module.exports = function(grunt) {
                 files: {
                     "../VERSION": "../VERSION"
                 }
+            },
+            temp: {
+                files: {
+                    "../temp/monkeybars.js": "../monkeybars.js"
+                }
             }
         },
         yuidoc: {
-            compile: {
+            all: {
                 "name": monkeyBarsName,
                 "description": monkeyBarsDescription,
                 "version": monkeyBarsVersion,
                 "url": monkeyBarsHomePage,
                 options: {
-                    paths: "../",
+                    paths: "../temp/",
                     outdir: "../docs/"
                 }
             }
@@ -151,10 +156,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jasmine-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-combine');
     grunt.loadNpmTasks('grunt-jsbeautifier');
 
     // tasks
-    grunt.registerTask('default', ['combine', 'lint', 'min', 'jasmine', 'jsbeautifier', 'copy:package', 'copy:version', 'yuidoc']);
+    grunt.registerTask('docs', ['copy:temp', 'yuidoc']);
+    grunt.registerTask('version', ['copy:package', 'copy:version']);
+    grunt.registerTask('default', ['combine', 'lint', 'min', 'jasmine', 'jsbeautifier', 'version' ,'docs']);
 
 };

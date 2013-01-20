@@ -6,94 +6,15 @@
         "url": "http://mcgaryes.github.com/monkeybars/"
     },
     "files": {
-        "../source/core.js": {
-            "name": "../source/core.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "MonkeyBars": 1
-            },
-            "namespaces": {}
-        },
-        "../source/decorators.js": {
-            "name": "../source/decorators.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "MonkeyBars": 1
-            },
-            "namespaces": {}
-        },
-        "../source/group.js": {
-            "name": "../source/group.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "TaskGroup": 1,
-                "ParallelTask": 1,
-                "Task": 1
-            },
-            "namespaces": {}
-        },
-        "../source/operations.js": {
-            "name": "../source/operations.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "../source/parallel.js": {
-            "name": "../source/parallel.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "ParallelTask": 1
-            },
-            "namespaces": {}
-        },
-        "../source/sequence.js": {
-            "name": "../source/sequence.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "SequenceTask": 1
-            },
-            "namespaces": {}
-        },
-        "../source/simple.js": {
-            "name": "../source/simple.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "Task": 1
-            },
-            "namespaces": {}
-        },
-        "../source/worker.js": {
-            "name": "../source/worker.js",
-            "modules": {},
-            "classes": {},
-            "fors": {
-                "WorkerTask": 1
-            },
-            "namespaces": {}
-        },
-        "../tests/lib/jasmine-1.3.1/jasmine.js": {
-            "name": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "../monkeybars.js": {
-            "name": "../monkeybars.js",
+        "../temp/monkeybars.js": {
+            "name": "../temp/monkeybars.js",
             "modules": {},
             "classes": {
+                "WorkerTask": 1,
+                "Task": 1,
                 "TaskGroup": 1,
                 "ParallelTask": 1,
-                "Task": 1,
-                "SequenceTask": 1,
-                "WorkerTask": 1
+                "SequenceTask": 1
             },
             "fors": {
                 "MonkeyBars": 1,
@@ -117,6 +38,54 @@
             "plugin_for": [],
             "extension_for": []
         },
+        "WorkerTask": {
+            "name": "WorkerTask",
+            "shortname": "WorkerTask",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "../temp/monkeybars.js",
+            "line": 446,
+            "description": "Creates a new worker representation of the task",
+            "extends": "Object",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "task",
+                    "description": "The task we're creating this worker representation from",
+                    "type": "Task"
+                }
+            ],
+            "example": [
+                "\n\n\tvar CustomWorker = MonkeyBars.WorkerTask.extend({\n\t\tappend:function(data){\n\t\t\tthis.postMessage(\"append\",100);\n\t\t},\n\t\tdevide:function(data){\n\t\t\tthis.postMessage(\"devide\",2);\n\t\t\tthis.complete(data/2);\n\t\t}\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tconcurrent:true,\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\tif(e.data.type === \"append\") {\n\t\t\t\t\t...\n\t\t\t\t} else if(e.data.type === \"devide\") {\n\t\t\t\t\t...\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t...\n\t});\n\n\ttask.start();\n"
+            ]
+        },
+        "Task": {
+            "name": "Task",
+            "shortname": "Task",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "../temp/monkeybars.js",
+            "line": 578,
+            "description": "The simplest form of a __MonkeyBars__ task. Once started the task executes all\nfunctionality located within the `performTask` function block. Set `logLevel`\nto see console logs during task execution.",
+            "extends": "Object",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "attributes",
+                    "description": "List of attributes to apply to the task",
+                    "type": "Object"
+                }
+            ],
+            "example": [
+                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tname:\"ExampleTask\",\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t},\n\t\tonComplete:function(){\n\t\t\talert(this.name + \" is complete!\");\n\t\t}\n\t});\n\ttask.start();\n"
+            ]
+        },
         "TaskGroup": {
             "name": "TaskGroup",
             "shortname": "TaskGroup",
@@ -125,8 +94,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../monkeybars.js",
-            "line": 1098,
+            "file": "../temp/monkeybars.js",
+            "line": 1073,
             "description": "A task group, and extention of task, provides the building blocks for creating\na group of tasks that is inherently a task itself.",
             "extends": "Task",
             "is_constructor": 1,
@@ -146,8 +115,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../monkeybars.js",
-            "line": 1515,
+            "file": "../temp/monkeybars.js",
+            "line": 1490,
             "description": "A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
             "is_constructor": 1,
@@ -162,30 +131,6 @@
                 "\n\n\t\tvar parallel = new MonkeyBars.ParallelTask({\n\t\t\tname:\"ParallelTask\",\n\t\t\ttasks:[new MonkeyBars.Task({\n\t\t\t\tperformTask:function(){\n\t\t\t\t\tthis.complete();\n\t\t\t\t}\n\t\t\t})],\n\t\t\tonComplete:function(){\n\t\t\t\talert(this.name + \" is complete!\");\n\t\t\t}\n\t\t});\n\n\t\tparallel.start();\n"
             ]
         },
-        "Task": {
-            "name": "Task",
-            "shortname": "Task",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "../monkeybars.js",
-            "line": 579,
-            "description": "The simplest form of a __MonkeyBars__ task. Once started the task executes all\nfunctionality located within the `performTask` function block. Set `logLevel`\nto see console logs during task execution.",
-            "extends": "Object",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "attributes",
-                    "description": "List of attributes to apply to the task",
-                    "type": "Object"
-                }
-            ],
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tname:\"ExampleTask\",\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t},\n\t\tonComplete:function(){\n\t\t\talert(this.name + \" is complete!\");\n\t\t}\n\t});\n\ttask.start();\n"
-            ]
-        },
         "SequenceTask": {
             "name": "SequenceTask",
             "shortname": "SequenceTask",
@@ -194,8 +139,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "../monkeybars.js",
-            "line": 1725,
+            "file": "../temp/monkeybars.js",
+            "line": 1700,
             "description": "A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its\ncomplete functionality is run when all of its sub tasks are complete.",
             "extends": "TaskGroup",
             "is_constructor": 1,
@@ -209,2372 +154,12 @@
             "example": [
                 "\n\n\t\tvar sequence = new MonkeyBars.SequenceTask({\n\t\t\tname:\"ParallelTask\",\n\t\t\ttasks:[new MonkeyBars.Task({\n\t\t\t\tperformTask:function(){\n\t\t\t\t\tthis.complete();\n\t\t\t\t}\n\t\t\t})],\n\t\t\tonComplete:function(){\n\t\t\t\talert(this.name + \" is complete!\");\n\t\t\t}\n\t\t});\n\n\t\tsequence.start();\n"
             ]
-        },
-        "WorkerTask": {
-            "name": "WorkerTask",
-            "shortname": "WorkerTask",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "../monkeybars.js",
-            "line": 447,
-            "description": "Creates a new worker representation of the task",
-            "extends": "Object",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "task",
-                    "description": "The task we're creating this worker representation from",
-                    "type": "Task"
-                }
-            ],
-            "example": [
-                "\n\n\tvar CustomWorker = MonkeyBars.WorkerTask.extend({\n\t\tappend:function(data){\n\t\t\tthis.postMessage(\"append\",100);\n\t\t},\n\t\tdevide:function(data){\n\t\t\tthis.postMessage(\"devide\",2);\n\t\t\tthis.complete(data/2);\n\t\t}\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tconcurrent:true,\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\tif(e.data.type === \"append\") {\n\t\t\t\t\t...\n\t\t\t\t} else if(e.data.type === \"devide\") {\n\t\t\t\t\t...\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t...\n\t});\n\n\ttask.start();\n"
-            ]
         }
     },
     "classitems": [
         {
-            "file": "../source/core.js",
-            "line": 37,
-            "description": "Reference to the global js object (i.e. brower's window)",
-            "itemtype": "property",
-            "name": "root",
-            "type": "Object",
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 46,
-            "description": "Counter used to create unique task ids",
-            "itemtype": "property",
-            "name": "taskIdCounter",
-            "type": "Integer",
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 55,
-            "description": "List of all whitelisted properties for a task",
-            "itemtype": "property",
-            "name": "taskOptions",
-            "type": "Array",
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 71,
-            "description": "Object returned by module. Works as namespace for the task library.",
-            "itemtype": "property",
-            "name": "MonkeyBars",
-            "type": "Object",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 93,
-            "description": "Creates task based on the options passed.",
-            "itemtype": "method",
-            "name": "createTaskWithOptions",
-            "params": [
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 152,
-            "description": "Creates an array of tasks based on the options array passed.",
-            "itemtype": "method",
-            "name": "createSubTasksFromTaskOptionsArray",
-            "params": [
-                {
-                    "name": "tasks",
-                    "description": "",
-                    "type": "Array"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 169,
-            "description": "Creates property descriptors from the passes attributes.",
-            "itemtype": "method",
-            "name": "createPropertyDescriptorsWithAttributes",
-            "params": [
-                {
-                    "name": "attributes",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 187,
-            "description": "Generates a unique id for each task.",
-            "itemtype": "method",
-            "name": "generateUniqueId",
-            "params": [
-                {
-                    "name": "prefix",
-                    "description": "",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "tid",
-                "type": "String"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 201,
-            "description": "Determains whether the first task is dependent on the second.",
-            "itemtype": "method",
-            "name": "isTaskDependentOnTask",
-            "params": [
-                {
-                    "name": "task1",
-                    "description": "",
-                    "type": "Task"
-                },
-                {
-                    "name": "task2",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 227,
-            "description": "Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/",
-            "itemtype": "method",
-            "name": "serialize",
-            "params": [
-                {
-                    "name": "o",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "Serialized string representation of the passed object",
-                "type": "String"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 278,
-            "description": "Creates a blob string to be used with the web worker for concurrent task execution",
-            "itemtype": "method",
-            "name": "createBlobWithTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "return": {
-                "description": "Blob instance",
-                "type": "Blob"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 312,
-            "description": "Creates a web Worker instance with the passed arguments",
-            "itemtype": "method",
-            "name": "createWebWorkerWithBlobAndTask",
-            "params": [
-                {
-                    "name": "blob",
-                    "description": "",
-                    "type": "Blob"
-                },
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "return": {
-                "description": "WebWorker instance",
-                "type": "Worker"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 358,
-            "description": "Performs the tasks `performTask` functionality within a web worker",
-            "itemtype": "method",
-            "name": "performTaskFunctionalityWithWebWorker",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 380,
-            "itemtype": "method",
-            "name": "decorateTaskBasedOnAttributes",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                },
-                {
-                    "name": "attributes",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 398,
-            "description": "Extention functionality for various task types.",
-            "itemtype": "method",
-            "name": "extend",
-            "params": [
-                {
-                    "name": "protoProps",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "child Constructor function for extended task type",
-                "type": "Function"
-            },
-            "example": [
-                "\n\t\t\n\tvar CustomTask = MonkeyBars.Task.extend({\n\t\tname:\"CustomTask\",\n\t\tnewMethod:function(){\n\t\t\tconsole.log(\"Executing newMethod\");\n\t\t}\n\t});\n\tvar instance = new CustomTask();\n"
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 426,
-            "description": "Simple console.log wrapper",
-            "itemtype": "method",
-            "name": "extend",
-            "params": [
-                {
-                    "name": "msg",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 479,
-            "description": "Task states contstants.",
-            "itemtype": "property",
-            "name": "TaskStates",
-            "type": "Object",
-            "static": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 495,
-            "description": "Task types contstants.",
-            "itemtype": "property",
-            "name": "TaskTypes",
-            "type": "Object",
-            "static": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/core.js",
-            "line": 509,
-            "description": "Log level contstants.",
-            "itemtype": "property",
-            "name": "LogLevels",
-            "type": "Object",
-            "static": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/decorators.js",
-            "line": 1,
-            "description": "Decorator to provide for loop functionality for the task. The task executes\nas many times as referenced by the count attribute provided by the instance.",
-            "itemtype": "method",
-            "name": "forTaskDecorator",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/decorators.js",
-            "line": 26,
-            "description": "Decorator to provide while loop functionaliy. The task executed until the `while`\nmethod returns false.",
-            "itemtype": "method",
-            "name": "whileTaskDecorator",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/decorators.js",
-            "line": 56,
-            "description": "The task doesnt execute until the when method provided returns true.",
-            "itemtype": "method",
-            "name": "whenTaskDecorator",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 33,
-            "description": "Adds a subtask to the groups queue. This is helpful when you want to add\na sub task after instantiation.",
-            "itemtype": "method",
-            "name": "addSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Either an object containing attributes of a task or\nan already instantiated task",
-                    "type": "Object"
-                }
-            ],
-            "example": [
-                "\n\n\tvar parallel = new MonkeyBars.ParallelTask();\n\t\n\tparallel.addSubTask({\n\t\tname:\"subtask\",\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t}\n\t});\n\n\tvar simple = new MonkeyBars.simple({\n\t\tname:\"subtask\",\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t}\n\t});\n\n\tparallel.addSubTask(simple);\n"
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 76,
-            "description": "Adds a subtask after another task",
-            "itemtype": "method",
-            "name": "addSubTaskAfterTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Either an object containing attributes of a task or",
-                    "type": "Object"
-                },
-                {
-                    "name": "afterTask",
-                    "description": "Reference to an already added task",
-                    "type": "Object"
-                }
-            ],
-            "example": [
-                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\ttasks:[task1,task3]\n\t});\n\n\tvar task2 = new MonkeyBars.Task();\n\tparallel.addTaskAfterTask(task2,task1);\n"
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 112,
-            "description": "Very similar to `addSubTaskAfterTask` except the inject task appears\nbefore the second arguments position.",
-            "itemtype": "method",
-            "name": "addSubTaskBeforeTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Either an object containing attributes of a task or",
-                    "type": "Object"
-                },
-                {
-                    "name": "beforeTask",
-                    "description": "Reference to an already added task",
-                    "type": "Object"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 140,
-            "description": "Cancel the group and cancel all of its subtasks",
-            "itemtype": "method",
-            "name": "cancel",
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 168,
-            "description": "The index of the subtasks that have completed execution.",
-            "itemtype": "property",
-            "name": "currentIndex",
-            "type": "Integer",
-            "readonly": "",
-            "default": "0",
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 182,
-            "description": "Return a Task object, if it exists, based on the `name` passed.",
-            "itemtype": "method",
-            "name": "getTaskByName",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "The user defined name",
-                    "type": "String"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 202,
-            "description": "Return a Task object, if it exists, based on the `tid` passed.",
-            "itemtype": "method",
-            "name": "getTaskByTid",
-            "params": [
-                {
-                    "name": "tid",
-                    "description": "The id of the task you want",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\ttasks:[task1,task3]\n\t});\n\n\tparallel.getTaskByTid(task1.tid);\n"
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 230,
-            "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
-            "itemtype": "method",
-            "name": "onSubTaskCancel",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "The task that was just canceled",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 250,
-            "description": "Called when a sub task completes. Must be overridden with functionality\nprovided by the extending class.",
-            "itemtype": "method",
-            "name": "onSubTaskComplete",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "The task that just completed",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 266,
-            "description": "Called when a subtask calls its fault method.",
-            "itemtype": "method",
-            "name": "onSubTaskFault",
-            "params": [
-                {
-                    "name": "error",
-                    "description": "Error message.",
-                    "type": "String"
-                },
-                {
-                    "name": "task",
-                    "description": "The task that just completed",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 281,
-            "description": "An incrimented number of the tasks that have already been processed.",
-            "itemtype": "property",
-            "name": "processedIndex",
-            "type": "Integer",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 293,
-            "description": "Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
-            "itemtype": "method",
-            "name": "processSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Subtask to process",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 348,
-            "description": "Removes a task from its group. Removing the task after it has executed will\nhave no apparent affect as it has already ran.",
-            "itemtype": "method",
-            "name": "removeSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "The task you wish to remove from the group.",
-                    "type": "Task"
-                }
-            ],
-            "class": "TaskGroup"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 367,
-            "description": "Resets a task to its original state",
-            "itemtype": "method",
-            "name": "reset",
-            "class": "Task"
-        },
-        {
-            "file": "../source/group.js",
-            "line": 386,
-            "description": "Sets dependencies for the passed task.",
-            "itemtype": "method",
-            "name": "setDependeciesForTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "static": 1,
-            "class": "Task"
-        },
-        {
-            "file": "../source/operations.js",
-            "line": 1,
-            "itemtype": "method",
-            "name": "operate",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "type",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/operations.js",
-            "line": 21,
-            "itemtype": "method",
-            "name": "replace",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/operations.js",
-            "line": 33,
-            "itemtype": "method",
-            "name": "overwrite",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/operations.js",
+            "file": "../temp/monkeybars.js",
             "line": 41,
-            "itemtype": "method",
-            "name": "append",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 33,
-            "description": "This method is overridden from `TaskGroups` implementation because of the\nnature of a parallel task. When a task is added it should be immediately\nprocessed and started.",
-            "itemtype": "method",
-            "name": "addSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Either an object containing attributes of a task or",
-                    "type": "Object"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 57,
-            "description": "Checks whether or not the group has any enabled sub tasks.",
-            "itemtype": "method",
-            "name": "hasNoEnabledSubTasks",
-            "return": {
-                "description": "Has sub tasks or not",
-                "type": "Boolean"
-            },
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 80,
-            "description": "The max amounts of tasks that can run simultaneously.",
-            "itemtype": "property",
-            "name": "max",
-            "type": "Integer",
-            "default": "20",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 93,
-            "description": "Overridden from TaskGroup. This method is run everytime a sub task\ncompletes. When all subtasks are complete the groups complete method\nis called.",
-            "itemtype": "method",
-            "name": "onSubTaskComplete",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 115,
-            "description": "Overridden from Task. First checks to see if there are any enabled\nsubtasks to process. If there arent the groups complete method is called.\nIf there are then the group processes all of the sub tasks it has.",
-            "itemtype": "method",
-            "name": "performTask",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 134,
-            "description": "Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
-            "itemtype": "method",
-            "name": "processSubTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "Subtask to process",
-                    "type": "Task"
-                }
-            ],
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 170,
-            "description": "Processes all of the sub tasks available for the group",
-            "itemtype": "method",
-            "name": "processSubTasks",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/parallel.js",
-            "line": 191,
-            "description": "The kind of task",
-            "itemtype": "property",
-            "name": "type",
-            "type": "String",
-            "readonly": "",
-            "class": "ParallelTask"
-        },
-        {
-            "file": "../source/sequence.js",
-            "line": 33,
-            "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
-            "itemtype": "method",
-            "name": "onSubTaskCancel",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../source/sequence.js",
-            "line": 51,
-            "description": "Overridden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task completes it starts the next sibling in the queue.",
-            "itemtype": "method",
-            "name": "onSubTaskComplete",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../source/sequence.js",
-            "line": 70,
-            "description": "Starts the next sub task in the sequence. If overriden you need to call the\nSequenceTask's prototype `performTask` method.",
-            "itemtype": "method",
-            "name": "performTask",
-            "params": [
-                {
-                    "name": "task",
-                    "description": "",
-                    "type": "Task"
-                }
-            ],
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../source/sequence.js",
-            "line": 85,
-            "description": "Starts the next task in the queue after its previous sibling has completed.",
-            "itemtype": "method",
-            "name": "startNextSubTask",
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../source/sequence.js",
-            "line": 112,
-            "description": "The kind of task",
-            "itemtype": "property",
-            "name": "type",
-            "type": "String",
-            "readonly": "",
-            "class": "SequenceTask"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 67,
-            "description": "Calling this method cancels the task. However it is up to the instance to handle\nthe canceled state.",
-            "itemtype": "method",
-            "name": "cancel",
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tif(true){\n\t\t\t\tthis.cancel();\n\t\t\t}\n\t\t}\n\t});\n\n\ttask.start();\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 117,
-            "description": "Calling this method says that the tasks execution is now complete.",
-            "itemtype": "method",
-            "name": "complete",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "operation",
-                    "description": "",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t}\n\t});\n\ttask.start();"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 163,
-            "description": "Whether or not to run the task concurrently through Web Workers",
-            "itemtype": "property",
-            "name": "concurrent",
-            "type": "Boolean",
-            "default": "false",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 176,
-            "itemtype": "method",
-            "name": "destroy",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 191,
-            "description": "Display name for task. Used in logging output.",
-            "itemtype": "property",
-            "name": "displayName",
-            "type": "String",
-            "readonly": "",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 209,
-            "description": "Calling this method to fault a task. If it is part of a group task this will\nalso call the groups fault method passing the error up to the group.",
-            "itemtype": "method",
-            "name": "fault",
-            "params": [
-                {
-                    "name": "error",
-                    "description": "Message associated with the cause of the fault.",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tvar a = \"a\";\n\t\t\tif(a != \"b\") {\n\t\t\t\tthis.fault(\"a != b\");\n\t\t\t}\n\t\t}\n\t});\n\n\ttask.start();\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 248,
-            "description": "Initialization functionality",
-            "itemtype": "method",
-            "name": "initialize",
-            "params": [
-                {
-                    "name": "attributes",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 260,
-            "description": "The default logging level for tasks",
-            "itemtype": "property",
-            "name": "logLevel",
-            "type": "Integer",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 273,
-            "description": "Convenience method called when the task is canceled.",
-            "itemtype": "method",
-            "name": "onCancel",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 284,
-            "description": "This method is called during the execution lifecycle of the task. It is intentionally\nleft blank and is up to the instance to describe it functionality.",
-            "itemtype": "method",
-            "name": "onChange",
-            "params": [
-                {
-                    "name": "state",
-                    "description": "The current state of the task",
-                    "type": "Integer"
-                },
-                {
-                    "name": "error",
-                    "description": "Message describing error",
-                    "type": "String"
-                }
-            ],
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\tperformTask:function(){\n\t\t\tthis.complete();\n\t\t},\n\t\tonChange:function(state,error){\n\t\t\tif(state == MonkeyBars.TaskStates.Completed){\n\t\t\t\talert(\"complete\");\n\t\t\t}\n\t\t}\n\t});\n\n\ttask.start();\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 313,
-            "description": "Convenience method called when the task completes.",
-            "itemtype": "method",
-            "name": "onComplete",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 324,
-            "description": "Convenience method called when the task faults.",
-            "itemtype": "method",
-            "name": "onFault",
-            "params": [
-                {
-                    "name": "error",
-                    "description": "Message describing error",
-                    "type": "String"
-                }
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 336,
-            "description": "Convenience method called when the task starts.",
-            "itemtype": "method",
-            "name": "onStart",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 354,
-            "description": "This method is required for **simple** tasks and will throw an exception if it\nis called and not overridden. If you overwrite this method on a task group\nthen you need to make sure that you call the extended/implemented classes\noriginal prototype method (see the example below).",
-            "itemtype": "method",
-            "name": "performTask",
-            "required": 1,
-            "example": [
-                "\n\n\tvar parallel = new MonkeyBars.ParallelTask({\n\t\t...\n\t\tperformTask:function(){\n\t\t\t// custom functionality\n\t\t\tMonkeyBars.ParallelTask.prototype.performTask.call(this);\n\t\t}\n\t\t...\n\t})\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 382,
-            "description": "Resets a task to its original state",
-            "itemtype": "method",
-            "name": "reset",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 395,
-            "description": "Kicks off the execution of the task by calling the tasks `performTask` method.\nThis method can only be run once on a task.",
-            "itemtype": "method",
-            "name": "start",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 438,
-            "description": "The current state of the task",
-            "itemtype": "property",
-            "name": "state",
-            "type": "Integer",
-            "readonly": "",
-            "default": "0",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 452,
-            "description": "Time in milliseconds in which a task will time out and throw a fault",
-            "itemtype": "property",
-            "name": "timeout",
-            "type": "Integer",
-            "default": "undefined",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 465,
-            "description": "The kind of task",
-            "itemtype": "property",
-            "name": "type",
-            "type": "String",
-            "readonly": "",
-            "class": "Task"
-        },
-        {
-            "file": "../source/simple.js",
-            "line": 478,
-            "description": "This object can either be simply a reference to a custom WorkerTask extention's\nconstructor. Or it can be an object with a constructor key/value pair. If it is the\nlatter then you also have the option of passing a handler function that will be run\non the `onMessage` handler of the Worker itself.",
-            "itemtype": "property",
-            "name": "worker",
-            "type": "Object",
-            "default": "undefined",
-            "example": [
-                "\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:{\n\t\t\tconstructor:CustomWorker,\n\t\t\thandler:function(e){\n\t\t\t\t// called when a postMessage is posted from the task\n\t\t\t}\n\t\t},\n\t\t...\n\t});\n\n\tvar task = new MonkeyBars.Task({\n\t\t...\n\t\tworker:CustomWorker,\n\t\t...\n\t});\n"
-            ],
-            "class": "Task"
-        },
-        {
-            "file": "../source/worker.js",
-            "line": 51,
-            "description": "Post a complete message along with the data passed stating that the task\nhas completed what it needs to.",
-            "itemtype": "method",
-            "name": "complete",
-            "class": "WorkerTask"
-        },
-        {
-            "file": "../source/worker.js",
-            "line": 62,
-            "description": "Posts a fault message to the main thread that the task has faulted. Passes\nan error as its value.",
-            "itemtype": "method",
-            "name": "fault",
-            "params": [
-                {
-                    "name": "error",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "WorkerTask"
-        },
-        {
-            "file": "../source/worker.js",
-            "line": 74,
-            "description": "Posts a cancel message to the main thread that the task has been canceled.",
-            "itemtype": "method",
-            "name": "cancel",
-            "class": "WorkerTask"
-        },
-        {
-            "file": "../source/worker.js",
-            "line": 84,
-            "description": "Convenience method for posting messages to the main thread. You should opt into\nusing this as it is how the rest of the WorkerTask core methods communicate with\nthe main thread.",
-            "itemtype": "method",
-            "name": "postMessage",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "value",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "WorkerTask"
-        },
-        {
-            "file": "../source/worker.js",
-            "line": 106,
-            "description": "Extention functionality for worker tasks. This is different than the core extend\nfunctionality because we need to make sure that all of the protoprops provided\nare available on the task because of its concurrent nature.",
-            "itemtype": "method",
-            "name": "extend",
-            "params": [
-                {
-                    "name": "protoProps",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "child Constructor function for extended task type",
-                "type": "Function"
-            },
-            "class": "WorkerTask"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 3,
-            "description": "Top level namespace for Jasmine, a lightweight JavaScript BDD/spec/testing framework.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 10,
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 17,
-            "description": "Use <code>jasmine.undefined</code> instead of <code>undefined</code>, since <code>undefined</code> is just\na plain old variable and may be redefined by somebody else.",
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 25,
-            "description": "Show diagnostic messages in the console if set to true",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 31,
-            "description": "Default interval in milliseconds for event loop yields (e.g. to allow network activity or to refresh the screen with the HTML-based runner). Small values here may result in slow test running. Zero means no updates until all tests have completed.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 37,
-            "description": "Maximum levels of nesting that will be included when an object is pretty-printed",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 42,
-            "description": "Default timeout interval in milliseconds for waitsFor() blocks.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 47,
-            "description": "By default exceptions thrown in the context of a test are caught by jasmine so that it can run the remaining tests in the suite.\nSet to false to let the exception bubble up in the browser.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 62,
-            "description": "Allows for bound functions to be compared.  Internal use only.",
-            "ignore": "",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "base",
-                    "description": "bound 'this' for the function",
-                    "type": "Object"
-                },
-                {
-                    "name": "name",
-                    "description": "function to find",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 126,
-            "description": "Getter for the Jasmine environment. Ensures one gets created",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 134,
-            "ignore": "",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "value",
-                    "description": ""
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 144,
-            "ignore": "",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "value",
-                    "description": ""
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 154,
-            "ignore": "",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "value",
-                    "description": ""
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 164,
-            "ignore": "",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "typeName",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "value",
-                    "description": ""
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 175,
-            "description": "Pretty printer for expecations.  Takes any object and turns it into a human-readable string.",
-            "params": [
-                {
-                    "name": "value",
-                    "description": "an object to be outputted",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "String"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 187,
-            "description": "Returns true if the object is a DOM Node.",
-            "params": [
-                {
-                    "name": "obj",
-                    "description": "object to check",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 197,
-            "description": "Returns a matchable 'generic' object of the class type.  For use in expecations of type when values don't matter.",
-            "example": [
-                "\n// don't care about which function is passed in, as long as it's a function\nexpect(mySpy).toHaveBeenCalledWith(jasmine.any(Function));"
-            ],
-            "params": [
-                {
-                    "name": "clazz",
-                    "description": "",
-                    "type": "Class"
-                }
-            ],
-            "return": {
-                "description": "matchable object of the type clazz"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 211,
-            "description": "Returns a matchable subset of a JSON object. For use in expectations when you don't care about all of the\nattributes on the object.",
-            "example": [
-                "\n// don't care about any other attributes than foo.\nexpect(mySpy).toHaveBeenCalledWith(jasmine.objectContaining({foo: \"bar\"});"
-            ],
-            "params": [
-                {
-                    "name": "sample",
-                    "description": "sample",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "matchable object for the sample"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 226,
-            "description": "Jasmine Spies are test doubles that can act as stubs, spies, fakes or when used in an expecation, mocks.\n\nSpies should be created in test setup, before expectations.  They can then be checked, using the standard Jasmine\nexpectation syntax. Spies can be checked if they were called or not and what the calling params were.\n\nA Spy has the following fields: wasCalled, callCount, mostRecentCall, and argsForCall (see docs).\n\nSpies are torn down at the end of every spec.\n\nNote: Do <b>not</b> call new jasmine.Spy() directly - a spy must be created using spyOn, jasmine.createSpy or jasmine.createSpyObj.",
-            "example": [
-                "\n// a stub\nvar myStub = jasmine.createSpy('myStub');  // can be used anywhere\n\n// spy example\nvar foo = {\n  not: function(bool) { return !bool; }\n}\n\n// actual foo.not will not be called, execution stops\nspyOn(foo, 'not');\n\n// foo.not spied upon, execution will continue to implementation\nspyOn(foo, 'not').andCallThrough();\n\n// fake example\nvar foo = {\n  not: function(bool) { return !bool; }\n}\n\n// foo.not(val) will return val\nspyOn(foo, 'not').andCallFake(function(value) {return value;});\n\n// mock example\nfoo.not(7 == 7);\nexpect(foo.not).toHaveBeenCalled();\nexpect(foo.not).toHaveBeenCalledWith(true);"
-            ],
-            "is_constructor": 1,
-            "see": [
-                "spyOn",
-                "jasmine.createSpy",
-                "jasmine.createSpyObj"
-            ],
-            "params": [
-                {
-                    "name": "name",
-                    "description": "",
-                    "type": "String"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 271,
-            "description": "The name of the spy, if provided.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 275,
-            "description": "Is this Object a spy?",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 279,
-            "description": "The actual function this spy stubs.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 284,
-            "description": "Tracking of the most recent call to the spy.",
-            "example": [
-                "\nvar mySpy = jasmine.createSpy('foo');\nmySpy(1, 2);\nmySpy.mostRecentCall.args = [1, 2];"
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 293,
-            "description": "Holds arguments for each call to the spy, indexed by call count",
-            "example": [
-                "\nvar mySpy = jasmine.createSpy('foo');\nmySpy(1, 2);\nmySpy(7, 8);\nmySpy.mostRecentCall.args = [7, 8];\nmySpy.argsForCall[0] = [1, 2];\nmySpy.argsForCall[1] = [7, 8];"
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 307,
-            "description": "Tells a spy to call through to the actual implemenatation.",
-            "example": [
-                "\nvar foo = {\n  bar: function() { // do some stuff }\n}\n\n// defining a spy on an existing property: foo.bar\nspyOn(foo, 'bar').andCallThrough();"
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 323,
-            "description": "For setting the return value of a spy.",
-            "example": [
-                "\n// defining a spy from scratch: foo() returns 'baz'\nvar foo = jasmine.createSpy('spy on foo').andReturn('baz');\n\n// defining a spy on an existing property: foo.bar() returns 'baz'\nspyOn(foo, 'bar').andReturn('baz');"
-            ],
-            "params": [
-                {
-                    "name": "value",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 342,
-            "description": "For throwing an exception when a spy is called.",
-            "example": [
-                "\n// defining a spy from scratch: foo() throws an exception w/ message 'ouch'\nvar foo = jasmine.createSpy('spy on foo').andThrow('baz');\n\n// defining a spy on an existing property: foo.bar() throws an exception w/ message 'ouch'\nspyOn(foo, 'bar').andThrow('baz');"
-            ],
-            "params": [
-                {
-                    "name": "exceptionMsg",
-                    "description": "",
-                    "type": "String"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 361,
-            "description": "Calls an alternate implementation when a spy is called.",
-            "example": [
-                "\nvar baz = function() {\n  // do some stuff, return something\n}\n// defining a spy from scratch: foo() calls the function baz\nvar foo = jasmine.createSpy('spy on foo').andCall(baz);\n\n// defining a spy on an existing property: foo.bar() calls an anonymnous function\nspyOn(foo, 'bar').andCall(function() { return 'baz';} );"
-            ],
-            "params": [
-                {
-                    "name": "fakeFunc",
-                    "description": "",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 381,
-            "description": "Resets all of a spy's the tracking variables so that it can be used again.",
-            "example": [
-                "\nspyOn(foo, 'bar');\n\nfoo.bar();\n\nexpect(foo.bar.callCount).toEqual(1);\n\nfoo.bar.reset();\n\nexpect(foo.bar.callCount).toEqual(0);"
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 427,
-            "description": "Determines whether an object is a spy.",
-            "params": [
-                {
-                    "name": "putativeSpy",
-                    "description": "",
-                    "type": "jasmine.Spy|Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 437,
-            "description": "Creates a more complicated spy: an Object that has every property a function that is a spy.  Used for stubbing something\nlarge in one call.",
-            "params": [
-                {
-                    "name": "baseName",
-                    "description": "name of spy class",
-                    "type": "String"
-                },
-                {
-                    "name": "methodNames",
-                    "description": "array of names of methods to make spies",
-                    "type": "Array"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 455,
-            "description": "All parameters are pretty-printed and concatenated together, then written to the current spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 465,
-            "description": "Function that installs a spy on an existing object's method name.  Used within a Spec to create a spy.",
-            "example": [
-                "\n// spy example\nvar foo = {\n  not: function(bool) { return !bool; }\n}\nspyOn(foo, 'not'); // actual foo.not will not be called, execution stops"
-            ],
-            "see": [
-                "jasmine.createSpy"
-            ],
-            "params": [
-                {
-                    "name": "obj",
-                    "description": ""
-                },
-                {
-                    "name": "methodName",
-                    "description": ""
-                }
-            ],
-            "return": {
-                "description": "a Jasmine spy that can be chained with all spy methods",
-                "type": "jasmine.Spy"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 485,
-            "description": "Creates a Jasmine spec that will be added to the current suite.\n\n// TODO: pending tests",
-            "example": [
-                "\nit('should be true', function() {\n  expect(true).toEqual(true);\n});"
-            ],
-            "params": [
-                {
-                    "name": "desc",
-                    "description": "description of this specification",
-                    "type": "String"
-                },
-                {
-                    "name": "func",
-                    "description": "defines the preconditions and expectations of the spec",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 503,
-            "description": "Creates a <em>disabled</em> Jasmine spec.\n\nA convenience method that allows existing specs to be disabled temporarily during development.",
-            "params": [
-                {
-                    "name": "desc",
-                    "description": "description of this specification",
-                    "type": "String"
-                },
-                {
-                    "name": "func",
-                    "description": "defines the preconditions and expectations of the spec",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 516,
-            "description": "Starts a chain for a Jasmine expectation.\n\nIt is passed an Object that is the actual value and should chain to one of the many\njasmine.Matchers functions.",
-            "params": [
-                {
-                    "name": "actual",
-                    "description": "Actual value to test against and expected value",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "jasmine.Matchers"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 530,
-            "description": "Defines part of a jasmine spec.  Used in cominbination with waits or waitsFor in asynchrnous specs.",
-            "params": [
-                {
-                    "name": "func",
-                    "description": "Function that defines part of a jasmine spec.",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 540,
-            "description": "Waits a fixed time period before moving to the next block.",
-            "deprecated": true,
-            "deprecationMessage": "Use waitsFor() instead",
-            "params": [
-                {
-                    "name": "timeout",
-                    "description": "milliseconds to wait",
-                    "type": "Number"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 551,
-            "description": "Waits for the latchFunction to return true before proceeding to the next block.",
-            "params": [
-                {
-                    "name": "latchFunction",
-                    "description": "",
-                    "type": "Function"
-                },
-                {
-                    "name": "optional_timeoutMessage",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "optional_timeout",
-                    "description": "",
-                    "type": "Number"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 563,
-            "description": "A function that is called before each spec in a suite.\n\nUsed for spec setup, including validating assumptions.",
-            "params": [
-                {
-                    "name": "beforeEachFunction",
-                    "description": "",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 575,
-            "description": "A function that is called after each spec in a suite.\n\nUsed for restoring any state that is hijacked during spec execution.",
-            "params": [
-                {
-                    "name": "afterEachFunction",
-                    "description": "",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 587,
-            "description": "Defines a suite of specifications.\n\nStores the description and all defined specs in the Jasmine environment as one suite of specs. Variables declared\nare accessible by calls to beforeEach, it, and afterEach. Describe blocks can be nested, allowing for specialization\nof setup in some tests.",
-            "example": [
-                "\n// TODO: a simple suite\n\n// TODO: a simple suite with a nested describe block"
-            ],
-            "params": [
-                {
-                    "name": "description",
-                    "description": "A string, usually the class under test.",
-                    "type": "String"
-                },
-                {
-                    "name": "specDefinitions",
-                    "description": "function that defines several specs.",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 607,
-            "description": "Disables a suite of specifications.  Used to disable some suites in a file, or files, temporarily during development.",
-            "params": [
-                {
-                    "name": "description",
-                    "description": "A string, usually the class under test.",
-                    "type": "String"
-                },
-                {
-                    "name": "specDefinitions",
-                    "description": "function that defines several specs.",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 646,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 651,
-            "description": "Declare that a child class inherit it's prototype from the parent class.",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "childClass",
-                    "description": "",
-                    "type": "Function"
-                },
-                {
-                    "name": "parentClass",
-                    "description": "",
-                    "type": "Function"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 659,
-            "access": "private",
-            "tagname": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 713,
-            "description": "Environment for Jasmine",
-            "is_constructor": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 751,
-            "return": {
-                "description": "an object containing jasmine version build info, if set."
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 762,
-            "return": {
-                "description": "string containing jasmine version build info, if set."
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 779,
-            "return": {
-                "description": "a sequential integer starting at 0"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 786,
-            "return": {
-                "description": "a sequential integer starting at 0"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 793,
-            "description": "Register a reporter to receive status updates from Jasmine.",
-            "params": [
-                {
-                    "name": "reporter",
-                    "description": "An object which will receive status updates.",
-                    "type": "jasmine.Reporter"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1013,
-            "is_constructor": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1044,
-            "description": "Blocks are functions with executable code that make up a spec.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "env",
-                    "description": "",
-                    "type": "jasmine.Env"
-                },
-                {
-                    "name": "func",
-                    "description": "",
-                    "type": "Function"
-                },
-                {
-                    "name": "spec",
-                    "description": "",
-                    "type": "jasmine.Spec"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1071,
-            "is_constructor": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1173,
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "env",
-                    "description": "",
-                    "type": "jasmine.Env"
-                },
-                {
-                    "name": "actual",
-                    "description": ""
-                },
-                {
-                    "name": "spec",
-                    "description": "",
-                    "type": "jasmine.Spec"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1250,
-            "description": "toBe: compares the actual to the expected using ===",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": ""
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1258,
-            "description": "toNotBe: compares the actual to the expected using !==",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": ""
-                }
-            ],
-            "deprecated": true,
-            "deprecationMessage": "as of 1.0. Use not.toBe() instead.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1267,
-            "description": "toEqual: compares the actual to the expected using common sense equality. Handles Objects, Arrays, etc.",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": ""
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1276,
-            "description": "toNotEqual: compares the actual to the expected using the ! of jasmine.Matchers.toEqual",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": ""
-                }
-            ],
-            "deprecated": true,
-            "deprecationMessage": "as of 1.0. Use not.toEqual() instead.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1285,
-            "description": "Matcher that compares the actual to the expected using a regular expression.  Constructs a RegExp, so takes\na pattern or a String.",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": ""
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1295,
-            "description": "Matcher that compares the actual to the expected using the boolean inverse of jasmine.Matchers.toMatch",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": ""
-                }
-            ],
-            "deprecated": true,
-            "deprecationMessage": "as of 1.0. Use not.toMatch() instead.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1304,
-            "description": "Matcher that compares the actual to jasmine.undefined.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1311,
-            "description": "Matcher that compares the actual to jasmine.undefined.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1318,
-            "description": "Matcher that compares the actual to null.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1325,
-            "description": "Matcher that compares the actual to NaN.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1336,
-            "description": "Matcher that boolean not-nots the actual.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1344,
-            "description": "Matcher that boolean nots the actual.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1352,
-            "description": "Matcher that checks to see if the actual, a Jasmine spy, was called.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1374,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1377,
-            "description": "Matcher that checks to see if the actual, a Jasmine spy, was not called.",
-            "deprecated": true,
-            "deprecationMessage": "Use expect(xxx).not.toHaveBeenCalled() instead",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1401,
-            "description": "Matcher that checks to see if the actual, a Jasmine spy, was called with a set of parameters.",
-            "example": [
-                "\n"
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1426,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1429,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1446,
-            "description": "Matcher that checks that the expected item is an element in the actual Array.",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1455,
-            "description": "Matcher that checks that the expected item is NOT an element in the actual Array.",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "deprecated": true,
-            "deprecationMessage": "as of 1.0. Use not.toContain() instead.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1473,
-            "description": "Matcher that checks that the expected item is equal to the actual item\nup to a given level of decimal precision (default 2).",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": "",
-                    "type": "Number"
-                },
-                {
-                    "name": "precision,",
-                    "description": "as number of decimal places",
-                    "type": "Number"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1487,
-            "description": "Matcher that checks that the expected exception was thrown by the actual.",
-            "params": [
-                {
-                    "name": "expected",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1664,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1760,
-            "is_constructor": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1795,
-            "description": "Holds results for a set of Jasmine spec. Allows for the results array to hold another jasmine.NestedResults",
-            "is_constructor": 1,
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1801,
-            "description": "The total count of results",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1805,
-            "description": "Number of passed results",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1809,
-            "description": "Number of failed results",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1813,
-            "description": "Was this suite/spec skipped?",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1817,
-            "ignore": "",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1823,
-            "description": "Roll up the result counts.",
-            "params": [
-                {
-                    "name": "result",
-                    "description": ""
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1834,
-            "description": "Adds a log message.",
-            "params": [
-                {
-                    "name": "values",
-                    "description": "Array of message parts which will be concatenated later."
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1842,
-            "description": "Getter for the results: message & results.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1849,
-            "description": "Adds a result, tracking counts (total, passed, & failed)",
-            "params": [
-                {
-                    "name": "result",
-                    "description": "",
-                    "type": "jasmine.ExpectationResult|jasmine.NestedResults"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1869,
-            "return": {
-                "description": "True if <b>everything</b> below passed",
-                "type": "Boolean"
-            },
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1875,
-            "description": "Base class for pretty printing for expectation results.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 1882,
-            "description": "Formats a value in a nice, human-readable string.",
-            "params": [
-                {
-                    "name": "value",
-                    "description": ""
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2123,
-            "description": "Runner",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "env",
-                    "description": "",
-                    "type": "jasmine.Env"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2200,
-            "description": "Internal representation of a Jasmine specification, or test.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "env",
-                    "description": "",
-                    "type": "jasmine.Env"
-                },
-                {
-                    "name": "suite",
-                    "description": "",
-                    "type": "jasmine.Suite"
-                },
-                {
-                    "name": "description",
-                    "description": "",
-                    "type": "String"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2239,
-            "description": "All parameters are pretty-printed and concatenated together, then written to the spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2262,
-            "params": [
-                {
-                    "name": "result",
-                    "description": "",
-                    "type": "jasmine.ExpectationResult"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2275,
-            "description": "Waits a fixed time period before moving to the next block.",
-            "deprecated": true,
-            "deprecationMessage": "Use waitsFor() instead",
-            "params": [
-                {
-                    "name": "timeout",
-                    "description": "milliseconds to wait",
-                    "type": "Number"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2287,
-            "description": "Waits for the latchFunction to return true before proceeding to the next block.",
-            "params": [
-                {
-                    "name": "latchFunction",
-                    "description": "",
-                    "type": "Function"
-                },
-                {
-                    "name": "optional_timeoutMessage",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "optional_timeout",
-                    "description": "",
-                    "type": "Number"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2443,
-            "description": "Internal representation of a Jasmine suite.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "env",
-                    "description": "",
-                    "type": "jasmine.Env"
-                },
-                {
-                    "name": "description",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "specDefinitions",
-                    "description": "",
-                    "type": "Function"
-                },
-                {
-                    "name": "parentSuite",
-                    "description": "",
-                    "type": "jasmine.Suite"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../tests/lib/jasmine-1.3.1/jasmine.js",
-            "line": 2540,
-            "description": "A block which waits for some condition to become true, with timeout.",
-            "is_constructor": 1,
-            "extends": "jasmine.Block",
-            "params": [
-                {
-                    "name": "env",
-                    "description": "The Jasmine environment.",
-                    "type": "jasmine.Env"
-                },
-                {
-                    "name": "timeout",
-                    "description": "The maximum time in milliseconds to wait for the condition to become true.",
-                    "type": "Number"
-                },
-                {
-                    "name": "latchFunction",
-                    "description": "A function which returns true when the desired condition has been met.",
-                    "type": "Function"
-                },
-                {
-                    "name": "message",
-                    "description": "The message to display if the desired condition hasn't been met within the given time period.",
-                    "type": "String"
-                },
-                {
-                    "name": "spec",
-                    "description": "The Jasmine spec.",
-                    "type": "jasmine.Spec"
-                }
-            ],
-            "class": "MonkeyBars"
-        },
-        {
-            "file": "../monkeybars.js",
-            "line": 42,
             "description": "Reference to the global js object (i.e. brower's window)",
             "itemtype": "property",
             "name": "root",
@@ -2584,8 +169,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 51,
+            "file": "../temp/monkeybars.js",
+            "line": 50,
             "description": "Counter used to create unique task ids",
             "itemtype": "property",
             "name": "taskIdCounter",
@@ -2595,8 +180,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 60,
+            "file": "../temp/monkeybars.js",
+            "line": 59,
             "description": "List of all whitelisted properties for a task",
             "itemtype": "property",
             "name": "taskOptions",
@@ -2606,8 +191,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 75,
+            "file": "../temp/monkeybars.js",
+            "line": 74,
             "description": "Object returned by module. Works as namespace for the task library.",
             "itemtype": "property",
             "name": "MonkeyBars",
@@ -2615,8 +200,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 97,
+            "file": "../temp/monkeybars.js",
+            "line": 96,
             "description": "Creates task based on the options passed.",
             "itemtype": "method",
             "name": "createTaskWithOptions",
@@ -2632,8 +217,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 156,
+            "file": "../temp/monkeybars.js",
+            "line": 155,
             "description": "Creates an array of tasks based on the options array passed.",
             "itemtype": "method",
             "name": "createSubTasksFromTaskOptionsArray",
@@ -2649,8 +234,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 173,
+            "file": "../temp/monkeybars.js",
+            "line": 172,
             "description": "Creates property descriptors from the passes attributes.",
             "itemtype": "method",
             "name": "createPropertyDescriptorsWithAttributes",
@@ -2666,8 +251,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 191,
+            "file": "../temp/monkeybars.js",
+            "line": 190,
             "description": "Generates a unique id for each task.",
             "itemtype": "method",
             "name": "generateUniqueId",
@@ -2687,8 +272,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 205,
+            "file": "../temp/monkeybars.js",
+            "line": 204,
             "description": "Determains whether the first task is dependent on the second.",
             "itemtype": "method",
             "name": "isTaskDependentOnTask",
@@ -2709,8 +294,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 231,
+            "file": "../temp/monkeybars.js",
+            "line": 230,
             "description": "Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/",
             "itemtype": "method",
             "name": "serialize",
@@ -2730,8 +315,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 282,
+            "file": "../temp/monkeybars.js",
+            "line": 281,
             "description": "Creates a blob string to be used with the web worker for concurrent task execution",
             "itemtype": "method",
             "name": "createBlobWithTask",
@@ -2751,8 +336,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 316,
+            "file": "../temp/monkeybars.js",
+            "line": 315,
             "description": "Creates a web Worker instance with the passed arguments",
             "itemtype": "method",
             "name": "createWebWorkerWithBlobAndTask",
@@ -2777,8 +362,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 362,
+            "file": "../temp/monkeybars.js",
+            "line": 361,
             "description": "Performs the tasks `performTask` functionality within a web worker",
             "itemtype": "method",
             "name": "performTaskFunctionalityWithWebWorker",
@@ -2794,8 +379,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 384,
+            "file": "../temp/monkeybars.js",
+            "line": 383,
             "itemtype": "method",
             "name": "decorateTaskBasedOnAttributes",
             "params": [
@@ -2815,8 +400,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 402,
+            "file": "../temp/monkeybars.js",
+            "line": 401,
             "description": "Extention functionality for various task types.",
             "itemtype": "method",
             "name": "extend",
@@ -2837,8 +422,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 430,
+            "file": "../temp/monkeybars.js",
+            "line": 429,
             "description": "Simple console.log wrapper",
             "itemtype": "method",
             "name": "extend",
@@ -2852,16 +437,16 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 497,
+            "file": "../temp/monkeybars.js",
+            "line": 496,
             "description": "Post a complete message along with the data passed stating that the task\nhas completed what it needs to.",
             "itemtype": "method",
             "name": "complete",
             "class": "WorkerTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 508,
+            "file": "../temp/monkeybars.js",
+            "line": 507,
             "description": "Posts a fault message to the main thread that the task has faulted. Passes\nan error as its value.",
             "itemtype": "method",
             "name": "fault",
@@ -2875,16 +460,16 @@
             "class": "WorkerTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 520,
+            "file": "../temp/monkeybars.js",
+            "line": 519,
             "description": "Posts a cancel message to the main thread that the task has been canceled.",
             "itemtype": "method",
             "name": "cancel",
             "class": "WorkerTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 530,
+            "file": "../temp/monkeybars.js",
+            "line": 529,
             "description": "Convenience method for posting messages to the main thread. You should opt into\nusing this as it is how the rest of the WorkerTask core methods communicate with\nthe main thread.",
             "itemtype": "method",
             "name": "postMessage",
@@ -2903,8 +488,8 @@
             "class": "WorkerTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 552,
+            "file": "../temp/monkeybars.js",
+            "line": 551,
             "description": "Extention functionality for worker tasks. This is different than the core extend\nfunctionality because we need to make sure that all of the protoprops provided\nare available on the task because of its concurrent nature.",
             "itemtype": "method",
             "name": "extend",
@@ -2922,8 +507,8 @@
             "class": "WorkerTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 645,
+            "file": "../temp/monkeybars.js",
+            "line": 644,
             "description": "Calling this method cancels the task. However it is up to the instance to handle\nthe canceled state.",
             "itemtype": "method",
             "name": "cancel",
@@ -2933,8 +518,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 695,
+            "file": "../temp/monkeybars.js",
+            "line": 681,
             "description": "Calling this method says that the tasks execution is now complete.",
             "itemtype": "method",
             "name": "complete",
@@ -2956,8 +541,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 741,
+            "file": "../temp/monkeybars.js",
+            "line": 724,
             "description": "Whether or not to run the task concurrently through Web Workers",
             "itemtype": "property",
             "name": "concurrent",
@@ -2966,15 +551,15 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 754,
+            "file": "../temp/monkeybars.js",
+            "line": 737,
             "itemtype": "method",
             "name": "destroy",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 769,
+            "file": "../temp/monkeybars.js",
+            "line": 752,
             "description": "Display name for task. Used in logging output.",
             "itemtype": "property",
             "name": "displayName",
@@ -2983,8 +568,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 787,
+            "file": "../temp/monkeybars.js",
+            "line": 770,
             "description": "Calling this method to fault a task. If it is part of a group task this will\nalso call the groups fault method passing the error up to the group.",
             "itemtype": "method",
             "name": "fault",
@@ -3001,8 +586,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 826,
+            "file": "../temp/monkeybars.js",
+            "line": 809,
             "description": "Initialization functionality",
             "itemtype": "method",
             "name": "initialize",
@@ -3016,8 +601,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 838,
+            "file": "../temp/monkeybars.js",
+            "line": 821,
             "description": "The default logging level for tasks",
             "itemtype": "property",
             "name": "logLevel",
@@ -3026,16 +611,16 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 851,
+            "file": "../temp/monkeybars.js",
+            "line": 834,
             "description": "Convenience method called when the task is canceled.",
             "itemtype": "method",
             "name": "onCancel",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 862,
+            "file": "../temp/monkeybars.js",
+            "line": 845,
             "description": "This method is called during the execution lifecycle of the task. It is intentionally\nleft blank and is up to the instance to describe it functionality.",
             "itemtype": "method",
             "name": "onChange",
@@ -3057,16 +642,16 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 891,
+            "file": "../temp/monkeybars.js",
+            "line": 874,
             "description": "Convenience method called when the task completes.",
             "itemtype": "method",
             "name": "onComplete",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 902,
+            "file": "../temp/monkeybars.js",
+            "line": 885,
             "description": "Convenience method called when the task faults.",
             "itemtype": "method",
             "name": "onFault",
@@ -3080,16 +665,16 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 914,
+            "file": "../temp/monkeybars.js",
+            "line": 897,
             "description": "Convenience method called when the task starts.",
             "itemtype": "method",
             "name": "onStart",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 932,
+            "file": "../temp/monkeybars.js",
+            "line": 915,
             "description": "This method is required for **simple** tasks and will throw an exception if it\nis called and not overridden. If you overwrite this method on a task group\nthen you need to make sure that you call the extended/implemented classes\noriginal prototype method (see the example below).",
             "itemtype": "method",
             "name": "performTask",
@@ -3100,24 +685,24 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 960,
+            "file": "../temp/monkeybars.js",
+            "line": 943,
             "description": "Resets a task to its original state",
             "itemtype": "method",
             "name": "reset",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 973,
+            "file": "../temp/monkeybars.js",
+            "line": 956,
             "description": "Kicks off the execution of the task by calling the tasks `performTask` method.\nThis method can only be run once on a task.",
             "itemtype": "method",
             "name": "start",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1016,
+            "file": "../temp/monkeybars.js",
+            "line": 991,
             "description": "The current state of the task",
             "itemtype": "property",
             "name": "state",
@@ -3127,8 +712,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1030,
+            "file": "../temp/monkeybars.js",
+            "line": 1005,
             "description": "Time in milliseconds in which a task will time out and throw a fault",
             "itemtype": "property",
             "name": "timeout",
@@ -3137,8 +722,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1043,
+            "file": "../temp/monkeybars.js",
+            "line": 1018,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
@@ -3147,8 +732,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1056,
+            "file": "../temp/monkeybars.js",
+            "line": 1031,
             "description": "This object can either be simply a reference to a custom WorkerTask extention's\nconstructor. Or it can be an object with a constructor key/value pair. If it is the\nlatter then you also have the option of passing a handler function that will be run\non the `onMessage` handler of the Worker itself.",
             "itemtype": "property",
             "name": "worker",
@@ -3160,8 +745,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1130,
+            "file": "../temp/monkeybars.js",
+            "line": 1105,
             "description": "Adds a subtask to the groups queue. This is helpful when you want to add\na sub task after instantiation.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -3178,8 +763,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1173,
+            "file": "../temp/monkeybars.js",
+            "line": 1148,
             "description": "Adds a subtask after another task",
             "itemtype": "method",
             "name": "addSubTaskAfterTask",
@@ -3201,8 +786,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1209,
+            "file": "../temp/monkeybars.js",
+            "line": 1184,
             "description": "Very similar to `addSubTaskAfterTask` except the inject task appears\nbefore the second arguments position.",
             "itemtype": "method",
             "name": "addSubTaskBeforeTask",
@@ -3221,16 +806,16 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1237,
+            "file": "../temp/monkeybars.js",
+            "line": 1212,
             "description": "Cancel the group and cancel all of its subtasks",
             "itemtype": "method",
             "name": "cancel",
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1265,
+            "file": "../temp/monkeybars.js",
+            "line": 1240,
             "description": "The index of the subtasks that have completed execution.",
             "itemtype": "property",
             "name": "currentIndex",
@@ -3240,8 +825,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1279,
+            "file": "../temp/monkeybars.js",
+            "line": 1254,
             "description": "Return a Task object, if it exists, based on the `name` passed.",
             "itemtype": "method",
             "name": "getTaskByName",
@@ -3255,8 +840,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1299,
+            "file": "../temp/monkeybars.js",
+            "line": 1274,
             "description": "Return a Task object, if it exists, based on the `tid` passed.",
             "itemtype": "method",
             "name": "getTaskByTid",
@@ -3273,8 +858,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1327,
+            "file": "../temp/monkeybars.js",
+            "line": 1302,
             "description": "Called when a subtask calls its cancel method. When a subtask is canceled\nany other subtasks that are dependent on the canceled task are cancled.",
             "itemtype": "method",
             "name": "onSubTaskCancel",
@@ -3288,8 +873,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1347,
+            "file": "../temp/monkeybars.js",
+            "line": 1322,
             "description": "Called when a sub task completes. Must be overridden with functionality\nprovided by the extending class.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -3303,8 +888,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1363,
+            "file": "../temp/monkeybars.js",
+            "line": 1338,
             "description": "Called when a subtask calls its fault method.",
             "itemtype": "method",
             "name": "onSubTaskFault",
@@ -3323,8 +908,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1378,
+            "file": "../temp/monkeybars.js",
+            "line": 1353,
             "description": "An incrimented number of the tasks that have already been processed.",
             "itemtype": "property",
             "name": "processedIndex",
@@ -3332,8 +917,8 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1390,
+            "file": "../temp/monkeybars.js",
+            "line": 1365,
             "description": "Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
             "itemtype": "method",
             "name": "processSubTask",
@@ -3347,8 +932,8 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1445,
+            "file": "../temp/monkeybars.js",
+            "line": 1420,
             "description": "Removes a task from its group. Removing the task after it has executed will\nhave no apparent affect as it has already ran.",
             "itemtype": "method",
             "name": "removeSubTask",
@@ -3362,16 +947,16 @@
             "class": "TaskGroup"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1464,
+            "file": "../temp/monkeybars.js",
+            "line": 1439,
             "description": "Resets a task to its original state",
             "itemtype": "method",
             "name": "reset",
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1483,
+            "file": "../temp/monkeybars.js",
+            "line": 1458,
             "description": "Sets dependencies for the passed task.",
             "itemtype": "method",
             "name": "setDependeciesForTask",
@@ -3386,8 +971,8 @@
             "class": "Task"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1547,
+            "file": "../temp/monkeybars.js",
+            "line": 1522,
             "description": "This method is overridden from `TaskGroups` implementation because of the\nnature of a parallel task. When a task is added it should be immediately\nprocessed and started.",
             "itemtype": "method",
             "name": "addSubTask",
@@ -3401,8 +986,8 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1571,
+            "file": "../temp/monkeybars.js",
+            "line": 1546,
             "description": "Checks whether or not the group has any enabled sub tasks.",
             "itemtype": "method",
             "name": "hasNoEnabledSubTasks",
@@ -3413,8 +998,8 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1594,
+            "file": "../temp/monkeybars.js",
+            "line": 1569,
             "description": "The max amounts of tasks that can run simultaneously.",
             "itemtype": "property",
             "name": "max",
@@ -3423,8 +1008,8 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1607,
+            "file": "../temp/monkeybars.js",
+            "line": 1582,
             "description": "Overridden from TaskGroup. This method is run everytime a sub task\ncompletes. When all subtasks are complete the groups complete method\nis called.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -3438,16 +1023,16 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1629,
+            "file": "../temp/monkeybars.js",
+            "line": 1604,
             "description": "Overridden from Task. First checks to see if there are any enabled\nsubtasks to process. If there arent the groups complete method is called.\nIf there are then the group processes all of the sub tasks it has.",
             "itemtype": "method",
             "name": "performTask",
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1648,
+            "file": "../temp/monkeybars.js",
+            "line": 1623,
             "description": "Overridden from TaskGroup. Processes a sub task and prepares it for execution. This method overwrites the\ntasks on change functionality. If you wish to have a sub task that handles\nits own change functionality then you will need to implement the partner\nconvenience methods.",
             "itemtype": "method",
             "name": "processSubTask",
@@ -3461,16 +1046,16 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1684,
+            "file": "../temp/monkeybars.js",
+            "line": 1659,
             "description": "Processes all of the sub tasks available for the group",
             "itemtype": "method",
             "name": "processSubTasks",
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1705,
+            "file": "../temp/monkeybars.js",
+            "line": 1680,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
@@ -3479,8 +1064,8 @@
             "class": "ParallelTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1757,
+            "file": "../temp/monkeybars.js",
+            "line": 1732,
             "description": "Overriden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task is canceled it simply moves on to the next task in the queue.",
             "itemtype": "method",
             "name": "onSubTaskCancel",
@@ -3494,8 +1079,8 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1775,
+            "file": "../temp/monkeybars.js",
+            "line": 1750,
             "description": "Overridden from TaskGroup. As long as the group has not been canceled,\nwhen a sub task completes it starts the next sibling in the queue.",
             "itemtype": "method",
             "name": "onSubTaskComplete",
@@ -3509,8 +1094,8 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1794,
+            "file": "../temp/monkeybars.js",
+            "line": 1769,
             "description": "Starts the next sub task in the sequence. If overriden you need to call the\nSequenceTask's prototype `performTask` method.",
             "itemtype": "method",
             "name": "performTask",
@@ -3524,16 +1109,16 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1809,
+            "file": "../temp/monkeybars.js",
+            "line": 1784,
             "description": "Starts the next task in the queue after its previous sibling has completed.",
             "itemtype": "method",
             "name": "startNextSubTask",
             "class": "SequenceTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1836,
+            "file": "../temp/monkeybars.js",
+            "line": 1811,
             "description": "The kind of task",
             "itemtype": "property",
             "name": "type",
@@ -3542,8 +1127,8 @@
             "class": "SequenceTask"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1856,
+            "file": "../temp/monkeybars.js",
+            "line": 1831,
             "description": "Decorator to provide for loop functionality for the task. The task executes\nas many times as referenced by the count attribute provided by the instance.",
             "itemtype": "method",
             "name": "forTaskDecorator",
@@ -3559,8 +1144,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1881,
+            "file": "../temp/monkeybars.js",
+            "line": 1856,
             "description": "Decorator to provide while loop functionaliy. The task executed until the `while`\nmethod returns false.",
             "itemtype": "method",
             "name": "whileTaskDecorator",
@@ -3576,8 +1161,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1911,
+            "file": "../temp/monkeybars.js",
+            "line": 1886,
             "description": "The task doesnt execute until the when method provided returns true.",
             "itemtype": "method",
             "name": "whenTaskDecorator",
@@ -3593,8 +1178,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1936,
+            "file": "../temp/monkeybars.js",
+            "line": 1911,
             "description": "Task states contstants.",
             "itemtype": "property",
             "name": "TaskStates",
@@ -3603,8 +1188,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1952,
+            "file": "../temp/monkeybars.js",
+            "line": 1927,
             "description": "Task types contstants.",
             "itemtype": "property",
             "name": "TaskTypes",
@@ -3613,8 +1198,8 @@
             "class": "MonkeyBars"
         },
         {
-            "file": "../monkeybars.js",
-            "line": 1966,
+            "file": "../temp/monkeybars.js",
+            "line": 1941,
             "description": "Log level contstants.",
             "itemtype": "property",
             "name": "LogLevels",
@@ -3626,495 +1211,7 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: function with method",
-            "line": " ../source/simple.js:176"
-        },
-        {
-            "message": "unknown tag: ignore",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:62"
-        },
-        {
-            "message": "unknown tag: ignore",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:134"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:134"
-        },
-        {
-            "message": "unknown tag: ignore",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:144"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:144"
-        },
-        {
-            "message": "unknown tag: ignore",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:154"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:154"
-        },
-        {
-            "message": "unknown tag: ignore",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:164"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:164"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:175"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:187"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:197"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:211"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:427"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:751"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:762"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:779"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:786"
-        },
-        {
-            "message": "unknown tag: ignore",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1817"
-        },
-        {
-            "message": "replacing incorrect tag: returns with return",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1869"
-        },
-        {
-            "message": "replacing incorrect tag: function with method",
-            "line": " ../monkeybars.js:754"
-        },
-        {
-            "message": "Missing item type\nTop level namespace for Jasmine, a lightweight JavaScript BDD/spec/testing framework.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:3"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:10"
-        },
-        {
-            "message": "Missing item type\nUse <code>jasmine.undefined</code> instead of <code>undefined</code>, since <code>undefined</code> is just\na plain old variable and may be redefined by somebody else.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:17"
-        },
-        {
-            "message": "Missing item type\nShow diagnostic messages in the console if set to true",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:25"
-        },
-        {
-            "message": "Missing item type\nDefault interval in milliseconds for event loop yields (e.g. to allow network activity or to refresh the screen with the HTML-based runner). Small values here may result in slow test running. Zero means no updates until all tests have completed.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:31"
-        },
-        {
-            "message": "Missing item type\nMaximum levels of nesting that will be included when an object is pretty-printed",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:37"
-        },
-        {
-            "message": "Missing item type\nDefault timeout interval in milliseconds for waitsFor() blocks.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:42"
-        },
-        {
-            "message": "Missing item type\nBy default exceptions thrown in the context of a test are caught by jasmine so that it can run the remaining tests in the suite.\nSet to false to let the exception bubble up in the browser.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:47"
-        },
-        {
-            "message": "Missing item type\nAllows for bound functions to be compared.  Internal use only.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:62"
-        },
-        {
-            "message": "Missing item type\nGetter for the Jasmine environment. Ensures one gets created",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:126"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:134"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:144"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:154"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:164"
-        },
-        {
-            "message": "Missing item type\nPretty printer for expecations.  Takes any object and turns it into a human-readable string.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:175"
-        },
-        {
-            "message": "Missing item type\nReturns true if the object is a DOM Node.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:187"
-        },
-        {
-            "message": "Missing item type\nReturns a matchable 'generic' object of the class type.  For use in expecations of type when values don't matter.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:197"
-        },
-        {
-            "message": "Missing item type\nReturns a matchable subset of a JSON object. For use in expectations when you don't care about all of the\nattributes on the object.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:211"
-        },
-        {
-            "message": "Missing item type\nJasmine Spies are test doubles that can act as stubs, spies, fakes or when used in an expecation, mocks.\n\nSpies should be created in test setup, before expectations.  They can then be checked, using the standard Jasmine\nexpectation syntax. Spies can be checked if they were called or not and what the calling params were.\n\nA Spy has the following fields: wasCalled, callCount, mostRecentCall, and argsForCall (see docs).\n\nSpies are torn down at the end of every spec.\n\nNote: Do <b>not</b> call new jasmine.Spy() directly - a spy must be created using spyOn, jasmine.createSpy or jasmine.createSpyObj.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:226"
-        },
-        {
-            "message": "Missing item type\nThe name of the spy, if provided.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:271"
-        },
-        {
-            "message": "Missing item type\nIs this Object a spy?",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:275"
-        },
-        {
-            "message": "Missing item type\nThe actual function this spy stubs.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:279"
-        },
-        {
-            "message": "Missing item type\nTracking of the most recent call to the spy.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:284"
-        },
-        {
-            "message": "Missing item type\nHolds arguments for each call to the spy, indexed by call count",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:293"
-        },
-        {
-            "message": "Missing item type\nTells a spy to call through to the actual implemenatation.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:307"
-        },
-        {
-            "message": "Missing item type\nFor setting the return value of a spy.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:323"
-        },
-        {
-            "message": "Missing item type\nFor throwing an exception when a spy is called.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:342"
-        },
-        {
-            "message": "Missing item type\nCalls an alternate implementation when a spy is called.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:361"
-        },
-        {
-            "message": "Missing item type\nResets all of a spy's the tracking variables so that it can be used again.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:381"
-        },
-        {
-            "message": "Missing item type\nDetermines whether an object is a spy.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:427"
-        },
-        {
-            "message": "Missing item type\nCreates a more complicated spy: an Object that has every property a function that is a spy.  Used for stubbing something\nlarge in one call.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:437"
-        },
-        {
-            "message": "Missing item type\nAll parameters are pretty-printed and concatenated together, then written to the current spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:455"
-        },
-        {
-            "message": "Missing item type\nFunction that installs a spy on an existing object's method name.  Used within a Spec to create a spy.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:465"
-        },
-        {
-            "message": "Missing item type\nCreates a Jasmine spec that will be added to the current suite.\n\n// TODO: pending tests",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:485"
-        },
-        {
-            "message": "Missing item type\nCreates a <em>disabled</em> Jasmine spec.\n\nA convenience method that allows existing specs to be disabled temporarily during development.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:503"
-        },
-        {
-            "message": "Missing item type\nStarts a chain for a Jasmine expectation.\n\nIt is passed an Object that is the actual value and should chain to one of the many\njasmine.Matchers functions.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:516"
-        },
-        {
-            "message": "Missing item type\nDefines part of a jasmine spec.  Used in cominbination with waits or waitsFor in asynchrnous specs.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:530"
-        },
-        {
-            "message": "Missing item type\nWaits a fixed time period before moving to the next block.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:540"
-        },
-        {
-            "message": "Missing item type\nWaits for the latchFunction to return true before proceeding to the next block.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:551"
-        },
-        {
-            "message": "Missing item type\nA function that is called before each spec in a suite.\n\nUsed for spec setup, including validating assumptions.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:563"
-        },
-        {
-            "message": "Missing item type\nA function that is called after each spec in a suite.\n\nUsed for restoring any state that is hijacked during spec execution.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:575"
-        },
-        {
-            "message": "Missing item type\nDefines a suite of specifications.\n\nStores the description and all defined specs in the Jasmine environment as one suite of specs. Variables declared\nare accessible by calls to beforeEach, it, and afterEach. Describe blocks can be nested, allowing for specialization\nof setup in some tests.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:587"
-        },
-        {
-            "message": "Missing item type\nDisables a suite of specifications.  Used to disable some suites in a file, or files, temporarily during development.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:607"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:646"
-        },
-        {
-            "message": "Missing item type\nDeclare that a child class inherit it's prototype from the parent class.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:651"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:659"
-        },
-        {
-            "message": "Missing item type\nEnvironment for Jasmine",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:713"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:751"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:762"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:779"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:786"
-        },
-        {
-            "message": "Missing item type\nRegister a reporter to receive status updates from Jasmine.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:793"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1013"
-        },
-        {
-            "message": "Missing item type\nBlocks are functions with executable code that make up a spec.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1044"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1071"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1173"
-        },
-        {
-            "message": "Missing item type\ntoBe: compares the actual to the expected using ===",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1250"
-        },
-        {
-            "message": "Missing item type\ntoNotBe: compares the actual to the expected using !==",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1258"
-        },
-        {
-            "message": "Missing item type\ntoEqual: compares the actual to the expected using common sense equality. Handles Objects, Arrays, etc.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1267"
-        },
-        {
-            "message": "Missing item type\ntoNotEqual: compares the actual to the expected using the ! of jasmine.Matchers.toEqual",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1276"
-        },
-        {
-            "message": "Missing item type\nMatcher that compares the actual to the expected using a regular expression.  Constructs a RegExp, so takes\na pattern or a String.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1285"
-        },
-        {
-            "message": "Missing item type\nMatcher that compares the actual to the expected using the boolean inverse of jasmine.Matchers.toMatch",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1295"
-        },
-        {
-            "message": "Missing item type\nMatcher that compares the actual to jasmine.undefined.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1304"
-        },
-        {
-            "message": "Missing item type\nMatcher that compares the actual to jasmine.undefined.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1311"
-        },
-        {
-            "message": "Missing item type\nMatcher that compares the actual to null.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1318"
-        },
-        {
-            "message": "Missing item type\nMatcher that compares the actual to NaN.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1325"
-        },
-        {
-            "message": "Missing item type\nMatcher that boolean not-nots the actual.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1336"
-        },
-        {
-            "message": "Missing item type\nMatcher that boolean nots the actual.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1344"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks to see if the actual, a Jasmine spy, was called.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1352"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1374"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks to see if the actual, a Jasmine spy, was not called.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1377"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks to see if the actual, a Jasmine spy, was called with a set of parameters.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1401"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1426"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1429"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks that the expected item is an element in the actual Array.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1446"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks that the expected item is NOT an element in the actual Array.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1455"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks that the expected item is equal to the actual item\nup to a given level of decimal precision (default 2).",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1473"
-        },
-        {
-            "message": "Missing item type\nMatcher that checks that the expected exception was thrown by the actual.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1487"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1664"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1760"
-        },
-        {
-            "message": "Missing item type\nHolds results for a set of Jasmine spec. Allows for the results array to hold another jasmine.NestedResults",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1795"
-        },
-        {
-            "message": "Missing item type\nThe total count of results",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1801"
-        },
-        {
-            "message": "Missing item type\nNumber of passed results",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1805"
-        },
-        {
-            "message": "Missing item type\nNumber of failed results",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1809"
-        },
-        {
-            "message": "Missing item type\nWas this suite/spec skipped?",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1813"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1817"
-        },
-        {
-            "message": "Missing item type\nRoll up the result counts.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1823"
-        },
-        {
-            "message": "Missing item type\nAdds a log message.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1834"
-        },
-        {
-            "message": "Missing item type\nGetter for the results: message & results.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1842"
-        },
-        {
-            "message": "Missing item type\nAdds a result, tracking counts (total, passed, & failed)",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1849"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1869"
-        },
-        {
-            "message": "Missing item type\nBase class for pretty printing for expectation results.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1875"
-        },
-        {
-            "message": "Missing item type\nFormats a value in a nice, human-readable string.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:1882"
-        },
-        {
-            "message": "Missing item type\nRunner",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2123"
-        },
-        {
-            "message": "Missing item type\nInternal representation of a Jasmine specification, or test.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2200"
-        },
-        {
-            "message": "Missing item type\nAll parameters are pretty-printed and concatenated together, then written to the spec's output.\n\nBe careful not to leave calls to <code>jasmine.log</code> in production code.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2239"
-        },
-        {
-            "message": "Missing item type",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2262"
-        },
-        {
-            "message": "Missing item type\nWaits a fixed time period before moving to the next block.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2275"
-        },
-        {
-            "message": "Missing item type\nWaits for the latchFunction to return true before proceeding to the next block.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2287"
-        },
-        {
-            "message": "Missing item type\nInternal representation of a Jasmine suite.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2443"
-        },
-        {
-            "message": "Missing item type\nA block which waits for some condition to become true, with timeout.",
-            "line": " ../tests/lib/jasmine-1.3.1/jasmine.js:2540"
+            "line": " ../temp/monkeybars.js:737"
         }
     ]
 }

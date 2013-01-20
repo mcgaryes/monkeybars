@@ -15,19 +15,3 @@ var sequence = new MonkeyBars.SequenceTask({
 });
 
 sequence.start();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

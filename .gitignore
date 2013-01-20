@@ -4,3 +4,4 @@ artwork/*.psd
 npm-debug.log
 *.sublime-project
 *.sublime-workspace
+temp

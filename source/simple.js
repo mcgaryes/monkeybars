@@ -100,19 +100,6 @@ Task.prototype = Object.create({}, {
 		},
 		writable: true
 	},
-	
-	/*
-	cleanUp:{
-		value:function(){
-			if(!this.group) {
-				deleteTaskProperties(this);
-			} else {
-				//deleteTaskProperties(this,["processed","tid","gid"]);
-			}
-		},
-		writable:true
-	},
-	*/
 
 	/**
 	 * Calling this method says that the tasks execution is now complete.
@@ -136,10 +123,8 @@ Task.prototype = Object.create({}, {
 			}
 			this.state = STATE_COMPLETED;
 
-			//this.executionTime = (new Date().getTime()) - this.startTime;
-
 			if(this.logLevel >= LOG_INFO) {
-				log("Completed: " + this.displayName + " in " + this.executionTime + "ms");
+				log("Completed: " + this.displayName);
 			}
 
 			// clear the timeout interval if we actually had one
@@ -155,7 +140,6 @@ Task.prototype = Object.create({}, {
 			// call completion methods
 			this.onComplete();
 			this.onChange(this.state);
-			//this.cleanUp();
 		},
 		writable: true
 	},
@@ -405,7 +389,6 @@ Task.prototype = Object.create({}, {
 				return;
 			}
 
-			//this.startTime = new Date().getTime();
 			this.state = STATE_STARTED;
 			if(this.logLevel >= LOG_INFO) {
 				log("Started: " + this.displayName);
@@ -420,14 +403,7 @@ Task.prototype = Object.create({}, {
 			if(this.concurrent) {
 				performTaskFunctionalityWithWebWorker(this);
 			} else {
-				//if(this.group){
-				//var delegate = this;
-				//setTimeout(function(){
-				//delegate.performTask(); 
-				//},1);
-				//}else{
 				this.performTask();
-				//}
 			}
 
 			this.onStart();

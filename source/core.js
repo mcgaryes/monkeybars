@@ -102,7 +102,7 @@ var createTaskWithOptions = function(attributes) {
 	// check for attributes
 	if(!attributes) {
 		if(attributes.logLevel >= LOG_ERROR) {
-			console.log(MISSING_ATTRIBUTES);
+			log(MISSING_ATTRIBUTES);
 		}
 		return;
 	}
@@ -335,13 +335,13 @@ var createWebWorkerWithBlobAndTask = function(blob, task) {
 		} else if(e.data.type === "cancel") {
 			task.cancel();
 		} else if(e.data.type === "console") {
-			console.log(e.data.message);
+			log(e.data.message);
 		} else {
 			if(task.worker !== undefined && typeof(task.worker.handler) === "function") {
 				task.worker.handler(e);
 			} else {
 				if(task.logLevel > LOG_ERROR) {
-					console.log(UNHANDLED_POST_MESSAGE + ": " + serialize(e.data));
+					log(UNHANDLED_POST_MESSAGE + ": " + serialize(e.data));
 				}
 			}
 		}

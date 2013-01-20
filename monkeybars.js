@@ -1,5 +1,4 @@
 /*!
- * @module MonkeyBars
  * @main MonkeyBars
  */
 
@@ -106,7 +105,7 @@
         // check for attributes
         if (!attributes) {
             if (attributes.logLevel >= LOG_ERROR) {
-                console.log(MISSING_ATTRIBUTES);
+                log(MISSING_ATTRIBUTES);
             }
             return;
         }
@@ -339,13 +338,13 @@
             } else if (e.data.type === "cancel") {
                 task.cancel();
             } else if (e.data.type === "console") {
-                console.log(e.data.message);
+                log(e.data.message);
             } else {
                 if (task.worker !== undefined && typeof(task.worker.handler) === "function") {
                     task.worker.handler(e);
                 } else {
                     if (task.logLevel > LOG_ERROR) {
-                        console.log(UNHANDLED_POST_MESSAGE + ": " + serialize(e.data));
+                        log(UNHANDLED_POST_MESSAGE + ": " + serialize(e.data));
                     }
                 }
             }
@@ -679,19 +678,6 @@
             writable: true
         },
 
-        /*
-	cleanUp:{
-		value:function(){
-			if(!this.group) {
-				deleteTaskProperties(this);
-			} else {
-				//deleteTaskProperties(this,["processed","tid","gid"]);
-			}
-		},
-		writable:true
-	},
-	*/
-
         /**
          * Calling this method says that the tasks execution is now complete.
          *
@@ -714,10 +700,8 @@
                 }
                 this.state = STATE_COMPLETED;
 
-                //this.executionTime = (new Date().getTime()) - this.startTime;
-
                 if (this.logLevel >= LOG_INFO) {
-                    log("Completed: " + this.displayName + " in " + this.executionTime + "ms");
+                    log("Completed: " + this.displayName);
                 }
 
                 // clear the timeout interval if we actually had one
@@ -733,7 +717,6 @@
                 // call completion methods
                 this.onComplete();
                 this.onChange(this.state);
-                //this.cleanUp();
             },
             writable: true
         },
@@ -983,7 +966,6 @@
                     return;
                 }
 
-                //this.startTime = new Date().getTime();
                 this.state = STATE_STARTED;
                 if (this.logLevel >= LOG_INFO) {
                     log("Started: " + this.displayName);
@@ -998,14 +980,7 @@
                 if (this.concurrent) {
                     performTaskFunctionalityWithWebWorker(this);
                 } else {
-                    //if(this.group){
-                    //var delegate = this;
-                    //setTimeout(function(){
-                    //delegate.performTask(); 
-                    //},1);
-                    //}else{
                     this.performTask();
-                    //}
                 }
 
                 this.onStart();
@@ -1869,7 +1844,7 @@
                 this.reset();
                 this.itterationIndex++;
                 if (this.logLevel >= LOG_INFO) {
-                    console.log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
+                    log("Completed:" + this.displayName + " " + this.itterationIndex + " out of " + this.count + " times");
                 }
                 this.performTask();
             } else {
