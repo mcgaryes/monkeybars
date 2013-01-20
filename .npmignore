@@ -6,3 +6,4 @@ artwork/*
 npm-debug.log
 docs/*
 source/*
+.jshintrc
