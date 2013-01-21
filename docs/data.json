@@ -2,7 +2,7 @@
     "project": {
         "name": "MonkeyBars",
         "description": "Task library that provides a simple structure for handling singular, sequential and parallel units of code.",
-        "version": "0.9.12",
+        "version": "0.9.13",
         "url": "http://mcgaryes.github.com/monkeybars/"
     },
     "files": {
