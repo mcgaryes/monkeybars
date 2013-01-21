@@ -762,7 +762,7 @@
                 if (this.name) {
                     return this.name;
                 } else {
-                    return this.type;
+                    return this.type + ":" + this.tid;
                 }
             }
         },
@@ -1394,7 +1394,7 @@
                 if (task.concurrent) {
                     task.concurrent = this.concurrent;
                 }
-                if (task.logLevel !== LOG_NONE) {
+                if (this.logLevel !== LOG_NONE) {
                     task.logLevel = this.logLevel;
                 }
 

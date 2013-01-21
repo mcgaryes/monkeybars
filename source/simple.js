@@ -185,7 +185,7 @@ Task.prototype = Object.create({}, {
 			if(this.name) {
 				return this.name;
 			} else {
-				return this.type;
+				return this.type + ":" + this.tid;
 			}
 		}
 	},

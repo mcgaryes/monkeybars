@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     "use strict";
 
     var monkeyBarsName = "MonkeyBars";
-    var monkeyBarsVersion = "0.9.11";
+    var monkeyBarsVersion = "0.9.12";
     var monkeyBarsDescription = "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
     var monkeyBarsRepository = "https://github.com/mcgaryes/monkeybars/";
     var monkeyBarsHomePage = "http://mcgaryes.github.com/monkeybars/";

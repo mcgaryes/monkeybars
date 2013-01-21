@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.11</em>
+            <em>API Docs for: 0.9.12</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -860,7 +860,7 @@
                 if (this.name) {
                     return this.name;
                 } else {
-                    return this.type;
+                    return this.type + &quot;:&quot; + this.tid;
                 }
             }
         },
@@ -1492,7 +1492,7 @@
                 if (task.concurrent) {
                     task.concurrent = this.concurrent;
                 }
-                if (task.logLevel !== LOG_NONE) {
+                if (this.logLevel !== LOG_NONE) {
                     task.logLevel = this.logLevel;
                 }
 

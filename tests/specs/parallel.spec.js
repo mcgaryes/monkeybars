@@ -177,6 +177,31 @@ describe("parallel", function() {
 
 		});
 
+		it("when deeply nested",function(){
+
+			var group = new MonkeyBars.ParallelTask({
+				logLevel:MonkeyBars.LogLevels.Verbose,
+				tasks:[{
+					type:"parallel",
+					tasks:[{
+						type:"parallel",
+						tasks:[{
+							type:"parallel",
+							tasks:[{
+								performTask:function(){
+									this.complete();
+								}
+							}]
+						}]
+					}]
+				}]
+			});
+
+			group.start();
+			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
+
+		});
+
 	});
 
 	// ===================================================================
@@ -435,8 +460,6 @@ describe("parallel", function() {
 			task.addSubTask(group);
 
 			task.start();
-
-			console.log(task);
 
 			waitsFor(function() {
 				return task.state > MonkeyBars.TaskStates.Started;
