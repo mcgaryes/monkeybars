@@ -56,14 +56,135 @@ var Task = MonkeyBars.Task = function(attributes) {
 
 	// initialize the task
 	task.initialize(task.options);
-
-	// add the task to the task dictionary for later use
-	//taskDictionary[task.tid] = task;
-	
 };
 
-Task.prototype = Object.create({}, {
+Task.prototype = Object.create(TaskEvents, {
 	
+	// ===================================================================
+	// === Task Private Properties =======================================
+	// ===================================================================
+
+	/**
+	 * The current state of the task
+	 *
+	 * @for Task
+	 * @property state
+	 * @type Integer
+	 * @private
+	 */
+	_state: {
+		value: STATE_INITIALIZED
+	},
+
+	// ===================================================================
+	// === Task Public Properties ========================================
+	// ===================================================================
+
+	/**
+	 * Whether or not to run the task concurrently through Web Workers
+	 *
+	 * @for Task
+	 * @property concurrent
+	 * @type Boolean
+	 * @default false
+	 */
+	concurrent: {
+		value: false
+	},
+
+	/**
+	 * The default logging level for tasks
+	 *
+	 * @for Task
+	 * @property logLevel
+	 * @type Integer
+	 * @default 0
+	 */
+	logLevel: {
+		value: LOG_NONE,
+		writable: true
+	},
+	
+	/**
+	 * Time in milliseconds in which a task will time out and throw a fault
+	 *
+	 * @for Task
+	 * @property timeout
+	 * @type Integer
+	 * @default undefined
+	 */
+	timeout: {
+		value: undefined,
+		writable: true
+	},
+	
+	/**
+	 * The kind of task
+	 *
+	 * @for Task
+	 * @property type
+	 * @type String
+	 * @readonly
+	 */
+	type: {
+		value: TYPE_SIMPLE
+	},
+	
+	/**
+	 * This object can either be simply a reference to a custom WorkerTask extention's
+	 * constructor. Or it can be an object with a constructor key/value pair. If it is the
+	 * latter then you also have the option of passing a handler function that will be run
+	 * on the `onMessage` handler of the Worker itself.
+	 *
+	 * @for Task
+	 * @property worker
+	 * @type Object
+	 * @default undefined
+	 * @example
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		...
+	 *		worker:{
+	 *			constructor:CustomWorker,
+	 *			handler:function(e){
+	 *				// called when a postMessage is posted from the task
+	 *			}
+	 *		},
+	 *		...
+	 *	});
+	 *
+	 *	var task = new MonkeyBars.Task({
+	 *		...
+	 *		worker:CustomWorker,
+	 *		...
+	 *	});
+	 *
+	 */
+	worker: {
+		value: undefined
+	},
+
+	// ===================================================================
+	// === Task Private Methods ==========================================
+	// ===================================================================
+
+	/**
+	 * This method is called during the execution lifecycle of the task. It is intentionally
+	 * left blank and is up to the instance to describe it functionality.
+	 * @for Task
+	 * @method __onStateChange
+	 * @param {Integer} state The current state of the task
+	 * @param {String} error Message describing error
+	 * @private
+	 */
+	__onStateChange: {
+		value: function(state, error) {}
+	},
+
+	// ===================================================================
+	// === Task Public Methods ===========================================
+	// ===================================================================
+
 	/**
 	 * Calling this method cancels the task. However it is up to the instance to handle
 	 * the canceled state.
@@ -85,20 +206,20 @@ Task.prototype = Object.create({}, {
 	 */
 	cancel: {
 		value: function() {
-			if(this.state > STATE_STARTED) {
+			if(this._state > STATE_STARTED) {
 				return;
 			}
-			this.state = STATE_CANCELED;
+			this._state = STATE_CANCELED;
 			if(this.logLevel >= LOG_INFO) {
 				log("Canceled: " + this.displayName);
 			}
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
 			}
-			this.onChange(this.state);
+			this.trigger("cancel");
+			this.__onStateChange(this._state);
 			this.onCancel();
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -117,11 +238,11 @@ Task.prototype = Object.create({}, {
 	 *	task.start();
 	 */
 	complete: {
-		value: function(data, operation) {
-			if(this.state > STATE_STARTED) {
+		value: function(data) {
+			if(this._state > STATE_STARTED) {
 				return;
 			}
-			this.state = STATE_COMPLETED;
+			this._state = STATE_COMPLETED;
 
 			if(this.logLevel >= LOG_INFO) {
 				log("Completed: " + this.displayName);
@@ -138,23 +259,10 @@ Task.prototype = Object.create({}, {
 			}
 
 			// call completion methods
+			this.trigger("complete");
 			this.onComplete();
-			this.onChange(this.state);
-		},
-		writable: true
-	},
-
-	/**
-	 * Whether or not to run the task concurrently through Web Workers
-	 *
-	 * @for Task
-	 * @property concurrent
-	 * @type Boolean
-	 * @default false
-	 */
-	concurrent: {
-		value: false,
-		writable: true
+			this.__onStateChange(this._state);
+		}
 	},
 
 	/**
@@ -168,8 +276,7 @@ Task.prototype = Object.create({}, {
 					delete this[prop];
 				}
 			}
-		},
-		writable:true
+		}
 	},
 
 	/**
@@ -213,20 +320,19 @@ Task.prototype = Object.create({}, {
 	 */
 	fault: {
 		value: function(error) {
-			if(this.state >= STATE_CANCELED) {
+			if(this._state >= STATE_CANCELED) {
 				return;
-			}
-			this.state = STATE_FAULTED;
+			}			this._state = STATE_FAULTED;
 			if(this.logLevel >= LOG_INFO) {
 				log("Faulted: " + this.displayName);
 			}
 			if(this.timeoutId) {
 				clearTimeout(this.timeoutId);
 			}
-			this.onChange(this.state, undefined, error);
+			this.trigger("fault");
+			this.__onStateChange(this._state, error);
 			this.onFault(error);
-		},
-		writable: true
+		}
 	},
 	
 	/**
@@ -237,21 +343,7 @@ Task.prototype = Object.create({}, {
 	 * @param {Object} attributes
 	 */
 	initialize: {
-		value: function(attributes) {},
-		writable: true
-	},
-	
-	/**
-	 * The default logging level for tasks
-	 *
-	 * @for Task
-	 * @property logLevel
-	 * @type Integer
-	 * @default 0
-	 */
-	logLevel: {
-		value: LOG_NONE,
-		writable: true
+		value: function(attributes) {}
 	},
 	
 	/**
@@ -261,37 +353,7 @@ Task.prototype = Object.create({}, {
 	 * @method onCancel
 	 */
 	onCancel: {
-		value: function() {},
-		writable: true
-	},
-	
-	/**
-	 * This method is called during the execution lifecycle of the task. It is intentionally
-	 * left blank and is up to the instance to describe it functionality.
-	 *
-	 * @for Task
-	 * @method onChange
-	 * @param {Integer} state The current state of the task
-	 * @param {String} error Message describing error
-	 * @example
-	 *
-	 *	var task = new MonkeyBars.Task({
-	 *		performTask:function(){
-	 *			this.complete();
-	 *		},
-	 *		onChange:function(state,error){
-	 *			if(state == MonkeyBars.TaskStates.Completed){
-	 *				alert("complete");
-	 *			}
-	 *		}
-	 *	});
-	 *
-	 *	task.start();
-	 *
-	 */
-	onChange: {
-		value: function(state, error) {},
-		writable: true
+		value: function() {}
 	},
 	
 	/**
@@ -301,8 +363,7 @@ Task.prototype = Object.create({}, {
 	 * @method onComplete
 	 */
 	onComplete: {
-		value: function() {},
-		writable: true
+		value: function() {}
 	},
 
 	/**
@@ -313,8 +374,7 @@ Task.prototype = Object.create({}, {
 	 * @param {String} error Message describing error
 	 */
 	onFault: {
-		value: function(error) {},
-		writable: true
+		value: function(error) {}
 	},
 	
 	/**
@@ -324,15 +384,18 @@ Task.prototype = Object.create({}, {
 	 * @method onStart
 	 */
 	onStart: {
-		value: function() {},
-		writable: true
+		value: function() {}
 	},
 	
+	/**
+	 * @method operate
+	 * @param {Object} data
+	 * @param {Task} task
+	 */
 	operate:{
 		value:function(data, task){
 			this.data = data;
-		},
-		writable:true
+		}
 	},
 
 	/**
@@ -359,8 +422,7 @@ Task.prototype = Object.create({}, {
 	performTask: {
 		value: function() {
 			throw "performTask: " + OVERRIDE_NEEDED;
-		},
-		writable: true
+		}
 	},
 	
 	/**
@@ -371,7 +433,7 @@ Task.prototype = Object.create({}, {
 	 */
 	reset:{
 		value:function(){
-			this.state = STATE_INITIALIZED;
+			this._state = STATE_INITIALIZED;
 			this.processed = false;
 		}
 	},
@@ -385,11 +447,11 @@ Task.prototype = Object.create({}, {
 	 */
 	start: {
 		value: function() {
-			if(this.state >= STATE_STARTED) {
+			if(this._state >= STATE_STARTED) {
 				return;
 			}
 
-			this.state = STATE_STARTED;
+			this._state = STATE_STARTED;
 			if(this.logLevel >= LOG_INFO) {
 				log("Started: " + this.displayName);
 			}
@@ -399,7 +461,8 @@ Task.prototype = Object.create({}, {
 					delegate.fault();
 				}, this.timeout);
 			}
-			this.onChange(this.state);
+			this.trigger("start");
+			this.__onStateChange(this._state);
 			if(this.concurrent) {
 				performTaskFunctionalityWithWebWorker(this);
 			} else {
@@ -407,83 +470,19 @@ Task.prototype = Object.create({}, {
 			}
 
 			this.onStart();
-		},
-		writable: true
+		}
 	},
-	
+
 	/**
-	 * The current state of the task
-	 *
-	 * @for Task
-	 * @property state
-	 * @type Integer
-	 * @readonly
-	 * @default 0
+	 * Getter for the tasks current state. Code outside of an implementation should not set the 
+	 * state as this is an internal property.
+	 * @method state
+	 * @return {Integer} The current state of the task
 	 */
-	state: {
-		value: STATE_INITIALIZED,
-		writable: true
-	},
-	
-	/**
-	 * Time in milliseconds in which a task will time out and throw a fault
-	 *
-	 * @for Task
-	 * @property timeout
-	 * @type Integer
-	 * @default undefined
-	 */
-	timeout: {
-		value: undefined,
-		writable: true
-	},
-	
-	/**
-	 * The kind of task
-	 *
-	 * @for Task
-	 * @property type
-	 * @type String
-	 * @readonly
-	 */
-	type: {
-		value: TYPE_SIMPLE,
-		writable: true
-	},
-	
-	/**
-	 * This object can either be simply a reference to a custom WorkerTask extention's
-	 * constructor. Or it can be an object with a constructor key/value pair. If it is the
-	 * latter then you also have the option of passing a handler function that will be run
-	 * on the `onMessage` handler of the Worker itself.
-	 *
-	 * @for Task
-	 * @property worker
-	 * @type Object
-	 * @default undefined
-	 * @example
-	 *
-	 *	var task = new MonkeyBars.Task({
-	 *		...
-	 *		worker:{
-	 *			constructor:CustomWorker,
-	 *			handler:function(e){
-	 *				// called when a postMessage is posted from the task
-	 *			}
-	 *		},
-	 *		...
-	 *	});
-	 *
-	 *	var task = new MonkeyBars.Task({
-	 *		...
-	 *		worker:CustomWorker,
-	 *		...
-	 *	});
-	 *
-	 */
-	worker: {
-		value: undefined,
-		writable: true
+	state:{
+		get:function(){
+			return this._state;
+		}
 	}
 });
 

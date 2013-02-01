@@ -1,4 +1,4 @@
-describe("Sequence Task Tests", function() {
+describe("sequence", function() {
 
 	// ===================================================================
 	// === Initialization Tests ==========================================
@@ -75,17 +75,16 @@ describe("Sequence Task Tests", function() {
 	// === Task Dependency Tests =========================================
 	// ===================================================================
 
-	describe("Dependency Tests", function() {
+	describe("task dependencies", function() {
 
-
-		it("Canceling SubTask Cancels Its Dependencies",function(){
+		it("for subtasks cancel said subtasks dependencies",function(){
 
 			var index = 0;
 
 			var Custom = MonkeyBars.Task.extend({
 				name:"Custom",
 				performTask:function(){
-					if(this.state == MonkeyBars.TaskStates.Canceled) return;
+					if(this.state === MonkeyBars.TaskStates.Canceled) return;
 					index++;
 					this.complete();
 				}
@@ -107,7 +106,14 @@ describe("Sequence Task Tests", function() {
 			});
 
 			sequence.start();
-			expect(index).toEqual(2);
+
+			waitsFor(function() {
+      			return sequence.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(index).toEqual(2);
+    		});
 
 		});
 
@@ -135,7 +141,14 @@ describe("Sequence Task Tests", function() {
 			});
 
 			sequence.start();
-			expect(index).toEqual(2);
+
+			waitsFor(function() {
+      			return sequence.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(index).toEqual(2);
+    		});
 
 		});
 
@@ -178,7 +191,14 @@ describe("Sequence Task Tests", function() {
 			});
 
 			sequence.start();
-			expect(index).toEqual(2);
+
+			waitsFor(function() {
+      			return sequence.state > MonkeyBars.TaskStates.Started;
+    		}, "the task to complete", 750);
+
+			runs(function() {
+		      expect(index).toEqual(2);
+    		});
 
 		});
 	});
@@ -211,33 +231,40 @@ describe("Sequence Task Tests", function() {
 			task.start();
 			task.cancel();
 			task.startNextSubTask();
-			expect(task.currentIndex).toEqual(1);
+			expect(task._currentIndex).toEqual(1);
 		});
 
 		it("Task Does Not Start Next Task After Complete",function(){
 			task.complete();
 			task.startNextSubTask();
-			expect(task.currentIndex).toEqual(0);
+			expect(task._currentIndex).toEqual(0);
 		});
 
 		it("Task Does Not Start Next Task After Faulted",function(){
 			task.fault(null);
 			task.startNextSubTask();
-			expect(task.currentIndex).toEqual(0);
+			expect(task._currentIndex).toEqual(0);
 		});
 
 		it("Task Starts Next Sub Task After Sub Task Canceled",function(){
 			task.start();
 			var subtask = task.getTaskByTid(t1.tid);
 			subtask.cancel();
-			expect(task.currentIndex).toEqual(2);
+			expect(task._currentIndex).toEqual(2);
 		});
 
 		it("Task Starts Next Sub Task After Sub Task Completes",function(){
 			task.start();
 			var subtask = task.getTaskByTid(t1.tid);
 			subtask.complete();
-			expect(task.currentIndex).toEqual(2);
+			waitsFor(function() {
+				return task._currentIndex > 1;
+			}, "index to incriment", 20000);
+
+			runs(function() {
+				expect(task._currentIndex).toEqual(2);
+			});
+			
 		});
 
 		it("Task Faults After Sub Task Faults",function(){
@@ -245,13 +272,6 @@ describe("Sequence Task Tests", function() {
 			var subtask = task.getTaskByTid(t1.tid);
 			subtask.fault();
 			expect(task.state).toEqual(MonkeyBars.TaskStates.Faulted);
-		});
-
-		it("Task Does Increment Current Index",function(){
-			task.start();
-			var subtask = task.getTaskByTid(t1.tid);
-			subtask.complete();
-			expect(task.currentIndex).toEqual(2);
 		});
 
 		it("Task Resets As Expected",function(){
@@ -262,105 +282,6 @@ describe("Sequence Task Tests", function() {
 			task.reset();
 			expect(task.state).toEqual(0);
 			expect(t1.state).toEqual(0);
-		});
-
-	});
-
-	// ===================================================================
-	// === Task Data Tests ============================================
-	// ===================================================================
-
-	describe("Data Tests", function() {
-
-		return;
-
-		it("Data Manipulates As Expected",function(){
-			
-			/*
-			// * NOTE *
-			// Imagine that all of the following tasks are in seperate modules and that
-			// we need to manipulate a piece of data between all of that tasks without 
-			// having a centralized model of any kind... how would it look
-
-			// take an value 100
-			// devide it by 2
-			// multiply it by 3
-			// substract 100
-			// should be 50
-
-			var t0 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(100);
-				}
-			});
-
-			var t1 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(this.data/2);
-				}
-			});
-
-			var t2 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(this.data*3);
-				}
-			});
-
-			var t3 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(this.data-100);
-				}
-			});
-
-			var group = new MonkeyBars.SequenceTask({
-				tasks:[t0,t1,t2,t3]
-			});
-
-			group.start();
-			expect(group.data).toEqual(50);
-			*/
-
-		});
-
-		it("Nested Tasks Manipulates Data As Expected",function(){
-			
-			/*
-			var t0 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(100);
-				}
-			});
-
-			var t1 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(this.data/2);
-				}
-			});
-
-			var t2 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(this.data*3);
-				}
-			});
-
-			var t3 = new MonkeyBars.Task({
-				performTask:function() {
-					this.complete(this.data-100);
-				}
-			});
-
-			var group = new MonkeyBars.SequenceTask({
-				tasks:[{
-					tasks:[t0,t1]
-				},{
-					tasks:[t2,t3]
-				}]
-			});
-
-			group.start();
-			expect(group.data).toEqual(50);
-			*/
-
 		});
 
 	});

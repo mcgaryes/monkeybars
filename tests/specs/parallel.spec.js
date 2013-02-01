@@ -102,6 +102,7 @@ describe("parallel", function() {
 
 		});
 
+
 		it("can only run MAX amount simultaniously", function() {
 
 			var tasks = [];
@@ -120,6 +121,7 @@ describe("parallel", function() {
 
 			var group = new MonkeyBars.ParallelTask({
 				max: 3,
+				logLevel:1000,
 				tasks: tasks,
 				onComplete: function() {
 					groupTaskComplete = new Date().getTime();
@@ -127,15 +129,18 @@ describe("parallel", function() {
 			});
 
 			group.start();
-			expect(group.processedIndex).toEqual(3);
+			expect(group._processedIndex).toEqual(3);
+
+			waitsFor(function() {
+				return group.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 750);
 
 			runs(function() {
-				setTimeout(function() {
-					expect(group.state).toEqual(4);
-				}, 300);
+				expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
 			});
 
 		});
+
 
 		it("only once its dependencies have", function() {
 
@@ -175,12 +180,14 @@ describe("parallel", function() {
 			expect(t3.state).toEqual(MonkeyBars.TaskStates.Completed);
 			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
 
+			group.destroy();
+
 		});
 
 		it("when deeply nested",function(){
 
 			var group = new MonkeyBars.ParallelTask({
-				logLevel:MonkeyBars.LogLevels.Verbose,
+				//logLevel:MonkeyBars.LogLevels.Verbose,
 				tasks:[{
 					type:"parallel",
 					tasks:[{
@@ -208,6 +215,8 @@ describe("parallel", function() {
 	// === Data Operation Tests ==========================================
 	// ===================================================================
 
+	// @TODO: Need to rework this
+
 	describe("task operates", function() {
 
 		it("with simple", function() {
@@ -219,6 +228,7 @@ describe("parallel", function() {
 			});
 
 			var task = new MonkeyBars.ParallelTask({
+				//logLevel:1000,
 				data:"a",
 				tasks: [
 					new CustomTask({name:"b"})

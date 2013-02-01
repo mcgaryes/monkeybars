@@ -48,6 +48,10 @@ var WorkerTask = MonkeyBars.WorkerTask = function(task) {
 
 WorkerTask.prototype = {
 
+	// ===================================================================
+	// === WorkerTask Methods ============================================
+	// ===================================================================
+
 	/**
 	 * Post a complete message along with the data passed stating that the task
 	 * has completed what it needs to.

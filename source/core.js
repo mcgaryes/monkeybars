@@ -61,9 +61,9 @@ var taskIdCounter = 0;
  */
 var taskOptions = [
 	// task
-	"name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
+	"name", "tid", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
 	// group
-	"tasks", "currentIndex", "processedIndex", "max", "dependencyMap", "operationType",
+	"tasks", "max",
 	// decorators
 	"count", "interval"
 ];
@@ -213,8 +213,6 @@ var isTaskDependentOnTask = function(task1, task2) {
 		for(var i = 0; i < totalDependencies; i++) {
 			var dependency = dependencies[i];
 			if(dependency.tid === task2.tid) {
-				return true;
-			} else if(dependency === task2.id) {
 				return true;
 			} else if(dependency === task2.name && task2.name !== "undefined") {
 				return true;
@@ -431,10 +429,16 @@ var extend = function(protoProps) {
  * @param {Object} msg
  */
 var log = function(msg) {
-	if(console) { 
+	if(console && console.log) { 
 		console.log(msg);
 	}
 };
+
+// ===================================================================
+// === Task Events ===================================================
+// ===================================================================
+
+//%events
 
 // ===================================================================
 // === Worker Task ===================================================

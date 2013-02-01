@@ -15,20 +15,62 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 	}
 
 	// create dependency map and populate it with subtask tids
-	task.dependencyMap = {};
 	if(task.tasks) {
 		for(var i = 0; i < task.tasks.length; i++) {
 			var subtask = task.tasks[i];
-			this.dependencyMap[subtask.tid] = [];
+			this._dependencyMap[subtask.tid] = [];
 			task.setDependeciesForTask(subtask);
 		}
 	}
-
 	// super
 	Task.call(task, attributes);
 };
 
 TaskGroup.prototype = Object.create(Task.prototype, {
+
+	// ===================================================================
+	// === TaskGroup Private Properties ==================================
+	// ===================================================================
+
+	/**
+	 * Holds all references to event types, callbacks, contexts and configurations.
+	 * @for TaskGroup
+	 * @property _dependencyMap
+	 * @type Object
+	 * @private
+	 */
+	_dependencyMap: {
+		value:{}
+	},
+
+	/**
+	 * The index of the subtasks that have completed execution.
+	 * @for TaskGroup
+	 * @property _currentIndex
+	 * @type Integer
+	 * @private
+	 */
+	_currentIndex: {
+		value: 0,
+		writable: true
+	},
+
+	/**
+	 * An incrimented number of the tasks that have already been processed.
+	 *
+	 * @for ParallelTask
+	 * @property _processedIndex
+	 * @type Integer
+	 * @private
+	 */
+	_processedIndex: {
+		value: 0,
+		writable: true
+	},
+
+	// ===================================================================
+	// === TaskGroup Methods =============================================
+	// ===================================================================
 
 	/**
 	 * Adds a subtask to the groups queue. This is helpful when you want to add
@@ -69,8 +111,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			}
 			this.setDependeciesForTask(task);
 			this.tasks.push(task);
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -95,7 +136,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task || !afterTask) {
 				throw "addSubTaskAfterTask: " + INVALID_ARGUMENTS;
 			}
-			if(!task || this.state === STATE_CANCELED) {
+			if(!task || this._state === STATE_CANCELED) {
 				return;
 			}
 			if(!task.tid) {
@@ -105,8 +146,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			// @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(afterTask);
 			this.tasks.splice(index + 1, 0, task);
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -123,7 +163,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			if(!task || !beforeTask) {
 				throw "addSubTaskBeforeTask: " + INVALID_ARGUMENTS;
 			}
-			if(!task || this.state === STATE_CANCELED) {
+			if(!task || this._state === STATE_CANCELED) {
 				return;
 			}
 			if(!task.tid) {
@@ -133,8 +173,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			// @TODO: Need to add the tid of the task and not the task itself
 			var index = this.tasks.indexOf(beforeTask);
 			this.tasks.splice(index, 0, task);
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -155,28 +194,13 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 				// otherwise we want to set the canceled flag
 				// @TODO: Need to reference the task through the tid
 				var task = this.tasks[i];
-				if(task.state > STATE_INITIALIZED) {
+				if(task._state > STATE_INITIALIZED) {
 					task.cancel();
 				} else {
-					task.state = STATE_CANCELED;
+					task._state = STATE_CANCELED;
 				}
 			}
-		},
-		writable: true
-	},
-
-	/**
-	 * The index of the subtasks that have completed execution.
-	 *
-	 * @for TaskGroup
-	 * @property currentIndex
-	 * @type Integer
-	 * @readonly
-	 * @default 0
-	 */
-	currentIndex: {
-		value: 0,
-		writable: true
+		}
 	},
 
 	/**
@@ -188,15 +212,13 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 */
 	getTaskByName: {
 		value: function(name) {
-			// @TODO: Need to reference the task through the tid
 			for(var i = 0; i < this.tasks.length; i++) {
 				var task = this.tasks[i];
 				if(task.name === name) {
 					return task;
 				}
 			}
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -216,15 +238,13 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 */
 	getTaskByTid: {
 		value: function(tid) {
-			// @TODO: Need to reference the task through the tid
 			for(var i = 0; i < this.tasks.length; i++) {
 				var task = this.tasks[i];
 				if(task.tid === tid) {
 					return task;
 				}
 			}
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -240,11 +260,10 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			for(var i = 0; i < this.tasks.length; i++) {
 				if(isTaskDependentOnTask(this.tasks[i], task)) {
 					// @TODO: Need to reference the task through the tid
-					this.tasks[i].state = STATE_CANCELED;
+					this.tasks[i]._state = STATE_CANCELED;
 				}
 			}
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -257,10 +276,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 */
 	onSubTaskComplete: {
 		value: function(task) {
-			// @TODO: Need to reference the task through the tid
-			this.operate(task.data,task);
-		},
-		writable: true
+			task.group.operate(task.data,task);
+		}
 	},
 
 	/**
@@ -274,20 +291,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	onSubTaskFault: {
 		value: function(task, error) {
 			this.fault(error);
-		},
-		writable: true
-	},
-
-	/**
-	 * An incrimented number of the tasks that have already been processed.
-	 *
-	 * @for ParallelTask
-	 * @property processedIndex
-	 * @type Integer
-	 */
-	processedIndex: {
-		value: 0,
-		writable: true
+		}
 	},
 
 	/**
@@ -303,19 +307,17 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	processSubTask: {
 		value: function(task) {
 
-			if(!task) {
-				if(this.logLevel >= LOG_ERROR) {
-					log(UNDEFINED_TASK);
-				}
+			if(task === undefined) {
+				if(this.logLevel >= LOG_ERROR) { log(UNDEFINED_TASK); }
 				return;
 			}
 
-			if(task.state === STATE_CANCELED) {
+			if(task._state === STATE_CANCELED) {
 				this.onSubTaskCancel(task);
 				return true;
 			}
 
-			this.processedIndex++;
+			this._processedIndex = this._processedIndex + 1;
 
 			task.group = this;
 			task.processed = true;
@@ -327,22 +329,19 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			}
 			
 			// set execution block
-			var group = this;
-			task.onChange = function(state, error) {
+			task.__onStateChange = function (state, error){
 				if(state === STATE_COMPLETED) {
-					group.onSubTaskComplete(this);
+					this.group.onSubTaskComplete(this);
 				} else if(state === STATE_FAULTED) {
-					group.onSubTaskFault(this, error);
+					this.group.onSubTaskFault(this, error);
 				} else if(state === STATE_CANCELED) {
-					group.onSubTaskCancel(this);
+					this.group.onSubTaskCancel(this);
 				}
 			};
 
 			task.start();
-
 			return false;
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -360,8 +359,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 			}
 			var index = this.tasks.indexOf(task);
 			this.tasks.splice(index, 1);
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -373,8 +371,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	reset:{
 		value:function(){
 			if(this.tasks) {
-				this.currentIndex = 0;
-				this.processedIndex = 0;
+				this._currentIndex = 0;
+				this._processedIndex = 0;
 				for(var i = 0; i < this.tasks.length; i++) {
 					this.tasks[i].reset();
 				}
@@ -397,15 +395,14 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 				for(var i = 0; i < totalDependencies; i++) {
 					var dependency = task.dependencies[i];
 					if(dependency.tid) {
-						this.dependencyMap[task.tid].push(dependency.tid);
+						this._dependencyMap[task.tid].push(dependency.tid);
 					} else {
-						this.dependencyMap[task.tid].push(dependency);
+						this._dependencyMap[task.tid].push(dependency);
 					}
 				}
 
 			}
-		},
-		writable: false
+		}
 	}
 });
 

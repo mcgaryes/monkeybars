@@ -36,7 +36,7 @@ var whileTaskDecorator = function(task) {
 	task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
 	task.complete = function() {
 		if(this.doWhile()) {
-			this.state = STATE_INITIALIZED;
+			this._state = STATE_INITIALIZED;
 			var delegate = this;
 			if(this.interval !== 0) {
 				setTimeout(function() {

@@ -65,9 +65,9 @@
      */
     var taskOptions = [
     // task
-    "name", "tid", "id", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
+    "name", "tid", "data", "type", "concurrent", "worker", "displayName", "state", "logLevel", "timeout", "dependencies", "group", "processed",
     // group
-    "tasks", "currentIndex", "processedIndex", "max", "dependencyMap", "operationType",
+    "tasks", "max",
     // decorators
     "count", "interval"];
 
@@ -216,8 +216,6 @@
             for (var i = 0; i < totalDependencies; i++) {
                 var dependency = dependencies[i];
                 if (dependency.tid === task2.tid) {
-                    return true;
-                } else if (dependency === task2.id) {
                     return true;
                 } else if (dependency === task2.name && task2.name !== "undefined") {
                     return true;
@@ -434,8 +432,129 @@
      * @param {Object} msg
      */
     var log = function(msg) {
-        if (console) {
+        if (console && console.log) {
             console.log(msg);
+        }
+    };
+
+    // ===================================================================
+    // === Task Events ===================================================
+    // ===================================================================
+
+    /**
+     * @proerty TaskEvents
+     * @type Object
+     */
+    var TaskEvents = {
+
+        // ===================================================================
+        // === Properties ====================================================
+        // ===================================================================
+
+        /**
+         * Holds all references to event types, callbacks, contexts and configurations.
+         * @for TaskEvents
+         * @property _eventMap
+         * @type Object
+         * @private
+         */
+        _eventMap: undefined,
+
+        // ===================================================================
+        // === Methods =======================================================
+        // ===================================================================
+
+        /**
+         * Checks to see if an event is registered to this object with the passed type.
+         * @for TaskEvents
+         * @method has
+         * @param {String} type
+         */
+        has: function(type) {
+            if (this._eventMap === undefined || this._eventMap[type] === undefined) {
+                return false;
+            }
+            return true;
+        },
+
+        /**
+         * Removes an event to the object.
+         * @for TaskEvents
+         * @method off
+         * @param {String} type
+         * @param {Function} callback
+         */
+        off: function(type, callbackRef) {
+            if (this._eventMap === undefined || this._eventMap[type] === undefined) {
+                return;
+            }
+            if (type) {
+                if (callbackRef) {
+                    var tempArr = [];
+                    this._eventMap[type].forEach(function(item, index) {
+                        if (item.callback === callbackRef) {
+                            this._eventMap[type] = this._eventMap[type].splice(index, 0);
+                        }
+                    }, this);
+                } else {
+                    this._eventMap[type].forEach(function(item, index) {
+                        if (item.configurable === true) {
+                            this._eventMap[type] = this._eventMap[type].splice(index, 0);
+                        }
+                    }, this);
+                }
+            } else {
+                // @TODO: need to come up with a way to look through all of the objects
+                // props as well as any events on the object and then delete only those that
+                // are not configurable
+                this._eventMap = {};
+            }
+        },
+
+        /**
+         * Attaches an event to the object.
+         * @for TaskEvents
+         * @method on
+         * @param {String} type
+         * @param {Function} callback
+         * @param {Object} context
+         * @param {Boolean} configurable Whether or not you should be able to remove this listener without passing its callback reference
+         */
+        on: function(type, callback, context, configurable) {
+            if (this._eventMap === undefined) {
+                this._eventMap = {};
+            }
+            if (this._eventMap[type] === undefined) {
+                this._eventMap[type] = [];
+            }
+            if (configurable === undefined) {
+                configurable = true;
+            }
+            this._eventMap[type].push({
+                callback: callback,
+                context: context,
+                configurable: configurable
+            });
+        },
+
+        /**
+         * Removes an event from the object.
+         * @for TaskEvents
+         * @method off
+         * @param {String} type
+         * @param {Function} callback
+         */
+        trigger: function(type) {
+            if (this._eventMap === undefined || this._eventMap[type] === undefined) {
+                return;
+            }
+            this._eventMap[type].forEach(function(item) {
+                item.callback.call(item.context, {
+                    type: type,
+                    target: this,
+                    isConfigurable: item.configurable
+                });
+            }, this);
         }
     };
 
@@ -492,6 +611,10 @@
     };
 
     WorkerTask.prototype = {
+
+        // ===================================================================
+        // === WorkerTask Methods ============================================
+        // ===================================================================
 
         /**
          * Post a complete message along with the data passed stating that the task
@@ -633,13 +756,134 @@
 
         // initialize the task
         task.initialize(task.options);
-
-        // add the task to the task dictionary for later use
-        //taskDictionary[task.tid] = task;
-
     };
 
-    Task.prototype = Object.create({}, {
+    Task.prototype = Object.create(TaskEvents, {
+
+        // ===================================================================
+        // === Task Private Properties =======================================
+        // ===================================================================
+
+        /**
+         * The current state of the task
+         *
+         * @for Task
+         * @property state
+         * @type Integer
+         * @private
+         */
+        _state: {
+            value: STATE_INITIALIZED
+        },
+
+        // ===================================================================
+        // === Task Public Properties ========================================
+        // ===================================================================
+
+        /**
+         * Whether or not to run the task concurrently through Web Workers
+         *
+         * @for Task
+         * @property concurrent
+         * @type Boolean
+         * @default false
+         */
+        concurrent: {
+            value: false
+        },
+
+        /**
+         * The default logging level for tasks
+         *
+         * @for Task
+         * @property logLevel
+         * @type Integer
+         * @default 0
+         */
+        logLevel: {
+            value: LOG_NONE,
+            writable: true
+        },
+
+        /**
+         * Time in milliseconds in which a task will time out and throw a fault
+         *
+         * @for Task
+         * @property timeout
+         * @type Integer
+         * @default undefined
+         */
+        timeout: {
+            value: undefined,
+            writable: true
+        },
+
+        /**
+         * The kind of task
+         *
+         * @for Task
+         * @property type
+         * @type String
+         * @readonly
+         */
+        type: {
+            value: TYPE_SIMPLE
+        },
+
+        /**
+         * This object can either be simply a reference to a custom WorkerTask extention's
+         * constructor. Or it can be an object with a constructor key/value pair. If it is the
+         * latter then you also have the option of passing a handler function that will be run
+         * on the `onMessage` handler of the Worker itself.
+         *
+         * @for Task
+         * @property worker
+         * @type Object
+         * @default undefined
+         * @example
+         *
+         *	var task = new MonkeyBars.Task({
+         *		...
+         *		worker:{
+         *			constructor:CustomWorker,
+         *			handler:function(e){
+         *				// called when a postMessage is posted from the task
+         *			}
+         *		},
+         *		...
+         *	});
+         *
+         *	var task = new MonkeyBars.Task({
+         *		...
+         *		worker:CustomWorker,
+         *		...
+         *	});
+         *
+         */
+        worker: {
+            value: undefined
+        },
+
+        // ===================================================================
+        // === Task Private Methods ==========================================
+        // ===================================================================
+
+        /**
+         * This method is called during the execution lifecycle of the task. It is intentionally
+         * left blank and is up to the instance to describe it functionality.
+         * @for Task
+         * @method __onStateChange
+         * @param {Integer} state The current state of the task
+         * @param {String} error Message describing error
+         * @private
+         */
+        __onStateChange: {
+            value: function(state, error) {}
+        },
+
+        // ===================================================================
+        // === Task Public Methods ===========================================
+        // ===================================================================
 
         /**
          * Calling this method cancels the task. However it is up to the instance to handle
@@ -662,20 +906,20 @@
          */
         cancel: {
             value: function() {
-                if (this.state > STATE_STARTED) {
+                if (this._state > STATE_STARTED) {
                     return;
                 }
-                this.state = STATE_CANCELED;
+                this._state = STATE_CANCELED;
                 if (this.logLevel >= LOG_INFO) {
                     log("Canceled: " + this.displayName);
                 }
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
                 }
-                this.onChange(this.state);
+                this.trigger("cancel");
+                this.__onStateChange(this._state);
                 this.onCancel();
-            },
-            writable: true
+            }
         },
 
         /**
@@ -694,11 +938,11 @@
          *	task.start();
          */
         complete: {
-            value: function(data, operation) {
-                if (this.state > STATE_STARTED) {
+            value: function(data) {
+                if (this._state > STATE_STARTED) {
                     return;
                 }
-                this.state = STATE_COMPLETED;
+                this._state = STATE_COMPLETED;
 
                 if (this.logLevel >= LOG_INFO) {
                     log("Completed: " + this.displayName);
@@ -715,23 +959,10 @@
                 }
 
                 // call completion methods
+                this.trigger("complete");
                 this.onComplete();
-                this.onChange(this.state);
-            },
-            writable: true
-        },
-
-        /**
-         * Whether or not to run the task concurrently through Web Workers
-         *
-         * @for Task
-         * @property concurrent
-         * @type Boolean
-         * @default false
-         */
-        concurrent: {
-            value: false,
-            writable: true
+                this.__onStateChange(this._state);
+            }
         },
 
         /**
@@ -745,8 +976,7 @@
                         delete this[prop];
                     }
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -790,20 +1020,20 @@
          */
         fault: {
             value: function(error) {
-                if (this.state >= STATE_CANCELED) {
+                if (this._state >= STATE_CANCELED) {
                     return;
                 }
-                this.state = STATE_FAULTED;
+                this._state = STATE_FAULTED;
                 if (this.logLevel >= LOG_INFO) {
                     log("Faulted: " + this.displayName);
                 }
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);
                 }
-                this.onChange(this.state, undefined, error);
+                this.trigger("fault");
+                this.__onStateChange(this._state, error);
                 this.onFault(error);
-            },
-            writable: true
+            }
         },
 
         /**
@@ -814,21 +1044,7 @@
          * @param {Object} attributes
          */
         initialize: {
-            value: function(attributes) {},
-            writable: true
-        },
-
-        /**
-         * The default logging level for tasks
-         *
-         * @for Task
-         * @property logLevel
-         * @type Integer
-         * @default 0
-         */
-        logLevel: {
-            value: LOG_NONE,
-            writable: true
+            value: function(attributes) {}
         },
 
         /**
@@ -838,37 +1054,7 @@
          * @method onCancel
          */
         onCancel: {
-            value: function() {},
-            writable: true
-        },
-
-        /**
-         * This method is called during the execution lifecycle of the task. It is intentionally
-         * left blank and is up to the instance to describe it functionality.
-         *
-         * @for Task
-         * @method onChange
-         * @param {Integer} state The current state of the task
-         * @param {String} error Message describing error
-         * @example
-         *
-         *	var task = new MonkeyBars.Task({
-         *		performTask:function(){
-         *			this.complete();
-         *		},
-         *		onChange:function(state,error){
-         *			if(state == MonkeyBars.TaskStates.Completed){
-         *				alert("complete");
-         *			}
-         *		}
-         *	});
-         *
-         *	task.start();
-         *
-         */
-        onChange: {
-            value: function(state, error) {},
-            writable: true
+            value: function() {}
         },
 
         /**
@@ -878,8 +1064,7 @@
          * @method onComplete
          */
         onComplete: {
-            value: function() {},
-            writable: true
+            value: function() {}
         },
 
         /**
@@ -890,8 +1075,7 @@
          * @param {String} error Message describing error
          */
         onFault: {
-            value: function(error) {},
-            writable: true
+            value: function(error) {}
         },
 
         /**
@@ -901,15 +1085,18 @@
          * @method onStart
          */
         onStart: {
-            value: function() {},
-            writable: true
+            value: function() {}
         },
 
+        /**
+         * @method operate
+         * @param {Object} data
+         * @param {Task} task
+         */
         operate: {
             value: function(data, task) {
                 this.data = data;
-            },
-            writable: true
+            }
         },
 
         /**
@@ -936,8 +1123,7 @@
         performTask: {
             value: function() {
                 throw "performTask: " + OVERRIDE_NEEDED;
-            },
-            writable: true
+            }
         },
 
         /**
@@ -948,7 +1134,7 @@
          */
         reset: {
             value: function() {
-                this.state = STATE_INITIALIZED;
+                this._state = STATE_INITIALIZED;
                 this.processed = false;
             }
         },
@@ -962,11 +1148,11 @@
          */
         start: {
             value: function() {
-                if (this.state >= STATE_STARTED) {
+                if (this._state >= STATE_STARTED) {
                     return;
                 }
 
-                this.state = STATE_STARTED;
+                this._state = STATE_STARTED;
                 if (this.logLevel >= LOG_INFO) {
                     log("Started: " + this.displayName);
                 }
@@ -976,7 +1162,8 @@
                         delegate.fault();
                     }, this.timeout);
                 }
-                this.onChange(this.state);
+                this.trigger("start");
+                this.__onStateChange(this._state);
                 if (this.concurrent) {
                     performTaskFunctionalityWithWebWorker(this);
                 } else {
@@ -984,83 +1171,19 @@
                 }
 
                 this.onStart();
-            },
-            writable: true
+            }
         },
 
         /**
-         * The current state of the task
-         *
-         * @for Task
-         * @property state
-         * @type Integer
-         * @readonly
-         * @default 0
+         * Getter for the tasks current state. Code outside of an implementation should not set the 
+         * state as this is an internal property.
+         * @method state
+         * @return {Integer} The current state of the task
          */
         state: {
-            value: STATE_INITIALIZED,
-            writable: true
-        },
-
-        /**
-         * Time in milliseconds in which a task will time out and throw a fault
-         *
-         * @for Task
-         * @property timeout
-         * @type Integer
-         * @default undefined
-         */
-        timeout: {
-            value: undefined,
-            writable: true
-        },
-
-        /**
-         * The kind of task
-         *
-         * @for Task
-         * @property type
-         * @type String
-         * @readonly
-         */
-        type: {
-            value: TYPE_SIMPLE,
-            writable: true
-        },
-
-        /**
-         * This object can either be simply a reference to a custom WorkerTask extention's
-         * constructor. Or it can be an object with a constructor key/value pair. If it is the
-         * latter then you also have the option of passing a handler function that will be run
-         * on the `onMessage` handler of the Worker itself.
-         *
-         * @for Task
-         * @property worker
-         * @type Object
-         * @default undefined
-         * @example
-         *
-         *	var task = new MonkeyBars.Task({
-         *		...
-         *		worker:{
-         *			constructor:CustomWorker,
-         *			handler:function(e){
-         *				// called when a postMessage is posted from the task
-         *			}
-         *		},
-         *		...
-         *	});
-         *
-         *	var task = new MonkeyBars.Task({
-         *		...
-         *		worker:CustomWorker,
-         *		...
-         *	});
-         *
-         */
-        worker: {
-            value: undefined,
-            writable: true
+            get: function() {
+                return this._state;
+            }
         }
     });
 
@@ -1087,20 +1210,62 @@
         }
 
         // create dependency map and populate it with subtask tids
-        task.dependencyMap = {};
         if (task.tasks) {
             for (var i = 0; i < task.tasks.length; i++) {
                 var subtask = task.tasks[i];
-                this.dependencyMap[subtask.tid] = [];
+                this._dependencyMap[subtask.tid] = [];
                 task.setDependeciesForTask(subtask);
             }
         }
-
         // super
         Task.call(task, attributes);
     };
 
     TaskGroup.prototype = Object.create(Task.prototype, {
+
+        // ===================================================================
+        // === TaskGroup Private Properties ==================================
+        // ===================================================================
+
+        /**
+         * Holds all references to event types, callbacks, contexts and configurations.
+         * @for TaskGroup
+         * @property _dependencyMap
+         * @type Object
+         * @private
+         */
+        _dependencyMap: {
+            value: {}
+        },
+
+        /**
+         * The index of the subtasks that have completed execution.
+         * @for TaskGroup
+         * @property _currentIndex
+         * @type Integer
+         * @private
+         */
+        _currentIndex: {
+            value: 0,
+            writable: true
+        },
+
+        /**
+         * An incrimented number of the tasks that have already been processed.
+         *
+         * @for ParallelTask
+         * @property _processedIndex
+         * @type Integer
+         * @private
+         */
+        _processedIndex: {
+            value: 0,
+            writable: true
+        },
+
+        // ===================================================================
+        // === TaskGroup Methods =============================================
+        // ===================================================================
 
         /**
          * Adds a subtask to the groups queue. This is helpful when you want to add
@@ -1141,8 +1306,7 @@
                 }
                 this.setDependeciesForTask(task);
                 this.tasks.push(task);
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1167,7 +1331,7 @@
                 if (!task || !afterTask) {
                     throw "addSubTaskAfterTask: " + INVALID_ARGUMENTS;
                 }
-                if (!task || this.state === STATE_CANCELED) {
+                if (!task || this._state === STATE_CANCELED) {
                     return;
                 }
                 if (!task.tid) {
@@ -1177,8 +1341,7 @@
                 // @TODO: Need to add the tid of the task and not the task itself
                 var index = this.tasks.indexOf(afterTask);
                 this.tasks.splice(index + 1, 0, task);
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1195,7 +1358,7 @@
                 if (!task || !beforeTask) {
                     throw "addSubTaskBeforeTask: " + INVALID_ARGUMENTS;
                 }
-                if (!task || this.state === STATE_CANCELED) {
+                if (!task || this._state === STATE_CANCELED) {
                     return;
                 }
                 if (!task.tid) {
@@ -1205,8 +1368,7 @@
                 // @TODO: Need to add the tid of the task and not the task itself
                 var index = this.tasks.indexOf(beforeTask);
                 this.tasks.splice(index, 0, task);
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1227,28 +1389,13 @@
                     // otherwise we want to set the canceled flag
                     // @TODO: Need to reference the task through the tid
                     var task = this.tasks[i];
-                    if (task.state > STATE_INITIALIZED) {
+                    if (task._state > STATE_INITIALIZED) {
                         task.cancel();
                     } else {
-                        task.state = STATE_CANCELED;
+                        task._state = STATE_CANCELED;
                     }
                 }
-            },
-            writable: true
-        },
-
-        /**
-         * The index of the subtasks that have completed execution.
-         *
-         * @for TaskGroup
-         * @property currentIndex
-         * @type Integer
-         * @readonly
-         * @default 0
-         */
-        currentIndex: {
-            value: 0,
-            writable: true
+            }
         },
 
         /**
@@ -1260,15 +1407,13 @@
          */
         getTaskByName: {
             value: function(name) {
-                // @TODO: Need to reference the task through the tid
                 for (var i = 0; i < this.tasks.length; i++) {
                     var task = this.tasks[i];
                     if (task.name === name) {
                         return task;
                     }
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1288,15 +1433,13 @@
          */
         getTaskByTid: {
             value: function(tid) {
-                // @TODO: Need to reference the task through the tid
                 for (var i = 0; i < this.tasks.length; i++) {
                     var task = this.tasks[i];
                     if (task.tid === tid) {
                         return task;
                     }
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1312,11 +1455,10 @@
                 for (var i = 0; i < this.tasks.length; i++) {
                     if (isTaskDependentOnTask(this.tasks[i], task)) {
                         // @TODO: Need to reference the task through the tid
-                        this.tasks[i].state = STATE_CANCELED;
+                        this.tasks[i]._state = STATE_CANCELED;
                     }
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1329,10 +1471,8 @@
          */
         onSubTaskComplete: {
             value: function(task) {
-                // @TODO: Need to reference the task through the tid
-                this.operate(task.data, task);
-            },
-            writable: true
+                task.group.operate(task.data, task);
+            }
         },
 
         /**
@@ -1346,20 +1486,7 @@
         onSubTaskFault: {
             value: function(task, error) {
                 this.fault(error);
-            },
-            writable: true
-        },
-
-        /**
-         * An incrimented number of the tasks that have already been processed.
-         *
-         * @for ParallelTask
-         * @property processedIndex
-         * @type Integer
-         */
-        processedIndex: {
-            value: 0,
-            writable: true
+            }
         },
 
         /**
@@ -1375,19 +1502,19 @@
         processSubTask: {
             value: function(task) {
 
-                if (!task) {
+                if (task === undefined) {
                     if (this.logLevel >= LOG_ERROR) {
                         log(UNDEFINED_TASK);
                     }
                     return;
                 }
 
-                if (task.state === STATE_CANCELED) {
+                if (task._state === STATE_CANCELED) {
                     this.onSubTaskCancel(task);
                     return true;
                 }
 
-                this.processedIndex++;
+                this._processedIndex = this._processedIndex + 1;
 
                 task.group = this;
                 task.processed = true;
@@ -1399,22 +1526,19 @@
                 }
 
                 // set execution block
-                var group = this;
-                task.onChange = function(state, error) {
+                task.__onStateChange = function(state, error) {
                     if (state === STATE_COMPLETED) {
-                        group.onSubTaskComplete(this);
+                        this.group.onSubTaskComplete(this);
                     } else if (state === STATE_FAULTED) {
-                        group.onSubTaskFault(this, error);
+                        this.group.onSubTaskFault(this, error);
                     } else if (state === STATE_CANCELED) {
-                        group.onSubTaskCancel(this);
+                        this.group.onSubTaskCancel(this);
                     }
                 };
 
                 task.start();
-
                 return false;
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1432,8 +1556,7 @@
                 }
                 var index = this.tasks.indexOf(task);
                 this.tasks.splice(index, 1);
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1445,8 +1568,8 @@
         reset: {
             value: function() {
                 if (this.tasks) {
-                    this.currentIndex = 0;
-                    this.processedIndex = 0;
+                    this._currentIndex = 0;
+                    this._processedIndex = 0;
                     for (var i = 0; i < this.tasks.length; i++) {
                         this.tasks[i].reset();
                     }
@@ -1469,15 +1592,14 @@
                     for (var i = 0; i < totalDependencies; i++) {
                         var dependency = task.dependencies[i];
                         if (dependency.tid) {
-                            this.dependencyMap[task.tid].push(dependency.tid);
+                            this._dependencyMap[task.tid].push(dependency.tid);
                         } else {
-                            this.dependencyMap[task.tid].push(dependency);
+                            this._dependencyMap[task.tid].push(dependency);
                         }
                     }
 
                 }
-            },
-            writable: false
+            }
         }
     });
 
@@ -1519,6 +1641,39 @@
 
     ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 
+        // ===================================================================
+        // === ParallelTask Public Properties ================================
+        // ===================================================================
+
+        /**
+         * The max amounts of tasks that can run simultaneously.
+         *
+         * @for ParallelTask
+         * @property max
+         * @type Integer
+         * @default 20
+         */
+        max: {
+            value: 20,
+            writable: true
+        },
+
+        /**
+         * The kind of task
+         *
+         * @for ParallelTask
+         * @property type
+         * @type String
+         * @readonly
+         */
+        type: {
+            value: TYPE_PARALLEL
+        },
+
+        // ===================================================================
+        // === ParallelTask Methods ==========================================
+        // ===================================================================
+
         /**
          * This method is overridden from `TaskGroups` implementation because of the
          * nature of a parallel task. When a task is added it should be immediately
@@ -1530,17 +1685,56 @@
          */
         addSubTask: {
             value: function(task) {
-                if (!task || task.state === STATE_CANCELED) {
+                if (!task || task._state === STATE_CANCELED) {
                     return;
                 }
-                this.currentIndex++;
+                this._currentIndex++;
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
                 this.tasks.push(task);
                 this.processSubTask(task);
-            },
-            writable: true
+            }
+        },
+
+        /**
+         * @method canProcessSubTask
+         */
+        canProcessSubTask: {
+            value: function(task) {
+                if (!task.dependencies) {
+                    return true;
+                }
+                var totalDependencies = task.dependencies.length;
+                var canProcess = totalDependencies;
+                var processCount = 0;
+                var dependencyNames = [];
+                var dependencies = [];
+                for (var i = 0; i < totalDependencies; i++) {
+                    var dependency = task.dependencies[i];
+
+                    if (dependency._state > STATE_STARTED) {
+                        processCount++;
+                    } else {
+                        dependencies.push(dependency);
+                        dependencyNames.push(dependency.displayName);
+                    }
+                }
+                if (processCount < canProcess) {
+                    if (this.logLevel >= LOG_VERBOSE) {
+                        log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
+                    }
+                    dependencies.forEach(function(t, i) {
+                        var completion = function(e) {
+                            e.target.off("complete", completion);
+                            this.processSubTask(task);
+                        };
+                        t.on("complete", completion, this, false);
+                    }, this);
+                    return false;
+                }
+                return true;
+            }
         },
 
         /**
@@ -1557,26 +1751,12 @@
                 }
                 for (var i = 0; i < this.tasks.length; i++) {
                     var task = this.tasks[i];
-                    if (task.state !== STATE_CANCELED) {
+                    if (task._state !== STATE_CANCELED) {
                         return false;
                     }
                 }
                 return true;
-            },
-            writable: true
-        },
-
-        /**
-         * The max amounts of tasks that can run simultaneously.
-         *
-         * @for ParallelTask
-         * @property max
-         * @type Integer
-         * @default 20
-         */
-        max: {
-            value: 20,
-            writable: true
+            }
         },
 
         /**
@@ -1590,15 +1770,12 @@
          */
         onSubTaskComplete: {
             value: function(task) {
-                this.currentIndex++;
+                this._currentIndex++;
                 TaskGroup.prototype.onSubTaskComplete.call(this, task);
-                if (this.currentIndex === this.tasks.length) {
+                if (this._currentIndex === this.tasks.length) {
                     this.complete();
-                } else {
-                    this.processSubTasks();
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1616,8 +1793,7 @@
                 } else {
                     this.processSubTasks();
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1632,28 +1808,10 @@
          */
         processSubTask: {
             value: function(task) {
-                if (task !== undefined && task.dependencies !== undefined) {
-                    var totalDependencies = task.dependencies.length;
-                    var canProcess = totalDependencies;
-                    var processCount = 0;
-                    var dependencyNames = [];
-                    for (var i = 0; i < totalDependencies; i++) {
-                        var dependency = task.dependencies[i];
-                        dependencyNames.push(dependency.displayName);
-                        if (dependency.state > STATE_STARTED) {
-                            processCount++;
-                        }
-                    }
-                    if (processCount < canProcess) {
-                        if (this.logLevel >= LOG_VERBOSE) {
-                            log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
-                        }
-                        return;
-                    }
+                if (this.canProcessSubTask(task)) {
+                    TaskGroup.prototype.processSubTask.call(this, task);
                 }
-                TaskGroup.prototype.processSubTask.call(this, task);
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1665,29 +1823,22 @@
         processSubTasks: {
             value: function() {
                 /*
-			@TODO: THIS IS NOT CURRENTLY WORKING
+			@TODO: THIS IS NOT CURRENTLY WORKING... need to fix this in furture release
 			*/
-                for (var i = this.currentIndex; i < this.currentIndex + this.max; i++) {
-                    var task = this.tasks[i];
+                /*
+			for(var i = this.currentIndex; i < this.currentIndex + this.max; i++) {
+				var task = this.tasks[i];
+				if(task !== undefined && !task.processed) {
+					this.processSubTask(task);
+				}
+			}
+			*/
+                this.tasks.forEach(function(task) {
                     if (task !== undefined && !task.processed) {
                         this.processSubTask(task);
                     }
-                }
-            },
-            writable: true
-        },
-
-        /**
-         * The kind of task
-         *
-         * @for ParallelTask
-         * @property type
-         * @type String
-         * @readonly
-         */
-        type: {
-            value: TYPE_PARALLEL,
-            writable: true
+                }, this);
+            }
         }
     });
 
@@ -1729,6 +1880,26 @@
 
     SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 
+        // ===================================================================
+        // === SequenceTask Public Properties ================================
+        // ===================================================================
+
+        /**
+         * The kind of task
+         *
+         * @for SequenceTask
+         * @property type
+         * @type String
+         * @readonly
+         */
+        type: {
+            value: TYPE_SEQUENCE
+        },
+
+        // ===================================================================
+        // === SequenceTask Methods ==========================================
+        // ===================================================================
+
         /**
          * Overriden from TaskGroup. As long as the group has not been canceled,
          * when a sub task is canceled it simply moves on to the next task in the queue.
@@ -1740,11 +1911,10 @@
         onSubTaskCancel: {
             value: function(task) {
                 TaskGroup.prototype.onSubTaskCancel.call(this, task);
-                if (this.state !== STATE_CANCELED) {
+                if (this._state !== STATE_CANCELED) {
                     this.startNextSubTask();
                 }
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1757,13 +1927,16 @@
          */
         onSubTaskComplete: {
             value: function(task) {
-                if (this.state === STATE_CANCELED) {
+                if (this._state === STATE_CANCELED) {
                     return;
                 }
-                TaskGroup.prototype.onSubTaskComplete.call(this, task);
-                this.startNextSubTask();
-            },
-            writable: true
+                // @TODO: there has got to be a better way of doing this
+                var delegate = this;
+                setTimeout(function() {
+                    TaskGroup.prototype.onSubTaskComplete.call(this, task);
+                    delegate.startNextSubTask();
+                }, 0);
+            }
         },
 
         /**
@@ -1777,8 +1950,7 @@
         performTask: {
             value: function() {
                 this.startNextSubTask();
-            },
-            writable: true
+            }
         },
 
         /**
@@ -1789,11 +1961,11 @@
          */
         startNextSubTask: {
             value: function() {
-                if (this.state >= STATE_CANCELED) {
+                if (this._state >= STATE_CANCELED) {
                     return;
                 }
-                if (this.tasks && this.currentIndex < this.tasks.length) {
-                    var task = this.tasks[this.currentIndex++];
+                if (this.tasks && this._currentIndex < this.tasks.length) {
+                    var task = this.tasks[this._currentIndex++];
                     var skipped = this.processSubTask(task);
                     if (skipped) {
                         if (this.logLevel >= LOG_INFO) {
@@ -1802,23 +1974,9 @@
                         this.startNextSubTask();
                     }
                 } else {
-                    this.complete(this.data, this.operationType);
+                    this.complete();
                 }
-            },
-            writable: true
-        },
-
-        /**
-         * The kind of task
-         *
-         * @for SequenceTask
-         * @property type
-         * @type String
-         * @readonly
-         */
-        type: {
-            value: TYPE_SEQUENCE,
-            writable: true
+            }
         }
     });
 
@@ -1866,7 +2024,7 @@
         task.interval = task.interval ? task.interval : TIMEOUT_INTERVAL;
         task.complete = function() {
             if (this.doWhile()) {
-                this.state = STATE_INITIALIZED;
+                this._state = STATE_INITIALIZED;
                 var delegate = this;
                 if (this.interval !== 0) {
                     setTimeout(function() {

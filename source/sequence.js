@@ -30,6 +30,26 @@ var SequenceTask = MonkeyBars.SequenceTask = function(attributes) {
 
 SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	
+	// ===================================================================
+	// === SequenceTask Public Properties ================================
+	// ===================================================================
+
+	/**
+	 * The kind of task
+	 *
+	 * @for SequenceTask
+	 * @property type
+	 * @type String
+	 * @readonly
+	 */
+	type: {
+		value: TYPE_SEQUENCE
+	},
+
+	// ===================================================================
+	// === SequenceTask Methods ==========================================
+	// ===================================================================
+
 	/**
 	 * Overriden from TaskGroup. As long as the group has not been canceled,
 	 * when a sub task is canceled it simply moves on to the next task in the queue.
@@ -41,11 +61,10 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	onSubTaskCancel: {
 		value: function(task) {
 			TaskGroup.prototype.onSubTaskCancel.call(this, task);
-			if(this.state !== STATE_CANCELED) {
+			if(this._state !== STATE_CANCELED) {
 				this.startNextSubTask();
 			}
-		},
-		writable: true
+		}
 	},
 	
 	/**
@@ -58,13 +77,16 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	onSubTaskComplete: {
 		value: function(task) {
-			if(this.state === STATE_CANCELED) {
+			if(this._state === STATE_CANCELED) {
 				return;
 			}
-			TaskGroup.prototype.onSubTaskComplete.call(this, task);
-			this.startNextSubTask();
-		},
-		writable: true
+			// @TODO: there has got to be a better way of doing this
+			var delegate = this;
+			setTimeout(function(){ 
+				TaskGroup.prototype.onSubTaskComplete.call(this, task);
+				delegate.startNextSubTask(); 
+			},0);
+		}
 	},
 
 	/**
@@ -78,8 +100,7 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	performTask: {
 		value: function() {
 			this.startNextSubTask();
-		},
-		writable: true
+		}
 	},
 	
 	/**
@@ -90,11 +111,11 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	startNextSubTask: {
 		value: function() {
-			if(this.state >= STATE_CANCELED) {
+			if(this._state >= STATE_CANCELED) {
 				return;
 			}
-			if(this.tasks && this.currentIndex < this.tasks.length) {
-				var task = this.tasks[this.currentIndex++];
+			if(this.tasks && this._currentIndex < this.tasks.length) {
+				var task = this.tasks[this._currentIndex++];
 				var skipped = this.processSubTask(task);
 				if(skipped) {
 					if(this.logLevel >= LOG_INFO) {
@@ -103,23 +124,9 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 					this.startNextSubTask();
 				}
 			} else {
-				this.complete(this.data,this.operationType);
+				this.complete();
 			}
-		},
-		writable: true
-	},
-	
-	/**
-	 * The kind of task
-	 *
-	 * @for SequenceTask
-	 * @property type
-	 * @type String
-	 * @readonly
-	 */
-	type: {
-		value: TYPE_SEQUENCE,
-		writable: true
+		}
 	}
 });
 

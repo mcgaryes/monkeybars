@@ -1,12 +1,12 @@
-describe("Task Group Tests", function() {
+describe("task group", function() {
 
 	// ===================================================================
 	// === Extension Tests ===============================================
 	// ===================================================================
 	
-	describe("Extension Tests", function() {
+	describe("executes", function() {
 
-		it("Extending Group And Adding To Another Group Should Perform As Expected", function() {
+		it("after extending", function() {
 
 			var CustomGroup = MonkeyBars.TaskGroup.extend({
 				type: "CustomGroupType",
@@ -16,8 +16,8 @@ describe("Task Group Tests", function() {
 					}
 				},
 				onSubTaskComplete: function() {
-					this.currentIndex++;
-					if(this.currentIndex == this.tasks.length) {
+					this._currentIndex++;
+					if(this._currentIndex == this.tasks.length) {
 						this.complete();
 					}
 				}
@@ -46,7 +46,15 @@ describe("Task Group Tests", function() {
 			});
 
 			sg.start();
-			expect(sg.state).toEqual(4);
+
+			waitsFor(function() {
+				return sg.state > MonkeyBars.TaskStates.Started;
+			}, "the task to complete", 20000);
+
+			runs(function() {
+				expect(sg.state).toEqual(MonkeyBars.TaskStates.Completed);
+			});
+			
 		});
 
 	});

@@ -58,6 +58,9 @@ module.exports = function(grunt) {
                     token: "//%pre",
                     string: "/*!\n * @main MonkeyBars\n*/\n\n(function() {"
                 }, {
+                    token: "//%events",
+                    file: "../source/events.js"
+                },{
                     token: "//%worker",
                     file: "../source/worker.js"
                 }, {

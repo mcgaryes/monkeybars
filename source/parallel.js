@@ -30,6 +30,39 @@ var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
 
 ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	
+	// ===================================================================
+	// === ParallelTask Public Properties ================================
+	// ===================================================================
+
+	/**
+	 * The max amounts of tasks that can run simultaneously.
+	 *
+	 * @for ParallelTask
+	 * @property max
+	 * @type Integer
+	 * @default 20
+	 */
+	max: {
+		value: undefined,
+		writable: true
+	},
+	
+	/**
+	 * The kind of task
+	 *
+	 * @for ParallelTask
+	 * @property type
+	 * @type String
+	 * @readonly
+	 */
+	type: {
+		value: TYPE_PARALLEL
+	},
+
+	// ===================================================================
+	// === ParallelTask Methods ==========================================
+	// ===================================================================
+
 	/**
 	 * This method is overridden from `TaskGroups` implementation because of the
 	 * nature of a parallel task. When a task is added it should be immediately
@@ -41,17 +74,56 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	addSubTask: {
 		value: function(task) {
-			if(!task || task.state === STATE_CANCELED) {
+			if(!task || task._state === STATE_CANCELED) {
 				return;
 			}
-			this.currentIndex++;
+			this._currentIndex++;
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
 			this.tasks.push(task);
 			this.processSubTask(task);
-		},
-		writable: true
+		}
+	},
+
+	/**
+	 * @method canProcessSubTask
+	 */
+	canProcessSubTask:{
+		value:function(task){
+			if(!task.dependencies) {
+				return true;
+			}
+			var totalDependencies = task.dependencies.length;
+			var canProcess = totalDependencies;
+			var processCount = 0;
+			var dependencyNames = [];
+			var dependencies = [];
+			for(var i = 0; i < totalDependencies; i++) {
+				var dependency = task.dependencies[i];
+				
+				if(dependency._state > STATE_STARTED) {
+					processCount++;
+				} else {
+					dependencies.push(dependency);
+					dependencyNames.push(dependency.displayName);
+				}
+			}
+			if(processCount < canProcess) {
+				if(this.logLevel >= LOG_VERBOSE) {
+					log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
+				}
+				dependencies.forEach(function(t,i){
+					var completion = function(e){
+						e.target.off("complete",completion);
+						this.processSubTask(task);
+					};
+					t.on("complete",completion,this,false);
+				},this);
+				return false;
+			}
+			return true;
+		}
 	},
 
 	/**
@@ -68,26 +140,12 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			}
 			for(var i = 0; i < this.tasks.length; i++) {
 				var task = this.tasks[i];
-				if(task.state !== STATE_CANCELED) {
+				if(task._state !== STATE_CANCELED) {
 					return false;
 				}
 			}
 			return true;
-		},
-		writable: true
-	},
-
-	/**
-	 * The max amounts of tasks that can run simultaneously.
-	 *
-	 * @for ParallelTask
-	 * @property max
-	 * @type Integer
-	 * @default 20
-	 */
-	max: {
-		value: 20,
-		writable: true
+		}
 	},
 
 	/**
@@ -101,15 +159,16 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	onSubTaskComplete: {
 		value: function(task) {
-			this.currentIndex++;
+			this._currentIndex++;
 			TaskGroup.prototype.onSubTaskComplete.call(this, task);
-			if(this.currentIndex === this.tasks.length) {
+			if(this._currentIndex === this.tasks.length) {
 				this.complete();
 			} else {
-				this.processSubTasks();
+				if(this.max !== undefined) {
+					this.processSubTasks();
+				}
 			}
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -127,8 +186,7 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			} else {
 				this.processSubTasks();
 			}
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -143,28 +201,10 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	processSubTask: {
 		value: function(task) {
-			if(task !== undefined && task.dependencies !== undefined) {
-				var totalDependencies = task.dependencies.length;
-				var canProcess = totalDependencies;
-				var processCount = 0;
-				var dependencyNames = [];
-				for(var i = 0; i < totalDependencies; i++) {
-					var dependency = task.dependencies[i];
-					dependencyNames.push(dependency.displayName);
-					if(dependency.state > STATE_STARTED) {
-						processCount++;
-					}
-				}
-				if(processCount < canProcess) {
-					if(this.logLevel >= LOG_VERBOSE) {
-						log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
-					}
-					return;
-				}
+			if(this.canProcessSubTask(task)) {
+				TaskGroup.prototype.processSubTask.call(this, task);
 			}
-			TaskGroup.prototype.processSubTask.call(this, task);
-		},
-		writable: true
+		}
 	},
 
 	/**
@@ -175,30 +215,16 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	processSubTasks: {
 		value: function() {
-			/*
-			@TODO: THIS IS NOT CURRENTLY WORKING
-			*/
-			for(var i = this.currentIndex; i < this.currentIndex + this.max; i++) {
+			// @TODO: setting a max on anything over 1500 tasks results in a stack overflow
+			var min = this._currentIndex;
+			var max = min + (this.max !== undefined ? this.max : this.tasks.length);
+			for(var i = min; i < max; i++) {
 				var task = this.tasks[i];
 				if(task !== undefined && !task.processed) {
 					this.processSubTask(task);
 				}
 			}
-		},
-		writable: true
-	},
-
-	/**
-	 * The kind of task
-	 *
-	 * @for ParallelTask
-	 * @property type
-	 * @type String
-	 * @readonly
-	 */
-	type: {
-		value: TYPE_PARALLEL,
-		writable: true
+		}
 	}
 });
 
