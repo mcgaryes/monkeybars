@@ -36,7 +36,6 @@ describe("library", function() {
 	});
 
 	it("sequence task can handle load", function() {
-		return;
 		var tasks = [];
 		for(var i = 0; i < 2000; i++) {
 			var task = new MonkeyBars.Task({
