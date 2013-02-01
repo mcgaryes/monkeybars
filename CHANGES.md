@@ -1,6 +1,6 @@
 * **2013.01.31** - *v0.9.13*
 	* `onChange` is no longer a public method
-	* Tasks now have events and can be reference through on, off, has and trigger methods
+	* Tasks now have events and can be referenced through `on`, `off`, `has` and `trigger` methods of the task
 		* This was implemented to increase the shear number of tasks that can be run
 		* Triggering state changes is not suggested
 	* Performace tuning updates
@@ -8,7 +8,7 @@
 		* Load tests are now part of the unit testing 
 			* ParallelTask - 10000 simultaneous
 			* SequenceTask - 2000 (takes longer because of the timeout)
-	* `currentIndex` and `processedIndex` of group tasks are now pricate properties
+	* `currentIndex` and `processedIndex` of group tasks are now private properties
 	* 'state' is now only a getter
 	* Removed `max` attribute until I can further gauge its usefulness
 
