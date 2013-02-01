@@ -10,6 +10,7 @@
 			* SequenceTask - 2000 (takes longer because of the timeout)
 	* `currentIndex` and `processedIndex` of group tasks are now pricate properties
 	* 'state' is now only a getter
+	* Removed `max` attribute until I can further gauge its usefulness
 
 * **2013.01.11** - *v0.9.10*
 	* Source development is now completed in the `source` directory in smaller more managable pieces

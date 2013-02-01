@@ -33,19 +33,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	// ===================================================================
 	// === ParallelTask Public Properties ================================
 	// ===================================================================
-
-	/**
-	 * The max amounts of tasks that can run simultaneously.
-	 *
-	 * @for ParallelTask
-	 * @property max
-	 * @type Integer
-	 * @default 20
-	 */
-	max: {
-		value: undefined,
-		writable: true
-	},
 	
 	/**
 	 * The kind of task
@@ -113,13 +100,14 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 				if(this.logLevel >= LOG_VERBOSE) {
 					log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
 				}
-				dependencies.forEach(function(t,i){
-					var completion = function(e){
-						e.target.off("complete",completion);
-						this.processSubTask(task);
-					};
+				var completion = function(e){
+					e.target.off("complete",completion);
+					this.processSubTask(task);
+				};
+				for (var j = 0; j < dependencies.length; j++) {
+					var t = dependencies[j];
 					t.on("complete",completion,this,false);
-				},this);
+				}
 				return false;
 			}
 			return true;
@@ -163,10 +151,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			TaskGroup.prototype.onSubTaskComplete.call(this, task);
 			if(this._currentIndex === this.tasks.length) {
 				this.complete();
-			} else {
-				if(this.max !== undefined) {
-					this.processSubTasks();
-				}
 			}
 		}
 	},
@@ -215,10 +199,7 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 */
 	processSubTasks: {
 		value: function() {
-			// @TODO: setting a max on anything over 1500 tasks results in a stack overflow
-			var min = this._currentIndex;
-			var max = min + (this.max !== undefined ? this.max : this.tasks.length);
-			for(var i = min; i < max; i++) {
+			for(var i = 0;i<this.tasks.length;i++) {
 				var task = this.tasks[i];
 				if(task !== undefined && !task.processed) {
 					this.processSubTask(task);

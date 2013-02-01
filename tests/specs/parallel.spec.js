@@ -102,46 +102,6 @@ describe("parallel", function() {
 
 		});
 
-
-		it("can only run MAX amount simultaniously", function() {
-
-			var tasks = [];
-
-			for(var i = 0; i < 20; i++) {
-				tasks.push(new MonkeyBars.Task({
-					name: "task" + i,
-					performTask: function() {
-						var delegate = this;
-						setTimeout(function() {
-							delegate.complete();
-						}, 10);
-					}
-				}));
-			};
-
-			var group = new MonkeyBars.ParallelTask({
-				max: 3,
-				logLevel:1000,
-				tasks: tasks,
-				onComplete: function() {
-					groupTaskComplete = new Date().getTime();
-				}
-			});
-
-			group.start();
-			expect(group._processedIndex).toEqual(3);
-
-			waitsFor(function() {
-				return group.state > MonkeyBars.TaskStates.Started;
-			}, "the task to complete", 750);
-
-			runs(function() {
-				expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
-			});
-
-		});
-
-
 		it("only once its dependencies have", function() {
 
 			var t1 = new MonkeyBars.Task({

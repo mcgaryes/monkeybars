@@ -491,17 +491,19 @@
             if (type) {
                 if (callbackRef) {
                     var tempArr = [];
-                    this._eventMap[type].forEach(function(item, index) {
-                        if (item.callback === callbackRef) {
-                            this._eventMap[type] = this._eventMap[type].splice(index, 0);
+                    for (var i = 0; i < this._eventMap[type].length; i++) {
+                        var item1 = this._eventMap[type][i];
+                        if (item1.callback === callbackRef) {
+                            this._eventMap[type] = this._eventMap[type].splice(i, 0);
                         }
-                    }, this);
+                    }
                 } else {
-                    this._eventMap[type].forEach(function(item, index) {
-                        if (item.configurable === true) {
-                            this._eventMap[type] = this._eventMap[type].splice(index, 0);
+                    for (var j = 0; j < this._eventMap[type].length; j++) {
+                        var item2 = this._eventMap[type][j];
+                        if (item2.configurable === true) {
+                            this._eventMap[type] = this._eventMap[type].splice(j, 0);
                         }
-                    }, this);
+                    }
                 }
             } else {
                 // @TODO: need to come up with a way to look through all of the objects
@@ -548,13 +550,14 @@
             if (this._eventMap === undefined || this._eventMap[type] === undefined) {
                 return;
             }
-            this._eventMap[type].forEach(function(item) {
+            for (var i = 0; i < this._eventMap[type].length; i++) {
+                var item = this._eventMap[type][i];
                 item.callback.call(item.context, {
                     type: type,
                     target: this,
                     isConfigurable: item.configurable
                 });
-            }, this);
+            }
         }
     };
 
@@ -1646,19 +1649,6 @@
         // ===================================================================
 
         /**
-         * The max amounts of tasks that can run simultaneously.
-         *
-         * @for ParallelTask
-         * @property max
-         * @type Integer
-         * @default 20
-         */
-        max: {
-            value: 20,
-            writable: true
-        },
-
-        /**
          * The kind of task
          *
          * @for ParallelTask
@@ -1724,13 +1714,14 @@
                     if (this.logLevel >= LOG_VERBOSE) {
                         log("Cannot process " + task.displayName + " until its dependencies [" + dependencyNames.join(",") + "] have run");
                     }
-                    dependencies.forEach(function(t, i) {
-                        var completion = function(e) {
-                            e.target.off("complete", completion);
-                            this.processSubTask(task);
-                        };
+                    var completion = function(e) {
+                        e.target.off("complete", completion);
+                        this.processSubTask(task);
+                    };
+                    for (var j = 0; j < dependencies.length; j++) {
+                        var t = dependencies[j];
                         t.on("complete", completion, this, false);
-                    }, this);
+                    }
                     return false;
                 }
                 return true;
@@ -1822,22 +1813,12 @@
          */
         processSubTasks: {
             value: function() {
-                /*
-			@TODO: THIS IS NOT CURRENTLY WORKING... need to fix this in furture release
-			*/
-                /*
-			for(var i = this.currentIndex; i < this.currentIndex + this.max; i++) {
-				var task = this.tasks[i];
-				if(task !== undefined && !task.processed) {
-					this.processSubTask(task);
-				}
-			}
-			*/
-                this.tasks.forEach(function(task) {
+                for (var i = 0; i < this.tasks.length; i++) {
+                    var task = this.tasks[i];
                     if (task !== undefined && !task.processed) {
                         this.processSubTask(task);
                     }
-                }, this);
+                }
             }
         }
     });
