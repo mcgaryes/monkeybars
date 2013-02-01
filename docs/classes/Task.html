@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.11</em>
+            <em>API Docs for: 0.9.13</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -48,6 +48,8 @@
                 <li><a href="..&#x2F;classes/SequenceTask.html">SequenceTask</a></li>
             
                 <li><a href="..&#x2F;classes/Task.html">Task</a></li>
+            
+                <li><a href="..&#x2F;classes/TaskEvents.html">TaskEvents</a></li>
             
                 <li><a href="..&#x2F;classes/TaskGroup.html">TaskGroup</a></li>
             
@@ -104,7 +106,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l578"><code>..&#x2F;temp&#x2F;monkeybars.js:578</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l704"><code>..&#x2F;temp&#x2F;monkeybars.js:704</code></a>
         </div>
     
 
@@ -166,7 +168,7 @@ to see console logs during task execution.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l578"><code>..&#x2F;temp&#x2F;monkeybars.js:578</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l704"><code>..&#x2F;temp&#x2F;monkeybars.js:704</code></a>
         
         </p>
 
@@ -255,6 +257,13 @@ task.start();
 
                     <ul class="index-list methods extends">
                         
+                            <li class="index-item method private">
+                                <a href="#method___onStateChange">__onStateChange</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method">
                                 <a href="#method_cancel">cancel</a>
 
@@ -298,13 +307,6 @@ task.start();
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_onChange">onChange</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
                                 <a href="#method_onComplete">onComplete</a>
 
                                 
@@ -320,6 +322,13 @@ task.start();
                         
                             <li class="index-item method">
                                 <a href="#method_onStart">onStart</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_operate">operate</a>
 
                                 
                                 
@@ -362,6 +371,13 @@ task.start();
                                 
                             </li>
                         
+                            <li class="index-item method">
+                                <a href="#method_state">state</a>
+
+                                
+                                
+                            </li>
+                        
                     </ul>
                 </div>
             
@@ -393,7 +409,7 @@ task.start();
                                 
                             </li>
                         
-                            <li class="index-item property">
+                            <li class="index-item property private">
                                 <a href="#property_state">state</a>
 
                                 
@@ -435,6 +451,117 @@ task.start();
                 <h2 class="off-left">Methods</h2>
 
                 
+                    <div id="method___onStateChange" class="method item private">
+    <h3 class="name"><code>__onStateChange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>state</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>error</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l874"><code>..&#x2F;temp&#x2F;monkeybars.js:874</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method is called during the execution lifecycle of the task. It is intentionally
+left blank and is up to the instance to describe it functionality.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">state</code>
+                        <span class="type">Integer</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The current state of the task</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">error</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Message describing error</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_cancel" class="method item">
     <h3 class="name"><code>cancel</code></h3>
 
@@ -467,7 +594,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l644"><code>..&#x2F;temp&#x2F;monkeybars.js:644</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l891"><code>..&#x2F;temp&#x2F;monkeybars.js:891</code></a>
         
         </p>
 
@@ -555,7 +682,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l681"><code>..&#x2F;temp&#x2F;monkeybars.js:681</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l928"><code>..&#x2F;temp&#x2F;monkeybars.js:928</code></a>
         
         </p>
 
@@ -661,7 +788,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l737"><code>..&#x2F;temp&#x2F;monkeybars.js:737</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l971"><code>..&#x2F;temp&#x2F;monkeybars.js:971</code></a>
         
         </p>
 
@@ -725,7 +852,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l770"><code>..&#x2F;temp&#x2F;monkeybars.js:770</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1003"><code>..&#x2F;temp&#x2F;monkeybars.js:1003</code></a>
         
         </p>
 
@@ -831,7 +958,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l809"><code>..&#x2F;temp&#x2F;monkeybars.js:809</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1042"><code>..&#x2F;temp&#x2F;monkeybars.js:1042</code></a>
         
         </p>
 
@@ -908,7 +1035,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l834"><code>..&#x2F;temp&#x2F;monkeybars.js:834</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1053"><code>..&#x2F;temp&#x2F;monkeybars.js:1053</code></a>
         
         </p>
 
@@ -926,135 +1053,6 @@ task.start();
 
     
 
-    
-</div>
-
-                
-                    <div id="method_onChange" class="method item">
-    <h3 class="name"><code>onChange</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>state</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>error</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l845"><code>..&#x2F;temp&#x2F;monkeybars.js:845</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>This method is called during the execution lifecycle of the task. It is intentionally
-left blank and is up to the instance to describe it functionality.</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">state</code>
-                        <span class="type">Integer</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The current state of the task</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">error</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Message describing error</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>var task = new MonkeyBars.Task({
-    performTask:function(){
-        this.complete();
-    },
-    onChange:function(state,error){
-        if(state == MonkeyBars.TaskStates.Completed){
-            alert("complete");
-        }
-    }
-});
-
-task.start();
-</code></pre>
-            </div>
-        </div>
     
 </div>
 
@@ -1091,7 +1089,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l874"><code>..&#x2F;temp&#x2F;monkeybars.js:874</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1063"><code>..&#x2F;temp&#x2F;monkeybars.js:1063</code></a>
         
         </p>
 
@@ -1155,7 +1153,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l885"><code>..&#x2F;temp&#x2F;monkeybars.js:885</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1073"><code>..&#x2F;temp&#x2F;monkeybars.js:1073</code></a>
         
         </p>
 
@@ -1232,7 +1230,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l897"><code>..&#x2F;temp&#x2F;monkeybars.js:897</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1084"><code>..&#x2F;temp&#x2F;monkeybars.js:1084</code></a>
         
         </p>
 
@@ -1246,6 +1244,114 @@ task.start();
         <p>Convenience method called when the task starts.</p>
     </div>
 
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_operate" class="method item">
+    <h3 class="name"><code>operate</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>data</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1094"><code>..&#x2F;temp&#x2F;monkeybars.js:1094</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">data</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -1286,7 +1392,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l915"><code>..&#x2F;temp&#x2F;monkeybars.js:915</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1105"><code>..&#x2F;temp&#x2F;monkeybars.js:1105</code></a>
         
         </p>
 
@@ -1359,7 +1465,7 @@ original prototype method (see the example below).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l943"><code>..&#x2F;temp&#x2F;monkeybars.js:943</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1132"><code>..&#x2F;temp&#x2F;monkeybars.js:1132</code></a>
         
         </p>
 
@@ -1413,7 +1519,7 @@ original prototype method (see the example below).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1439"><code>..&#x2F;temp&#x2F;monkeybars.js:1439</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1565"><code>..&#x2F;temp&#x2F;monkeybars.js:1565</code></a>
         
         </p>
 
@@ -1479,7 +1585,7 @@ original prototype method (see the example below).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1458"><code>..&#x2F;temp&#x2F;monkeybars.js:1458</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1584"><code>..&#x2F;temp&#x2F;monkeybars.js:1584</code></a>
         
         </p>
 
@@ -1556,7 +1662,7 @@ original prototype method (see the example below).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l956"><code>..&#x2F;temp&#x2F;monkeybars.js:956</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1145"><code>..&#x2F;temp&#x2F;monkeybars.js:1145</code></a>
         
         </p>
 
@@ -1573,6 +1679,78 @@ This method can only be run once on a task.</p>
 
     
 
+    
+
+    
+</div>
+
+                
+                    <div id="method_state" class="method item">
+    <h3 class="name"><code>state</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Integer</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1180"><code>..&#x2F;temp&#x2F;monkeybars.js:1180</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Getter for the tasks current state. Code outside of an implementation should not set the 
+state as this is an internal property.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Integer</span>:
+                    
+                    The current state of the task
+                
+            </div>
+        </div>
     
 
     
@@ -1610,7 +1788,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l724"><code>..&#x2F;temp&#x2F;monkeybars.js:724</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l786"><code>..&#x2F;temp&#x2F;monkeybars.js:786</code></a>
         
         </p>
 
@@ -1656,7 +1834,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l752"><code>..&#x2F;temp&#x2F;monkeybars.js:752</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l985"><code>..&#x2F;temp&#x2F;monkeybars.js:985</code></a>
         
         </p>
 
@@ -1700,7 +1878,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l821"><code>..&#x2F;temp&#x2F;monkeybars.js:821</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l798"><code>..&#x2F;temp&#x2F;monkeybars.js:798</code></a>
         
         </p>
 
@@ -1723,12 +1901,14 @@ This method can only be run once on a task.</p>
 </div>
 
                 
-                    <div id="property_state" class="property item">
+                    <div id="property_state" class="property item private">
     <h3 class="name"><code>state</code></h3>
     <span class="type">Integer</span>
 
     
 
+    
+        <span class="flag private">private</span>
     
 
     
@@ -1746,7 +1926,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l991"><code>..&#x2F;temp&#x2F;monkeybars.js:991</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l770"><code>..&#x2F;temp&#x2F;monkeybars.js:770</code></a>
         
         </p>
 
@@ -1759,8 +1939,6 @@ This method can only be run once on a task.</p>
         <p>The current state of the task</p>
     </div>
 
-    
-        <p><strong>Default:</strong> 0</p>
     
 
     
@@ -1792,7 +1970,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1005"><code>..&#x2F;temp&#x2F;monkeybars.js:1005</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l811"><code>..&#x2F;temp&#x2F;monkeybars.js:811</code></a>
         
         </p>
 
@@ -1838,7 +2016,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1018"><code>..&#x2F;temp&#x2F;monkeybars.js:1018</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l824"><code>..&#x2F;temp&#x2F;monkeybars.js:824</code></a>
         
         </p>
 
@@ -1882,7 +2060,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1031"><code>..&#x2F;temp&#x2F;monkeybars.js:1031</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l836"><code>..&#x2F;temp&#x2F;monkeybars.js:836</code></a>
         
         </p>
 
