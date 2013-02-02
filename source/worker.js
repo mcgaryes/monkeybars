@@ -1,12 +1,10 @@
 /**
  * Creates a new worker representation of the task
- *
  * @extends Object
  * @constructor
  * @class WorkerTask
  * @param {Task} task The task we're creating this worker representation from
  * @example
- *
  *	var CustomWorker = MonkeyBars.WorkerTask.extend({
  *		append:function(data){
  *			this.postMessage("append",100);
@@ -16,7 +14,6 @@
  *			this.complete(data/2);
  *		}
  *	});
- *
  *	var task = new MonkeyBars.Task({
  *		...
  *		concurrent:true,
@@ -32,9 +29,7 @@
  *		}
  *		...
  *	});
- *
  *	task.start();
- *
  */
 var WorkerTask = MonkeyBars.WorkerTask = function(task) {
 	if(!task) {
@@ -55,7 +50,6 @@ WorkerTask.prototype = {
 	/**
 	 * Post a complete message along with the data passed stating that the task
 	 * has completed what it needs to.
-	 *
 	 * @for WorkerTask
 	 * @method complete
 	 */
@@ -66,7 +60,6 @@ WorkerTask.prototype = {
 	/**
 	 * Posts a fault message to the main thread that the task has faulted. Passes
 	 * an error as its value.
-	 *
 	 * @for WorkerTask
 	 * @method fault
 	 * @param {Object} error
@@ -77,7 +70,6 @@ WorkerTask.prototype = {
 
 	/**
 	 * Posts a cancel message to the main thread that the task has been canceled.
-	 *
 	 * @for WorkerTask
 	 * @method cancel
 	 */
@@ -89,7 +81,6 @@ WorkerTask.prototype = {
 	 * Convenience method for posting messages to the main thread. You should opt into
 	 * using this as it is how the rest of the WorkerTask core methods communicate with
 	 * the main thread.
-	 *
 	 * @for WorkerTask
 	 * @method postMessage
 	 * @param {String} type
@@ -111,7 +102,6 @@ WorkerTask.prototype = {
  * Extention functionality for worker tasks. This is different than the core extend
  * functionality because we need to make sure that all of the protoprops provided
  * are available on the task because of its concurrent nature.
- *
  * @method extend
  * @for WorkerTask
  * @param {Object} protoProps

@@ -1,5 +1,7 @@
 /*!
- * @main MonkeyBars
+ * MonkeyBars v0.9.13
+ * http://mcgaryes.github.com/monkeybars/
+ * MonkeyBars may be freely distributed under the MIT license.
  */
 
 (function() {
@@ -40,7 +42,7 @@
 
     /**
      * Reference to the global js object (i.e. brower's window)
-     *
+     * @for MonkeyBars
      * @property root
      * @type Object
      * @private
@@ -49,7 +51,7 @@
 
     /**
      * Counter used to create unique task ids
-     *
+     * @for MonkeyBars
      * @property taskIdCounter
      * @type Integer
      * @private
@@ -58,7 +60,6 @@
 
     /**
      * List of all whitelisted properties for a task
-     *
      * @property taskOptions
      * @type Array
      * @private
@@ -73,7 +74,6 @@
 
     /**
      * Object returned by module. Works as namespace for the task library.
-     *
      * @property MonkeyBars
      * @type Object
      */
@@ -95,9 +95,10 @@
 
     /**
      * Creates task based on the options passed.
-     *
+     * @for MonkeyBars
      * @method createTaskWithOptions
      * @param {Object} options
+     * @return {Task} Task
      * @private
      */
     var createTaskWithOptions = function(attributes) {
@@ -154,9 +155,10 @@
 
     /**
      * Creates an array of tasks based on the options array passed.
-     *
+     * @for MonkeyBars
      * @method createSubTasksFromTaskOptionsArray
      * @param {Array} tasks
+     * @return {Array} Array of tasks
      * @private
      */
     var createSubTasksFromTaskOptionsArray = function(tasks) {
@@ -171,9 +173,10 @@
 
     /**
      * Creates property descriptors from the passes attributes.
-     *
+     * @for MonkeyBars
      * @method createPropertyDescriptorsWithAttributes
      * @param {Object} attributes
+     * @return {Object} Property descriptors object
      * @private
      */
     var createPropertyDescriptorsWithAttributes = function(attributes) {
@@ -189,7 +192,7 @@
 
     /**
      * Generates a unique id for each task.
-     *
+     * @for MonkeyBars
      * @method generateUniqueId
      * @param {String} prefix
      * @return {String} tid
@@ -203,10 +206,11 @@
 
     /**
      * Determains whether the first task is dependent on the second.
-     *
+     * @for MonkeyBars
      * @method isTaskDependentOnTask
      * @param {Task} task1
      * @param {Task} task2
+     * @return {Boolean} Whether or not the task is dependent on the other
      * @private
      */
     var isTaskDependentOnTask = function(task1, task2) {
@@ -227,7 +231,7 @@
 
     /**
      * Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/
-     *
+     * @for MonkeyBars
      * @method serialize
      * @param {Object} o
      * @return {String} Serialized string representation of the passed object
@@ -278,7 +282,7 @@
 
     /**
      * Creates a blob string to be used with the web worker for concurrent task execution
-     *
+     * @for MonkeyBars
      * @method createBlobWithTask
      * @param {Task} task
      * @return {Blob} Blob instance
@@ -312,7 +316,7 @@
 
     /**
      * Creates a web Worker instance with the passed arguments
-     *
+     * @for MonkeyBars
      * @method createWebWorkerWithBlobAndTask
      * @param {Blob} blob
      * @param {Task} task
@@ -358,7 +362,7 @@
 
     /**
      * Performs the tasks `performTask` functionality within a web worker
-     *
+     * @for MonkeyBars
      * @method performTaskFunctionalityWithWebWorker
      * @param {Task} task
      * @private
@@ -380,6 +384,7 @@
 
     /**
      * @method decorateTaskBasedOnAttributes
+     * @for MonkeyBars
      * @param {Task} task
      * @param {Object} attributes
      * @private
@@ -398,13 +403,11 @@
 
     /**
      * Extention functionality for various task types.
-     *
      * @method extend
      * @for MonkeyBars
      * @param {Object} protoProps
      * @return {Function} child Constructor function for extended task type
      * @example
-     *		
      *	var CustomTask = MonkeyBars.Task.extend({
      *		name:"CustomTask",
      *		newMethod:function(){
@@ -412,7 +415,7 @@
      *		}
      *	});
      *	var instance = new CustomTask();
-     *
+     * @private
      */
     var extend = function(protoProps) {
         var parent = this;
@@ -426,10 +429,10 @@
 
     /**
      * Simple console.log wrapper
-     *
-     * @method extend
      * @for MonkeyBars
+     * @method log
      * @param {Object} msg
+     * @private
      */
     var log = function(msg) {
         if (console && console.log) {
@@ -469,6 +472,7 @@
          * @for TaskEvents
          * @method has
          * @param {String} type
+         * @return {Boolean} Whether or not the object contains the listener type
          */
         has: function(type) {
             if (this._eventMap === undefined || this._eventMap[type] === undefined) {
@@ -540,11 +544,10 @@
         },
 
         /**
-         * Removes an event from the object.
+         * Triggers the firing of an event on an object.
          * @for TaskEvents
-         * @method off
+         * @method trigger
          * @param {String} type
-         * @param {Function} callback
          */
         trigger: function(type) {
             if (this._eventMap === undefined || this._eventMap[type] === undefined) {
@@ -567,13 +570,11 @@
 
     /**
      * Creates a new worker representation of the task
-     *
      * @extends Object
      * @constructor
      * @class WorkerTask
      * @param {Task} task The task we're creating this worker representation from
      * @example
-     *
      *	var CustomWorker = MonkeyBars.WorkerTask.extend({
      *		append:function(data){
      *			this.postMessage("append",100);
@@ -583,7 +584,6 @@
      *			this.complete(data/2);
      *		}
      *	});
-     *
      *	var task = new MonkeyBars.Task({
      *		...
      *		concurrent:true,
@@ -599,9 +599,7 @@
      *		}
      *		...
      *	});
-     *
      *	task.start();
-     *
      */
     var WorkerTask = MonkeyBars.WorkerTask = function(task) {
         if (!task) {
@@ -622,7 +620,6 @@
         /**
          * Post a complete message along with the data passed stating that the task
          * has completed what it needs to.
-         *
          * @for WorkerTask
          * @method complete
          */
@@ -633,7 +630,6 @@
         /**
          * Posts a fault message to the main thread that the task has faulted. Passes
          * an error as its value.
-         *
          * @for WorkerTask
          * @method fault
          * @param {Object} error
@@ -644,7 +640,6 @@
 
         /**
          * Posts a cancel message to the main thread that the task has been canceled.
-         *
          * @for WorkerTask
          * @method cancel
          */
@@ -656,7 +651,6 @@
          * Convenience method for posting messages to the main thread. You should opt into
          * using this as it is how the rest of the WorkerTask core methods communicate with
          * the main thread.
-         *
          * @for WorkerTask
          * @method postMessage
          * @param {String} type
@@ -678,7 +672,6 @@
      * Extention functionality for worker tasks. This is different than the core extend
      * functionality because we need to make sure that all of the protoprops provided
      * are available on the task because of its concurrent nature.
-     *
      * @method extend
      * @for WorkerTask
      * @param {Object} protoProps
@@ -705,13 +698,12 @@
      * The simplest form of a __MonkeyBars__ task. Once started the task executes all
      * functionality located within the `performTask` function block. Set `logLevel`
      * to see console logs during task execution.
-     *
      * @extends Object
+     * @uses TaskEvents
      * @constructor
      * @class Task
      * @param {Object} attributes List of attributes to apply to the task
      * @example
-     *
      *	var task = new MonkeyBars.Task({
      *		name:"ExampleTask",
      *		performTask:function(){
@@ -722,7 +714,6 @@
      *		}
      *	});
      *	task.start();
-     *
      */
     var Task = MonkeyBars.Task = function(attributes) {
 
@@ -769,9 +760,8 @@
 
         /**
          * The current state of the task
-         *
          * @for Task
-         * @property state
+         * @property _state
          * @type Integer
          * @private
          */
@@ -785,7 +775,6 @@
 
         /**
          * Whether or not to run the task concurrently through Web Workers
-         *
          * @for Task
          * @property concurrent
          * @type Boolean
@@ -797,7 +786,6 @@
 
         /**
          * The default logging level for tasks
-         *
          * @for Task
          * @property logLevel
          * @type Integer
@@ -810,7 +798,6 @@
 
         /**
          * Time in milliseconds in which a task will time out and throw a fault
-         *
          * @for Task
          * @property timeout
          * @type Integer
@@ -823,7 +810,6 @@
 
         /**
          * The kind of task
-         *
          * @for Task
          * @property type
          * @type String
@@ -838,13 +824,11 @@
          * constructor. Or it can be an object with a constructor key/value pair. If it is the
          * latter then you also have the option of passing a handler function that will be run
          * on the `onMessage` handler of the Worker itself.
-         *
          * @for Task
          * @property worker
          * @type Object
          * @default undefined
          * @example
-         *
          *	var task = new MonkeyBars.Task({
          *		...
          *		worker:{
@@ -855,13 +839,11 @@
          *		},
          *		...
          *	});
-         *
          *	var task = new MonkeyBars.Task({
          *		...
          *		worker:CustomWorker,
          *		...
          *	});
-         *
          */
         worker: {
             value: undefined
@@ -891,11 +873,9 @@
         /**
          * Calling this method cancels the task. However it is up to the instance to handle
          * the canceled state.
-         *
          * @for Task
          * @method cancel
          * @example
-         *
          *	var task = new MonkeyBars.Task({
          *		performTask:function(){
          *			if(true){
@@ -903,9 +883,7 @@
          *			}
          *		}
          *	});
-         *
          *	task.start();
-         *
          */
         cancel: {
             value: function() {
@@ -927,7 +905,6 @@
 
         /**
          * Calling this method says that the tasks execution is now complete.
-         *
          * @for Task
          * @method complete
          * @param {Object} data
@@ -984,10 +961,10 @@
 
         /**
          * Display name for task. Used in logging output.
-         *
          * @for Task
          * @property displayName
          * @type String
+         * @return {String} The display name of the task
          * @readonly
          */
         displayName: {
@@ -1003,12 +980,10 @@
         /**
          * Calling this method to fault a task. If it is part of a group task this will
          * also call the groups fault method passing the error up to the group.
-         *
          * @for Task
          * @method fault
          * @param {String} error Message associated with the cause of the fault.
          * @example
-         *
          *	var task = new MonkeyBars.Task({
          *		performTask:function(){
          *			var a = "a";
@@ -1017,9 +992,7 @@
          *			}
          *		}
          *	});
-         *
          *	task.start();
-         *
          */
         fault: {
             value: function(error) {
@@ -1041,7 +1014,6 @@
 
         /**
          * Initialization functionality
-         *
          * @for Task
          * @method initialize
          * @param {Object} attributes
@@ -1052,7 +1024,6 @@
 
         /**
          * Convenience method called when the task is canceled.
-         *
          * @for Task
          * @method onCancel
          */
@@ -1062,7 +1033,6 @@
 
         /**
          * Convenience method called when the task completes.
-         *
          * @for Task
          * @method onComplete
          */
@@ -1072,7 +1042,6 @@
 
         /**
          * Convenience method called when the task faults.
-         *
          * @for Task
          * @method onFault
          * @param {String} error Message describing error
@@ -1083,7 +1052,6 @@
 
         /**
          * Convenience method called when the task starts.
-         *
          * @for Task
          * @method onStart
          */
@@ -1092,6 +1060,7 @@
         },
 
         /**
+         * @for Task
          * @method operate
          * @param {Object} data
          * @param {Task} task
@@ -1107,12 +1076,10 @@
          * is called and not overridden. If you overwrite this method on a task group
          * then you need to make sure that you call the extended/implemented classes
          * original prototype method (see the example below).
-         *
          * @for Task
          * @method performTask
          * @required
          * @example
-         *
          *	var parallel = new MonkeyBars.ParallelTask({
          *		...
          *		performTask:function(){
@@ -1121,7 +1088,6 @@
          *		}
          *		...
          *	})
-         *
          */
         performTask: {
             value: function() {
@@ -1131,7 +1097,6 @@
 
         /**
          * Resets a task to its original state
-         *
          * @for Task
          * @method reset
          */
@@ -1145,7 +1110,6 @@
         /**
          * Kicks off the execution of the task by calling the tasks `performTask` method.
          * This method can only be run once on a task.
-         *
          * @for Task
          * @method start
          */
@@ -1180,6 +1144,7 @@
         /**
          * Getter for the tasks current state. Code outside of an implementation should not set the 
          * state as this is an internal property.
+         * @for Task
          * @method state
          * @return {Integer} The current state of the task
          */
@@ -1199,7 +1164,6 @@
     /**
      * A task group, and extention of task, provides the building blocks for creating
      * a group of tasks that is inherently a task itself.
-     *
      * @extends Task
      * @constructor
      * @class TaskGroup
@@ -1255,8 +1219,7 @@
 
         /**
          * An incrimented number of the tasks that have already been processed.
-         *
-         * @for ParallelTask
+         * @for TaskGroup
          * @property _processedIndex
          * @type Integer
          * @private
@@ -1273,31 +1236,25 @@
         /**
          * Adds a subtask to the groups queue. This is helpful when you want to add
          * a sub task after instantiation.
-         *
          * @for TaskGroup
          * @method addSubTask
          * @param {Object} task Either an object containing attributes of a task or
          * an already instantiated task
          * @example
-         *
          *	var parallel = new MonkeyBars.ParallelTask();
-         *	
          *	parallel.addSubTask({
          *		name:"subtask",
          *		performTask:function(){
          *			this.complete();
          *		}
          *	});
-         *
          *	var simple = new MonkeyBars.simple({
          *		name:"subtask",
          *		performTask:function(){
          *			this.complete();
          *		}
          *	});
-         *
          *	parallel.addSubTask(simple);
-         *
          */
         addSubTask: {
             value: function(task) {
@@ -1314,20 +1271,16 @@
 
         /**
          * Adds a subtask after another task
-         *
          * @for TaskGroup
          * @method addSubTaskAfterTask
          * @param {Object} task Either an object containing attributes of a task or
          * @param {Object} afterTask Reference to an already added task
          * @example
-         *
          *	var parallel = new MonkeyBars.ParallelTask({
          *		tasks:[task1,task3]
          *	});
-         *
          *	var task2 = new MonkeyBars.Task();
          *	parallel.addTaskAfterTask(task2,task1);
-         *
          */
         addSubTaskAfterTask: {
             value: function(task, afterTask) {
@@ -1350,7 +1303,6 @@
         /**
          * Very similar to `addSubTaskAfterTask` except the inject task appears
          * before the second arguments position.
-         *
          * @for TaskGroup
          * @method addSubTaskBeforeTask
          * @param {Object} task Either an object containing attributes of a task or
@@ -1376,7 +1328,6 @@
 
         /**
          * Cancel the group and cancel all of its subtasks
-         *
          * @for TaskGroup
          * @method cancel
          */
@@ -1403,10 +1354,10 @@
 
         /**
          * Return a Task object, if it exists, based on the `name` passed.
-         *
          * @for TaskGroup
          * @method getTaskByName
          * @param {String} name The user defined name
+         * @return {Task} Task with name
          */
         getTaskByName: {
             value: function(name) {
@@ -1421,18 +1372,15 @@
 
         /**
          * Return a Task object, if it exists, based on the `tid` passed.
-         *
          * @for TaskGroup
          * @method getTaskByTid
          * @param {String} tid The id of the task you want
          * @example
-         *
          *	var parallel = new MonkeyBars.ParallelTask({
          *		tasks:[task1,task3]
          *	});
-         *
          *	parallel.getTaskByTid(task1.tid);
-         *
+         * @return {Task} Task with name
          */
         getTaskByTid: {
             value: function(tid) {
@@ -1448,7 +1396,6 @@
         /**
          * Called when a subtask calls its cancel method. When a subtask is canceled
          * any other subtasks that are dependent on the canceled task are cancled.
-         *
          * @for TaskGroup
          * @method onSubTaskCancel
          * @param {Task} task The task that was just canceled
@@ -1467,7 +1414,6 @@
         /**
          * Called when a sub task completes. Must be overridden with functionality
          * provided by the extending class.
-         *
          * @for TaskGroup
          * @method onSubTaskComplete
          * @param {Task} task The task that just completed
@@ -1480,7 +1426,6 @@
 
         /**
          * Called when a subtask calls its fault method.
-         *
          * @for TaskGroup
          * @method onSubTaskFault
          * @param {String} error Error message.
@@ -1497,7 +1442,6 @@
          * tasks on change functionality. If you wish to have a sub task that handles
          * its own change functionality then you will need to implement the partner
          * convenience methods.
-         *
          * @for TaskGroup
          * @method processSubTask
          * @param {Task} task Subtask to process
@@ -1547,7 +1491,6 @@
         /**
          * Removes a task from its group. Removing the task after it has executed will
          * have no apparent affect as it has already ran.
-         *
          * @for TaskGroup
          * @method removeSubTask
          * @param {Task} task The task you wish to remove from the group.
@@ -1564,8 +1507,7 @@
 
         /**
          * Resets a task to its original state
-         *
-         * @for Task
+         * @for TaskGroup
          * @method reset
          */
         reset: {
@@ -1583,10 +1525,9 @@
 
         /**
          * Sets dependencies for the passed task.
-         *
+         * @for TaskGroup
          * @method setDependeciesForTask
          * @param {Task} task
-         * @static
          */
         setDependeciesForTask: {
             value: function(task) {
@@ -1615,27 +1556,23 @@
     /**
      * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
      * complete functionality is run when all of its sub tasks are complete.
-     *
      * @extends TaskGroup
      * @constructor
      * @class ParallelTask
      * @param {Object} attributes List of attributes to apply to the task group
      * @example
-     *
-     *		var parallel = new MonkeyBars.ParallelTask({
-     *			name:"ParallelTask",
-     *			tasks:[new MonkeyBars.Task({
-     *				performTask:function(){
-     *					this.complete();
-     *				}
-     *			})],
-     *			onComplete:function(){
-     *				alert(this.name + " is complete!");
+     *	var parallel = new MonkeyBars.ParallelTask({
+     *		name:"ParallelTask",
+     *		tasks:[new MonkeyBars.Task({
+     *			performTask:function(){
+     *				this.complete();
      *			}
-     *		});
-     *
-     *		parallel.start();
-     *
+     *		})],
+     *		onComplete:function(){
+     *			alert(this.name + " is complete!");
+     *		}
+     *	});
+     *	parallel.start();
      */
     var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
         var task = this;
@@ -1650,7 +1587,6 @@
 
         /**
          * The kind of task
-         *
          * @for ParallelTask
          * @property type
          * @type String
@@ -1668,7 +1604,6 @@
          * This method is overridden from `TaskGroups` implementation because of the
          * nature of a parallel task. When a task is added it should be immediately
          * processed and started.
-         *
          * @for ParallelTask
          * @method addSubTask
          * @param {Object} task Either an object containing attributes of a task or
@@ -1688,7 +1623,9 @@
         },
 
         /**
+         * @for ParallelTask
          * @method canProcessSubTask
+         * @return {Boolean} Whether or not the task can process
          */
         canProcessSubTask: {
             value: function(task) {
@@ -1730,7 +1667,6 @@
 
         /**
          * Checks whether or not the group has any enabled sub tasks.
-         *
          * @for ParallelTask
          * @method hasNoEnabledSubTasks
          * @return {Boolean} Has sub tasks or not
@@ -1754,7 +1690,6 @@
          * Overridden from TaskGroup. This method is run everytime a sub task
          * completes. When all subtasks are complete the groups complete method
          * is called.
-         *
          * @for ParallelTask
          * @method onSubTaskComplete
          * @param {Task} task
@@ -1773,7 +1708,6 @@
          * Overridden from Task. First checks to see if there are any enabled
          * subtasks to process. If there arent the groups complete method is called.
          * If there are then the group processes all of the sub tasks it has.
-         *
          * @for ParallelTask
          * @method performTask
          */
@@ -1792,7 +1726,6 @@
          * tasks on change functionality. If you wish to have a sub task that handles
          * its own change functionality then you will need to implement the partner
          * convenience methods.
-         *
          * @for ParallelTask
          * @method processSubTask
          * @param {Task} task Subtask to process
@@ -1807,7 +1740,6 @@
 
         /**
          * Processes all of the sub tasks available for the group
-         *
          * @for ParallelTask
          * @method processSubTasks
          */
@@ -1832,27 +1764,23 @@
     /**
      * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
      * complete functionality is run when all of its sub tasks are complete.
-     *
      * @extends TaskGroup
      * @constructor
      * @class SequenceTask
      * @param {Object} attributes List of attributes to apply to the task group
      * @example
-     *
-     *		var sequence = new MonkeyBars.SequenceTask({
-     *			name:"ParallelTask",
-     *			tasks:[new MonkeyBars.Task({
-     *				performTask:function(){
-     *					this.complete();
-     *				}
-     *			})],
-     *			onComplete:function(){
-     *				alert(this.name + " is complete!");
+     *	var sequence = new MonkeyBars.SequenceTask({
+     *		name:"ParallelTask",
+     *		tasks:[new MonkeyBars.Task({
+     *			performTask:function(){
+     *				this.complete();
      *			}
-     *		});
-     *
-     *		sequence.start();
-     *
+     *		})],
+     *		onComplete:function(){
+     *			alert(this.name + " is complete!");
+     *		}
+     *	});
+     *	sequence.start();
      */
     var SequenceTask = MonkeyBars.SequenceTask = function(attributes) {
         var task = this;
@@ -1867,7 +1795,6 @@
 
         /**
          * The kind of task
-         *
          * @for SequenceTask
          * @property type
          * @type String
@@ -1884,7 +1811,6 @@
         /**
          * Overriden from TaskGroup. As long as the group has not been canceled,
          * when a sub task is canceled it simply moves on to the next task in the queue.
-         *
          * @for SequenceTask
          * @method onSubTaskCancel
          * @param {Task} task
@@ -1901,7 +1827,6 @@
         /**
          * Overridden from TaskGroup. As long as the group has not been canceled,
          * when a sub task completes it starts the next sibling in the queue.
-         *
          * @for SequenceTask
          * @method onSubTaskComplete
          * @param {Task} task
@@ -1923,7 +1848,6 @@
         /**
          * Starts the next sub task in the sequence. If overriden you need to call the
          * SequenceTask's prototype `performTask` method.
-         *
          * @for SequenceTask
          * @method performTask
          * @param {Task} task
@@ -1936,7 +1860,6 @@
 
         /**
          * Starts the next task in the queue after its previous sibling has completed.
-         *
          * @for SequenceTask
          * @method startNextSubTask
          */
@@ -1970,7 +1893,6 @@
     /**
      * Decorator to provide for loop functionality for the task. The task executes
      * as many times as referenced by the count attribute provided by the instance.
-     *
      * @for MonkeyBars
      * @method forTaskDecorator
      * @param {Object} task
@@ -1995,7 +1917,6 @@
     /**
      * Decorator to provide while loop functionaliy. The task executed until the `while`
      * method returns false.
-     *
      * @for MonkeyBars
      * @method whileTaskDecorator
      * @param {Object} task
@@ -2024,7 +1945,6 @@
 
     /**
      * The task doesnt execute until the when method provided returns true.
-     *
      * @for MonkeyBars
      * @method whenTaskDecorator
      * @param {Object} task
@@ -2049,11 +1969,10 @@
 
     /**
      * Task states contstants.
-     *
      * @property TaskStates
      * @for MonkeyBars
      * @type Object
-     * @static
+     * @final
      */
     MonkeyBars.TaskStates = {
         Initialized: STATE_INITIALIZED,
@@ -2065,11 +1984,10 @@
 
     /**
      * Task types contstants.
-     *
      * @property TaskTypes
      * @for MonkeyBars
      * @type Object
-     * @static
+     * @final
      */
     MonkeyBars.TaskTypes = {
         Parallel: TYPE_PARALLEL,
@@ -2079,11 +1997,10 @@
 
     /**
      * Log level contstants.
-     *
      * @property LogLevels
      * @for MonkeyBars
      * @type Object
-     * @static
+     * @final
      */
     MonkeyBars.LogLevels = {
         None: LOG_NONE,

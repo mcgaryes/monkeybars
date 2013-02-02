@@ -36,7 +36,7 @@ var UNHANDLED_POST_MESSAGE = "Unhandled 'postMessage'";
 
 /**
  * Reference to the global js object (i.e. brower's window)
- *
+ * @for MonkeyBars
  * @property root
  * @type Object
  * @private
@@ -45,7 +45,7 @@ var root = this;
 
 /**
  * Counter used to create unique task ids
- *
+ * @for MonkeyBars
  * @property taskIdCounter
  * @type Integer
  * @private
@@ -54,7 +54,6 @@ var taskIdCounter = 0;
 
 /**
  * List of all whitelisted properties for a task
- *
  * @property taskOptions
  * @type Array
  * @private
@@ -70,7 +69,6 @@ var taskOptions = [
 
 /**
  * Object returned by module. Works as namespace for the task library.
- *
  * @property MonkeyBars
  * @type Object
  */
@@ -92,9 +90,10 @@ if(typeof exports !== 'undefined') {
 
 /**
  * Creates task based on the options passed.
- *
+ * @for MonkeyBars
  * @method createTaskWithOptions
  * @param {Object} options
+ * @return {Task} Task
  * @private
  */
 var createTaskWithOptions = function(attributes) {
@@ -151,9 +150,10 @@ var createTaskWithOptions = function(attributes) {
 
 /**
  * Creates an array of tasks based on the options array passed.
- *
+ * @for MonkeyBars
  * @method createSubTasksFromTaskOptionsArray
  * @param {Array} tasks
+ * @return {Array} Array of tasks
  * @private
  */
 var createSubTasksFromTaskOptionsArray = function(tasks) {
@@ -168,9 +168,10 @@ var createSubTasksFromTaskOptionsArray = function(tasks) {
 
 /**
  * Creates property descriptors from the passes attributes.
- *
+ * @for MonkeyBars
  * @method createPropertyDescriptorsWithAttributes
  * @param {Object} attributes
+ * @return {Object} Property descriptors object
  * @private
  */
 var createPropertyDescriptorsWithAttributes = function(attributes) {
@@ -186,7 +187,7 @@ var createPropertyDescriptorsWithAttributes = function(attributes) {
 
 /**
  * Generates a unique id for each task.
- *
+ * @for MonkeyBars
  * @method generateUniqueId
  * @param {String} prefix
  * @return {String} tid
@@ -200,10 +201,11 @@ var generateUniqueId = function(prefix) {
 
 /**
  * Determains whether the first task is dependent on the second.
- *
+ * @for MonkeyBars
  * @method isTaskDependentOnTask
  * @param {Task} task1
  * @param {Task} task2
+ * @return {Boolean} Whether or not the task is dependent on the other
  * @private
  */
 var isTaskDependentOnTask = function(task1, task2) {
@@ -224,7 +226,7 @@ var isTaskDependentOnTask = function(task1, task2) {
 
 /**
  * Variation of http://blog.stchur.com/2007/04/06/serializing-objects-in-javascript/
- *
+ * @for MonkeyBars
  * @method serialize
  * @param {Object} o
  * @return {String} Serialized string representation of the passed object
@@ -275,7 +277,7 @@ var serialize = function(o) {
 
 /**
  * Creates a blob string to be used with the web worker for concurrent task execution
- *
+ * @for MonkeyBars
  * @method createBlobWithTask
  * @param {Task} task
  * @return {Blob} Blob instance
@@ -309,7 +311,7 @@ var createBlobWithTask = function(task) {
 
 /**
  * Creates a web Worker instance with the passed arguments
- *
+ * @for MonkeyBars
  * @method createWebWorkerWithBlobAndTask
  * @param {Blob} blob
  * @param {Task} task
@@ -355,7 +357,7 @@ var createWebWorkerWithBlobAndTask = function(blob, task) {
 
 /**
  * Performs the tasks `performTask` functionality within a web worker
- *
+ * @for MonkeyBars
  * @method performTaskFunctionalityWithWebWorker
  * @param {Task} task
  * @private
@@ -377,6 +379,7 @@ var performTaskFunctionalityWithWebWorker = function(task) {
 
 /**
  * @method decorateTaskBasedOnAttributes
+ * @for MonkeyBars
  * @param {Task} task
  * @param {Object} attributes
  * @private
@@ -395,13 +398,11 @@ var decorateTaskBasedOnAttributes = function(task, attributes) {
 
 /**
  * Extention functionality for various task types.
- *
  * @method extend
  * @for MonkeyBars
  * @param {Object} protoProps
  * @return {Function} child Constructor function for extended task type
  * @example
- *		
  *	var CustomTask = MonkeyBars.Task.extend({
  *		name:"CustomTask",
  *		newMethod:function(){
@@ -409,7 +410,7 @@ var decorateTaskBasedOnAttributes = function(task, attributes) {
  *		}
  *	});
  *	var instance = new CustomTask();
- *
+ * @private
  */
 var extend = function(protoProps) {
 	var parent = this;
@@ -423,10 +424,10 @@ var extend = function(protoProps) {
 
 /**
  * Simple console.log wrapper
- *
- * @method extend
  * @for MonkeyBars
+ * @method log
  * @param {Object} msg
+ * @private
  */
 var log = function(msg) {
 	if(console && console.log) { 
@@ -482,11 +483,10 @@ var log = function(msg) {
 
 /**
  * Task states contstants.
- *
  * @property TaskStates
  * @for MonkeyBars
  * @type Object
- * @static
+ * @final
  */
 MonkeyBars.TaskStates = {
 	Initialized: STATE_INITIALIZED,
@@ -498,11 +498,10 @@ MonkeyBars.TaskStates = {
 
 /**
  * Task types contstants.
- *
  * @property TaskTypes
  * @for MonkeyBars
  * @type Object
- * @static
+ * @final
  */
 MonkeyBars.TaskTypes = {
 	Parallel: TYPE_PARALLEL,
@@ -512,11 +511,10 @@ MonkeyBars.TaskTypes = {
 
 /**
  * Log level contstants.
- *
  * @property LogLevels
  * @for MonkeyBars
  * @type Object
- * @static
+ * @final
  */
 MonkeyBars.LogLevels = {
 	None: LOG_NONE,

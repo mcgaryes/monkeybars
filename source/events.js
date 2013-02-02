@@ -26,6 +26,7 @@ var TaskEvents = {
 	 * @for TaskEvents
 	 * @method has
 	 * @param {String} type
+	 * @return {Boolean} Whether or not the object contains the listener type
 	 */
 	has: function(type) {
 		if(this._eventMap === undefined || this._eventMap[type] === undefined) {
@@ -97,11 +98,10 @@ var TaskEvents = {
 	},
 
 	/**
-	 * Removes an event from the object.
+	 * Triggers the firing of an event on an object.
 	 * @for TaskEvents
-	 * @method off
+	 * @method trigger
 	 * @param {String} type
-	 * @param {Function} callback
 	 */
 	trigger: function(type) {
 		if(this._eventMap === undefined || this._eventMap[type] === undefined) {

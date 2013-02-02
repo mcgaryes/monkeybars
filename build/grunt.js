@@ -7,7 +7,8 @@ module.exports = function(grunt) {
     var monkeyBarsDescription = "Task library that provides a simple structure for handling singular, sequential and parallel units of code.";
     var monkeyBarsRepository = "https://github.com/mcgaryes/monkeybars/";
     var monkeyBarsHomePage = "http://mcgaryes.github.com/monkeybars/";
-    var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + "\n* " + monkeyBarsDescription + " \n* " + monkeyBarsHomePage + "\n*/";
+    var LICENSE = monkeyBarsName + " may be freely distributed under the MIT license.";
+    var monkeyBarsBanner = "/*!\n* MonkeyBars v" + monkeyBarsVersion + " \n* " + monkeyBarsHomePage + " \n* " + LICENSE + "\n*/";
 
     // object will be used to create the package.json file for npm manager
     var monkeyBarsPackageJsonTemplate = {
@@ -56,7 +57,7 @@ module.exports = function(grunt) {
                 output: "../monkeybars.js",
                 tokens: [{
                     token: "//%pre",
-                    string: "/*!\n * @main MonkeyBars\n*/\n\n(function() {"
+                    string: monkeyBarsBanner + "\n\n(function() {"
                 }, {
                     token: "//%events",
                     file: "../source/events.js"

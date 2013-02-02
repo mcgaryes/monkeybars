@@ -1,27 +1,23 @@
 /**
  * A SequenceTask is a TaskGroup that runs all of its subtasks serially. Its
  * complete functionality is run when all of its sub tasks are complete.
- *
  * @extends TaskGroup
  * @constructor
  * @class SequenceTask
  * @param {Object} attributes List of attributes to apply to the task group
  * @example
- *
- *		var sequence = new MonkeyBars.SequenceTask({
- *			name:"ParallelTask",
- *			tasks:[new MonkeyBars.Task({
- *				performTask:function(){
- *					this.complete();
- *				}
- *			})],
- *			onComplete:function(){
- *				alert(this.name + " is complete!");
+ *	var sequence = new MonkeyBars.SequenceTask({
+ *		name:"ParallelTask",
+ *		tasks:[new MonkeyBars.Task({
+ *			performTask:function(){
+ *				this.complete();
  *			}
- *		});
- *
- *		sequence.start();
- *
+ *		})],
+ *		onComplete:function(){
+ *			alert(this.name + " is complete!");
+ *		}
+ *	});
+ *	sequence.start();
  */
 var SequenceTask = MonkeyBars.SequenceTask = function(attributes) {
 	var task = this;
@@ -36,7 +32,6 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 
 	/**
 	 * The kind of task
-	 *
 	 * @for SequenceTask
 	 * @property type
 	 * @type String
@@ -53,7 +48,6 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	/**
 	 * Overriden from TaskGroup. As long as the group has not been canceled,
 	 * when a sub task is canceled it simply moves on to the next task in the queue.
-	 *
 	 * @for SequenceTask
 	 * @method onSubTaskCancel
 	 * @param {Task} task
@@ -70,7 +64,6 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	/**
 	 * Overridden from TaskGroup. As long as the group has not been canceled,
 	 * when a sub task completes it starts the next sibling in the queue.
-	 *
 	 * @for SequenceTask
 	 * @method onSubTaskComplete
 	 * @param {Task} task
@@ -92,7 +85,6 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	/**
 	 * Starts the next sub task in the sequence. If overriden you need to call the
 	 * SequenceTask's prototype `performTask` method.
-	 *
 	 * @for SequenceTask
 	 * @method performTask
 	 * @param {Task} task
@@ -105,7 +97,6 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	
 	/**
 	 * Starts the next task in the queue after its previous sibling has completed.
-	 *
 	 * @for SequenceTask
 	 * @method startNextSubTask
 	 */

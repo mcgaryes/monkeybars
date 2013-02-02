@@ -1,27 +1,23 @@
 /**
  * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
  * complete functionality is run when all of its sub tasks are complete.
- *
  * @extends TaskGroup
  * @constructor
  * @class ParallelTask
  * @param {Object} attributes List of attributes to apply to the task group
  * @example
- *
- *		var parallel = new MonkeyBars.ParallelTask({
- *			name:"ParallelTask",
- *			tasks:[new MonkeyBars.Task({
- *				performTask:function(){
- *					this.complete();
- *				}
- *			})],
- *			onComplete:function(){
- *				alert(this.name + " is complete!");
+ *	var parallel = new MonkeyBars.ParallelTask({
+ *		name:"ParallelTask",
+ *		tasks:[new MonkeyBars.Task({
+ *			performTask:function(){
+ *				this.complete();
  *			}
- *		});
- *
- *		parallel.start();
- *
+ *		})],
+ *		onComplete:function(){
+ *			alert(this.name + " is complete!");
+ *		}
+ *	});
+ *	parallel.start();
  */
 var ParallelTask = MonkeyBars.ParallelTask = function(attributes) {
 	var task = this;
@@ -36,7 +32,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	
 	/**
 	 * The kind of task
-	 *
 	 * @for ParallelTask
 	 * @property type
 	 * @type String
@@ -54,7 +49,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 * This method is overridden from `TaskGroups` implementation because of the
 	 * nature of a parallel task. When a task is added it should be immediately
 	 * processed and started.
-	 *
 	 * @for ParallelTask
 	 * @method addSubTask
 	 * @param {Object} task Either an object containing attributes of a task or
@@ -74,7 +68,9 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	},
 
 	/**
+	 * @for ParallelTask
 	 * @method canProcessSubTask
+	 * @return {Boolean} Whether or not the task can process
 	 */
 	canProcessSubTask:{
 		value:function(task){
@@ -116,7 +112,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 
 	/**
 	 * Checks whether or not the group has any enabled sub tasks.
-	 *
 	 * @for ParallelTask
 	 * @method hasNoEnabledSubTasks
 	 * @return {Boolean} Has sub tasks or not
@@ -140,7 +135,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 * Overridden from TaskGroup. This method is run everytime a sub task
 	 * completes. When all subtasks are complete the groups complete method
 	 * is called.
-	 *
 	 * @for ParallelTask
 	 * @method onSubTaskComplete
 	 * @param {Task} task
@@ -159,7 +153,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 * Overridden from Task. First checks to see if there are any enabled
 	 * subtasks to process. If there arent the groups complete method is called.
 	 * If there are then the group processes all of the sub tasks it has.
-	 *
 	 * @for ParallelTask
 	 * @method performTask
 	 */
@@ -178,7 +171,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 	 * tasks on change functionality. If you wish to have a sub task that handles
 	 * its own change functionality then you will need to implement the partner
 	 * convenience methods.
-	 *
 	 * @for ParallelTask
 	 * @method processSubTask
 	 * @param {Task} task Subtask to process
@@ -193,7 +185,6 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 
 	/**
 	 * Processes all of the sub tasks available for the group
-	 *
 	 * @for ParallelTask
 	 * @method processSubTasks
 	 */

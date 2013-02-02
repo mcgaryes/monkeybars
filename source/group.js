@@ -1,7 +1,6 @@
 /**
  * A task group, and extention of task, provides the building blocks for creating
  * a group of tasks that is inherently a task itself.
- *
  * @extends Task
  * @constructor
  * @class TaskGroup
@@ -57,8 +56,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * An incrimented number of the tasks that have already been processed.
-	 *
-	 * @for ParallelTask
+	 * @for TaskGroup
 	 * @property _processedIndex
 	 * @type Integer
 	 * @private
@@ -75,31 +73,25 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	/**
 	 * Adds a subtask to the groups queue. This is helpful when you want to add
 	 * a sub task after instantiation.
-	 *
 	 * @for TaskGroup
 	 * @method addSubTask
 	 * @param {Object} task Either an object containing attributes of a task or
 	 * an already instantiated task
 	 * @example
-	 *
 	 *	var parallel = new MonkeyBars.ParallelTask();
-	 *	
 	 *	parallel.addSubTask({
 	 *		name:"subtask",
 	 *		performTask:function(){
 	 *			this.complete();
 	 *		}
 	 *	});
-	 *
 	 *	var simple = new MonkeyBars.simple({
 	 *		name:"subtask",
 	 *		performTask:function(){
 	 *			this.complete();
 	 *		}
 	 *	});
-	 *
 	 *	parallel.addSubTask(simple);
-	 *
 	 */
 	addSubTask: {
 		value: function(task) {
@@ -116,20 +108,16 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Adds a subtask after another task
-	 *
 	 * @for TaskGroup
 	 * @method addSubTaskAfterTask
 	 * @param {Object} task Either an object containing attributes of a task or
 	 * @param {Object} afterTask Reference to an already added task
 	 * @example
-	 *
 	 *	var parallel = new MonkeyBars.ParallelTask({
 	 *		tasks:[task1,task3]
 	 *	});
-	 *
 	 *	var task2 = new MonkeyBars.Task();
 	 *	parallel.addTaskAfterTask(task2,task1);
-	 *
 	 */
 	addSubTaskAfterTask: {
 		value: function(task, afterTask) {
@@ -152,7 +140,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	/**
 	 * Very similar to `addSubTaskAfterTask` except the inject task appears
 	 * before the second arguments position.
-	 *
 	 * @for TaskGroup
 	 * @method addSubTaskBeforeTask
 	 * @param {Object} task Either an object containing attributes of a task or
@@ -178,7 +165,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Cancel the group and cancel all of its subtasks
-	 *
 	 * @for TaskGroup
 	 * @method cancel
 	 */
@@ -205,10 +191,10 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Return a Task object, if it exists, based on the `name` passed.
-	 *
 	 * @for TaskGroup
 	 * @method getTaskByName
 	 * @param {String} name The user defined name
+	 * @return {Task} Task with name
 	 */
 	getTaskByName: {
 		value: function(name) {
@@ -223,18 +209,15 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Return a Task object, if it exists, based on the `tid` passed.
-	 *
 	 * @for TaskGroup
 	 * @method getTaskByTid
 	 * @param {String} tid The id of the task you want
 	 * @example
-	 *
 	 *	var parallel = new MonkeyBars.ParallelTask({
 	 *		tasks:[task1,task3]
 	 *	});
-	 *
 	 *	parallel.getTaskByTid(task1.tid);
-	 *
+	 * @return {Task} Task with name
 	 */
 	getTaskByTid: {
 		value: function(tid) {
@@ -250,7 +233,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	/**
 	 * Called when a subtask calls its cancel method. When a subtask is canceled
 	 * any other subtasks that are dependent on the canceled task are cancled.
-	 *
 	 * @for TaskGroup
 	 * @method onSubTaskCancel
 	 * @param {Task} task The task that was just canceled
@@ -269,7 +251,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	/**
 	 * Called when a sub task completes. Must be overridden with functionality
 	 * provided by the extending class.
-	 *
 	 * @for TaskGroup
 	 * @method onSubTaskComplete
 	 * @param {Task} task The task that just completed
@@ -282,7 +263,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Called when a subtask calls its fault method.
-	 *
 	 * @for TaskGroup
 	 * @method onSubTaskFault
 	 * @param {String} error Error message.
@@ -299,7 +279,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 * tasks on change functionality. If you wish to have a sub task that handles
 	 * its own change functionality then you will need to implement the partner
 	 * convenience methods.
-	 *
 	 * @for TaskGroup
 	 * @method processSubTask
 	 * @param {Task} task Subtask to process
@@ -347,7 +326,6 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	/**
 	 * Removes a task from its group. Removing the task after it has executed will
 	 * have no apparent affect as it has already ran.
-	 *
 	 * @for TaskGroup
 	 * @method removeSubTask
 	 * @param {Task} task The task you wish to remove from the group.
@@ -364,8 +342,7 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Resets a task to its original state
-	 *
-	 * @for Task
+	 * @for TaskGroup
 	 * @method reset
 	 */
 	reset:{
@@ -383,10 +360,9 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 
 	/**
 	 * Sets dependencies for the passed task.
-	 *
+	 * @for TaskGroup
 	 * @method setDependeciesForTask
 	 * @param {Task} task
-	 * @static
 	 */
 	setDependeciesForTask: {
 		value: function(task) {

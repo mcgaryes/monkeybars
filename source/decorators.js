@@ -1,7 +1,6 @@
 /**
  * Decorator to provide for loop functionality for the task. The task executes
  * as many times as referenced by the count attribute provided by the instance.
- *
  * @for MonkeyBars
  * @method forTaskDecorator
  * @param {Object} task
@@ -26,7 +25,6 @@ var forTaskDecorator = function(task) {
 /**
  * Decorator to provide while loop functionaliy. The task executed until the `while`
  * method returns false.
- *
  * @for MonkeyBars
  * @method whileTaskDecorator
  * @param {Object} task
@@ -55,7 +53,6 @@ var whileTaskDecorator = function(task) {
 
 /**
  * The task doesnt execute until the when method provided returns true.
- *
  * @for MonkeyBars
  * @method whenTaskDecorator
  * @param {Object} task

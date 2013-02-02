@@ -2,13 +2,12 @@
  * The simplest form of a __MonkeyBars__ task. Once started the task executes all
  * functionality located within the `performTask` function block. Set `logLevel`
  * to see console logs during task execution.
- *
  * @extends Object
+ * @uses TaskEvents
  * @constructor
  * @class Task
  * @param {Object} attributes List of attributes to apply to the task
  * @example
- *
  *	var task = new MonkeyBars.Task({
  *		name:"ExampleTask",
  *		performTask:function(){
@@ -19,7 +18,6 @@
  *		}
  *	});
  *	task.start();
- *
  */
 var Task = MonkeyBars.Task = function(attributes) {
 
@@ -66,9 +64,8 @@ Task.prototype = Object.create(TaskEvents, {
 
 	/**
 	 * The current state of the task
-	 *
 	 * @for Task
-	 * @property state
+	 * @property _state
 	 * @type Integer
 	 * @private
 	 */
@@ -82,7 +79,6 @@ Task.prototype = Object.create(TaskEvents, {
 
 	/**
 	 * Whether or not to run the task concurrently through Web Workers
-	 *
 	 * @for Task
 	 * @property concurrent
 	 * @type Boolean
@@ -94,7 +90,6 @@ Task.prototype = Object.create(TaskEvents, {
 
 	/**
 	 * The default logging level for tasks
-	 *
 	 * @for Task
 	 * @property logLevel
 	 * @type Integer
@@ -107,7 +102,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * Time in milliseconds in which a task will time out and throw a fault
-	 *
 	 * @for Task
 	 * @property timeout
 	 * @type Integer
@@ -120,7 +114,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * The kind of task
-	 *
 	 * @for Task
 	 * @property type
 	 * @type String
@@ -135,13 +128,11 @@ Task.prototype = Object.create(TaskEvents, {
 	 * constructor. Or it can be an object with a constructor key/value pair. If it is the
 	 * latter then you also have the option of passing a handler function that will be run
 	 * on the `onMessage` handler of the Worker itself.
-	 *
 	 * @for Task
 	 * @property worker
 	 * @type Object
 	 * @default undefined
 	 * @example
-	 *
 	 *	var task = new MonkeyBars.Task({
 	 *		...
 	 *		worker:{
@@ -152,13 +143,11 @@ Task.prototype = Object.create(TaskEvents, {
 	 *		},
 	 *		...
 	 *	});
-	 *
 	 *	var task = new MonkeyBars.Task({
 	 *		...
 	 *		worker:CustomWorker,
 	 *		...
 	 *	});
-	 *
 	 */
 	worker: {
 		value: undefined
@@ -188,11 +177,9 @@ Task.prototype = Object.create(TaskEvents, {
 	/**
 	 * Calling this method cancels the task. However it is up to the instance to handle
 	 * the canceled state.
-	 *
 	 * @for Task
 	 * @method cancel
 	 * @example
-	 *
 	 *	var task = new MonkeyBars.Task({
 	 *		performTask:function(){
 	 *			if(true){
@@ -200,9 +187,7 @@ Task.prototype = Object.create(TaskEvents, {
 	 *			}
 	 *		}
 	 *	});
-	 *
 	 *	task.start();
-	 *
 	 */
 	cancel: {
 		value: function() {
@@ -224,7 +209,6 @@ Task.prototype = Object.create(TaskEvents, {
 
 	/**
 	 * Calling this method says that the tasks execution is now complete.
-	 *
 	 * @for Task
 	 * @method complete
 	 * @param {Object} data
@@ -281,10 +265,10 @@ Task.prototype = Object.create(TaskEvents, {
 
 	/**
 	 * Display name for task. Used in logging output.
-	 *
 	 * @for Task
 	 * @property displayName
 	 * @type String
+	 * @return {String} The display name of the task
 	 * @readonly
 	 */
 	displayName: {
@@ -300,12 +284,10 @@ Task.prototype = Object.create(TaskEvents, {
 	/**
 	 * Calling this method to fault a task. If it is part of a group task this will
 	 * also call the groups fault method passing the error up to the group.
-	 *
 	 * @for Task
 	 * @method fault
 	 * @param {String} error Message associated with the cause of the fault.
 	 * @example
-	 *
 	 *	var task = new MonkeyBars.Task({
 	 *		performTask:function(){
 	 *			var a = "a";
@@ -314,9 +296,7 @@ Task.prototype = Object.create(TaskEvents, {
 	 *			}
 	 *		}
 	 *	});
-	 *
 	 *	task.start();
-	 *
 	 */
 	fault: {
 		value: function(error) {
@@ -337,7 +317,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * Initialization functionality
-	 *
 	 * @for Task
 	 * @method initialize
 	 * @param {Object} attributes
@@ -348,7 +327,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * Convenience method called when the task is canceled.
-	 *
 	 * @for Task
 	 * @method onCancel
 	 */
@@ -358,7 +336,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * Convenience method called when the task completes.
-	 *
 	 * @for Task
 	 * @method onComplete
 	 */
@@ -368,7 +345,6 @@ Task.prototype = Object.create(TaskEvents, {
 
 	/**
 	 * Convenience method called when the task faults.
-	 *
 	 * @for Task
 	 * @method onFault
 	 * @param {String} error Message describing error
@@ -379,7 +355,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * Convenience method called when the task starts.
-	 *
 	 * @for Task
 	 * @method onStart
 	 */
@@ -388,6 +363,7 @@ Task.prototype = Object.create(TaskEvents, {
 	},
 	
 	/**
+	 * @for Task
 	 * @method operate
 	 * @param {Object} data
 	 * @param {Task} task
@@ -403,12 +379,10 @@ Task.prototype = Object.create(TaskEvents, {
 	 * is called and not overridden. If you overwrite this method on a task group
 	 * then you need to make sure that you call the extended/implemented classes
 	 * original prototype method (see the example below).
-	 *
 	 * @for Task
 	 * @method performTask
 	 * @required
 	 * @example
-	 *
 	 *	var parallel = new MonkeyBars.ParallelTask({
 	 *		...
 	 *		performTask:function(){
@@ -417,7 +391,6 @@ Task.prototype = Object.create(TaskEvents, {
 	 *		}
 	 *		...
 	 *	})
-	 *
 	 */
 	performTask: {
 		value: function() {
@@ -427,7 +400,6 @@ Task.prototype = Object.create(TaskEvents, {
 	
 	/**
 	 * Resets a task to its original state
-	 *
 	 * @for Task
 	 * @method reset
 	 */
@@ -441,7 +413,6 @@ Task.prototype = Object.create(TaskEvents, {
 	/**
 	 * Kicks off the execution of the task by calling the tasks `performTask` method.
 	 * This method can only be run once on a task.
-	 *
 	 * @for Task
 	 * @method start
 	 */
@@ -476,6 +447,7 @@ Task.prototype = Object.create(TaskEvents, {
 	/**
 	 * Getter for the tasks current state. Code outside of an implementation should not set the 
 	 * state as this is an internal property.
+	 * @for Task
 	 * @method state
 	 * @return {Integer} The current state of the task
 	 */
