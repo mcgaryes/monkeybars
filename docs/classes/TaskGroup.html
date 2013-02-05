@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.13</em>
+            <em>API Docs for: 0.9.14</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -106,7 +106,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1199"><code>..&#x2F;temp&#x2F;monkeybars.js:1199</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1164"><code>..&#x2F;temp&#x2F;monkeybars.js:1164</code></a>
         </div>
     
 
@@ -167,7 +167,7 @@ a group of tasks that is inherently a task itself.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1199"><code>..&#x2F;temp&#x2F;monkeybars.js:1199</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1164"><code>..&#x2F;temp&#x2F;monkeybars.js:1164</code></a>
         
         </p>
 
@@ -309,7 +309,28 @@ a group of tasks that is inherently a task itself.</p>
                             </li>
                         
                             <li class="index-item method inherited">
+                                <a href="#method_has">has</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
                                 <a href="#method_initialize">initialize</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_off">off</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_on">on</a>
 
                                 
                                 
@@ -392,8 +413,15 @@ a group of tasks that is inherently a task itself.</p>
                                 
                             </li>
                         
-                            <li class="index-item method inherited inherited">
+                            <li class="index-item method inherited">
                                 <a href="#method_reset">reset</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setDependeciesForTask">setDependeciesForTask</a>
 
                                 
                                 
@@ -408,6 +436,13 @@ a group of tasks that is inherently a task itself.</p>
                         
                             <li class="index-item method inherited">
                                 <a href="#method_state">state</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_trigger">trigger</a>
 
                                 
                                 
@@ -437,6 +472,27 @@ a group of tasks that is inherently a task itself.</p>
                                 
                             </li>
                         
+                            <li class="index-item property private inherited">
+                                <a href="#property__eventMap">_eventMap</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__processedIndex">_processedIndex</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private inherited">
+                                <a href="#property__state">_state</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item property inherited">
                                 <a href="#property_concurrent">concurrent</a>
 
@@ -453,13 +509,6 @@ a group of tasks that is inherently a task itself.</p>
                         
                             <li class="index-item property inherited">
                                 <a href="#property_logLevel">logLevel</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property private inherited">
-                                <a href="#property_state">state</a>
 
                                 
                                 
@@ -547,7 +596,7 @@ a group of tasks that is inherently a task itself.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l874"><code>..&#x2F;temp&#x2F;monkeybars.js:874</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l856"><code>..&#x2F;temp&#x2F;monkeybars.js:856</code></a>
         
         </p>
 
@@ -650,7 +699,7 @@ left blank and is up to the instance to describe it functionality.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1273"><code>..&#x2F;temp&#x2F;monkeybars.js:1273</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1236"><code>..&#x2F;temp&#x2F;monkeybars.js:1236</code></a>
         
         </p>
 
@@ -699,21 +748,18 @@ an already instantiated task</p>
 
             <div class="example-content">
                 <pre class="code prettyprint"><code>var parallel = new MonkeyBars.ParallelTask();
-
 parallel.addSubTask({
     name:"subtask",
     performTask:function(){
         this.complete();
     }
 });
-
 var simple = new MonkeyBars.simple({
     name:"subtask",
     performTask:function(){
         this.complete();
     }
 });
-
 parallel.addSubTask(simple);
 </code></pre>
             </div>
@@ -770,7 +816,7 @@ parallel.addSubTask(simple);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1315"><code>..&#x2F;temp&#x2F;monkeybars.js:1315</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1272"><code>..&#x2F;temp&#x2F;monkeybars.js:1272</code></a>
         
         </p>
 
@@ -834,7 +880,6 @@ parallel.addSubTask(simple);
                 <pre class="code prettyprint"><code>var parallel = new MonkeyBars.ParallelTask({
     tasks:[task1,task3]
 });
-
 var task2 = new MonkeyBars.Task();
 parallel.addTaskAfterTask(task2,task1);
 </code></pre>
@@ -892,7 +937,7 @@ parallel.addTaskAfterTask(task2,task1);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1350"><code>..&#x2F;temp&#x2F;monkeybars.js:1350</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1303"><code>..&#x2F;temp&#x2F;monkeybars.js:1303</code></a>
         
         </p>
 
@@ -985,7 +1030,7 @@ before the second arguments position.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1377"><code>..&#x2F;temp&#x2F;monkeybars.js:1377</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1329"><code>..&#x2F;temp&#x2F;monkeybars.js:1329</code></a>
         
         </p>
 
@@ -1052,7 +1097,7 @@ before the second arguments position.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l928"><code>..&#x2F;temp&#x2F;monkeybars.js:928</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l906"><code>..&#x2F;temp&#x2F;monkeybars.js:906</code></a>
         
         </p>
 
@@ -1155,7 +1200,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l971"><code>..&#x2F;temp&#x2F;monkeybars.js:971</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l948"><code>..&#x2F;temp&#x2F;monkeybars.js:948</code></a>
         
         </p>
 
@@ -1216,7 +1261,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1003"><code>..&#x2F;temp&#x2F;monkeybars.js:1003</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l980"><code>..&#x2F;temp&#x2F;monkeybars.js:980</code></a>
         
         </p>
 
@@ -1271,7 +1316,6 @@ also call the groups fault method passing the error up to the group.</p>
         }
     }
 });
-
 task.start();
 </code></pre>
             </div>
@@ -1298,6 +1342,10 @@ task.start();
     
 
     
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+        </span>
+    
 
     
 
@@ -1322,7 +1370,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1404"><code>..&#x2F;temp&#x2F;monkeybars.js:1404</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1355"><code>..&#x2F;temp&#x2F;monkeybars.js:1355</code></a>
         
         </p>
 
@@ -1362,6 +1410,19 @@ task.start();
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>:
+                    
+                    Task with name
+                
+            </div>
+        </div>
+    
 
     
 </div>
@@ -1384,6 +1445,10 @@ task.start();
         </div>
     
 
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+        </span>
     
 
     
@@ -1409,7 +1474,7 @@ task.start();
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1422"><code>..&#x2F;temp&#x2F;monkeybars.js:1422</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1373"><code>..&#x2F;temp&#x2F;monkeybars.js:1373</code></a>
         
         </p>
 
@@ -1449,6 +1514,19 @@ task.start();
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>:
+                    
+                    Task with name
+                
+            </div>
+        </div>
+    
 
     
         <div class="example">
@@ -1458,11 +1536,111 @@ task.start();
                 <pre class="code prettyprint"><code>var parallel = new MonkeyBars.ParallelTask({
     tasks:[task1,task3]
 });
-
 parallel.getTaskByTid(task1.tid);
 </code></pre>
             </div>
         </div>
+    
+</div>
+
+                
+                    <div id="method_has" class="method item inherited">
+    <h3 class="name"><code>has</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskEvents.html#method_has">TaskEvents</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l470"><code>..&#x2F;temp&#x2F;monkeybars.js:470</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Checks to see if an event is registered to this object with the passed type.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    Whether or not the object contains the listener type
+                
+            </div>
+        </div>
+    
+
     
 </div>
 
@@ -1506,7 +1684,7 @@ parallel.getTaskByTid(task1.tid);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1042"><code>..&#x2F;temp&#x2F;monkeybars.js:1042</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1015"><code>..&#x2F;temp&#x2F;monkeybars.js:1015</code></a>
         
         </p>
 
@@ -1551,6 +1729,258 @@ parallel.getTaskByTid(task1.tid);
 </div>
 
                 
+                    <div id="method_off" class="method item inherited">
+    <h3 class="name"><code>off</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskEvents.html#method_off">TaskEvents</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l484"><code>..&#x2F;temp&#x2F;monkeybars.js:484</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Removes an event to the object.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_on" class="method item inherited">
+    <h3 class="name"><code>on</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>context</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>configurable</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskEvents.html#method_on">TaskEvents</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l520"><code>..&#x2F;temp&#x2F;monkeybars.js:520</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Attaches an event to the object.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">context</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">configurable</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Whether or not you should be able to remove this listener without passing its callback reference</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_onCancel" class="method item inherited">
     <h3 class="name"><code>onCancel</code></h3>
 
@@ -1580,7 +2010,7 @@ parallel.getTaskByTid(task1.tid);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1053"><code>..&#x2F;temp&#x2F;monkeybars.js:1053</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1025"><code>..&#x2F;temp&#x2F;monkeybars.js:1025</code></a>
         
         </p>
 
@@ -1631,7 +2061,7 @@ parallel.getTaskByTid(task1.tid);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1063"><code>..&#x2F;temp&#x2F;monkeybars.js:1063</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1034"><code>..&#x2F;temp&#x2F;monkeybars.js:1034</code></a>
         
         </p>
 
@@ -1692,7 +2122,7 @@ parallel.getTaskByTid(task1.tid);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1073"><code>..&#x2F;temp&#x2F;monkeybars.js:1073</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1043"><code>..&#x2F;temp&#x2F;monkeybars.js:1043</code></a>
         
         </p>
 
@@ -1766,7 +2196,7 @@ parallel.getTaskByTid(task1.tid);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1084"><code>..&#x2F;temp&#x2F;monkeybars.js:1084</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1053"><code>..&#x2F;temp&#x2F;monkeybars.js:1053</code></a>
         
         </p>
 
@@ -1830,7 +2260,7 @@ parallel.getTaskByTid(task1.tid);
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1448"><code>..&#x2F;temp&#x2F;monkeybars.js:1448</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1396"><code>..&#x2F;temp&#x2F;monkeybars.js:1396</code></a>
         
         </p>
 
@@ -1918,7 +2348,7 @@ any other subtasks that are dependent on the canceled task are cancled.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1467"><code>..&#x2F;temp&#x2F;monkeybars.js:1467</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1414"><code>..&#x2F;temp&#x2F;monkeybars.js:1414</code></a>
         
         </p>
 
@@ -2012,7 +2442,7 @@ provided by the extending class.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1481"><code>..&#x2F;temp&#x2F;monkeybars.js:1481</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1427"><code>..&#x2F;temp&#x2F;monkeybars.js:1427</code></a>
         
         </p>
 
@@ -2117,7 +2547,7 @@ provided by the extending class.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1094"><code>..&#x2F;temp&#x2F;monkeybars.js:1094</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1062"><code>..&#x2F;temp&#x2F;monkeybars.js:1062</code></a>
         
         </p>
 
@@ -2206,7 +2636,7 @@ provided by the extending class.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1105"><code>..&#x2F;temp&#x2F;monkeybars.js:1105</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1074"><code>..&#x2F;temp&#x2F;monkeybars.js:1074</code></a>
         
         </p>
 
@@ -2289,7 +2719,7 @@ original prototype method (see the example below).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1495"><code>..&#x2F;temp&#x2F;monkeybars.js:1495</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1440"><code>..&#x2F;temp&#x2F;monkeybars.js:1440</code></a>
         
         </p>
 
@@ -2379,7 +2809,7 @@ convenience methods.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1547"><code>..&#x2F;temp&#x2F;monkeybars.js:1547</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1491"><code>..&#x2F;temp&#x2F;monkeybars.js:1491</code></a>
         
         </p>
 
@@ -2425,7 +2855,7 @@ have no apparent affect as it has already ran.</p>
 </div>
 
                 
-                    <div id="method_reset" class="method item inherited">
+                    <div id="method_reset" class="method item">
     <h3 class="name"><code>reset</code></h3>
 
     
@@ -2457,7 +2887,7 @@ have no apparent affect as it has already ran.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1132"><code>..&#x2F;temp&#x2F;monkeybars.js:1132</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1508"><code>..&#x2F;temp&#x2F;monkeybars.js:1508</code></a>
         
         </p>
 
@@ -2471,6 +2901,93 @@ have no apparent affect as it has already ran.</p>
         <p>Resets a task to its original state</p>
     </div>
 
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setDependeciesForTask" class="method item">
+    <h3 class="name"><code>setDependeciesForTask</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>task</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1526"><code>..&#x2F;temp&#x2F;monkeybars.js:1526</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets dependencies for the passed task.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">task</code>
+                        <span class="type"><a href="../classes/Task.html" class="crosslink">Task</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -2508,7 +3025,7 @@ have no apparent affect as it has already ran.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1145"><code>..&#x2F;temp&#x2F;monkeybars.js:1145</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1110"><code>..&#x2F;temp&#x2F;monkeybars.js:1110</code></a>
         
         </p>
 
@@ -2564,7 +3081,7 @@ This method can only be run once on a task.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1180"><code>..&#x2F;temp&#x2F;monkeybars.js:1180</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1144"><code>..&#x2F;temp&#x2F;monkeybars.js:1144</code></a>
         
         </p>
 
@@ -2594,6 +3111,90 @@ state as this is an internal property.</p>
                 
             </div>
         </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_trigger" class="method item inherited">
+    <h3 class="name"><code>trigger</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskEvents.html#method_trigger">TaskEvents</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l546"><code>..&#x2F;temp&#x2F;monkeybars.js:546</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Triggers the firing of an event on an object.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
     
 
     
@@ -2633,7 +3234,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1244"><code>..&#x2F;temp&#x2F;monkeybars.js:1244</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1208"><code>..&#x2F;temp&#x2F;monkeybars.js:1208</code></a>
         
         </p>
 
@@ -2679,7 +3280,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1233"><code>..&#x2F;temp&#x2F;monkeybars.js:1233</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1197"><code>..&#x2F;temp&#x2F;monkeybars.js:1197</code></a>
         
         </p>
 
@@ -2690,6 +3291,138 @@ state as this is an internal property.</p>
 
     <div class="description">
         <p>Holds all references to event types, callbacks, contexts and configurations.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__eventMap" class="property item private inherited">
+    <h3 class="name"><code>_eventMap</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;TaskEvents.html#property__eventMap">TaskEvents</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l457"><code>..&#x2F;temp&#x2F;monkeybars.js:457</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Holds all references to event types, callbacks, contexts and configurations.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__processedIndex" class="property item private">
+    <h3 class="name"><code>_processedIndex</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l1220"><code>..&#x2F;temp&#x2F;monkeybars.js:1220</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>An incrimented number of the tasks that have already been processed.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__state" class="property item private inherited">
+    <h3 class="name"><code>_state</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="..&#x2F;classes&#x2F;Task.html#property__state">Task</a>:
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l761"><code>..&#x2F;temp&#x2F;monkeybars.js:761</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The current state of the task</p>
     </div>
 
     
@@ -2720,7 +3453,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l786"><code>..&#x2F;temp&#x2F;monkeybars.js:786</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l776"><code>..&#x2F;temp&#x2F;monkeybars.js:776</code></a>
         
         </p>
 
@@ -2763,7 +3496,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l985"><code>..&#x2F;temp&#x2F;monkeybars.js:985</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l962"><code>..&#x2F;temp&#x2F;monkeybars.js:962</code></a>
         
         </p>
 
@@ -2804,7 +3537,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l798"><code>..&#x2F;temp&#x2F;monkeybars.js:798</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l787"><code>..&#x2F;temp&#x2F;monkeybars.js:787</code></a>
         
         </p>
 
@@ -2819,49 +3552,6 @@ state as this is an internal property.</p>
 
     
         <p><strong>Default:</strong> 0</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_state" class="property item private inherited">
-    <h3 class="name"><code>state</code></h3>
-    <span class="type">Integer</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;Task.html#property_state">Task</a>:
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l770"><code>..&#x2F;temp&#x2F;monkeybars.js:770</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>The current state of the task</p>
-    </div>
-
     
 
     
@@ -2890,7 +3580,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l811"><code>..&#x2F;temp&#x2F;monkeybars.js:811</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l799"><code>..&#x2F;temp&#x2F;monkeybars.js:799</code></a>
         
         </p>
 
@@ -2933,7 +3623,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l824"><code>..&#x2F;temp&#x2F;monkeybars.js:824</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l811"><code>..&#x2F;temp&#x2F;monkeybars.js:811</code></a>
         
         </p>
 
@@ -2974,7 +3664,7 @@ state as this is an internal property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l836"><code>..&#x2F;temp&#x2F;monkeybars.js:836</code></a>
+        <a href="..&#x2F;files&#x2F;.._temp_monkeybars.js.html#l822"><code>..&#x2F;temp&#x2F;monkeybars.js:822</code></a>
         
         </p>
 
@@ -3009,7 +3699,6 @@ on the <code>onMessage</code> handler of the Worker itself.</p>
     },
     ...
 });
-
 var task = new MonkeyBars.Task({
     ...
     worker:CustomWorker,
