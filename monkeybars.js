@@ -1184,6 +1184,11 @@
                 task.setDependeciesForTask(subtask);
             }
         }
+
+        if (this.tasks === undefined) {
+            this.tasks = [];
+        }
+
         // super
         Task.call(task, attributes);
     };
@@ -1228,6 +1233,10 @@
             value: 0,
             writable: true
         },
+
+        // ===================================================================
+        // === TaskGroup Public Properties ===================================
+        // ===================================================================
 
         // ===================================================================
         // === TaskGroup Methods =============================================
@@ -1613,12 +1622,13 @@
                 if (!task || task._state === STATE_CANCELED) {
                     return;
                 }
-                this._currentIndex++;
                 if (!task.tid) {
                     task = createTaskWithOptions(task);
                 }
                 this.tasks.push(task);
-                this.processSubTask(task);
+                if (this._state >= STATE_STARTED) {
+                    this.processSubTask(task);
+                }
             }
         },
 

@@ -21,6 +21,11 @@ var TaskGroup = MonkeyBars.TaskGroup = function(attributes) {
 			task.setDependeciesForTask(subtask);
 		}
 	}
+
+	if(this.tasks === undefined) {
+		this.tasks = [];
+	}
+
 	// super
 	Task.call(task, attributes);
 };
@@ -65,6 +70,10 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 		value: 0,
 		writable: true
 	},
+
+	// ===================================================================
+	// === TaskGroup Public Properties ===================================
+	// ===================================================================
 
 	// ===================================================================
 	// === TaskGroup Methods =============================================

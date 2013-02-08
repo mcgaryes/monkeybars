@@ -58,12 +58,13 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			if(!task || task._state === STATE_CANCELED) {
 				return;
 			}
-			this._currentIndex++;
 			if(!task.tid) {
 				task = createTaskWithOptions(task);
 			}
 			this.tasks.push(task);
-			this.processSubTask(task);
+			if(this._state >= STATE_STARTED){
+				this.processSubTask(task);
+			}
 		}
 	},
 
