@@ -58,7 +58,8 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 			if(this._state !== STATE_CANCELED) {
 				this.startNextSubTask();
 			}
-		}
+		},
+		writable:true
 	},
 	
 	/**
@@ -79,7 +80,8 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 				TaskGroup.prototype.onSubTaskComplete.call(this, task);
 				delegate.startNextSubTask(); 
 			},0);
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -92,7 +94,8 @@ SequenceTask.prototype = Object.create(TaskGroup.prototype, {
 	performTask: {
 		value: function() {
 			this.startNextSubTask();
-		}
+		},
+		writable:true
 	},
 	
 	/**

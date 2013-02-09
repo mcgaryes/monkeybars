@@ -70,7 +70,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @private
 	 */
 	_state: {
-		value: STATE_INITIALIZED
+		value: STATE_INITIALIZED,
+		writable:true
 	},
 
 	// ===================================================================
@@ -85,7 +86,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @default false
 	 */
 	concurrent: {
-		value: false
+		value: false,
+		writable:true
 	},
 
 	/**
@@ -150,7 +152,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 *	});
 	 */
 	worker: {
-		value: undefined
+		value: undefined,
+		writable:true
 	},
 
 	// ===================================================================
@@ -167,7 +170,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @private
 	 */
 	__onStateChange: {
-		value: function(state, error) {}
+		value: function(state, error) {},
+		writable: true
 	},
 
 	// ===================================================================
@@ -246,7 +250,8 @@ Task.prototype = Object.create(TaskEvents, {
 			this.trigger("complete");
 			this.onComplete();
 			this.__onStateChange(this._state);
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -302,7 +307,8 @@ Task.prototype = Object.create(TaskEvents, {
 		value: function(error) {
 			if(this._state >= STATE_CANCELED) {
 				return;
-			}			this._state = STATE_FAULTED;
+			}			
+			this._state = STATE_FAULTED;
 			if(this.logLevel >= LOG_INFO) {
 				log("Faulted: " + this.displayName);
 			}
@@ -322,7 +328,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @param {Object} attributes
 	 */
 	initialize: {
-		value: function(attributes) {}
+		value: function(attributes) {},
+		writable:true
 	},
 	
 	/**
@@ -331,7 +338,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @method onCancel
 	 */
 	onCancel: {
-		value: function() {}
+		value: function() {},
+		writable:true
 	},
 	
 	/**
@@ -340,7 +348,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @method onComplete
 	 */
 	onComplete: {
-		value: function() {}
+		value: function() {},
+		writable:true
 	},
 
 	/**
@@ -350,7 +359,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @param {String} error Message describing error
 	 */
 	onFault: {
-		value: function(error) {}
+		value: function(error) {},
+		writable:true
 	},
 	
 	/**
@@ -359,7 +369,8 @@ Task.prototype = Object.create(TaskEvents, {
 	 * @method onStart
 	 */
 	onStart: {
-		value: function() {}
+		value: function() {},
+		writable:true
 	},
 	
 	/**
@@ -371,7 +382,8 @@ Task.prototype = Object.create(TaskEvents, {
 	operate:{
 		value:function(data, task){
 			this.data = data;
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -395,7 +407,8 @@ Task.prototype = Object.create(TaskEvents, {
 	performTask: {
 		value: function() {
 			throw "performTask: " + OVERRIDE_NEEDED;
-		}
+		},
+		writable:true
 	},
 	
 	/**
@@ -441,7 +454,8 @@ Task.prototype = Object.create(TaskEvents, {
 			}
 
 			this.onStart();
-		}
+		},
+		writable:true
 	},
 
 	/**

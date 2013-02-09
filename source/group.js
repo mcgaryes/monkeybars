@@ -44,7 +44,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	 * @private
 	 */
 	_dependencyMap: {
-		value:{}
+		value:{},
+		writable:true
 	},
 
 	/**
@@ -254,7 +255,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 					this.tasks[i]._state = STATE_CANCELED;
 				}
 			}
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -267,7 +269,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	onSubTaskComplete: {
 		value: function(task) {
 			task.group.operate(task.data,task);
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -280,7 +283,8 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 	onSubTaskFault: {
 		value: function(task, error) {
 			this.fault(error);
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -379,6 +383,20 @@ TaskGroup.prototype = Object.create(Task.prototype, {
 				var totalDependencies = task.dependencies.length;
 				for(var i = 0; i < totalDependencies; i++) {
 					var dependency = task.dependencies[i];
+
+					// if the depoendency is not an actual task then we need to find that
+					// task and reassign the dependency with the instance
+					if(dependency.tid === undefined) {
+						var t = this.getTaskByTid(dependency);
+						if(t === undefined) {
+							t = this.getTaskByName(dependency);
+						}
+						if(t !== undefined) {
+							dependency = task.dependencies[i] = t;
+						} 
+					}
+
+					// set the dependency to the groups dependency map
 					if(dependency.tid) {
 						this._dependencyMap[task.tid].push(dependency.tid);
 					} else {

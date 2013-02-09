@@ -140,9 +140,64 @@ describe("parallel", function() {
 			expect(t3.state).toEqual(MonkeyBars.TaskStates.Completed);
 			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
 
-			group.destroy();
+		});
+
+		xit("only once its dependencies with named references have", function() {
+
+			/* 
+
+				@TODO: going to have to work on the processing flow to do the following:
+
+				1. start is called on group
+				2. process all sub tasks
+				3. performTask
+				4. start all sub tasks that can be started
+
+			*/
+
+			var Task1 = MonkeyBars.Task.extend({
+				name: "task1",
+				performTask: function() {
+					this.complete();
+				}
+			});
+
+			var Task2 = MonkeyBars.Task.extend({
+				name: "task2",
+				performTask: function() {
+					this.complete();
+				}
+			});
+
+			var Task3 = MonkeyBars.Task.extend({
+				name: "task3",
+				performTask: function() {
+					this.complete();
+				}
+			});
+
+			var Group = MonkeyBars.ParallelTask.extend({
+				logLevel:1000,
+				tasks: [new Task1(), new Task2({
+	  				dependencies:["task1"]
+	  			}), new Task3({
+	  				dependencies:["task2"]
+	  			})]
+			});
+
+			var group = new Group();
+
+			var t2 = group.getTaskByName("task2");
+			var t3 = group.getTaskByName("task3");
+
+			group.start();
+
+			expect(t2.state).toEqual(MonkeyBars.TaskStates.Completed);
+			expect(t3.state).toEqual(MonkeyBars.TaskStates.Completed);
+			expect(group.state).toEqual(MonkeyBars.TaskStates.Completed);
 
 		});
+
 
 		it("when deeply nested",function(){
 
