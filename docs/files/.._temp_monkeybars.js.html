@@ -866,7 +866,8 @@
          * @private
          *&#x2F;
         _state: {
-            value: STATE_INITIALIZED
+            value: STATE_INITIALIZED,
+            writable: true
         },
 
         &#x2F;&#x2F; ===================================================================
@@ -881,7 +882,8 @@
          * @default false
          *&#x2F;
         concurrent: {
-            value: false
+            value: false,
+            writable: true
         },
 
         &#x2F;**
@@ -946,7 +948,8 @@
          *	});
          *&#x2F;
         worker: {
-            value: undefined
+            value: undefined,
+            writable: true
         },
 
         &#x2F;&#x2F; ===================================================================
@@ -963,7 +966,8 @@
          * @private
          *&#x2F;
         __onStateChange: {
-            value: function(state, error) {}
+            value: function(state, error) {},
+            writable: true
         },
 
         &#x2F;&#x2F; ===================================================================
@@ -1042,7 +1046,8 @@
                 this.trigger(&quot;complete&quot;);
                 this.onComplete();
                 this.__onStateChange(this._state);
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1119,7 +1124,8 @@
          * @param {Object} attributes
          *&#x2F;
         initialize: {
-            value: function(attributes) {}
+            value: function(attributes) {},
+            writable: true
         },
 
         &#x2F;**
@@ -1128,7 +1134,8 @@
          * @method onCancel
          *&#x2F;
         onCancel: {
-            value: function() {}
+            value: function() {},
+            writable: true
         },
 
         &#x2F;**
@@ -1137,7 +1144,8 @@
          * @method onComplete
          *&#x2F;
         onComplete: {
-            value: function() {}
+            value: function() {},
+            writable: true
         },
 
         &#x2F;**
@@ -1147,7 +1155,8 @@
          * @param {String} error Message describing error
          *&#x2F;
         onFault: {
-            value: function(error) {}
+            value: function(error) {},
+            writable: true
         },
 
         &#x2F;**
@@ -1156,7 +1165,8 @@
          * @method onStart
          *&#x2F;
         onStart: {
-            value: function() {}
+            value: function() {},
+            writable: true
         },
 
         &#x2F;**
@@ -1168,7 +1178,8 @@
         operate: {
             value: function(data, task) {
                 this.data = data;
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1192,7 +1203,8 @@
         performTask: {
             value: function() {
                 throw &quot;performTask: &quot; + OVERRIDE_NEEDED;
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1238,7 +1250,8 @@
                 }
 
                 this.onStart();
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1307,7 +1320,8 @@
          * @private
          *&#x2F;
         _dependencyMap: {
-            value: {}
+            value: {},
+            writable: true
         },
 
         &#x2F;**
@@ -1517,7 +1531,8 @@
                         this.tasks[i]._state = STATE_CANCELED;
                     }
                 }
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1530,7 +1545,8 @@
         onSubTaskComplete: {
             value: function(task) {
                 task.group.operate(task.data, task);
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1543,7 +1559,8 @@
         onSubTaskFault: {
             value: function(task, error) {
                 this.fault(error);
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1644,6 +1661,20 @@
                     var totalDependencies = task.dependencies.length;
                     for (var i = 0; i &lt; totalDependencies; i++) {
                         var dependency = task.dependencies[i];
+
+                        &#x2F;&#x2F; if the depoendency is not an actual task then we need to find that
+                        &#x2F;&#x2F; task and reassign the dependency with the instance
+                        if (dependency.tid === undefined) {
+                            var t = this.getTaskByTid(dependency);
+                            if (t === undefined) {
+                                t = this.getTaskByName(dependency);
+                            }
+                            if (t !== undefined) {
+                                dependency = task.dependencies[i] = t;
+                            }
+                        }
+
+                        &#x2F;&#x2F; set the dependency to the groups dependency map
                         if (dependency.tid) {
                             this._dependencyMap[task.tid].push(dependency.tid);
                         } else {
@@ -1661,6 +1692,17 @@
     &#x2F;&#x2F; ===================================================================
     &#x2F;&#x2F; === Parallel Task =================================================
     &#x2F;&#x2F; ===================================================================
+
+    &#x2F;* 
+
+	@TODO: going to have to work on the processing flow to do the following:
+
+	1. start is called on group
+	2. process all sub tasks
+	3. performTask
+	4. start all sub tasks that can be started
+
+*&#x2F;
 
     &#x2F;**
      * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
@@ -1767,6 +1809,8 @@
                     };
                     for (var j = 0; j &lt; dependencies.length; j++) {
                         var t = dependencies[j];
+                        console.log(&quot;add event&quot;);
+                        console.log(t);
                         t.on(&quot;complete&quot;, completion, this, false);
                     }
                     return false;
@@ -1811,7 +1855,8 @@
                 if (this._currentIndex === this.tasks.length) {
                     this.complete();
                 }
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1828,7 +1873,8 @@
                 } else {
                     this.processSubTasks();
                 }
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1931,7 +1977,8 @@
                 if (this._state !== STATE_CANCELED) {
                     this.startNextSubTask();
                 }
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1952,7 +1999,8 @@
                     TaskGroup.prototype.onSubTaskComplete.call(this, task);
                     delegate.startNextSubTask();
                 }, 0);
-            }
+            },
+            writable: true
         },
 
         &#x2F;**
@@ -1965,7 +2013,8 @@
         performTask: {
             value: function() {
                 this.startNextSubTask();
-            }
+            },
+            writable: true
         },
 
         &#x2F;**

@@ -1,28 +1,28 @@
 // requirejs config
 require.config({
-  deps: ["main"],
-  paths: {
-    monkeybars: "../../monkeybars.min",
-  },
-  shim: {
-    monkeybars: {
-      exports: "MonkeyBars"
+    deps: ["main"],
+    paths: {
+        monkeybars: "../../monkeybars",
+    },
+    shim: {
+        monkeybars: {
+            exports: "MonkeyBars"
+        }
     }
-  }
 });
 
 // main require
-require(["monkeybars"], function(MonkeyBars) {
+require(["group_task"], function(GroupTask) {
 
-  'use strict';
+    'use strict';
 
-  var task = new MonkeyBars.Task({
-  	logLevel:1000,
-  	performTask:function(){
-  		this.complete();
-  	}
-  });
+    var groupTask = new GroupTask({
+        logLevel:1000,
+        onComplete: function() {
+            console.log(this.data); // should equal ["task1","task2","task3"] after 1 second timeout
+        }
+    });
 
-  task.start();
+    groupTask.start();
 
 });

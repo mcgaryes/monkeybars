@@ -1,3 +1,14 @@
+/* 
+
+	@TODO: going to have to work on the processing flow to do the following:
+
+	1. start is called on group
+	2. process all sub tasks
+	3. performTask
+	4. start all sub tasks that can be started
+
+*/
+
 /**
  * A ParallelTask is a TaskGroup that runs all of its subtasks ansynchronously. Its
  * complete functionality is run when all of its sub tasks are complete.
@@ -103,6 +114,8 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 				};
 				for (var j = 0; j < dependencies.length; j++) {
 					var t = dependencies[j];
+					console.log("add event");
+					console.log(t);
 					t.on("complete",completion,this,false);
 				}
 				return false;
@@ -147,7 +160,8 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			if(this._currentIndex === this.tasks.length) {
 				this.complete();
 			}
-		}
+		},
+		writable:true
 	},
 
 	/**
@@ -164,7 +178,8 @@ ParallelTask.prototype = Object.create(TaskGroup.prototype, {
 			} else {
 				this.processSubTasks();
 			}
-		}
+		},
+		writable:true
 	},
 
 	/**

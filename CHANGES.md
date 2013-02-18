@@ -1,6 +1,10 @@
-* **2013.01.31** - *v0.9.14*
+* **2013.02.09** - *v0.9.15*
+	* Rewriting of some of the Task prototype property descriptors
+
+* **2013.02.07** - *v0.9.14*
 	* Fixed an issue where unreferenced `tasks` attribute was not being instantiated for the `initialize` method with use of `addSubTask`
 	* Fixed issue with tasks being processed in parallel task before the task had been started
+
 * **2013.01.31** - *v0.9.13*
 	* `onChange` is no longer a public method
 	* Tasks now have events and can be referenced through `on`, `off`, `has` and `trigger` methods of the task
